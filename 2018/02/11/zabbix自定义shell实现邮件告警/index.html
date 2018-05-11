@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>zabbix自定义shell实现邮件告警 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,zabbix,shell,mailx">
+    <meta name="description" content="安装postfix参考: Postfix邮件发送服务 注: 如果postfix安装后没有mail命令,则需要安装mailx 邮件发送测试 echo &amp;quot;aaa&amp;quot;|mail -s &amp;#39;aaa&amp;#39; xxxx@qq.com">
+<meta name="keywords" content="高级运维,zabbix,shell,mailx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zabbix自定义shell实现邮件告警">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="安装postfix参考: Postfix邮件发送服务 注: 如果postfix安装后没有mail命令,则需要安装mailx 邮件发送测试 echo &amp;quot;aaa&amp;quot;|mail -s &amp;#39;aaa&amp;#39; xxxx@qq.com">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-12T08:09:01.419Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zabbix自定义shell实现邮件告警">
+<meta name="twitter:description" content="安装postfix参考: Postfix邮件发送服务 注: 如果postfix安装后没有mail命令,则需要安装mailx 邮件发送测试 echo &amp;quot;aaa&amp;quot;|mail -s &amp;#39;aaa&amp;#39; xxxx@qq.com">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">zabbix自定义shell实现邮件告警</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">zabbix自定义shell实现邮件告警</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-11T08:59:51.000Z" itemprop="datePublished" class="page-time">
+  2018-02-11
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装postfix"><span class="post-toc-number">1.</span> <span class="post-toc-text">安装postfix</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#邮件发送Shell脚本"><span class="post-toc-number">2.</span> <span class="post-toc-text">邮件发送Shell脚本</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#设置zabbix执行脚本的路径"><span class="post-toc-number">3.</span> <span class="post-toc-text">设置zabbix执行脚本的路径</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置”报警媒介类型”类型"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置”报警媒介类型”类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#对用户添加报警方式"><span class="post-toc-number">5.</span> <span class="post-toc-text">对用户添加报警方式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试"><span class="post-toc-number">6.</span> <span class="post-toc-text">测试</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-zabbix自定义shell实现邮件告警"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">zabbix自定义shell实现邮件告警</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-11 16:59:51" datetime="2018-02-11T08:59:51.000Z"  itemprop="datePublished">2018-02-11</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="安装postfix"><a href="#安装postfix" class="headerlink" title="安装postfix"></a>安装postfix</h4><p>参考: <a href="https://wuyanteng.github.io/2018/02/09/postfix%E9%82%AE%E4%BB%B6%E5%8F%91%E9%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8/">Postfix邮件发送服务</a></p>
+<pre><code>注: 如果postfix安装后没有mail命令,则需要安装mailx
+</code></pre><p>邮件发送测试</p>
+<pre><code>echo &quot;aaa&quot;|mail -s &#39;aaa&#39; xxxx@qq.com
+</code></pre><a id="more"></a>
+<h4 id="邮件发送Shell脚本"><a href="#邮件发送Shell脚本" class="headerlink" title="邮件发送Shell脚本"></a>邮件发送Shell脚本</h4><pre><code> vim /usr/local/zabbix/scripts/postfix_mail.sh 
+</code></pre><pre><code>#!/bin/bash
+
+messages=`echo $3 | tr &#39;\r\n&#39; &#39;\n&#39;`
+subject=`echo $2 | tr &#39;\r\n&#39; &#39;\n&#39;`
+logdir=&quot;/var/lib/zabbix/scripts/alertscripts&quot;
+
+echo &quot;${messages}&quot; | mail -aFrom:zabbix@xxx.com -s &quot;${subject}&quot; xxx@xxx.com $1
+
+注：发送邮件命令中  xxx@xxx.com 和 $1都是邮件地址,写两个原因是避免出错,暂无日志输出
+</code></pre><p>测试Shell邮件发送脚本</p>
+<pre><code>/usr/local/zabbix/scripts/send_mail.sh xxxxx@qq.com &#39;aaa&#39; &#39;ccc&#39;
+
+检查邮箱可以看到邮件
+</code></pre><h4 id="设置zabbix执行脚本的路径"><a href="#设置zabbix执行脚本的路径" class="headerlink" title="设置zabbix执行脚本的路径"></a>设置zabbix执行脚本的路径</h4><pre><code>vim /usr/local/zabbix/etc/zabbix_server.conf
+
+AlertScriptsPath=/usr/local/zabbix/scripts   #把上面的脚本放这个目录下
+</code></pre><pre><code>给这个目录设置755执行权限和zabbix用户属组权限
+</code></pre><h4 id="配置”报警媒介类型”类型"><a href="#配置”报警媒介类型”类型" class="headerlink" title="配置”报警媒介类型”类型"></a>配置”报警媒介类型”类型</h4><pre><code>管理 -- 报警媒介类型 -- 添加
+名称: bj_Email_Shell
+类型: scripts/脚本
+脚本名称: postfix_mail.sh (按实际填写,否则会出现错误)
+Script参数：
+  {ALERT.SENDTO}
+  {ALERT.SUBJECT}
+  {ALERT.MESSAGE}
+</code></pre><h4 id="对用户添加报警方式"><a href="#对用户添加报警方式" class="headerlink" title="对用户添加报警方式"></a>对用户添加报警方式</h4><pre><code>管理 -- 用户 -- 张三 -- 报警媒介 --添加
+类型: 选择刚定义的bj_Email_Shell
+收件人: zhangsan@mail.com
+时间范围: 1-7,00:00-23:59;
+</code></pre><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><pre><code>/etc/init.d/zabbix_agentd stop
+
+等待邮件收取
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-12T08:09:01.419Z" itemprop="dateUpdated">2018-02-12 16:09:01</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/02/11/zabbix自定义shell实现邮件告警/" target="_blank" rel="external">https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mailx/">mailx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/&title=《zabbix自定义shell实现邮件告警》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/&title=《zabbix自定义shell实现邮件告警》 — Gary Wu&source=安装postfix参考: Postfix邮件发送服务
+注: 如果postfix安装后没有mail命令,则需要安装mailx
+邮件发送测试
+echo &qu..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《zabbix自定义shell实现邮件告警》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/13/MySQL新增从库-数据量T级/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">MySQL新增从库-数据量T级</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/11/jumpserver连接登陆时间隔天的问题/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">jumpserver连接登陆时间隔天的问题</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/&title=《zabbix自定义shell实现邮件告警》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/&title=《zabbix自定义shell实现邮件告警》 — Gary Wu&source=安装postfix参考: Postfix邮件发送服务
+注: 如果postfix安装后没有mail命令,则需要安装mailx
+邮件发送测试
+echo &qu..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《zabbix自定义shell实现邮件告警》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/02/11/zabbix自定义shell实现邮件告警/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

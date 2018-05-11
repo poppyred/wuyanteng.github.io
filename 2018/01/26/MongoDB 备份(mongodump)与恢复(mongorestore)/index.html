@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MongoDB 备份(mongodump)与恢复(mongorestore) | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,mongodb,mongodump,mongorestore">
+    <meta name="description" content="Mongodb数据备份  在Mongodb中我们使用mongodump命令来备份MongoDB数据。该命令可以导出所有数据到指定目录中。 mongodump命令可以通过参数指定导出的数据量级转存的服务器。">
+<meta name="keywords" content="高级运维,mongodb,mongodump,mongorestore">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB 备份(mongodump)与恢复(mongorestore)">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Mongodb数据备份  在Mongodb中我们使用mongodump命令来备份MongoDB数据。该命令可以导出所有数据到指定目录中。 mongodump命令可以通过参数指定导出的数据量级转存的服务器。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-26T04:02:47.557Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB 备份(mongodump)与恢复(mongorestore)">
+<meta name="twitter:description" content="Mongodb数据备份  在Mongodb中我们使用mongodump命令来备份MongoDB数据。该命令可以导出所有数据到指定目录中。 mongodump命令可以通过参数指定导出的数据量级转存的服务器。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MongoDB 备份(mongodump)与恢复(mongorestore)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MongoDB 备份(mongodump)与恢复(mongorestore)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-26T03:35:10.000Z" itemprop="datePublished" class="page-time">
+  2018-01-26
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-MongoDB 备份(mongodump)与恢复(mongorestore)"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MongoDB 备份(mongodump)与恢复(mongorestore)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-26 11:35:10" datetime="2018-01-26T03:35:10.000Z"  itemprop="datePublished">2018-01-26</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>Mongodb数据备份</p>
+</blockquote>
+<pre><code>在Mongodb中我们使用mongodump命令来备份MongoDB数据。该命令可以导出所有数据到指定目录中。
+mongodump命令可以通过参数指定导出的数据量级转存的服务器。
+</code></pre><a id="more"></a>
+<ul>
+<li>语法</li>
+</ul>
+<p>mongodump 备份命令脚本语法如下：</p>
+<pre><code>备份
+/usr/local/mongo/bin/mongodump -h 127.0.0.1:27017 -d dbname -o /tmp/mongobak
+
+-u: 用户名
+-p: 密码
+-h：MongDB所在服务器地址，例如：127.0.0.1，当然也可以指定端口号：127.0.0.1:27017
+-d：需要备份的数据库实例，例如：test
+-o：备份的数据存放位置，例如：/tmp/mongo，当然该目录需要提前建立，在备份完成后，系统自动在dump目录下建立一个test目录，这个目录里面存放该数据库实例的备份数据。
+
+注：如果要导出所有数据库，可去掉-d参数及对应的数据库名称
+</code></pre><p>此时可以对/tmp/mongobak文件进行压缩并下载到任意地方</p>
+<pre><code>tar zcf /tmp/mongobak.tar.gz  /tmp/mongobak
+</code></pre><!-- more -->
+<hr>
+<blockquote>
+<p>Mongodb数据恢复</p>
+</blockquote>
+<pre><code>mongodb使用 mongorestore 命令来恢复备份的数据。
+</code></pre><p>注：如果待恢复的数据库中有同名数据库，可以先drop再恢复</p>
+<pre><code>清理部署
+# /usr/local/mongo/bin/mongo 127.0.0.1:27017
+&gt; use app_auto
+&gt; db.dropDatabase()
+&gt; exit
+bye
+</code></pre><p>恢复</p>
+<pre><code>恢复
+mongorestore -h &lt;hostname&gt;&lt;:port&gt; -d dbname &lt;path&gt;
+
+
+--host &lt;:port&gt;, -h &lt;:port&gt;：MongoDB所在服务器地址，默认为： localhost:27017
+--db , -d ：需要恢复的数据库实例，例如：test，当然这个名称也可以和备份时候的不一样，比如test2
+--drop：恢复的时候，先删除当前数据，然后恢复备份的数据。
+&lt;path&gt;：mongorestore 最后的一个参数，设置备份数据所在位置，例如：/tmp/mongobak
+--dir：指定备份的目录
+注： 你不能同时指定 &lt;path&gt; 和 --dir 选项，--dir也可以设置备份目录。
+
+注：还原所有数据库到mongodb中的话，恢复时不指定-d参数和具体数据库名称即可。
+</code></pre><p>验证恢复</p>
+<pre><code>mongo -h 127.0.0.1:27017
+&gt;show dbs
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-26T04:02:47.557Z" itemprop="dateUpdated">2018-01-26 12:02:47</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodump/">mongodump</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongorestore/">mongorestore</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/&title=《MongoDB 备份(mongodump)与恢复(mongorestore)》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/&title=《MongoDB 备份(mongodump)与恢复(mongorestore)》 — Gary Wu&source=
+Mongodb数据备份
+
+在Mongodb中我们使用mongodump命令来备份MongoDB数据。该命令可以导出所有数据到指定目录中。
+mongodu..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MongoDB 备份(mongodump)与恢复(mongorestore)》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/30/Dell RAID控制卡使用-说明/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Dell RAID控制卡使用-说明</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/26/chrony时间同步/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">chrony时间同步</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/&title=《MongoDB 备份(mongodump)与恢复(mongorestore)》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/&title=《MongoDB 备份(mongodump)与恢复(mongorestore)》 — Gary Wu&source=
+Mongodb数据备份
+
+在Mongodb中我们使用mongodump命令来备份MongoDB数据。该命令可以导出所有数据到指定目录中。
+mongodu..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MongoDB 备份(mongodump)与恢复(mongorestore)》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/26/MongoDB 备份(mongodump)与恢复(mongorestore)/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

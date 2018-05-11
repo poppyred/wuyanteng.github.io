@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OpenStack-Pike-Horizen Web管理10 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Horizon,Dashboard,OpenStack">
+    <meta name="description" content="生产环境最好将Horizen安装在非控制节点，因为控制节点已经运行有了Apache服务，重启服务的话都会有影响。另外Horizen可以安装多个，Horizen的配置不需要部署数据库等等信息，它是直接通过API调用的Keystone">
+<meta name="keywords" content="Horizon,Dashboard,OpenStack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenStack-Pike-Horizen Web管理10">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="生产环境最好将Horizen安装在非控制节点，因为控制节点已经运行有了Apache服务，重启服务的话都会有影响。另外Horizen可以安装多个，Horizen的配置不需要部署数据库等等信息，它是直接通过API调用的Keystone">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-15T09:05:06.510Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenStack-Pike-Horizen Web管理10">
+<meta name="twitter:description" content="生产环境最好将Horizen安装在非控制节点，因为控制节点已经运行有了Apache服务，重启服务的话都会有影响。另外Horizen可以安装多个，Horizen的配置不需要部署数据库等等信息，它是直接通过API调用的Keystone">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OpenStack-Pike-Horizen Web管理10</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OpenStack-Pike-Horizen Web管理10</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-14T04:57:23.000Z" itemprop="datePublished" class="page-time">
+  2018-01-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-OpenStack-Pike-Horizen-Web管理10"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OpenStack-Pike-Horizen Web管理10</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-14 12:57:23" datetime="2018-01-14T04:57:23.000Z"  itemprop="datePublished">2018-01-14</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>生产环境最好将Horizen安装在非控制节点，因为控制节点已经运行有了Apache服务，重启服务的话都会有影响。另外Horizen可以安装多个，Horizen的配置不需要部署数据库等等信息，它是直接通过API调用的Keystone
+</code></pre><a id="more"></a>
+<p>安装Openstack官方源</p>
+<pre><code>#安装OpenStack源
+yum install -y centos-release-openstack-pike
+
+升级包
+yum -y upgrade
+
+安装OpenStack客户端
+yum install -y python-openstackclient
+
+安装 openstack-selinux包实现对OpenStack服务的安全策略进行自动管理：
+yum install -y openstack-selinux
+</code></pre><p>安装Dashboard包</p>
+<pre><code>yum install openstack-dashboard
+</code></pre><!-- more -->
+<hr>
+<blockquote>
+<p>配置</p>
+</blockquote>
+<pre><code>vim /etc/openstack-dashboard/local_settings
+</code></pre><pre><code>配置OpenStack Host在控制节点上启用dashboard
+
+OPENSTACK_HOST = &quot;192.168.56.11&quot;
+</code></pre><pre><code>配置哪些主机有权限访问仪表盘
+
+ALLOWED_HOSTS = [&#39;*&#39;,]
+</code></pre><pre><code>配置memcached会话存储服务
+
+SESSION_ENGINE = &#39;django.contrib.sessions.backends.cache&#39;
+
+CACHES = {
+    &#39;default&#39;: {
+         &#39;BACKEND&#39;: &#39;django.core.cache.backends.memcached.MemcachedCache&#39;,
+         &#39;LOCATION&#39;: &#39;192.168.56.11:11211&#39;,
+    }
+}
+</code></pre><pre><code>启用API 版本3
+
+OPENSTACK_KEYSTONE_URL = &quot;http://%s:5000/v3&quot; % OPENSTACK_HOST
+</code></pre><pre><code>启用对域的支持
+
+OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True   
+注意: True是大写 
+</code></pre><pre><code>配置API版本
+
+OPENSTACK_API_VERSIONS = {
+    &quot;identity&quot;: 3,
+    &quot;image&quot;: 2,
+    &quot;volume&quot;: 2,
+}
+</code></pre><pre><code>把Default设置为默认域
+
+OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = &quot;Default&quot;
+</code></pre><pre><code>指定通过dashboard创建用户的默认角色
+
+OPENSTACK_KEYSTONE_DEFAULT_ROLE = &quot;user&quot;
+</code></pre><pre><code>如果使用了扁平桥接网络, 需要禁用对三层网络服务的支持(否则dashboard会报错)
+
+OPENSTACK_NEUTRON_NETWORK = {
+    &#39;enable_router&#39;: False,
+    &#39;enable_quotas&#39;: False,
+    &#39;enable_distributed_router&#39;: False,
+    &#39;enable_ha_router&#39;: False,
+    &#39;enable_lb&#39;: False,
+    &#39;enable_firewall&#39;: False,
+    &#39;enable_vpn&#39;: False,
+    &#39;enable_fip_topology_check&#39;: False,
+}
+</code></pre><pre><code>配置时区
+
+TIME_ZONE = &quot;Asia/Shanghai&quot;
+</code></pre><!-- more -->
+<hr>
+<blockquote>
+<p>重启服务</p>
+</blockquote>
+<pre><code>systemctl restart httpd.service
+
+上面虽修改了
+</code></pre><blockquote>
+<p>Web访问</p>
+</blockquote>
+<pre><code>我把Horizon配置在了192.168.56.12机器上，所以我应该访问它的地址
+
+http://192.168.56.12/dashboard/
+域：Default
+账号: admin   密码:admin
+账号: demo    密码：demo
+</code></pre><blockquote>
+<p>故障处理</p>
+</blockquote>
+<ul>
+<li>CentOS7.4 重启完Apache访问Horizon出错，错误:500</li>
+</ul>
+<pre><code>解决方法：
+vim /etc/httpd/conf.d/openstack-dashboard.conf
+
+搜索：WSGISocketPrefix run/wsgi
+在下面加入如下一行：WSGIApplicationGroup %{GLOBAL}
+
+最后重启Apache
+systemctl restart httpd
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-15T09:05:06.510Z" itemprop="dateUpdated">2018-01-15 17:05:06</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/14/OpenStack-Pike-Horizen-Web管理10/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Dashboard/">Dashboard</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Horizon/">Horizon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenStack/">OpenStack</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/&title=《OpenStack-Pike-Horizen Web管理10》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/&title=《OpenStack-Pike-Horizen Web管理10》 — Gary Wu&source=生产环境最好将Horizen安装在非控制节点，因为控制节点已经运行有了Apache服务，重启服务的话都会有影响。另外Horizen可以安装多个，Horiz..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack-Pike-Horizen Web管理10》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">深入理解OpenStack-虚拟机元数据metadata</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/10/OpenStack-Pike-创建第1台云主机9/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OpenStack-Pike-创建第1台云主机9</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/&title=《OpenStack-Pike-Horizen Web管理10》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/&title=《OpenStack-Pike-Horizen Web管理10》 — Gary Wu&source=生产环境最好将Horizen安装在非控制节点，因为控制节点已经运行有了Apache服务，重启服务的话都会有影响。另外Horizen可以安装多个，Horiz..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack-Pike-Horizen Web管理10》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/14/OpenStack-Pike-Horizen-Web管理10/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

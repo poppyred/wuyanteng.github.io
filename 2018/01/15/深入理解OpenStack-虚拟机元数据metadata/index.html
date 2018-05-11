@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>深入理解OpenStack-虚拟机元数据metadata | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,OpenStack,元数据,metadata">
+    <meta name="description" content="概念  OpenStack云主机metadata(元数据)是一组与一台云主机相关联的键值对。用户可以通过API读写这些键值对。 云主机或者Nova服务也可以获取这些metadata。">
+<meta name="keywords" content="高级运维,OpenStack,元数据,metadata">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解OpenStack-虚拟机元数据metadata">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="概念  OpenStack云主机metadata(元数据)是一组与一台云主机相关联的键值对。用户可以通过API读写这些键值对。 云主机或者Nova服务也可以获取这些metadata。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/openstack-metadata.png">
+<meta property="og:updated_time" content="2018-01-16T01:50:38.311Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解OpenStack-虚拟机元数据metadata">
+<meta name="twitter:description" content="概念  OpenStack云主机metadata(元数据)是一组与一台云主机相关联的键值对。用户可以通过API读写这些键值对。 云主机或者Nova服务也可以获取这些metadata。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/openstack-metadata.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">深入理解OpenStack-虚拟机元数据metadata</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">深入理解OpenStack-虚拟机元数据metadata</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-15T06:25:59.000Z" itemprop="datePublished" class="page-time">
+  2018-01-15
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-深入理解OpenStack-虚拟机元数据metadata"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">深入理解OpenStack-虚拟机元数据metadata</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-15 14:25:59" datetime="2018-01-15T06:25:59.000Z"  itemprop="datePublished">2018-01-15</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <ul>
+<li>概念</li>
+</ul>
+<pre><code>OpenStack云主机metadata(元数据)是一组与一台云主机相关联的键值对。用户可以通过API读写这些键值对。
+云主机或者Nova服务也可以获取这些metadata。
+</code></pre><a id="more"></a>
+<ul>
+<li>OpenStack元数据分类</li>
+</ul>
+<pre><code>元数据可以分为实例元数据(instance metadata)和用户数据(instance user data)。
+</code></pre><pre><code>实例元数据包括键值对或者自定义键值对.
+用户数据是以user-data为键的元数据，供部署在云主机中的云感知应用使用。
+
+用户数据与普通实例元数据的不同在于它先于云主机创建，并从云主机中访问，可以用于存储配置、脚本以及其它任何信息。
+</code></pre><ul>
+<li>查询元数据有何作用？</li>
+</ul>
+<pre><code>在OpenStack云主机上通过请求Metadata元数据API，来获取云主机上的主机名、IP地址、SSH公钥等信息。通过这些信息可以通过编写脚本来对云主机的标准化进行定制。
+</code></pre><!-- more -->
+<hr>
+<blockquote>
+<p>查询云主机元数据</p>
+</blockquote>
+<p>云主机中,可以通过访问<a href="http://169.254.169.254" target="_blank" rel="noopener">http://169.254.169.254</a> 这个URL来获取它的元数据信息。</p>
+<pre><code>在控制节点上ssh虚拟机
+ssh cirros@192.168.56.53
+
+获取元数据metadata
+$ curl http://169.254.169.254/
+1.0
+2007-01-19
+2007-03-01
+...
+2008-09-01
+2009-04-04
+latest
+
+这个返回结果是元数据服务目前支持的接口版本号，可以选择最新的2009-04-04来查询元数据。
+</code></pre><pre><code>$ curl http://169.254.169.254/2009-04-04/meta-data/
+ami-id
+ami-launch-index
+ami-manifest-path
+block-device-mapping/
+hostname
+instance-action
+instance-id
+instance-type
+local-hostname
+local-ipv4
+placement/
+public-hostname
+public-ipv4
+public-keys/
+reservation-id
+security-groups
+</code></pre><pre><code>比如：
+1. 获取虚拟机的IP地址
+   $ curl http://169.254.169.254/2009-04-04/meta-data/local-ipv4
+     192.168.56.53
+
+2. 获取虚拟机的主机名
+   $ curl http://169.254.169.254/2009-04-04/meta-data/hostname
+     first1host.novalocal
+
+3. 获取已上传到虚拟机中的ssh-key
+   $ curl http://169.254.169.254/2009-04-04/meta-data/public-keys/0/openssh-key
+     ssh-rsa AAAAB3NzaC1yc2EA......kDwKNgF3 root@controller
+</code></pre><p>metadata元数据获取流程</p>
+<pre><code>获取元数据的请求会通过云主机的默认网关,路由到网络节点上该云主机所在虚拟网络的虚拟网关设备上，并通过iptables的NAT规则重定向到neutron-ns-metadata-proxy服务，再经由neutron-metadata-agent最终由nova-api里提供的metadata服务返回云主机的虚拟机。 
+
+
+注(重要)：在/etc/neutron/dhcp_agent.ini中有enable_isolated_metadata这个选项，设置为True后，如果一个虚拟网络没有网关则DHCP服务会给这个主机增加一条路由，将元数据请求路由到DHCP服务。只要DHCP服务与元数据服务在一台主机上就可以由后者去处理该请求了。
+
+
+如下图(参考):
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/openstack-metadata.png" alt="openstack-metadata" title="">
+                </div>
+                <div class="image-caption">openstack-metadata</div>
+            </figure>
+<p>(1)虚拟机发出请求</p>
+<pre><code>查看虚拟机网卡信息
+$ ip -4 address show dev eth0
+  eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast qlen 1000
+  inet 192.168.56.53/24 brd 192.168.56.255 scope global eth0
+
+
+查看虚拟机路由
+$ ip route list
+default via 192.168.56.2 dev eth0 
+169.254.169.254 via 192.168.56.50 dev eth0 
+192.168.56.0/24 dev eth0  src 192.168.56.53
+</code></pre><p>(2)namespace-metadata-proxy</p>
+<pre><code>我的网络环境因为是扁平桥接所以下面是qdhcp设备。因为使用了namespace，在network node上每个namespace里都会有相应的iptables规则和网络设备。
+
+先获取当前虚拟网络设备或获取网络名称空间
+[root@controller ~]# ip netns
+qdhcp-605a77b4-d232-4d0b-b915-d6572542c3d5 (id: 0)
+
+获取这个虚拟网络设备的ip地址信息
+[root@controller ~]# ip netns exec qdhcp-605a77b4-d232-4d0b-b915-d6572542c3d5 ip addr show 
+2:ns-fda843d0-0e@if5: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP qlen 1000
+    link/ether fa:16:3e:bb:39:10 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.56.50/24 brd 192.168.56.255 scope global ns-fda843d0-0e
+       valid_lft forever preferred_lft forever
+    inet 169.254.169.254/16 brd 169.254.255.255 scope global ns-fda843d0-0e
+       valid_lft forever preferred_lft forever
+    inet6 fe80::f816:3eff:febb:3910/64 scope link 
+       valid_lft forever preferred_lft forever
+
+可以看到169.254.169.254地址是绑定在qdhcp-605a77b4-d232-4d0b-b915-d6572542c3d5 (id: 0)虚拟设备上的ns-fda843d0-0e@if5这个网卡上的，然后再看看它的下一步路由
+</code></pre><pre><code>[root@controller ~]# ip netns exec qdhcp-605a77b4-d232-4d0b-b915-d6572542c3d5 ip route
+
+default via 192.168.56.2 dev ns-fda843d0-0e 
+169.254.0.0/16 dev ns-fda843d0-0e proto kernel scope link src 169.254.169.254 
+192.168.56.0/24 dev ns-fda843d0-0e proto kernel scope link src 192.168.56.50 
+这就可以理解它为什么能与192.168.56.0/24网络通信了
+
+接下来ping下
+ip netns exec qdhcp-605a77b4-d232-4d0b-b915-d6572542c3d5 ping 192.168.56.2
+ip netns exec qdhcp-605a77b4-d232-4d0b-b915-d6572542c3d5 ping 169.254.169.254
+结果都是通的
+</code></pre><p>(3)Neutron Metadata Agent</p>
+<p>network node上的metadata agent监听/var/lib/neutron/metadata_proxy</p>
+<pre><code>我这里的PIKE版本启用的是Neutron Metadata Agent, 控制节点上查看以下信息
+
+[root@controller ~]# netstat -lxp |grep metadata
+unix  2      [ ACC ]     STREAM     LISTENING     128073   6622/python2         /var/lib/neutron/metadata_proxy
+
+
+[root@controller ~]# ps -f --pid 6622 |fold -s
+UID         PID   PPID  C STIME TTY          TIME CMD
+neutron    6622      1  0 02:39 ?        00:00:38 /usr/bin/python2 
+/usr/bin/neutron-metadata-agent --config-file 
+/usr/share/neutron/neutron-dist.conf --config-file /etc/neutron/neutron.conf 
+--config-file /etc/neutron/metadata_agent.ini --config-dir 
+/etc/neutron/conf.d/common --config-dir 
+/etc/neutron/conf.d/neutron-metadata-agent --log-file 
+/var/log/neutron/metadata-agent.log
+
+该进程的功能是，根据请求头部的X-Forwarded-For和X-Quantum-Router-ID参数，向Quantum service查询虚拟机ID，然后向Nova Metadata服务发送请求（默认端口8775），消息头：X-Forwarded-For，X-Instance-ID、X-Instance-ID-Signature分别表示虚拟机的fixedIP，虚拟机ID和虚拟机ID的签名。
+</code></pre><p>(4) Nova Metadata Service</p>
+<pre><code>Nova的metadata service是随着nova-api启动的。虚拟机访问169.254.169.254的返回内容，其实就是metadata服务向nova-conductor查询后，返回给network node的metadata agent，再由metadata agent返回给metadata proxy，然后返回给虚拟机的。
+
+[root@controller ~]# netstat -lntup |grep 8775
+tcp        0      0 0.0.0.0:8775            0.0.0.0:*               LISTEN      6263/python2   
+
+
+You have new mail in /var/spool/mail/root
+[root@controller ~]# ps -f --pid 6263
+UID         PID   PPID  C STIME TTY          TIME CMD
+nova       6263      1  1 02:29 ?        00:12:21 /usr/bin/python2 /usr/bin/nova-ap
+</code></pre><!-- more -->
+<blockquote>
+<p>为什么请求的IP地址是169.254.169.254？</p>
+</blockquote>
+<pre><code>这个IP地址在OpenStack中是不存在的，为什么可以获取到metadata呢？
+
+这是因为Amazon的原因，最早metadata是通过亚马逊提出来的。
+</code></pre><p>参考： <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html" target="_blank" rel="noopener">Amazon Ec2-instance-metadata介绍</a></p>
+<pre><code>后来很多开源机构给亚马逊定制了一些操作系统的镜像，比如 ubuntu, fedora, centos 等等，而且将里面获取 metadta 的api地址也写死了。所以opentack为了兼容，保留了这个地址 169.254.169.254。然后通过iptables nat映射到真实的api上.
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-16T01:50:38.311Z" itemprop="dateUpdated">2018-01-16 09:50:38</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenStack/">OpenStack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/metadata/">metadata</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/元数据/">元数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/&title=《深入理解OpenStack-虚拟机元数据metadata》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/&title=《深入理解OpenStack-虚拟机元数据metadata》 — Gary Wu&source=
+概念
+
+OpenStack云主机metadata(元数据)是一组与一台云主机相关联的键值对。用户可以通过API读写这些键值对。
+云主机或者Nova服务也..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解OpenStack-虚拟机元数据metadata》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/15/深入理解OpenStack-虚拟机存放目录/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">深入理解OpenStack-虚拟机存放目录</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/14/OpenStack-Pike-Horizen-Web管理10/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OpenStack-Pike-Horizen Web管理10</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/&title=《深入理解OpenStack-虚拟机元数据metadata》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/&title=《深入理解OpenStack-虚拟机元数据metadata》 — Gary Wu&source=
+概念
+
+OpenStack云主机metadata(元数据)是一组与一台云主机相关联的键值对。用户可以通过API读写这些键值对。
+云主机或者Nova服务也..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解OpenStack-虚拟机元数据metadata》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/15/深入理解OpenStack-虚拟机元数据metadata/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

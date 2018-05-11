@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HA高可用之Heartbeat-部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,HA,高可用,双机热备">
+    <meta name="description" content="HA即(high available)高可用，又被叫做双机热备，用于关键性业务。简单理解就是，有2台机器 A 和 B，正常是 A 提供服务，B 待命闲置，当 A 宕机或服务宕掉，会切换至B机器继续提供服务。常见的实现高可用的开源软件有 heartbeat 和 keepalived。">
+<meta name="keywords" content="高级运维,HA,高可用,双机热备">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HA高可用之Heartbeat-部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="HA即(high available)高可用，又被叫做双机热备，用于关键性业务。简单理解就是，有2台机器 A 和 B，正常是 A 提供服务，B 待命闲置，当 A 宕机或服务宕掉，会切换至B机器继续提供服务。常见的实现高可用的开源软件有 heartbeat 和 keepalived。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/heartbeat.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/heartbeat%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF.png">
+<meta property="og:updated_time" content="2017-08-08T10:32:38.077Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HA高可用之Heartbeat-部署">
+<meta name="twitter:description" content="HA即(high available)高可用，又被叫做双机热备，用于关键性业务。简单理解就是，有2台机器 A 和 B，正常是 A 提供服务，B 待命闲置，当 A 宕机或服务宕掉，会切换至B机器继续提供服务。常见的实现高可用的开源软件有 heartbeat 和 keepalived。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/heartbeat.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HA高可用之Heartbeat-部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">HA高可用之Heartbeat-部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-03T02:48:55.000Z" itemprop="datePublished" class="page-time">
+  2017-08-03
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">部署</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#主master配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">主master配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#从节点配置"><span class="post-toc-number">3.</span> <span class="post-toc-text">从节点配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#启动Heartbeat服务（所有节点）"><span class="post-toc-number">4.</span> <span class="post-toc-text">启动Heartbeat服务（所有节点）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#检查测试"><span class="post-toc-number">5.</span> <span class="post-toc-text">检查测试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#工作中Heartbeat使用场景-HA高可用"><span class="post-toc-number">5.0.1.</span> <span class="post-toc-text">工作中Heartbeat使用场景 - HA高可用</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-HA高可用之Heartbeat-部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HA高可用之Heartbeat-部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-03 10:48:55" datetime="2017-08-03T02:48:55.000Z"  itemprop="datePublished">2017-08-03</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>HA即(high available)高可用，又被叫做双机热备，用于关键性业务。简单理解就是，有2台机器 A 和 B，正常是 A 提供服务，B 待命闲置，当 A 宕机或服务宕掉，会切换至B机器继续提供服务。常见的实现高可用的开源软件有 heartbeat 和 keepalived。</p>
+</blockquote>
+<a id="more"></a>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/heartbeat.png" alt="heartbeat" title="">
+                </div>
+                <div class="image-caption">heartbeat</div>
+            </figure>
+<blockquote>
+<p>一台 web 服务器一天24小时提供web服务，难免会存在 web 服务挂掉或服务器宕机宕机的情况，那么用户就访问不了服务了，这当然不是我们期望的。</p>
+<p>如果这样，有2台服务器，A对外提供 web 服务，B作为备用，如果A挂掉，那么B立刻替代A的位置去提供 web 服务，这样对用户来说是透明的。</p>
+<p>但是有个问题，服务器A的 ip 是 10.0.10.24，服务器B的 ip 是10.0.10.25，显然向用户提供A或B的ip地址是不可行的，因为用户总不能去切换ip来访问的吧。这时heartbeat或keepalived可以提供一个虚拟IP：10.0.10.26，用户只需要访问 10.0.10.26，当A提供服务时，VIP 会设置在A服务器上；当B提供服务时，VIP会设置在B服务器上，这样就可以让用户通过访问10.0.10.26来获取web服务，即使A或B服务器切换也不影响用户的正常访问。</p>
+</blockquote>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>Web1:
+主机名：hahb24_master
+OS: CentOS 6.6
+网卡IP：10.0.10.24
+</code></pre><pre><code>Web2:
+主机名：hahb25_slave
+OS: CentOS 6.6
+网卡IP：10.0.10.25
+</code></pre><pre><code>虚拟VIP: 10.0.10.26
+</code></pre><blockquote>
+<p>配置主机名</p>
+</blockquote>
+<p>master节点配置</p>
+<pre><code>[root@hahb24 ~]# vi /etc/sysconfig/network
+HOSTNAME=hahb24_master
+</code></pre><p>slave节点配置</p>
+<pre><code>[root@hahb25 ~]# vi /etc/sysconfig/network
+HOSTNAME=hahb24_slave
+</code></pre><blockquote>
+<p>关闭防火墙和selinux（所有节点配置）</p>
+</blockquote>
+<p>关闭iptables</p>
+<pre><code>service iptables stop
+</code></pre><p>关闭selinux</p>
+<pre><code>setenforce 0
+sed -i &#39;s/SELINUX=enforcing/SELINUX=disabled/&#39; /etc/selinux/config
+</code></pre><blockquote>
+<p>配置host(所有节点配置)</p>
+</blockquote>
+<pre><code>vim /etc/hosts
+10.0.10.24 hahb24_master
+10.0.10.25 hahb24_slave
+</code></pre><blockquote>
+<p>安装Hearbeat和Nginx（所有节点配置）</p>
+</blockquote>
+<pre><code> # 安装epel源
+ yum install -y epel-release
+
+ # 安装heartbeat和nginx
+ yum install -y heartbeat* libnet nginx
+</code></pre><p><br></p>
+<h2 id="主master配置"><a href="#主master配置" class="headerlink" title="主master配置"></a>主master配置</h2><blockquote>
+<p>heartbeat主要的配置文件有3个，分别是authkeys、ha.cf和haresources</p>
+</blockquote>
+<p>Authkeys文件:</p>
+<pre><code>文件为heartbeat的认证文件，该文件主要是用于集群中两个节点的认证。该文件的属性必须为600，否则heartbeat启动将失败。两个节点的authkeys文件内容及权限相同。
+
+目前提供了3种算法：crc/md5/sha1。其中crc不能够提供认证，它只能够用于校验数据包是否损坏，而sha1/md5需要一个密钥来进行认证，从资源消耗的角度来讲，md5消耗的比较多，sha1次之，因此建议一般使用sha1算法。
+</code></pre><p>ha.cf文件:</p>
+<pre><code>配置文件详解
+vim ha.cf
+
+debugfile /var/log/ha-debug：该文件保存heartbeat的调试信息。
+
+logfile /var/log/ha-log：heartbeat的日志文件。
+
+bcast eth0   表示在eth0接口上使用udp广播来通知心跳（把接口名称改为实际接口名称，比如:eth1）
+
+#ucast eth0 10.0.10.25： 说明：采用网卡eth0的udp单播来通知心跳，eth0的IP
+
+#mcast eth0 225.0.0.1 694 1 0 说明：采用udp多播播来通知心跳，建议在副节点不只一台时使用
+
+keepalive 2：设定heartbeat之间的时间间隔为2秒。
+
+deadtime 30： 在30秒后宣布节点死亡
+
+warntime 10：超出该时间间隔未收到对方节点的心跳，则发出警告并记录到日志中。
+
+initdead 120：
+在某系统上，系统启动或重启之后需要经过一段时间网络才能正常工作，该选项用于解决这种情况产生的时间间隔，取值通常为deadtime的2倍。
+
+udpport 694：设置广播通信使用的端口，694为默认使用的端口号。
+
+node data-1-1  主节点主机名(必须与uname -n输出结果一致)
+node data-1-2  从节点主机名(必须与uname -n输出结果一致)
+
+nice_failback on【注释掉:auto_failback on；注：从节点无需配置该选项。】
+主节点在正常情况下占用资源并运行所有的服务，遇到故障时把资源交给从节点由从节点运行服务。在该选项设为on的情况下，一旦主节点恢复运行，则自动获取资源并取代从节点，否则不取代从节点。
+
+watchdog /dev/watchdog
+说明：看门狗，如果本节点在超过一分钟后还没有发出心跳，那么本节点自动重启
+
+##################################################################
+下面是可选项
+##################################################################
+
+stonith baytech /etc/ha.d/conf/stonith.baytech 说明：主/副等所有节点的一种校验。
+
+respawn hacluster /etc/init.d/nginx 说明：和heartbeat必须一起启动的本地服务
+
+baud 19200  说明：串口波特率，与serial一起使用。
+
+serial /dev/ttyS0    说明：采用串口来传递心跳信息。
+
+ping 10.0.10.1   Ping一个非heartbeat服务器的IP，一般为同网段网关即可
+
+respawn hacluster /usr/lib64/heartbeat/ipfail
+使Heartbeat以hacluster的身份来执行该进程并监视该进程的执行情况，如果其死亡便重启之。最常用的进程是ipfail，该进程用于检测和处理网络故障，需要配合ping语句指定的ping node来检测网络连接。 注意：如果结束进程的退出代码为100，则不会重启该进程。
+注：(1)如果你的系统是64bit，请注意该文件的路径。
+    (2)hacluster是安装heartbeat生成的用户
+</code></pre><p>haresources文件:</p>
+<pre><code>添加如下行，例如：
+hahb24_master 10.0.10.26/24/eth0/10.0.10.255 nginx
+
+注：10.0.10.26/24是VIP地址，ech0是物理网卡名称，10.0.10.255是广播地址；nginx为heartbeat要监控的HA服务,可以有多个,中间使用空格分割
+
+注意：两个集群节点上的该文件必须相同。
+</code></pre><p>拷贝配置文件</p>
+<pre><code>cd /usr/share/doc/heartbeat-3.0.4/
+cp authkeys ha.cf haresources /etc/ha.d/
+cd /etc/ha.d
+</code></pre><p>修改authkeys</p>
+<pre><code># 更改或增加如下内容
+vim authkeys
+auth 3
+3 md5 Hello!
+注：不论您在关键字auth后面指定的是什么索引值，在后面必须要作为键值再次出现。如果您指定“auth 4”，则在后面一定要有一行的内容为“4 ”。
+
+# 然后修改其权限
+chmod 600 authkeys
+</code></pre><p>ha.cf文件修改</p>
+<pre><code>[root@hahb24_master ha.d]# vim ha.cf
+debugfile /var/log/ha-debug
+logfile /var/log/ha-log
+keepalive 2
+deadtime 10
+warntime 5
+initdead 60
+udpport 694
+ucast eth0 10.0.10.25
+auto_failback on
+ping 10.0.10.1
+node hahb24_master
+node hahb25_slave
+respawn hacluster /usr/lib64/heartbeat/ipfail
+</code></pre><p>haresources文件修改</p>
+<pre><code>[root@hahb24_master ha.d]# vim haresources
+
+hahb24_master 10.0.10.26/24/eth0/10.0.10.255 nginx
+注：10.0.10.26/24是VIP地址，ech0是物理网卡名称，10.0.10.255是广播地址；nginx为heartbeat要监控的HA服务,可以有多个,中间使用空格分割
+</code></pre><h2 id="从节点配置"><a href="#从节点配置" class="headerlink" title="从节点配置"></a>从节点配置</h2><pre><code>把主节点上的三个配置文件拷贝到从节点的/etc/ha.d目录下
+</code></pre><p>编辑ha.cf</p>
+<pre><code>vim /etc/ha.d/ha.cf
+将“ucast eth0 10.0.10.25” 改为 ucast eth0 10.0.10.24
+</code></pre><p>检查authkeys文件权限</p>
+<pre><code>ls -l authkeys 是否为600
+</code></pre><p>编辑</p>
+<pre><code>vim haresources 
+hahb25_slave 10.0.10.26/24/eth0/10.0.10.255 nginx
+</code></pre><h2 id="启动Heartbeat服务（所有节点）"><a href="#启动Heartbeat服务（所有节点）" class="headerlink" title="启动Heartbeat服务（所有节点）"></a>启动Heartbeat服务（所有节点）</h2><pre><code>chkconfig heartbeat on
+/etc/init.d/heartbeat start
+
+两台服务器服务都启动后，可以查看master辅助IP：  
+[root@hahb24_master ha.d]# ip addr
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq state UP qlen 1000
+    link/ether 00:0c:29:43:b6:0f brd ff:ff:ff:ff:ff:ff
+    inet 10.0.10.24/24 brd 10.0.10.255 scope global eth0
+    inet 10.0.10.26/24 brd 10.0.10.255 scope global secondary eth0
+    inet6 fe80::20c:29ff:fe43:b60f/64 scope link 
+       valid_lft forever preferred_lft forever
+</code></pre><h2 id="检查测试"><a href="#检查测试" class="headerlink" title="检查测试"></a>检查测试</h2><p>启动nginx服务(所有节点)</p>
+<pre><code>chkconfig nginx on
+chkconfig httpd off   如果有则关闭，我们使用nginx测试
+/etc/init.d/nginx start
+</code></pre><pre><code>为了能看出效果
+
+#在master上添加
+[root@hahb24_master]# echo &quot;1111111111master&quot; &gt; /usr/share/nginx/html/index.html 
+
+#在slave上添加
+[root@hahb25_slave ha.d]# echo &quot;22222222222222slave&quot; &gt;/usr/share/nginx/html/index.html
+
+在浏览器输入http://10.0.10.26/index.html,此时的结果显示1111111111master则说明配置正确
+</code></pre><blockquote>
+<p>测试1：主节点停止heartbeat服务</p>
+</blockquote>
+<pre><code>[root@hahb24_master]# /etc/init.d/heartbeat stop
+
+此时，再访问http://10.0.10.26/index.html,会显示 22222222222222slave
+</code></pre><blockquote>
+<p>测试2：测试脑裂</p>
+</blockquote>
+<pre><code>主节点master和从节点slave都down掉eth0网卡
+[root@hahb24_master ~]# ifdown eth0
+[root@hahb25_slave ~]# ifdown eth0
+
+然后先启动master（10.0.10.24） eth0的网卡，你会发现网页依然无法访问，因为slave（10.0.10.25）目前依然是master模式。
+最后启动，10.0.10.25的eth0网卡，服务恢复访问，访问结果是22222222222222slave
+</code></pre><blockquote>
+<p>测试3：VIP漂移后，主master恢复后自动抢占。</p>
+</blockquote>
+<pre><code>#master节点
+[root@hahb24_master ~]# ifdown eth0
+此时，访问web已经转移到了slave2服务器。
+这时候把master服务器重新激活网卡并启动master heartbeat服务，稍等片刻，VIP又漂移回来了，访问的web资源是master的web资源，测试成功！
+
+</code></pre><h4 id="工作中Heartbeat使用场景-HA高可用"><a href="#工作中Heartbeat使用场景-HA高可用" class="headerlink" title="工作中Heartbeat使用场景 - HA高可用"></a>工作中Heartbeat使用场景 - HA高可用</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/heartbeat%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF.png" alt="heartbeat场景" title="">
+                </div>
+                <div class="image-caption">heartbeat场景</div>
+            </figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-08T10:32:38.077Z" itemprop="dateUpdated">2017-08-08 18:32:38</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/03/HA高可用之Heartbeat-部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HA/">HA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/双机热备/">双机热备</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高可用/">高可用</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/&title=《HA高可用之Heartbeat-部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/&title=《HA高可用之Heartbeat-部署》 — Gary Wu&source=
+HA即(high available)高可用，又被叫做双机热备，用于关键性业务。简单理解就是，有2台机器 A 和 B，正常是 A 提供服务，B 待命闲置..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HA高可用之Heartbeat-部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/03/使用nginx实现HTTP负载均衡-官网翻译版/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">使用nginx实现HTTP负载均衡-官网翻译版</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/02/Cacti实战-交换机接口显示错误以及流量断图/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Cacti实战-交换机接口显示错误以及流量断图</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/&title=《HA高可用之Heartbeat-部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/&title=《HA高可用之Heartbeat-部署》 — Gary Wu&source=
+HA即(high available)高可用，又被叫做双机热备，用于关键性业务。简单理解就是，有2台机器 A 和 B，正常是 A 提供服务，B 待命闲置..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HA高可用之Heartbeat-部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/03/HA高可用之Heartbeat-部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

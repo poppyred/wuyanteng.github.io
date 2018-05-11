@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>GlusterFS存储 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,GlusterFS,SAN,NAS,分布式存储">
+    <meta name="description" content="概述  GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。GlusterFS 是 Scale-Out 存储解决方案 Gluster 的核心，具有强大的横向扩展能力，通过扩展能够支持数PB存储容量和处理数千客户端。GlusterFS 借助 TCP/IP 或 InfiniBand RDMA 网络将物理分布的存储资源">
+<meta name="keywords" content="高级运维,GlusterFS,SAN,NAS,分布式存储">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GlusterFS存储">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="概述  GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。GlusterFS 是 Scale-Out 存储解决方案 Gluster 的核心，具有强大的横向扩展能力，通过扩展能够支持数PB存储容量和处理数千客户端。GlusterFS 借助 TCP/IP 或 InfiniBand RDMA 网络将物理分布的存储资源">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/zongtijiagou.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi_juan.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fuzhijuan.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tiaodaijuan.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi-fuzhijuan.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi-tiaodaijuan.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tiaodai-fuzhijuan.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi_tiaodai_fuzhijuan.png">
+<meta property="og:updated_time" content="2017-09-26T03:56:56.368Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GlusterFS存储">
+<meta name="twitter:description" content="概述  GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。GlusterFS 是 Scale-Out 存储解决方案 Gluster 的核心，具有强大的横向扩展能力，通过扩展能够支持数PB存储容量和处理数千客户端。GlusterFS 借助 TCP/IP 或 InfiniBand RDMA 网络将物理分布的存储资源">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/zongtijiagou.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">GlusterFS存储</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">GlusterFS存储</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-24T02:50:18.000Z" itemprop="datePublished" class="page-time">
+  2017-09-24
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">部署</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Trusted-Storage-Pools可信存储池-【在server1配置】"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">Trusted Storage Pools可信存储池-【在server1配置】</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GlusterFS逻辑卷-Volume-创建"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">GlusterFS逻辑卷(Volume)创建</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-创建分布式卷"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">1. 创建分布式卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-创建复制卷"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">2. 创建复制卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-创建条带卷"><span class="post-toc-number">1.0.5.</span> <span class="post-toc-text">3. 创建条带卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-创建分布式-复制卷（推荐）"><span class="post-toc-number">1.0.6.</span> <span class="post-toc-text">4. 创建分布式+复制卷（推荐）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5-创建分布式-条带卷"><span class="post-toc-number">1.0.7.</span> <span class="post-toc-text">5. 创建分布式+条带卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-stripe-replica-volume条带复制卷"><span class="post-toc-number">1.0.8.</span> <span class="post-toc-text">6. stripe replica volume条带复制卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#7-distribute-stripe-replica-volume分布式条带复制卷"><span class="post-toc-number">1.0.9.</span> <span class="post-toc-text">7. distribute stripe replica volume分布式条带复制卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Docker-GlusterFS-Volume-插件"><span class="post-toc-number">1.0.10.</span> <span class="post-toc-text">Docker GlusterFS Volume 插件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#管理GlusterFS卷"><span class="post-toc-number">1.0.11.</span> <span class="post-toc-text">管理GlusterFS卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端挂载"><span class="post-toc-number">1.0.12.</span> <span class="post-toc-text">客户端挂载</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#基于GlusterFS实现MySQL数据持久化"><span class="post-toc-number">1.0.13.</span> <span class="post-toc-text">基于GlusterFS实现MySQL数据持久化</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-GlusterFS分布式存储"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">GlusterFS存储</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-24 10:50:18" datetime="2017-09-24T02:50:18.000Z"  itemprop="datePublished">2017-09-24</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>概述</p>
+</blockquote>
+<pre><code>GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。GlusterFS 是 Scale-Out 存储解决方案 Gluster 的核心，具有强大的横向扩展能力，通过扩展能够支持数PB存储容量和处理数千客户端。GlusterFS 借助 TCP/IP 或 InfiniBand RDMA 网络将物理分布的存储资源聚集在一起，使用单一全局命名空间来管理数据。GlusterFS 基于可堆叠的用户空间设计，可为各种不同的数据负载提供优异的性能。
+</code></pre><a id="more"></a>
+<pre><code>GlusterFS 总体架构与组成部分如图1所示，它主要由存储服务器（Brick Server）、客户端以及 NFS/Samba 存储网关组成。不难发现，GlusterFS 架构中没有元数据服务器组件，这是其最大的设计这点，对于提升整个系统的性能、可靠性和稳定性都有着决定性的意义。
+
+(1) GlusterFS 支持 TCP/IP 和 InfiniBand RDMA 高速网络互联。
+(2) 客户端可通过原生 GlusterFS 协议访问数据，其他没有运行 GlusterFS 客户端的终端可通过 NFS/CIFS 标准协议通过存储网关访问数据（存储网关提供弹性卷管理和访问代理功能）。
+(3) 存储服务器主要提供基本的数据存储功能，客户端弥补了没有元数据服务器的问题，承担了更多的功能，包括数据卷管理、I/O 调度、文件定位、数据缓存等功能，利用 FUSE（File system in User Space）模块将 GlusterFS 挂载到本地文件系统之上，实现 POSIX 兼容的方式来访问系统数据。
+</code></pre><blockquote>
+<p>GlusterFS总体架构</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/zongtijiagou.png" alt="GFS_jiagou" title="">
+                </div>
+                <div class="image-caption">GFS_jiagou</div>
+            </figure>
+<blockquote>
+<p>GlusterFS卷类型</p>
+</blockquote>
+<pre><code>为了满足不同应用对高性能、高可用的需求，GlusterFS 支持 7 种卷，即 distribute 卷、stripe 卷、replica 卷、distribute stripe 卷、distribute replica 卷、stripe Replica 卷、distribute stripe replica 卷。
+其实不难看出，GlusterFS 卷类型实际上可以分为 3 种基本卷和 4 种复合卷，每种类型的卷都有其自身的特点和适用场景。
+</code></pre><blockquote>
+<p>GlusterFS常见术语</p>
+</blockquote>
+<pre><code>名称           解释
+Brick         最基本的存储单元，表示为trusted storage pool中输出的目录，供客户端挂载用。
+Volume         一个卷。在逻辑上由N个bricks组成。
+FUSE         Unix-like OS上的可动态加载的模块，允许用户不用修改内核即可创建自己的文件系统。
+Glusterd     Gluster management daemon，要在trusted storage pool中所有的服务器上运行。
+POSIX         一个标准，GlusterFS兼容。
+</code></pre><h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>服务器：
+192.168.56.10   角色：gluster_client
+192.168.56.101  角色：gluster_server1     
+192.168.56.102  角色：gluster_server2
+192.168.56.103  角色：gluster_server3
+gluster是去中心化存储，所以拓扑结构类似网状
+
+
+注：每台服务器单独一块10G磁盘来模拟生产环境的大容量RIAD磁盘或盘柜等。
+提前格式化并挂载好,(下面的卷就创建在/data/A目录上)如下：
+192.168.56.10   挂载目录： /data/A
+192.168.56.101  挂载目录: /data/A    
+192.168.56.102  挂载目录: /data/A  
+192.168.56.103  挂载目录: /data/A 
+</code></pre><blockquote>
+<p>安装/验证/启动【全节点配置】</p>
+</blockquote>
+<pre><code>GlusterFS项目被Redhat收购，官方提供repo可以直接安装。
+
+安装
+yum install centos-release-gluster -y
+yum install glusterfs-server -y
+
+验证
+glusterfs -V
+截止目前版本为: v3.10.5
+
+启动Glusterd
+systemctl start glusterd
+systemctl status glusterd
+</code></pre><h4 id="Trusted-Storage-Pools可信存储池-【在server1配置】"><a href="#Trusted-Storage-Pools可信存储池-【在server1配置】" class="headerlink" title="Trusted Storage Pools可信存储池-【在server1配置】"></a>Trusted Storage Pools可信存储池-【在server1配置】</h4><pre><code>在开始创建ClusterFS卷之前，需要创建一个称之为Trusted Storage的池，是一个可信的网络存储服务器，可以理解为集群。为卷提供bricks。
+
+格式: gluster peer probe&lt;主机名或者IP地址&gt;
+建议是IP地址，或者内网用DNS做主机名解析，或者在/etc/hosts做好绑定。
+</code></pre><pre><code>例如要创建一个包含3个服务器的存储池，则需要从第一个服务器server1中把另外两个服务器加入存储池中(不要添加server1服务器，默认就已经添加了的)。
+
+#配置peer
+[root@gserver1 ~]# gluster peer probe 192.168.56.102
+[root@gserver1 ~]# gluster peer probe 192.168.56.103
+
+注：之后横向扩展，把服务器也加入这个存储池即可。
+
+查看存储池状态(可以在已加入可信存储池的任一服务器查看状态)：
+[root@gserver1 ~]# gluster peer status
+Number of Peers: 2
+
+Hostname: 192.168.56.102
+Uuid: 91d7b5e7-f5f8-4111-b90a-05ea71b10e1e
+State: Peer in Cluster (Connected)
+
+Hostname: 192.168.56.103
+Uuid: 1cc01e69-948c-4876-a8be-4ab5e3b85681
+State: Peer in Cluster (Connected)
+</code></pre><pre><code>从存储池移除服务器
+假设需要将服务器从存储池移除，可以使用以下命令：
+gluster peer detach 192.168.56.103
+</code></pre><h4 id="GlusterFS逻辑卷-Volume-创建"><a href="#GlusterFS逻辑卷-Volume-创建" class="headerlink" title="GlusterFS逻辑卷(Volume)创建"></a>GlusterFS逻辑卷(Volume)创建</h4><h4 id="1-创建分布式卷"><a href="#1-创建分布式卷" class="headerlink" title="1. 创建分布式卷"></a>1. 创建分布式卷</h4><pre><code>特点：
+基于 Hash 算法将文件分布到所有 brick server，只是扩大了磁盘空间，不具备容错能力。由于distribute volume 使用本地文件系统，因此存取效率并没有提高，相反会因为网络通信的原因使用效率有所降低，另外本地存储设备的容量有限制，因此支持超大型文件会有一定难度。
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi_juan.png" alt="fenbushijuan"></p>
+<p>创建Distributed逻辑卷</p>
+<pre><code>【server1配置】
+在独立挂载的磁盘/data/A上创建一个名字为dis-volume逻辑卷
+[root@gserver1 ~]# gluster volume create dis-volume 192.168.56.101:/data/A 192.168.56.102:/data/A 192.168.56.103:/data/A force
+
+查看卷
+[root@gserver1 ~]# gluster volume info dis-volume
+Volume Name: dis-volume  #卷名称
+Type: Distribute       #此处会显示卷的类型
+Volume ID: f5adb5a0-28cd-4d65-a77e-4d4e25c51db4     #分布式卷ID
+Status: Created        #状态created,卷不启动将无法使用卷
+Snapshot Count: 0
+Number of Bricks: 3
+Transport-type: tcp
+Bricks:
+Brick1: 192.168.56.101:/data/A
+Brick2: 192.168.56.102:/data/A
+Brick3: 192.168.56.103:/data/A
+Options Reconfigured:
+transport.address-family: inet
+nfs.disable: on
+
+
+启动卷
+[root@gserver1 ~]# gluster volume start dis-volume
+volume start: dis-volume: success
+
+再次查看卷状态
+[root@gserver1 ~]# gluster volume info dis-volume
+Startus: Started   #可以看到，卷已经启动
+</code></pre><p>客户端client-挂载使用</p>
+<pre><code> #创建挂载目录
+[root@gluster_client ~]# mkdir /mnt/dis -p
+
+#挂载使用
+[root@gluster_client ~]# mount.glusterfs 192.168.56.101:dis-volume /mnt/dis/  
+[root@gluster_client ~]# df -h
+Filesystem                 Size  Used Avail Use% Mounted on
+192.168.56.101:dis-volume   30G  109M   28G   1% /mnt/dis
+
+注：挂载的时候,可以使用任意一台已经加入到可信存储池并且创建了对应卷的server地址
+</code></pre><p>Distributed逻辑卷-文件存储测试</p>
+<pre><code>[root@gluster_client ~]# cd /mnt/dis/
+[root@gluster_client dis]# touch dis_test{1..6}.txt
+[root@gluster_client dis]# ll
+</code></pre><p>server tree测试</p>
+<pre><code>#server1存储的文件
+[root@gserver1 ~]# tree /data/A
+/data/A
+├── dis_test1.txt
+├── dis_test2.txt
+├── dis_test3.txt
+├── dis_test5.txt
+├── dis_test6.txt
+
+#server2存储的文件
+[root@gserver2 ~]# tree /data/A
+/data/A
+├── dis_test4.txt
+
+
+#server3存储的文件
+[root@gserver3 ~]# tree /data/A
+/data/A
+└── 
+
+由此可以得出结论,分布式卷存储没有副本，倘若其中一台服务器挂掉，这台gluster服务器数据,便会丢失。
+</code></pre><h4 id="2-创建复制卷"><a href="#2-创建复制卷" class="headerlink" title="2. 创建复制卷"></a>2. 创建复制卷</h4><p>复制卷架构示意图</p>
+<pre><code>特点：文件同步复制到多个 brick 上，文件级 RAID1，具有容错能力，写性能下降，读性能提升。Replicated 模式，也称作 AFR（Auto File Replication），相当于 RAID1，即同一文件在多个镜像存储节点上保存多份，每个 replicated 子节点有着相同的目录结构和文件，replica volume 也是在容器存储中较为推崇的一种。
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fuzhijuan.png" alt="fuzhijuan"></p>
+<pre><code>测试之前，我们先删除刚才创建的分布式卷
+
+[root@gserver1 ~]# gluster volume stop dis-volume   #必须先停止卷，然后再删除卷
+[root@gserver1 ~]# gluster volume delete dis-volume
+并清空三台服务器/data/A目录下的内容
+</code></pre><pre><code># 创建卷test-volume
+[root@gserver1 A]# gluster volume create test-volume replica 3 transport tcp 192.168.56.101:/data/A 192.168.56.102:/data/A 192.168.56.103:/data/A force
+
+其中,replica 3 意思是一份数据存储1x3=3份副本, 因为我的服务器一共是3台，这样的话可以指定数量为3或6或9以此类推。但如果服务器数量是2台，则可以设置的副本数为2或4或6或8,总之是服务器数量的倍数即可。否则会报命令格式的错误。
+
+replica意思是副本。
+transport tcp 使用TCP协议
+</code></pre><pre><code>启动卷
+[root@gserver1 ~]# gluster volume start test-volume
+volume start: test-volume: success
+
+再次查看卷状态
+[root@gserver1 ~]# gluster volume info test-volume
+Number of Bricks: 1 x 3 = 3      #可以看到我们刚才提到的副本数量
+Transport-type: tcp              # 协议使用TCP
+</code></pre><p>客户端client-挂载使用</p>
+<pre><code> #创建挂载目录
+[root@gluster_client ~]# mkdir /mnt/test -p
+
+#挂载使用
+[root@gluster_client ~]# mount.glusterfs 192.168.56.101:test-volume /mnt/test/  
+[root@gluster_client ~]# df -h
+Filesystem                 Size  Used Avail Use% Mounted on
+192.168.56.101:test-volume  9.8G   37M  9.2G   1% /mnt/test
+注：挂载的时候,可以使用任意一台已经加入到可信存储池并且创建了对应卷的server地址
+</code></pre><p>Distributed逻辑卷-文件存储测试</p>
+<pre><code>[root@gluster_client ~]# cd /mnt/test/
+[root@gluster_client dis]# touch test{1..6}.txt
+[root@gluster_client dis]# ll
+</code></pre><p>server tree测试</p>
+<pre><code>#server1测试
+[root@gserver1 test]# tree /data/A
+/data/A
+├── test1.txt
+├── test2.txt
+├── test3.txt
+├── test4.txt
+├── test5.txt
+└── test6.txt
+
+#server2测试
+[root@gserver2 test]# tree /data/A
+/data/A
+├── test1.txt
+├── test2.txt
+├── test3.txt
+├── test4.txt
+├── test5.txt
+└── test6.txt
+
+#server3测试
+[root@gserver3 test]# tree /data/A
+/data/A
+├── test1.txt
+├── test2.txt
+├── test3.txt
+├── test4.txt
+├── test5.txt
+└── test6.txt
+
+总结：由测试结果可以看出，数据存储副本数量与架构图所示一致，该模式下，倘若某一台机器坏掉，数据还有2份
+</code></pre><h4 id="3-创建条带卷"><a href="#3-创建条带卷" class="headerlink" title="3. 创建条带卷"></a>3. 创建条带卷</h4><pre><code>特点：
+类似 RAID0，文件分成数据块以 Round Robin 方式分布到 brick server 上，并发粒度是数据块，支持超大文件，大文件的读写性能高。
+</code></pre><p> <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tiaodaijuan.png" alt="tiaodaijuan"></p>
+<pre><code>测试之前，我们先删除刚才创建的分布式卷
+
+[root@gserver1 ~]# gluster volume stop test-volume   #必须先停止卷，然后再删除卷
+[root@gserver1 ~]# gluster volume delete test-volume
+并清空三台服务器/data/A目录下的内容
+</code></pre><pre><code>#创建条带卷stri-volume
+[root@gserver1 A]# gluster volume create stri-volume stripe 4 transport tcp 192.168.56.10:/data/A 192.168.56.101:/data/A 192.168.56.102:/data/A 192.168.56.103:/data/A force
+
+启动卷
+[root@gserver1 ~]# gluster volume start stri-volume
+volume start: stri-volume: success
+
+再次查看卷状态
+[root@gserver1 ~]# gluster volume info stri-volume
+Volume Name: stri-volume
+Type: Stripe             #类型:条带卷
+Volume ID: a8745aae-d5a1-4093-a163-4db5687d575b
+Status: Started
+Snapshot Count: 0
+Number of Bricks: 1 x 4 = 4
+Transport-type: tcp
+Bricks:
+Brick1: 192.168.56.10:/data/A
+Brick2: 192.168.56.101:/data/A
+Brick3: 192.168.56.102:/data/A
+Brick4: 192.168.56.103:/data/A
+Options Reconfigured:
+transport.address-family: inet
+nfs.disable: on
+</code></pre><p>客户端client-挂载使用</p>
+<pre><code> #创建挂载目录
+[root@gluster_client ~]# mkdir /mnt/stri -p
+
+#挂载使用
+[root@gluster_client ~]# mount.glusterfs 192.168.56.101:stri-volume /mnt/stri/  
+[root@gluster_client ~]# df -h
+Filesystem                 Size  Used Avail Use% Mounted on
+192.168.56.101:stri-volume   30G  109M   28G   1% /mnt/stri
+
+注：挂载的时候,可以使用任意一台已经加入到可信存储池并且创建了对应卷的server地址
+</code></pre><p>Distributed逻辑卷-文件存储测试</p>
+<pre><code>[root@gluster_client ~]# cd /mnt/stri/
+[root@gluster_client dis]# touch stri{1..6}.txt
+[root@gluster_client dis]# ll
+</code></pre><p>server tree测试</p>
+<pre><code>[root@gserver1 ~]# tree /data/A
+/data/A
+├── stri1.txt
+├── stri2.txt
+├── stri3.txt
+├── stri4.txt
+├── stri5.txt
+└── stri6.txt
+
+[root@gserver2 ~]# tree /data/A
+/data/A
+├── stri1.txt
+├── stri2.txt
+├── stri3.txt
+├── stri4.txt
+├── stri5.txt
+└── stri6.txt
+
+[root@gserver3 ~]# tree /data/A
+/data/A
+├── stri1.txt
+├── stri2.txt
+├── stri3.txt
+├── stri4.txt
+├── stri5.txt
+└── stri6.txt
+</code></pre><h4 id="4-创建分布式-复制卷（推荐）"><a href="#4-创建分布式-复制卷（推荐）" class="headerlink" title="4. 创建分布式+复制卷（推荐）"></a>4. 创建分布式+复制卷（推荐）</h4><pre><code>特点：
+Brick server 数量是镜像数的倍数，兼具 distribute 和 replica 卷的特点,可以在 2 个或多个节点之间复制数据。分布式的复制卷，volume 中 brick 所包含的存储服务器数必须是 replica 的倍数(&gt;=2倍)，兼顾分布式和复制式的功能。
+</code></pre><p>分布式复制卷架构示意图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi-fuzhijuan.png" alt="fenbushi-fuzhi" title="">
+                </div>
+                <div class="image-caption">fenbushi-fuzhi</div>
+            </figure>
+<pre><code>测试之前，我们先删除刚才创建的分布式卷
+
+[root@gserver1 ~]# gluster volume stop dis-volume   #必须先停止卷，然后再删除卷
+[root@gserver1 ~]# gluster volume delete dis-volume
+并清空三台服务器/data/A目录下的内容
+</code></pre><pre><code># 创建卷test-volume
+[root@gserver1 A]# gluster volume create test1-volume replica 2 transport tcp 192.168.56.10:/data/A 192.168.56.101:/data/A 192.168.56.102:/data/A 192.168.56.103:/data/A  force
+
+注：此处使用的是4台服务器的/data/A目录来创建分布式+复制（综合）卷
+</code></pre><pre><code>启动卷
+[root@gserver1 ~]# gluster volume start test1-volume
+volume start: test1-volume: success
+
+再次查看卷状态
+Volume Name: test1-volume
+Type: Distributed-Replicate
+Volume ID: 7ef157ef-5d51-492c-9e85-cf4e583a9903
+Status: Started
+Snapshot Count: 0
+Number of Bricks: 2 x 2 = 4
+Transport-type: tcp
+Bricks:
+Brick1: 192.168.56.10:/data/A
+Brick2: 192.168.56.101:/data/A
+Brick3: 192.168.56.102:/data/A
+Brick4: 192.168.56.103:/data/A
+Options Reconfigured:
+transport.address-family: inet
+nfs.disable: on
+</code></pre><p>客户端client-挂载使用</p>
+<pre><code> #创建挂载目录
+[root@gluster_client ~]# mkdir /mnt/test1 -p
+
+#挂载使用
+[root@gluster_client ~]# mount.glusterfs 192.168.56.101:test1-volume /mnt/test1/  
+[root@gluster_client ~]# df -h
+Filesystem                 Size  Used Avail Use% Mounted on
+192.168.56.101:test1-volume   20G   73M   19G   1% /mnt/test1
+
+注：挂载的时候,可以使用任意一台已经加入到可信存储池并且创建了对应卷的server地址
+</code></pre><p>测试结果：</p>
+<pre><code>[root@gluster_client ~]# tree /data/A
+/data/A
+├── haha10.conf
+├── haha1.conf
+├── haha2.conf
+├── haha3.conf
+├── haha4.conf
+├── haha5.conf
+├── haha6.conf
+├── haha7.conf
+├── haha8.conf
+└── haha9.conf
+
+[root@gserver1 test1]# tree /data/A
+/data/A
+├── haha10.conf
+├── haha1.conf
+├── haha2.conf
+├── haha3.conf
+├── haha4.conf
+├── haha5.conf
+├── haha6.conf
+├── haha7.conf
+├── haha8.conf
+└── haha9.conf
+
+另外2台服务器/data/A没有数据，由此可以总结为分布式复制卷类似于RIAD1,有备份冗余功能，但磁盘利用率低。
+</code></pre><h4 id="5-创建分布式-条带卷"><a href="#5-创建分布式-条带卷" class="headerlink" title="5. 创建分布式+条带卷"></a>5. 创建分布式+条带卷</h4><pre><code>特点：
+Brick server 数量是条带数的倍数，兼具 distribute 和 stripe 卷的特点。分布式的条带卷，volume 中 brick 所包含的存储服务器数必须是 stripe 的倍数(&gt;=2倍)，兼顾分布式和条带式的功能。每个文件分布在四台共享服务器上，通常用于大文件访问处理，最少需要 4 台服务器才能创建分布条带卷。
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi-tiaodaijuan.png" alt="fenbushi_tiaodaijuan" title="">
+                </div>
+                <div class="image-caption">fenbushi_tiaodaijuan</div>
+            </figure>
+<h4 id="6-stripe-replica-volume条带复制卷"><a href="#6-stripe-replica-volume条带复制卷" class="headerlink" title="6. stripe replica volume条带复制卷"></a>6. stripe replica volume条带复制卷</h4><pre><code>特点：类似 RAID 10，同时具有条带卷和复制卷的特点。
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tiaodai-fuzhijuan.png" alt="tiaodai_fuzhijuan" title="">
+                </div>
+                <div class="image-caption">tiaodai_fuzhijuan</div>
+            </figure>
+<h4 id="7-distribute-stripe-replica-volume分布式条带复制卷"><a href="#7-distribute-stripe-replica-volume分布式条带复制卷" class="headerlink" title="7. distribute stripe replica volume分布式条带复制卷"></a>7. distribute stripe replica volume分布式条带复制卷</h4><pre><code>特点：三种基本卷的复合卷，通常用于类 Map Reduce 应用。
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi_tiaodai_fuzhijuan.png" alt="fenbushi_tiaodai_fuzhijuan" title="">
+                </div>
+                <div class="image-caption">fenbushi_tiaodai_fuzhijuan</div>
+            </figure>
+<h4 id="Docker-GlusterFS-Volume-插件"><a href="#Docker-GlusterFS-Volume-插件" class="headerlink" title="Docker GlusterFS Volume 插件"></a>Docker GlusterFS Volume 插件</h4><pre><code>Docker Volume是一种可以将容器以及容器生产的数据分享开来的数据格式，我们可以使用宿主机的本地存储作为Volume的提供方，也可以使用Volume Plugin接入许多第三方的存储。 GitHub就有一个Docker GlusterFS Volume Plugin，方便我们将GlusterFS挂载到容器中。
+
+GitHub:https://github.com/calavera/docker-volume-glusterfs
+</code></pre><p>安装Docker GlusterFS Volume 插件</p>
+<pre><code># (1). 获取docker-volume-glusterfs
+go get github.com/calavera/docker-volume-glusterfs
+考虑到搭建golang环境有一定的复杂性，我们也可以采用golang容器来获取该应用
+
+# (2). 拷贝docker-volume-glusterfs至/usr/bin
+cp ./docker-volume-glusterfs /usr/bin
+chmod 777 /usr/bin/docker-volume-glusterfs
+
+# (3). 声明gluster服务集群
+docker-volume-glusterfs -servers node1:node2
+
+# (4). 指定volume
+docker run --volume-driver glusterfs --volume datastore:/data alpine touch /data/hello
+这里的datastore即我们在glusterfs集群中创建的volume，但需要事先手动创建
+</code></pre><h4 id="管理GlusterFS卷"><a href="#管理GlusterFS卷" class="headerlink" title="管理GlusterFS卷"></a>管理GlusterFS卷</h4><pre><code>#停止卷
+[root@linux-node1 ~]# gluster volume stop test1-volume
+
+#启动卷
+[root@linux-node1 ~]# gluster volume start test1-volume
+
+#删除卷
+[root@linux-node1 ~]# gluster volume delete test1-volume
+</code></pre><blockquote>
+<p>扩展卷（GlusterFS支持在线进行卷的扩展）</p>
+</blockquote>
+<pre><code>#加入可信任存储池
+[root@linux-node3 data]# gluster peer probe 192.168.56.30
+peer probe: success
+
+#添加brick
+[root@linux-node3 data]# gluster volume add-brick test1-volume 192.168.56.30:/data/A force
+volume add-brick: success
+
+#查看卷信息
+[root@linux-node3 data]# gluster volume info test1-volume
+Volume Name: test1-volume
+</code></pre><blockquote>
+<p>收缩卷</p>
+</blockquote>
+<pre><code>收缩卷和扩展卷相似据以Brick为单位。
+
+#移除brick
+[root@linux-node3 data]# gluster volume remove-brick test1-volume 192.168.56.30:/data/A start
+volume remove-brick start: success
+ID: 15764d05-5675-46b5-8467-b9eb12570e61
+
+#查看该节点brick状态
+[root@linux-node3 data]#  gluster volume remove-brick test1-volume 192.168.56.30:/data/A status
+
+#提交更改
+[root@linux-node3 data]# gluster volume remove-brick test1-volume 192.168.56.30:/data/A commit
+Removing brick(s) can result in data loss. Do you want to Continue? (y/n) y
+volume remove-brick commit: success
+
+#查看卷状态信息
+[root@linux-node3 data]# gluster volume info test1-volume
+</code></pre><blockquote>
+<p>迁移卷</p>
+</blockquote>
+<pre><code>进行卷迁移前需要确保迁移目标已经加入集群。或者迁移的Brick目录存在。迁移卷可以执行暂停和中止的操作。
+
+#迁移
+gluster volume replace-brick test1-volume 192.168.56.30:/data/A 192.168.56.30:/data/B commit force
+
+#暂停迁移
+gluster volume replace-brick test1-volume 192.168.56.30:/data/A 192.168.56.30:/data/B pause
+
+#中止迁移
+gluster volume replace-brick test1-volume 192.168.56.30:/data/A 192.168.56.30:/data/B abort
+</code></pre><blockquote>
+<p>替换brick</p>
+</blockquote>
+<pre><code>gluster volume replace-brick VOLNAME BRICKNEW-BRICK start/pause/abort/status/commit
+
+gluster volume replace-brick dht_vol server0:/mnt/sdb1 server0:/mnt/sdc1 start
+//如上server0上的/mnt/sdb1替换到server0的/mnt/sdc1，执行replcace-brick卷替换启动命令，使用start启动命令后，开始将原始Brick的数据迁移到即将需要替换的Brick上。
+
+
+gluster volume replace-brick dht_vol server0:/mnt/sdb1 server0:/mnt/sdc1 status
+//在数据迁移的过程中，可以查看替换任务是否完成。
+
+gluster volume replace-brick dht_vol server0:/mnt/sdb1 server0:/mnt/sdc1 abort
+//在数据迁移的过程中，可以执行abort命令终止Brick替换。
+
+gluster volume replace-brick dht_vol server0:/mnt/sdb1 server0:/mnt/sdc1 commit
+//在数据迁移结束之后，执行commit命令结束任务，则进行Brick替换。使用volume info命令可以查看到Brick已经被替换。
+</code></pre><blockquote>
+<p>系统配额</p>
+</blockquote>
+<pre><code>开启/关闭系统配额
+gluster volume quota VOLNAME enable/disable
+
+//在使用系统配额功能时，需要使用enable将其开启；disable为关闭配额功能命令。
+
+设置(重置)目录配额
+gluster volume quota VOLNAME limit-usage /directory limit-value
+gluster volume quota dht_vol limit-usage /quota 10GB
+//如上，设置dht_vol卷下的quota子目录的限额为10GB。
+
+PS：这个目录是以系统挂载目录为根目录”/”,所以/quota即客户端挂载目录下的子目录quota
+
+配额查看
+gluster volume quota VOLNAME list
+gluster volume quota VOLNAME list /directory name
+//可以使用如上两个命令进行系统卷的配额查看，第一个命令查看目的卷的所有配额设置，第二个命令则是执行目录进行查看。可以显示配额大小及当前使用容量，若无使用容量(最小0KB)则说明设置的目录可能是错误的(不存在)。
+
+
+地域复制(geo-replication)
+gluster volume geo-replication MASTER SLAVE start/status/stop
+
+地域复制是系统提供的灾备功能，能够将系统的全部数据进行异步的增量备份到另外的磁盘中。
+gluster volume geo-replication dht_vol 192.168.2.104:/mnt/sdb1 start 
+
+//如上，开始执行将dht_vol卷的所有内容备份到2.104下的/mnt/sdb1中的task，需要注意的是，这个备份目标不能是系统中的Brick。
+</code></pre><blockquote>
+<p>I/O信息查看</p>
+</blockquote>
+<pre><code>Profile Command 提供接口查看一个卷中的每一个brick的IO信息。
+注：把下面的VOLNAME改为实际的volume名称，比如:stri-volume
+
+gluster volume profile VOLNAME start
+//启动profiling，之后则可以进行IO信息查看
+
+gluster volume profile VOLNAME info
+//查看IO信息，可以查看到每一个Brick的IO信息
+
+gluster volume profile VOLNAME stop
+//查看结束之后关闭profiling功能
+</code></pre><blockquote>
+<p>Top监控</p>
+</blockquote>
+<pre><code>Top command 允许你查看bricks的性能例如：read, write, file open calls, file read calls, file write calls, directory open calls, and directory real calls
+
+所有的查看都可以设置top数，默认100
+gluster volume top VOLNAME open [brick BRICK-NAME] [list-cnt cnt]
+
+//查看打开的fd
+gluster volume top VOLNAME read [brick BRICK-NAME] [list-cnt cnt]
+
+//查看调用次数最多的读调用
+gluster volume top VOLNAME write [brick BRICK-NAME] [list-cnt cnt]
+
+//查看调用次数最多的写调用
+gluster volume top VOLNAME opendir [brick BRICK-NAME] [list-cnt cnt]
+
+//查看次数最多的目录调用
+gluster volume top VOLNAME readdir [brick BRICK-NAME] [list-cnt cnt]
+
+//查看每个Brick的读性能
+gluster volume top VOLNAME read-perf [bs blk-size count count] [brick BRICK-NAME] [list-cnt cnt]
+
+//查看每个Brick的写性能
+gluster volume top VOLNAME write-perf [bs blk-size count count] [brick BRICK-NAME] [list-cnt cnt]
+</code></pre><h4 id="客户端挂载"><a href="#客户端挂载" class="headerlink" title="客户端挂载"></a>客户端挂载</h4><pre><code>GlusterFS支持三种客户端类型。Gluster Native Client、NFS和CIFS。官方推荐使用Native Client，可以使用GlusterFS的全部功能。
+</code></pre><blockquote>
+<p>Gluster Native Client</p>
+</blockquote>
+<pre><code>Gluster Native Client是基于FUSE的，所以需要保证客户端安装了FUSE。这个是官方推荐的客户端，支持高并发和高效的写性能。
+
+[root@linux-node4 ~]# yum -y install glusterfs-client
+[root@linux-node4 ~]# mkdir /mnt/test
+[root@linux-node4 ~]# mount.glusterfs 192.168.56.102:/test1-volume /mnt/test
+</code></pre><pre><code>挂载参数：
+当使用mount –t glusterfs的使用，可以执行相关的参数如下：
+backupvolfile-server=server-name
+volfile-max-fetch-attempts=number of attempts
+log-level=loglevel
+log-file=logfile
+transport=transport-type
+direct-io-mode=[enable|disable]
+
+挂载示例：
+mount -t glusterfs -o backupvolfile-server=volfile_server2 --volfile-max-fetch-attempts=2 log-level=WARNING,log-file=/var/log/gluster.log server1:/test-volume /mnt/test 
+
+注：
+(1)gluster 的提供option叫backup-volfile-server和backup-volfile-servers，达到挂载时候可以指定多个读取卷配置服务器。
+mount -t glusterfs -o backup-volfile-server=gluster2 gluster1:/volume /mnt
+mount -t glusterfs -o backup-volfile-servers=gluster2:gluster3:gluster4 gluster1:/volume /mnt
+意思是如果gluster1连接失败，会去gluster2等去取卷配置信息。
+
+(2)--volfile-max-fetch-attempts=X  option
+specify the number of attempts to fetch volume files while mounting a volume. This option is useful when you mount a server with multiple IP addresses or when round-robin DNS is configured for the server-name..
+</code></pre><blockquote>
+<p>NFS挂载</p>
+</blockquote>
+<pre><code>NFS默认是使用的UDP进行通信，由于GlusterFS不支持UDP。所以需要设置为TCP的方式挂载。
+
+mount -o mountproto=tcp -t nfs server1:/test-volume /mnt/test
+</code></pre><h4 id="基于GlusterFS实现MySQL数据持久化"><a href="#基于GlusterFS实现MySQL数据持久化" class="headerlink" title="基于GlusterFS实现MySQL数据持久化"></a>基于GlusterFS实现MySQL数据持久化</h4><blockquote>
+<p>参考：<a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-glusterfs-docker-volume/index.html" target="_blank" rel="noopener">IBM developerworks</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-26T03:56:56.368Z" itemprop="dateUpdated">2017-09-26 11:56:56</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/24/GlusterFS分布式存储/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GlusterFS/">GlusterFS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NAS/">NAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SAN/">SAN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式存储/">分布式存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&title=《GlusterFS存储》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&title=《GlusterFS存储》 — Gary Wu&source=
+概述
+
+GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。Glus..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《GlusterFS存储》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/24/CentOS7-创建网卡子接口/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">CentOS7-创建网卡子接口</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/23/Nginx负载均衡/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Nginx负载均衡</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&title=《GlusterFS存储》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&title=《GlusterFS存储》 — Gary Wu&source=
+概述
+
+GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。Glus..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《GlusterFS存储》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>查询MySQL表占用空间空间排序 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,MySQL">
+    <meta name="description" content="一个数据库运行了很久，向对其进行清理优化，如何能快速知道哪些表占用容量较大呢？">
+<meta name="keywords" content="高级运维,MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="查询MySQL表占用空间空间排序">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="一个数据库运行了很久，向对其进行清理优化，如何能快速知道哪些表占用容量较大呢？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-08T06:48:26.413Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="查询MySQL表占用空间空间排序">
+<meta name="twitter:description" content="一个数据库运行了很久，向对其进行清理优化，如何能快速知道哪些表占用容量较大呢？">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">查询MySQL表占用空间空间排序</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">查询MySQL表占用空间空间排序</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-08T06:39:27.000Z" itemprop="datePublished" class="page-time">
+  2018-02-08
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-查询MySQL占用空间空间排序"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">查询MySQL表占用空间空间排序</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-08 14:39:27" datetime="2018-02-08T06:39:27.000Z"  itemprop="datePublished">2018-02-08</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>一个数据库运行了很久，向对其进行清理优化，如何能快速知道哪些表占用容量较大呢？
+</code></pre><a id="more"></a>
+<pre><code>Select  
+Concat(table_schema, &#39;.&#39;, table_name) As &quot;Name&quot;  
+,Concat(Round(table_rows / 1000000, 2), &#39;M&#39;) As &quot;Rows&quot;  
+,Concat(Round(data_length / ( 1024 * 1024  ), 2), &#39;M&#39;) As &quot;Row Size&quot;  
+ ,Concat(Round(index_length / ( 1024 * 1024 ), 2), &#39;M&#39;) As &quot;Index Size&quot;  
+ ,Concat(Round(( data_length + index_length ) / ( 1024 * 1024  ), 2), &#39;M&#39;) As &quot;Total&quot;  
+ ,Round(index_length / data_length, 2) &quot;Row / Index Ratio&quot;  
+From information_schema.TABLES  
+ Order By data_length + index_length DESC  
+Limit 20; 
+</code></pre><pre><code>其中Limit 20是查看前20名占用空间较大的表，效果如下：
+</code></pre><pre><code>+------------------------------------------------+---------+------------+------------+------------+-------------------+
+| Name                                           | Rows    | Row Size   | Index Size | Total      | Row / Index Ratio |
++------------------------------------------------+---------+------------+------------+------------+-------------------+
+| mcmp_event_l.event_launcher_attribute_daily    | 992.65M | 132980.50M | 171929.17M | 304909.67M |              1.29 |
+| mcmp_event_v.event_vlock_attribute_daily       | 277.90M | 39546.03M  | 44269.23M  | 83815.27M  |              1.12 |
+| mcmp_launcher.theme_thid_summary_daily         | 259.76M | 27497.39M  | 16808.81M  | 44306.20M  |              0.61 |
+| mcmp_launcher.theme_new_thid_summary_daily     | 282.85M | 26321.91M  | 17841.27M  | 44163.17M  |              0.68 |
+| mcmp_event_l.event_launcher_ver_daily          | 150.33M | 15974.84M  | 27352.84M  | 43327.69M  |              1.71 |
+| mcmp_crash.exc_vlock_exception_model_osver     | 0.79M   | 22076.00M  | 0.00M      | 22076.00M  |              0.00 |
+| mcmp_launcher.theme_new_thid_summary_daily_sum | 234.67M | 17412.17M  | 3534.38M   | 20946.55M  |              0.20 |
+| mcmp_event_v.event_vlock_ver_daily             | 51.24M  | 5931.20M   | 10507.33M  | 16438.53M  |              1.77 |
+| mcmp_event_v.event_vlock_ver_daily_copy        | 50.06M  | 5684.45M   | 10077.70M  | 15762.16M  |              1.77 |
+| mcmp_crash.exc_launcher_exception_model_osver  | 3.76M   | 11865.00M  | 0.00M      | 11865.00M  |              0.00 |
+| mcmp_event_l.event_launcher_attribute_su_daily | 41.70M  | 8022.86M   | 3096.13M   | 11118.98M  |              0.39 |
+| mcmp_event_v.event_vlock_attribute_su_daily    | 27.02M  | 5434.39M   | 1335.61M   | 6770.00M   |              0.25 |
+| mcmp_launcher.launcher_device_dru_daily_imei   | 48.46M  | 4165.00M   | 0.00M      | 4165.00M   |              0.00 |
+| mcmp_support.support_mail_history              | 0.01M   | 2571.52M   | 0.00M      | 2571.52M   |              0.00 |
+| columbus_monitor.monitor_mail_history          | 0.01M   | 2314.52M   | 0.00M      | 2314.52M   |              0.00 |
+| mobile_interface.mobile_info                   | 5.12M   | 1702.00M   | 0.00M      | 1702.00M   |              0.00 |
+| mcmp_f_manager.f_manager_aa_name_addr_pv_daily | 14.20M  | 1251.00M   | 0.00M      | 1251.00M   |              0.00 |
+| columbus_monitor.compass_flow                  | 0.02M   | 1064.10M   | 0.00M      | 1064.10M   |              0.00 |
+| mcmp_crash.exc_launcher_exception_core_daily   | 5.77M   | 440.00M    | 380.00M    | 820.00M    |              0.86 |
+| mcmp_launcher.launcher_channel_ver_daily       | 3.02M   | 501.95M    | 306.06M    | 808.02M    |              0.61 |
++------------------------------------------------+---------+------------+------------+------------+-------------------+
+20 rows in set (0.95 sec)
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-08T06:48:26.413Z" itemprop="dateUpdated">2018-02-08 14:48:26</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/02/08/查询MySQL占用空间空间排序/" target="_blank" rel="external">https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/&title=《查询MySQL表占用空间空间排序》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/&title=《查询MySQL表占用空间空间排序》 — Gary Wu&source=一个数据库运行了很久，向对其进行清理优化，如何能快速知道哪些表占用容量较大呢？
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《查询MySQL表占用空间空间排序》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/08/xtrabackup连接不上MySQL的问题/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">xtrabackup连接不上MySQL的问题</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/08/xtrabackup单表备份与还原/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">xtrabackup单表备份与还原</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/&title=《查询MySQL表占用空间空间排序》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/&title=《查询MySQL表占用空间空间排序》 — Gary Wu&source=一个数据库运行了很久，向对其进行清理优化，如何能快速知道哪些表占用容量较大呢？
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《查询MySQL表占用空间空间排序》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/02/08/查询MySQL占用空间空间排序/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>flume跨机房拉取内网kafka消息的问题 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="kafka,zookeeper,高级运维,NAT,flume,kafka生产消费,lua nginx">
+    <meta name="description" content="原来flume跨机房拉取(公网IP)的kafka服务器消息一切正常，业务迁移到openstack虚拟机后遇到了坑。  注: openstack没有公网IP">
+<meta name="keywords" content="kafka,zookeeper,高级运维,NAT,flume,kafka生产消费,lua nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flume跨机房拉取内网kafka消息的问题">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="原来flume跨机房拉取(公网IP)的kafka服务器消息一切正常，业务迁移到openstack虚拟机后遇到了坑。  注: openstack没有公网IP">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-07T12:46:31.905Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="flume跨机房拉取内网kafka消息的问题">
+<meta name="twitter:description" content="原来flume跨机房拉取(公网IP)的kafka服务器消息一切正常，业务迁移到openstack虚拟机后遇到了坑。  注: openstack没有公网IP">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">flume跨机房拉取内网kafka消息的问题</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">flume跨机房拉取内网kafka消息的问题</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-07T09:54:10.000Z" itemprop="datePublished" class="page-time">
+  2017-08-07
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#flume拉取日志错误"><span class="post-toc-number">1.</span> <span class="post-toc-text">flume拉取日志错误</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#方案解决-思路"><span class="post-toc-number">2.</span> <span class="post-toc-text">方案解决-思路</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#KAFKA配置-修改监听域名-非内网IP-是否能解决问题？"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">KAFKA配置-修改监听域名(非内网IP)-是否能解决问题？</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#最后通过官方文档了解到KAFKA如下两个参数"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">最后通过官方文档了解到KAFKA如下两个参数</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-flume跨机房拉取内网kafka消息的问题"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">flume跨机房拉取内网kafka消息的问题</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-07 17:54:10" datetime="2017-08-07T09:54:10.000Z"  itemprop="datePublished">2017-08-07</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>原来flume跨机房拉取(公网IP)的kafka服务器消息一切正常，业务迁移到openstack虚拟机后遇到了坑。
+
+注: openstack没有公网IP
+</code></pre><a id="more"></a>
+<h4 id="flume拉取日志错误"><a href="#flume拉取日志错误" class="headerlink" title="flume拉取日志错误"></a>flume拉取日志错误</h4><pre><code>由日志报错可确定flume、kafka和zookeeper的工作流程。
+
+首先,机房2的flume跨机房找机房1的zookeeper(flume里面配置了另一个机房的zookeeper集群信息；能跨机房连接这一步肯定是配置了NAT的), zookeeper告诉flume：我给你我这边的kafka的地址，你自己去联系并索要(由lua二次开发的nginx产生的)kafka消息，于是zookeeper就把kafka内网IP给了flume，flume拿到内网kafka的IP地址和端口就懵逼了,我TM连接不上啊......
+
+这就是你看到的flume日志的报错,一直在重试连接并不断返回连接失败。
+</code></pre><h4 id="方案解决-思路"><a href="#方案解决-思路" class="headerlink" title="方案解决-思路"></a>方案解决-思路</h4><pre><code>前提:
+1.机房1和机房2的kafka需要有相同的topic,没有就创建。
+2.机房1的zookeeper集群需要完成DNAT映射,让机房2的flume能连接过去
+
+刚才已经分析完了报错信息，下面就尝试去解决。
+</code></pre><h5 id="KAFKA配置-修改监听域名-非内网IP-是否能解决问题？"><a href="#KAFKA配置-修改监听域名-非内网IP-是否能解决问题？" class="headerlink" title="KAFKA配置-修改监听域名(非内网IP)-是否能解决问题？"></a>KAFKA配置-修改监听域名(非内网IP)-是否能解决问题？</h5><pre><code>带着疑问，各种修改，hosts添加解析，各种NAT映射，最后测试结果是：
+
+(1)在机房1的kafka生产消息，在机房2的kafka消费消息，测试OK，这样的话跨公网的问题就解决了。需要注意的是，需要在机房2的flume服务器配置hosts把域名指向机房1的DNAT映射。
+
+(2)在测试机房1的业务POST请求是否能被机房2的flume拉取的过程中, 机房2的flume竟然无法消费，什么尼玛情况...刚才已经确认机房1和机房2的kafka直接没有问题，那么问题就可能出现在(机房1的)lua-Nginx到(机房1)kafka的过程出现了错误。
+
+经过查看lua二次开发的Nginx错误日志可以发现这一条信息：
+producer.lua:255: buffered messages send to kafka err: test76.xxx.com could not be resolved (110: Operation timed out), retryable: true, topic: test, partition_id: 4, length: 1, context: ngx.timer, client: X.X.X.X, server: 0.0.0.0:80
+
+这条信息很明显,说kafka由监听内网IP改为监听域名后,这个域名无法解析，Lua-Nginx生产消息后发送到同机房的kafka过程中发生了错误。
+
+各种Google、某度，尝试了大半天，配置改的乱七八糟，最后得出一个结论：用Lua二次开发的Nginx &quot;他妈的&quot;不支持向kafka域名监听的地址发送生产的业务消息。无奈整套方案放弃,修改的配置全部恢复。
+</code></pre><h5 id="最后通过官方文档了解到KAFKA如下两个参数"><a href="#最后通过官方文档了解到KAFKA如下两个参数" class="headerlink" title="最后通过官方文档了解到KAFKA如下两个参数"></a>最后通过官方文档了解到KAFKA如下两个参数</h5><pre><code>advertised.host.name=X.X.X.X
+advertised.port=9092
+
+这两个kafka配置参数意思是：把这个地址注册到zookeeper，当外部(机房2)flume等程序过来请求zookeeper的时候,zookeeper告诉外部程序flume, kafka的IP地址和端口是这两个参数定义的，(这个IP可以是公网IP)，这就好办了，当配置了公网IP,flume就能找到机房1的kafka集群了。
+
+实施: 在机房1的kafka集群的机器中，每台kafka集群配置中都加这两个参数，保存，重启kafka,重启zookeeper。
+注:这个参数的公网IP和端口需要提前在iptables完成DNAT映射。
+
+---------------------------------------------------------------------------------------------
+最终测试：
+1. 在机房1 POST访问请求Lua-KAFKA,让其产生消息
+2. 在机房1的kafka查看Topic为test的消费消息(速度最快)
+3. 在机房2的kafka查看Topic为test的消费消息(由于跨公网,速度稍有延迟)
+4. 把测试的Topic改为正式的Topic即可。
+
+测试结果:完美+感人！
+</code></pre><p>参考:</p>
+<p><a href="http://kafka.apache.org/documentation.html#brokerconfigs" target="_blank" rel="noopener">KAFKA官方说明文档</a></p>
+<p><a href="https://www.cnblogs.com/dragkiss/p/5668019.html" target="_blank" rel="noopener">KAFKA常用命令参考</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-07T12:46:31.905Z" itemprop="dateUpdated">2018-03-07 20:46:31</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/07/flume跨机房拉取内网kafka消息的问题/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NAT/">NAT</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flume/">flume</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kafka/">kafka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kafka生产消费/">kafka生产消费</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lua-nginx/">lua nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/&title=《flume跨机房拉取内网kafka消息的问题》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/&title=《flume跨机房拉取内网kafka消息的问题》 — Gary Wu&source=原来flume跨机房拉取(公网IP)的kafka服务器消息一切正常，业务迁移到openstack虚拟机后遇到了坑。
+
+注: openstack没有公网IP
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《flume跨机房拉取内网kafka消息的问题》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/10/Apache目录浏览功能-部署/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Apache目录浏览功能-部署</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/05/vmware虚拟机-Linux多网卡配置/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">vmware虚拟机-Linux多网卡配置</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/&title=《flume跨机房拉取内网kafka消息的问题》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/&title=《flume跨机房拉取内网kafka消息的问题》 — Gary Wu&source=原来flume跨机房拉取(公网IP)的kafka服务器消息一切正常，业务迁移到openstack虚拟机后遇到了坑。
+
+注: openstack没有公网IP
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《flume跨机房拉取内网kafka消息的问题》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/07/flume跨机房拉取内网kafka消息的问题/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

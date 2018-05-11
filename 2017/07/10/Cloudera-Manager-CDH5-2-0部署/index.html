@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Cloudera_Manager-CDH5.2.0部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,CDH,大数据,Hadoop">
+    <meta name="description" content="hadoop 体系衍生了许多商业发行版，目前Hadoop比较流行的主要有2个版本，Apache和Cloudera版本。 Apache Hadoop：维护人员比较多，更新频率比较快，但是稳定性比较差。Cloudera Hadoop（CDH）：Cloudera公司的发行版本，基于Apache Hadoop的二次开发，优化了组件兼容和交互接口、简化安装配置、增加Cloudera兼容特性。 下载链接：D">
+<meta name="keywords" content="高级运维,CDH,大数据,Hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloudera_Manager-CDH5.2.0部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="hadoop 体系衍生了许多商业发行版，目前Hadoop比较流行的主要有2个版本，Apache和Cloudera版本。 Apache Hadoop：维护人员比较多，更新频率比较快，但是稳定性比较差。Cloudera Hadoop（CDH）：Cloudera公司的发行版本，基于Apache Hadoop的二次开发，优化了组件兼容和交互接口、简化安装配置、增加Cloudera兼容特性。 下载链接：D">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-10T10:06:36.732Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cloudera_Manager-CDH5.2.0部署">
+<meta name="twitter:description" content="hadoop 体系衍生了许多商业发行版，目前Hadoop比较流行的主要有2个版本，Apache和Cloudera版本。 Apache Hadoop：维护人员比较多，更新频率比较快，但是稳定性比较差。Cloudera Hadoop（CDH）：Cloudera公司的发行版本，基于Apache Hadoop的二次开发，优化了组件兼容和交互接口、简化安装配置、增加Cloudera兼容特性。 下载链接：D">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Cloudera_Manager-CDH5.2.0部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Cloudera_Manager-CDH5.2.0部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-10T09:36:15.000Z" itemprop="datePublished" class="page-time">
+  2017-07-10
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#搭建过程"><span class="post-toc-number">1.</span> <span class="post-toc-text">搭建过程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#节点角色说明"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">节点角色说明</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#节点角色说明-1"><span class="post-toc-number">1.0.1.1.</span> <span class="post-toc-text">节点角色说明</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#准备工作-所有节点操作"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">准备工作(所有节点操作)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装mysql"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">安装mysql</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装jdk（所有节点操作）"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">安装jdk（所有节点操作）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署内网ntp时间服务器"><span class="post-toc-number">1.0.5.</span> <span class="post-toc-text">部署内网ntp时间服务器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#下载文件"><span class="post-toc-number">1.0.6.</span> <span class="post-toc-text">下载文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Cloudera-Manager安装"><span class="post-toc-number">1.0.7.</span> <span class="post-toc-text">Cloudera Manager安装</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#以下操作在所有节点运行"><span class="post-toc-number">1.0.7.0.1.</span> <span class="post-toc-text"># 以下操作在所有节点运行</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#以下步骤只在主节点上执行："><span class="post-toc-number">1.0.7.0.2.</span> <span class="post-toc-text"># 以下步骤只在主节点上执行：</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CDH集群安装（Parcel方式）"><span class="post-toc-number">1.0.8.</span> <span class="post-toc-text">CDH集群安装（Parcel方式）</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Cloudera-Manager-CDH5-2-0部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Cloudera_Manager-CDH5.2.0部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-10 17:36:15" datetime="2017-07-10T09:36:15.000Z"  itemprop="datePublished">2017-07-10</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>hadoop 体系衍生了许多商业发行版，目前Hadoop比较流行的主要有2个版本，Apache和Cloudera版本。</p>
+<p>Apache Hadoop：维护人员比较多，更新频率比较快，但是稳定性比较差。<br>Cloudera Hadoop（CDH）：Cloudera公司的发行版本，基于Apache Hadoop的二次开发，优化了组件兼容和交互接口、简化安装配置、增加Cloudera兼容特性。</p>
+<p>下载链接：<a href="http://www.cloudera.com/downloads/manager/5-7-1.html" target="_blank" rel="noopener">Download Cloudera Manager</a></p>
+</blockquote>
+<a id="more"></a>
+<blockquote>
+<p>整个安装过程，大致上可以分成两个步骤：首先是先安装 CM 控制台（即一个web管理界面），然后通过 CM 来安装 CDH。也就是说，整个CDH集群的安装，是可以在CM界面上进行操作的，包括后面添加节点，也是在CM界面上进行操作。</p>
+</blockquote>
+<h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><blockquote>
+<p><strong>系统环境</strong></p>
+<p>系统：CentOS6.6</p>
+<p>Cloudera: CM5.2.0 +CDH5.2.0</p>
+<p>内存：主节点：16G，其他slave节点内存8G；CPU均为8核</p>
+</blockquote>
+<h4 id="节点角色说明"><a href="#节点角色说明" class="headerlink" title="节点角色说明"></a>节点角色说明</h4><h5 id="节点角色说明-1"><a href="#节点角色说明-1" class="headerlink" title="节点角色说明"></a>节点角色说明</h5><table>
+<thead>
+<tr>
+<th>IP</th>
+<th>主机名</th>
+<th>角色描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.1.2.20</td>
+<td>cm-master</td>
+<td>master CM主控节点</td>
+</tr>
+<tr>
+<td>10.1.2.21</td>
+<td>cm-slave1</td>
+<td>Slave1 受控节点</td>
+</tr>
+<tr>
+<td>10.1.2.22</td>
+<td>cm-slave2</td>
+<td>Slave2 受控节点</td>
+</tr>
+</tbody>
+</table>
+<h4 id="准备工作-所有节点操作"><a href="#准备工作-所有节点操作" class="headerlink" title="准备工作(所有节点操作)"></a>准备工作(所有节点操作)</h4><pre><code>1. 修改hostname
+   vim /etc/sysconfig/network
+
+2. 关闭SELinux
+   getenforce    查看SELinux状态
+   vi /etc/selinux/config    若SELinux没有关闭，修改SELinux=disabled.（重启生效）
+   setenforce 0   立即生效
+
+3. 关闭防火墙
+   service iptables stop
+   chkconfig iptables off
+   chkconfig iptables --list
+
+4. 网络配置（略）
+   设置静态ip以及制定DNS
+
+5. 修改hosts文件，添加如下：
+
+   # CDH Cluster
+   10.1.2.20   cm-master
+   10.1.2.21   cm-slave1
+   10.1.2.22   cm-slave2
+
+6. 重启
+</code></pre><h4 id="安装mysql"><a href="#安装mysql" class="headerlink" title="安装mysql"></a>安装mysql</h4><pre><code>略
+</code></pre><h4 id="安装jdk（所有节点操作）"><a href="#安装jdk（所有节点操作）" class="headerlink" title="安装jdk（所有节点操作）"></a>安装jdk（所有节点操作）</h4><pre><code>(1) 创建java目录
+    mkdir /usr/java &amp;&amp; cd /usr/java   
+
+(2)下载解压
+   tar -zxvf jdk-7u79-linux-x64.tar.gz  
+
+(3)配置java环境变量
+ vim /etc/profile
+    #set java environment
+    JAVA_HOME=/usr/java/jdk1.7.0_79
+    JRE_HOME=/usr/java/jdk1.7.0_79/jre
+    CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
+    PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+    export JAVA_HOME JRE_HOME CLASS_PATH PATH
+source /etc/profile
+
+(4)验证
+   [root@localhost java]# java -version
+   java version &quot;1.7.0_79&quot;
+   Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+   Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+</code></pre><h4 id="部署内网ntp时间服务器"><a href="#部署内网ntp时间服务器" class="headerlink" title="部署内网ntp时间服务器"></a>部署内网ntp时间服务器</h4><p>参考：<a href="https://wuyanteng.github.io/2017/07/06/NTP%E6%9C%8D%E5%8A%A1%E5%99%A8-%E9%83%A8%E7%BD%B2/#more">NTP服务器部署</a></p>
+<h4 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h4><ul>
+<li><p>下载：<a href="http://archive.cloudera.com/cm5/redhat/6/x86_64/cm/cloudera-manager.repo" target="_blank" rel="noopener">cloudera-manager.repo</a> </p>
+<p>修改baseurl中cm版本为实际版本，本例中改成5.2.0</p>
+<pre><code>[cloudera-manager]
+# Packages for Cloudera Manager, Version 5, on RedHat or CentOS 6 x86_64                  
+name=Cloudera Manager
+baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.2.0/
+gpgkey =https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/RPM-GPG-KEY-cloudera    
+gpgcheck = 1
+</code></pre></li>
+</ul>
+<ul>
+<li><p>下载：<a href="http://archive.cloudera.com/cm5/installer/5.2.0/" target="_blank" rel="noopener">CM installer</a></p>
+</li>
+<li><p>下载：<a href="http://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.2.0/RPMS/x86_64/" target="_blank" rel="noopener">CM rpms</a>，目录中全部下载下来</p>
+</li>
+<li><p>下载：<a href="http://archive.cloudera.com/cdh5/parcels/5.2.0/" target="_blank" rel="noopener">CDH Parcel</a> 文件，只需要下载如下三个</p>
+<pre><code>CDH-5.2.0-1.cdh5.2.0.p0.36-el6.parcel
+CDH-5.2.0-1.cdh5.2.0.p0.36-el6.parcel.sha1
+manifest.json
+
+注: 将.sha1文件后缀更改为.sha，同时把内容只保留hash码部分。
+(5.2.0版本sha文件内容本身就只包含hash码，不需要修改，其他版本请自行查看！)
+</code></pre></li>
+</ul>
+<h4 id="Cloudera-Manager安装"><a href="#Cloudera-Manager安装" class="headerlink" title="Cloudera Manager安装"></a>Cloudera Manager安装</h4><h6 id="以下操作在所有节点运行"><a href="#以下操作在所有节点运行" class="headerlink" title="# 以下操作在所有节点运行"></a># 以下操作在所有节点运行</h6><pre><code>(1)将cloudera-manager.repo文件拷贝到所有节点的/etc/yum.repos.d/文件夹下
+   验证repo文件是否起效
+   yum list|grep cloudera
+
+  如果列出的不是你安装的版本，执行下面命令重试
+   yum clean all 
+   yum list | grep cloudera
+
+(2) 将之前下载的rpms文件拷贝到所有节点的/opt目录下
+    cd /opt/rpms
+    yum -y install *.rpm
+
+(3) 将之前下载的Parcel那3个文件拷贝到/opt/cloudera/parcel-repo目录下（没有此目录则创建）
+    cd /opt/cloudera/parcel-repo &amp;&amp; ls
+        CDH-5.2.0-1.cdh5.2.0.p0.36-el6.parcel
+        mainfest.json
+        CDH-5.2.0-1.cdh5.2.0.p0.36-el6.parcel.sha
+</code></pre><h6 id="以下步骤只在主节点上执行："><a href="#以下步骤只在主节点上执行：" class="headerlink" title="# 以下步骤只在主节点上执行："></a># 以下步骤只在主节点上执行：</h6><pre><code>(1) 将下载好的bin文件拷贝到主节点任意目录下(我的目录是这个 /opt/cloudera/parcel-repo)
+     cd /opt/cloudera/parcel-repo/
+
+(2) 进入该目录，给bin文件赋予可执行权限
+    chmod +x ./cloudera-manager-installer.bin
+
+(3)删除db.properties(不删除会导致下一步出错)
+    rm -rf /etc/cloudera-scm-server/db.properties
+
+(4)安装CM
+   ./cloudera-manager-installer.bin
+
+接下来全部next和yes就行了，因为所需要的rpm包已经提前下载下来了，这个过程会进行的非常快。
+</code></pre><h4 id="CDH集群安装（Parcel方式）"><a href="#CDH集群安装（Parcel方式）" class="headerlink" title="CDH集群安装（Parcel方式）"></a>CDH集群安装（Parcel方式）</h4><pre><code>CM安装成功后, 浏览器输入http://ip:7180 (ip是CM安装的主机ip或者主机名) ，用户名和密码都输入admin，登陆进入web管理界面。
+
+注：如果打不开改网页，请耐心等待会。这个服务启动是需要一定时间......
+</code></pre><p>Web初始化配置</p>
+<pre><code>(1) 选择部署版本
+    免费版即可，继续
+
+(2) 为 CDH 群集安装指定主机。
+    cm-master
+    cm-slave1
+    cm-slave2
+    点击搜索，继续
+
+    当然，也可以使用如下方式搜索系列主机，如：
+    192.168.1.[101-105]
+    slave[1-3].com.cn
+
+(3) 选择存储库
+    这里我们采用Parcel离线安装的方式，安装简便、完全离线而且更便于集群的管理。
+    然后选择我们之前上传到服务器的CDH5.2.0版本，其他选择无。
+    继续下一步
+
+(4) JDK安装选项
+    JDK我们在最开始已经安装，所以这一步“取消勾选”，继续。
+
+(5) 提供SSH登陆凭据
+    由于CDH会自动管理所有主机间的SSH通讯，所以我们之前并没有手动配置各个节点间的SSH免密登录。在这里统一设置就行了，设置好密码点继续。
+    注：每台机器的密码需要一致，且账户具有管理员权限，最好是root。
+
+(6) 群集安装
+    这一步错误：socket.gaierror: [Errno -2] Name or service not known
+    解决方案：mv /usr/bin/host /usr/bin/host.bak
+
+(7) 安装选定的Parcel
+    这一步不需要干预，CDH安装包已经下载，耐心等待部署即可。类似于解压后分发到各节点上。
+
+(8) 检查主机正确性
+    警告：Cloudera 建议将 /proc/sys/vm/swappiness 设置为 0。当前设置为 60。使用 sysctl 命令在运行时更改该设置并编辑 /etc/sysctl.conf 以在重启后保存该设置。您可以继续进行安装，但可能会遇到问题，Cloudera Manager 报告您的主机由于交换运行状况不佳。以下主机受到影响。
+    解决方法：在会受到影响的主机上执行echo 0 &gt; /proc/sys/vm/swappiness命令即可解决，然后重新检查。
+
+(9) 安装CDH5服务
+    CDH5提供了你可能需要的各种服务，需要什么启动什么就行了。这里我选择了自定义，添加HBase，HDFS，MapReduce和ZooKeeper，这里大家按照自己的需求选。
+
+(10) 数据库设置
+     CDH默认内嵌了一个数据库，如果你需要MySQL或者Oracle请选择使用自定义数据库，点击测试连接，成功后点继续。
+     为测试，暂且使用嵌入式数据库
+
+注意，这里安装Hive的时候可能会报错，因为我们使用了MySql作为hive的元数据存储，hive默认没有带mysql的驱动，通过以下命令拷贝一个就行了：
+cp /opt/cm-5.3.4/share/cmf/lib/mysql-connector-java-5.1.25-bin.jar 
+/opt/cloudera/parcels/CDH-5.3.4-1.cdh5.3.4.p0.12/lib/hive/lib/
+
+(11) 审核更改
+     保持默认即可，继续
+
+(12) 机器设置
+     等待Hadoop等各项服务自动部署完成，然后随即进入管理页面
+
+</code></pre><pre><code>Web管理: http://cm-ip:7180
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-10T10:06:36.732Z" itemprop="dateUpdated">2017-07-10 18:06:36</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CDH/">CDH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/&title=《Cloudera_Manager-CDH5.2.0部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/&title=《Cloudera_Manager-CDH5.2.0部署》 — Gary Wu&source=
+hadoop 体系衍生了许多商业发行版，目前Hadoop比较流行的主要有2个版本，Apache和Cloudera版本。
+Apache Hadoop：维护..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Cloudera_Manager-CDH5.2.0部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/11/Ansible自动化入门/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Ansible自动化入门</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/10/cloudera-manager群集安装报错/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">cloudera manager群集安装报错</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/&title=《Cloudera_Manager-CDH5.2.0部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/&title=《Cloudera_Manager-CDH5.2.0部署》 — Gary Wu&source=
+hadoop 体系衍生了许多商业发行版，目前Hadoop比较流行的主要有2个版本，Apache和Cloudera版本。
+Apache Hadoop：维护..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Cloudera_Manager-CDH5.2.0部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

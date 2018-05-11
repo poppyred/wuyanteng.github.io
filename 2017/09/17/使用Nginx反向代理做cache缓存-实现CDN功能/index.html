@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>使用Nginx反向代理做cache缓存-实现CDN功能 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,curl,Nginx,cache,CDN">
+    <meta name="description" content="目标  使用Nginx反向代理做cache缓存-实现CDN功能">
+<meta name="keywords" content="高级运维,curl,Nginx,cache,CDN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Nginx反向代理做cache缓存-实现CDN功能">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="目标  使用Nginx反向代理做cache缓存-实现CDN功能">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-09-17T07:21:17.452Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Nginx反向代理做cache缓存-实现CDN功能">
+<meta name="twitter:description" content="目标  使用Nginx反向代理做cache缓存-实现CDN功能">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">使用Nginx反向代理做cache缓存-实现CDN功能</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">使用Nginx反向代理做cache缓存-实现CDN功能</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-17T05:45:14.000Z" itemprop="datePublished" class="page-time">
+  2017-09-17
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#源站nginx配置"><span class="post-toc-number">1.</span> <span class="post-toc-text">源站nginx配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CDN节点-配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">CDN节点-配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CDN删除缓存-脚本"><span class="post-toc-number">4.</span> <span class="post-toc-text">CDN删除缓存-脚本</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#排错"><span class="post-toc-number">5.</span> <span class="post-toc-text">排错</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分布式缓存架构-现状"><span class="post-toc-number">6.</span> <span class="post-toc-text">分布式缓存架构-现状</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-使用Nginx反向代理做cache缓存-实现CDN功能"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">使用Nginx反向代理做cache缓存-实现CDN功能</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-17 13:45:14" datetime="2017-09-17T05:45:14.000Z"  itemprop="datePublished">2017-09-17</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>目标</p>
+</blockquote>
+<pre><code>使用Nginx反向代理做cache缓存-实现CDN功能
+</code></pre><a id="more"></a>
+<blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>192.168.56.11是CDN节点
+192.168.56.12是资源源站
+</code></pre><h4 id="源站nginx配置"><a href="#源站nginx配置" class="headerlink" title="源站nginx配置"></a>源站nginx配置</h4><pre><code>源站nginx配置：
+yum install -y nginx
+hostnamectl set-hostname linux-node2
+echo &quot;This is linux-node2&quot; &gt;/usr/share/nginx/html/index.html
+端口修改为8080
+nginx -t
+systemctl status nginx
+
+要求：能正常使用curl请求访问资源。
+curl -H &quot;Host:www.exmail.com&quot; http://192.168.56.12:8080
+</code></pre><h4 id="CDN节点-配置"><a href="#CDN节点-配置" class="headerlink" title="CDN节点-配置"></a>CDN节点-配置</h4><pre><code>CDN节点nginx配置：
+yum install -y nginx
+cd /etc/nginx/conf.d
+</code></pre><blockquote>
+<p>配置nginx</p>
+</blockquote>
+<p>vim <a href="http://www.example.com.conf" target="_blank" rel="noopener">www.example.com.conf</a></p>
+<pre><code>server
+{
+    listen 80;
+    server_name www.example.com;
+    access_log /var/log/nginx/www.example.com-access.log main;
+    ##给这些静态资源做缓存
+    location ~ .*\.(gif|jpg|png|html|htm|css|js|ico|swf|pdf)$ {
+    #Proxy 
+    proxy_redirect off;
+        proxy_next_upstream http_502 http_504 http_404 error timeout invalid_header;
+        proxy_set_header            Host $host;
+        proxy_set_header            X-real-ip $remote_addr;
+        proxy_set_header            X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass    http://www.example.com.pool;
+
+    #Use Proxy Cache
+    proxy_cache cache_one;   #定义的缓存池名称
+    proxy_cache_key &quot;$host$request_uri&quot;;   #定义缓存存放目录的子目录命名规则
+    add_header Cache &quot;$upstream_cache_status&quot;; #缓存的HTTP头部加了一个Cache
+    proxy_cache_valid  200 304 301 302 8h;
+    proxy_cache_valid 404 1m;
+    proxy_cache_valid  any 2d;
+    }
+
+
+    #回源区，如果上面的location没有命中，则使用下面的配置访问源站信息
+    location /
+    {
+          proxy_redirect off;
+          proxy_next_upstream http_502 http_504 http_404 error timeout invalid_header;
+          proxy_set_header            Host $host;
+          proxy_set_header            X-real-ip $remote_addr;
+          proxy_set_header            X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_pass    http://www.example.com.pool;
+          client_max_body_size 40m;
+          client_body_buffer_size 128k;
+          proxy_connect_timeout 60;
+          proxy_send_timeout 60;
+          proxy_read_timeout 60;
+          proxy_buffer_size 64k;
+          proxy_buffers 4 32k;
+          proxy_busy_buffers_size 64k;
+
+   }
+}
+</code></pre><blockquote>
+<p>配置upstream</p>
+</blockquote>
+<p>vim upstrem.conf</p>
+<pre><code>upstream www.example.com.pool
+{
+        server 192.168.56.12:8080 weight=10 max_fails=3;      #可以添加多个
+}
+</code></pre><blockquote>
+<p>配置CDN</p>
+</blockquote>
+<p>创建CDN缓存存放目录</p>
+<pre><code>mkdir -p /data/cdn_cache/
+</code></pre><p>vim proxy.conf</p>
+<pre><code>#CDN
+#临时缓存目录
+proxy_temp_path /data/cdn_cache/proxy_temp_dir; 
+#真实缓存存放目录（其中cache_one是定义的一个缓存区域名称）
+proxy_cache_path /data/cdn_cache/proxy_cache_dir levels=1:2 keys_zone=cache_one:50m inactive=1d max_size=1g;
+proxy_connect_timeout 5;
+proxy_read_timeout 60;
+proxy_send_timeout 5;
+proxy_buffer_size 16k;
+proxy_buffers 4 64k;
+proxy_busy_buffers_size 128k;
+proxy_temp_file_write_size 128k;
+proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_404;
+</code></pre><pre><code>配置检查
+nginx -t
+
+启动服务
+systemctl status nginx
+</code></pre><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><pre><code>CDN节点访问：
+[root@linux-node1 nginx]# curl -H &quot;Host:www.exmail.com&quot; http://192.168.56.11/index.html
+this is linux-node2
+
+
+[root@linux-node1 nginx]# tree /data/cdn_cache
+/data/cdn_cache
+├── proxy_cache_dir
+│   ├── b
+│   │   └── ec
+│   │       └── abe4950dded0468475eb27f43c676ecb
+│   └── d
+│       └── 3e
+│           └── 9f4970c1daafbbba52d6e625e05f23ed
+└── proxy_temp_dir
+
+本地浏览器访问:
+添加host解析，网页访问测试。http://www.example.com/index.html
+我们使用firebug看看HTTP请求头部信息,当出现了&quot;Cache HIT&quot;说明已经命中。如果出现：Cache    
+MISS说明没有被缓存命中。
+</code></pre><pre><code>注：CDN缓存目录数据存放规则：
+cd /data/cdn_cache/proxy_cache_dir/    #进入实际缓存目录
+cd ./d/3e目录
+cat 9f4970c1daafbbba52d6e625e05f23ed 
+    &quot;59bdf88c-14&quot;
+    KEY: www.exmail.com/index.html   
+    HTTP/1.1 200 OK
+#注：md5sum加密的是&quot;www.exmail.com/index.html&quot;字符,此处的key值定义规则在www.example.com.conf配置文件中的proxy_cache_key &quot;$host$request_uri&quot;;
+
+
+
+
+目录命名规则：
+/data/cdn_cache/
+├── proxy_cache_dir
+│   ├── 6
+│   │   └── e1
+│   │       └── 8ef7ececfe8528bffb1d8ae1f639ce16
+
+1. 将用户访问的URL进行md5sum加密，然后取第一列，假设为：8ef7ececfe8528bffb1d8ae1f639ce16
+2. 第一级目录是倒数第一位数字命名,此处为：6
+3. 第二级目录是倒数第1位和第2位数字命名,此处为：e1
+</code></pre><h4 id="CDN删除缓存-脚本"><a href="#CDN删除缓存-脚本" class="headerlink" title="CDN删除缓存-脚本"></a>CDN删除缓存-脚本</h4><pre><code>#!/bin/bash
+
+cache_purge(){
+PURGE_URL=$1
+    URL_NAME=$(echo -n $PURGE_URL | md5sum | awk &#39;{print $1}&#39;)
+    FILE_NAME=$(echo $URL_NAME  | awk &#39;{print &quot;/data/cdn_cache/proxy_cache_dir/&quot;substr($0,length($0),1)&quot;/&quot;substr($0,length($0)-2,2)&quot;/&quot;$0}&#39;)
+    rm -rf $FILE_NAME 
+}
+
+purge_file(){
+PURGE_FILE=$1
+for url in $(cat $PURGE_FILE);do
+cache_purge $url
+done
+}
+
+purge_url(){
+PURGE_URL=$1
+cache_purge $PURGE_URL
+}
+
+usage(){
+echo $&quot;Usage: $0 &lt;url_file | &#39;url&#39;&gt;&quot;
+}
+
+main (){
+if [ &quot;$#&quot; -ne 1 ];then
+usage;
+else
+if [ -f $1 ];then
+purge_file $1;
+else
+purge_url $1;
+fi
+fi
+}
+
+main $1
+</code></pre><p>使用</p>
+<pre><code>chmod +x nginx_refresh
+./nginx_refresh www.example.com/index.html
+</code></pre><blockquote>
+<p>第三方清除缓存</p>
+</blockquote>
+<pre><code>第三方扩展模块ngx_cache_purge，编译安装可实现清除缓存
+https://www.lvtao.net/web/nginx-cache-purge.html 
+</code></pre><h4 id="排错"><a href="#排错" class="headerlink" title="排错"></a>排错</h4><pre><code>1.检查源站是否能够正常访问
+2.检查CDN节点是否能够正常访问源站
+3.检查CDN节点端口
+4.检查CDN节点服务
+5.检查CDN节点日志
+6.用户到CDN节点之间是否正常
+</code></pre><h4 id="分布式缓存架构-现状"><a href="#分布式缓存架构-现状" class="headerlink" title="分布式缓存架构-现状"></a>分布式缓存架构-现状</h4><pre><code>Nginx + Varnish CDN
+Nginx + Lua
+Nginx + ATS(主流架构方式)
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-17T07:21:17.452Z" itemprop="dateUpdated">2017-09-17 15:21:17</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CDN/">CDN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cache/">cache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/&title=《使用Nginx反向代理做cache缓存-实现CDN功能》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/&title=《使用Nginx反向代理做cache缓存-实现CDN功能》 — Gary Wu&source=
+目标
+
+使用Nginx反向代理做cache缓存-实现CDN功能
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用Nginx反向代理做cache缓存-实现CDN功能》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/19/buffer与cache的深入理解/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">buffer与cache的深入理解</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/16/LNMP架构部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">LNMP架构-部署与配置</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/&title=《使用Nginx反向代理做cache缓存-实现CDN功能》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/&title=《使用Nginx反向代理做cache缓存-实现CDN功能》 — Gary Wu&source=
+目标
+
+使用Nginx反向代理做cache缓存-实现CDN功能
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用Nginx反向代理做cache缓存-实现CDN功能》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

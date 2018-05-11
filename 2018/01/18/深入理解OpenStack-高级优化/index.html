@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>深入理解OpenStack-高级优化 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,高级优化,nova,CPU超配,neutron防火墙">
+    <meta name="description" content="目录">
+<meta name="keywords" content="高级运维,高级优化,nova,CPU超配,neutron防火墙">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解OpenStack-高级优化">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="目录">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-18T10:16:47.331Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解OpenStack-高级优化">
+<meta name="twitter:description" content="目录">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">深入理解OpenStack-高级优化</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">深入理解OpenStack-高级优化</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-18T08:53:23.000Z" itemprop="datePublished" class="page-time">
+  2018-01-18
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-深入理解OpenStack-高级优化"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">深入理解OpenStack-高级优化</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-18 16:53:23" datetime="2018-01-18T08:53:23.000Z"  itemprop="datePublished">2018-01-18</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>目录</p>
+</blockquote>
+<a id="more"></a>
+<ul>
+<li>OpenStack综合排错</li>
+<li>动态调整虚拟机大小</li>
+</ul>
+<ul>
+<li>关闭neutron防火墙</li>
+<li>VCPU超配</li>
+<li>添加计算节点的步骤</li>
+<li>flat网络给虚拟机添加公网/内网等多网卡</li>
+<li>关于Cinder存储</li>
+<li>关于MySQL</li>
+<li>关于RabbitMQ</li>
+</ul>
+<!-- more -->
+<hr>
+<blockquote>
+<p>OpenStack综合排错</p>
+</blockquote>
+<pre><code>1.第一步，保证所有服务都是up的状态
+openstack compute service list
+openstack network agent list
+
+2.看日志：控制节点和计算节点都要看。
+grep &#39;ERROR&#39; /var/log/nova/*
+grep &#39;ERROR&#39; /var/log/neutron/*
+</code></pre><!-- more -->
+<blockquote>
+<p>动态调整虚拟机配置大小</p>
+</blockquote>
+<pre><code>有时虚拟机创建后发现虚拟机规格太小，满足不了业务需求。于是需要在线拉伸虚拟机的规格。 
+修改控制节点和各个计算节点的nova.conf文件，进行如下配置：
+
+allow_resize_to_same_host=True
+enabled_filters=RetryFilter,AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter
+</code></pre><pre><code>在控制节点和各个计算节点重启nova服务
+</code></pre><!-- more -->
+<blockquote>
+<p>关闭neutron防火墙</p>
+</blockquote>
+<pre><code>修改计算节点防火墙
+vim /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+
+firewall_driver = neutron.agent.firewall.NoopFirewallDriver
+enable_security_group = False
+</code></pre><!-- more -->
+<blockquote>
+<p>VCPU超配</p>
+</blockquote>
+<pre><code>OpenStack的CPU超配比例是1：16（最新P版默认值是0.0,表示不超分），内存超配比例是1：1.5（最新P版默认值是0.0）。
+计算方法: cat /proc/cpuinfo里面的逻辑核数，再x16就是你能够分配给虚拟机的。内存也是类似。
+
+分别修改控制节点和计算节点的/etc/nova/nova.conf配置文件
+#cpu_allocation_ratio=16.0
+#ram_allocation_ratio=1.5
+配置完成后，只需要重启控制节点的nova-scheduler服务即可。
+
+这个值其实是给nova-scheduler调度看的，可根据实际需求进行决策是否要开启超配，另内存不建议超配！！！
+</code></pre><!-- more -->
+<blockquote>
+<p>添加计算节点的步骤</p>
+</blockquote>
+<pre><code>1. 安装操作系统
+2. 安装openstack包
+3. 安装nova-compute neutron-linuxbridge-agent
+4. SCP配置文件到新节点
+5. 检查配置文件权限,并启动服务
+6. 发现主机(配置文件已配置了自动发现)
+   su -s /bin/sh -c &quot;nova-manage cell_v2 discover_hosts --verbose&quot; nova
+</code></pre><!-- more -->
+<blockquote>
+<p>flat网络给云主机添加(外网/内网)多网卡</p>
+</blockquote>
+<pre><code>思路：在控制节点创建两个或多个扁平桥接网络即可实现,具体操作如下：
+前提是：物理服务器必须同时有公网IP地址和内网IP地址，provider是桥接到内网网卡(eth1)，然后internet桥接到公网IP的网卡上(eth0),最后在dashboard创建虚拟机的时候同时选择这两个flat网络。
+
+测试：
+1.  每台物理机器添加2块网卡并配置对应内外网IP地址
+</code></pre><pre><code>2. 控制节点配置
+   vim /etc/neutron/plugins/ml2/ml2_conf.ini
+   flat_networks = provider,internet 
+   配置flat名称，一个内网provider,一个外网internet
+
+   vim /etc/neutron/plugins/ml2/linuxbridge_agent.ini 
+   physical_interface_mappings = provider:eth1,internet:eth0 
+   2块网卡分别做映射
+
+   systemctl restart neutron-server neutron-linuxbridge-agent
+   重启服务
+</code></pre><pre><code>3. 多个计算节点分别配置neutronbridge_agent.ini
+   vim /etc/neutron/plugins/ml2/linuxbridge_agent.ini 
+   physical_interface_mappings = provider:eth1,internet:eth0
+
+   重启服务
+   systemctl restart neutron-server neutron-linuxbridge-agent
+</code></pre><pre><code>4. 控制节点创建2个flat的网络
+openstack network create  --share --external   --provider-physical-network provider   --provider-network-type flat provider
+
+openstack network create  --share --external   --provider-physical-network internet   --provider-network-type flat internet
+</code></pre><pre><code>5. 控制节点分别创建子网
+openstack subnet create --network provider \
+    --allocation-pool start=192.168.57.100,end=192.168.57.200 \
+    --dns-nameserver 223.5.5.5 --gateway 192.168.57.2  \
+    --subnet-range 192.168.57.0/24 provider
+
+openstack subnet create --network internet \
+    --allocation-pool start=1.1.1.10,end=1.1.1.15 \
+    --dns-nameserver 223.5.5.5 --gateway 1.1.1.1  \
+    --subnet-range 1.1.1.0/24 internet
+
+
+注：如果是公网IP地址不连续，起始和结束IP都写一个，在dashboard中外网flat(internet)DHCP可以加多行。
+</code></pre><pre><code>6. dashboard创建虚拟机
+   创建的时候选择两个网络,即provider和internet
+</code></pre><!-- more -->
+<blockquote>
+<p>关于Cinder存储</p>
+</blockquote>
+<pre><code>虚拟机默认存到了/var/lib/nova/instances目录中
+
+1. 本地硬盘  
+      优点：性能好
+
+2. 网络硬盘/云硬盘
+      Cinder管理: NFS/Gluster/Ceph
+      存储网络建议: 万兆网卡或者3个千兆网卡做bonding
+      单个存储不建议超过12台虚拟机，否则会导致网卡io下降,但可以做多个云存储
+
+3. 本地硬盘+云硬盘   
+</code></pre><blockquote>
+<p>关于MySQL</p>
+</blockquote>
+<pre><code>如果生产配置环境中,创建虚拟机操作过慢，可能原因是mysql数据库的原因，官方建议的最大连接数是4096，可能会超
+</code></pre><!-- more -->
+<blockquote>
+<p>关于RabbitMQ</p>
+</blockquote>
+<pre><code>RabbitMQ作为基础服务，运行过程中禁止修改hosts解析，无法解析后，会影响虚拟机的创建。
+注: 已经运行的虚拟机将不受影响
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-18T10:16:47.331Z" itemprop="dateUpdated">2018-01-18 18:16:47</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/18/深入理解OpenStack-高级优化/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CPU超配/">CPU超配</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/neutron防火墙/">neutron防火墙</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova/">nova</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级优化/">高级优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/&title=《深入理解OpenStack-高级优化》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/&title=《深入理解OpenStack-高级优化》 — Gary Wu&source=
+目录
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解OpenStack-高级优化》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/22/docker容器运行后为什么立即退出/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">docker容器运行后为什么立即退出</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">深入理解OpenStack-手动制作qcow2镜像</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/&title=《深入理解OpenStack-高级优化》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/&title=《深入理解OpenStack-高级优化》 — Gary Wu&source=
+目录
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解OpenStack-高级优化》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-高级优化/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

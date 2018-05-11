@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>redis主从宕机数据恢复问题 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,redis,rdb,aof">
+    <meta name="description" content="今天对redis在生产使用过程中的数据恢复问题做个剖析。  前提：  适用于: redis持久化没有采用AOF的持久化方式，而是采用的RDB方式。因为AOF的方式会对硬盘io造成很大压力。  既然采用RDB方式持久化，那么数据会根据自定义save策略自动进行持久化，并保存数据到指定目录中，文件以rdb结尾。">
+<meta name="keywords" content="高级运维,redis,rdb,aof">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis主从宕机数据恢复问题">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="今天对redis在生产使用过程中的数据恢复问题做个剖析。  前提：  适用于: redis持久化没有采用AOF的持久化方式，而是采用的RDB方式。因为AOF的方式会对硬盘io造成很大压力。  既然采用RDB方式持久化，那么数据会根据自定义save策略自动进行持久化，并保存数据到指定目录中，文件以rdb结尾。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-23T07:23:15.667Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis主从宕机数据恢复问题">
+<meta name="twitter:description" content="今天对redis在生产使用过程中的数据恢复问题做个剖析。  前提：  适用于: redis持久化没有采用AOF的持久化方式，而是采用的RDB方式。因为AOF的方式会对硬盘io造成很大压力。  既然采用RDB方式持久化，那么数据会根据自定义save策略自动进行持久化，并保存数据到指定目录中，文件以rdb结尾。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">redis主从宕机数据恢复问题</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">redis主从宕机数据恢复问题</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-23T06:07:45.000Z" itemprop="datePublished" class="page-time">
+  2017-11-23
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-redis主从宕机数据恢复问题"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">redis主从宕机数据恢复问题</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-23 14:07:45" datetime="2017-11-23T06:07:45.000Z"  itemprop="datePublished">2017-11-23</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>今天对redis在生产使用过程中的数据恢复问题做个剖析。
+</code></pre><blockquote>
+<p>前提：</p>
+</blockquote>
+<pre><code>适用于: redis持久化没有采用AOF的持久化方式，而是采用的RDB方式。因为AOF的方式会对硬盘io造成很大压力。
+
+既然采用RDB方式持久化，那么数据会根据自定义save策略自动进行持久化，并保存数据到指定目录中，文件以rdb结尾。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>情况1：从节点宕机</p>
+</blockquote>
+<pre><code>这种情况很简单，从节点宕机后，会丢失宕机时间内的数据，服务器维护好并启动后，会自动与Redis主进行数据同步。
+</code></pre><blockquote>
+<p>情况2：集群主节点宕机</p>
+</blockquote>
+<pre><code>一个 redis 集群包含 16384 个哈希槽（hash slot），数据库中的每个数据都属于这16384个哈希槽中的一个。集群使用公式 CRC16(key) % 16384 来计算键 key 属于哪个槽。集群中的每一个节点负责处理一部分哈希槽
+
+集群中的主从复制:
+集群中的每个节点都有1个至N个复制品，其中一个为主节点，其余的为从节点，如果主节点下线了，集群就会把这个主节点的一个从节点设置为新的主节点，继续工作。这样集群就不会因为一个主节点的下线而无法正常工作
+
+注意：
+1、如果某一个主节点和他所有的从节点都下线的话，redis集群就会停止工作了。redis集群不保证数据的强一致性，在特定的情况下，redis集群会丢失已经被执行过的写命令
+2、使用异步复制（asynchronous replication）是redis 集群可能会丢失写命令的其中一个原因，有时候由于网络原因，如果网络断开时间太长，redis集群就会启用新的主节点，之前发给主节点的数据就会丢失。
+
+这种多主多从的架构一般不会造成数据丢失。除非主都挂了...
+</code></pre><blockquote>
+<p>情况3：一主一丛</p>
+</blockquote>
+<pre><code>我要说的就是这种情况，redis主本地没有缓存数据，从redis负责数据落地。这样可以降低redis主服务器的压力。
+
+当主节点挂掉，当维护完毕这台主服务器时，需要慎重启动redis服务（最好不要自启动），因为此时主宕机期间数据就已经丢失了，一旦启动服务从就会从主节点同步过时数据，造成数据丢失。
+
+正确流程：
+1. 修改主节点配置文件，修改端口（让从找不到主）
+2. 在配置文件内加入如下内容（启用如下配置）：
+   slaveof  10.10.10.8 6379  （把主临时改为10.10.10.8从节点的从节点）
+   slave-serve-stale-data yes  
+
+   注：slaveof选项其实就是配置redis主服务器和端口
+
+3. 启动刚才宕机的主redis服务
+4. redis-cli -h 10.10.10.10 -p 6379  #在主redis上，登陆redis命令界面
+   执行save命令，同步10.10.10.8从节点的rdb数据到主上来，同步完成后，再注释掉刚才配置文件添加的两行配置，修改为主的端口，最后重新启动redis。
+</code></pre><blockquote>
+<p>常用命令</p>
+</blockquote>
+<pre><code>#获取RDB文件保存路径：
+redis 10.10.10.10:6379&gt; CONFIG GET dir
+
+#Redis SAVE 命令用于创建当前数据库的备份
+redis 10.10.10.10:6379&gt;SAVE
+
+#创建 redis RDB备份文件也可以使用命令BGSAVE，该命令在后台执行
+redis 10.10.10.10:6379&gt; BGSAVE
+
+#创建 redis 备份文件也可以使用命令 BGSAVE，该命令在后台执行。
+实例
+127.0.0.1:6379&gt; BGSAVE
+Background saving started
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-23T07:23:15.667Z" itemprop="dateUpdated">2017-11-23 15:23:15</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/23/redis主从宕机数据恢复问题/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/aof/">aof</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rdb/">rdb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/&title=《redis主从宕机数据恢复问题》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/&title=《redis主从宕机数据恢复问题》 — Gary Wu&source=今天对redis在生产使用过程中的数据恢复问题做个剖析。
+
+前提：
+
+适用于: redis持久化没有采用AOF的持久化方式，而是采用的RDB方式。因为AO..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《redis主从宕机数据恢复问题》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/24/企业IM聊天系统-Rocket-Chat/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">企业IM聊天系统-Rocket.Chat</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/20/Kafka-Broker-HA机制-进阶2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Kafka Broker HA机制-进阶2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/&title=《redis主从宕机数据恢复问题》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/&title=《redis主从宕机数据恢复问题》 — Gary Wu&source=今天对redis在生产使用过程中的数据恢复问题做个剖析。
+
+前提：
+
+适用于: redis持久化没有采用AOF的持久化方式，而是采用的RDB方式。因为AO..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《redis主从宕机数据恢复问题》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

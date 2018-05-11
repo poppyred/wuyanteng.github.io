@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Redis Cluster集群部署-实战1 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Redis,redis集群,cluster">
+    <meta name="description" content="架构图                                                                                               redis">
+<meta name="keywords" content="高级运维,Redis,redis集群,cluster">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis Cluster集群部署-实战1">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="架构图                                                                                               redis">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/redis%E8%BF%9B%E9%98%B61.png">
+<meta property="og:updated_time" content="2017-11-13T09:45:17.014Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis Cluster集群部署-实战1">
+<meta name="twitter:description" content="架构图                                                                                               redis">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/redis%E8%BF%9B%E9%98%B61.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Redis Cluster集群部署-实战1</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Redis Cluster集群部署-实战1</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-07T06:44:20.000Z" itemprop="datePublished" class="page-time">
+  2017-11-07
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Redis集群部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis集群部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Redis集群创建"><span class="post-toc-number">2.</span> <span class="post-toc-text">Redis集群创建</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#横向扩容-向集群中添加节点"><span class="post-toc-number">3.</span> <span class="post-toc-text">横向扩容-向集群中添加节点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#从集群中删除节点"><span class="post-toc-number">4.</span> <span class="post-toc-text">从集群中删除节点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如果主节点有从节点，在删除主节点之前，需要改变从节点的master"><span class="post-toc-number">5.</span> <span class="post-toc-text">如果主节点有从节点，在删除主节点之前，需要改变从节点的master</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Redis-Cluster集群部署-实战1"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Redis Cluster集群部署-实战1</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-07 14:44:20" datetime="2017-11-07T06:44:20.000Z"  itemprop="datePublished">2017-11-07</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>架构图</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/redis%E8%BF%9B%E9%98%B61.png" alt="redis" title="">
+                </div>
+                <div class="image-caption">redis</div>
+            </figure>
+<a id="more"></a>
+<blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>OS: CentOS 7
+每台机器启用两个redis实例：
+Redis21：10.0.10.21 7021
+Redis22：10.0.10.22 7022
+Redis23：10.0.10.23 7023
+Redis21：10.0.10.21 7024
+Redis22：10.0.10.22 7025
+Redis23：10.0.10.23 7026
+
+Redis30：10.0.10.24 7027
+Redis30：10.0.10.24 7028
+
+Redis部署方式：编译
+Redis版本：官网最新稳定版 redis-stable.tar.gz
+</code></pre><blockquote>
+<p>安装编译工具</p>
+</blockquote>
+<pre><code>(1) 安装GCC编译工具
+    yum install -y gcc g++ gcc-c++ make tcl
+(2) 关闭firewall
+    systemctl stop firewalld.service &amp;&amp; systemctl disable firewalld.service
+</code></pre><h4 id="Redis集群部署"><a href="#Redis集群部署" class="headerlink" title="Redis集群部署"></a>Redis集群部署</h4><blockquote>
+<p>编译安装redis【全节点部署】</p>
+</blockquote>
+<pre><code>tar xzf redis-stable.tar.gz
+cd redis-stable
+make
+make PREFIX=/usr/local/redis install
+</code></pre><blockquote>
+<p>配置redis【全节点部署】</p>
+</blockquote>
+<pre><code>mkdir /usr/local/redis/etc -p     #创建配置文件目录
+cp /root/redis-stable/redis.conf /usr/local/redis/etc/   #拷贝默认redis配置文件
+cd /usr/bin/ &amp;&amp; ln -s /usr/local/redis/bin/redis* ./    #配置环境变量
+mkdir /var/log/redis -p    #创建redis日志目录
+</code></pre><blockquote>
+<p>创建redis配置文件【每节点操作】</p>
+</blockquote>
+<pre><code>注：待会要创建redis集群，而配置文件不需要配置主从关系。所以每个节点配置基本一致。除了监听的IP和端口不同。
+</code></pre><pre><code>cd /usr/local/redis/etc
+mv redis.conf redis.conf.bak
+vim redis-site.conf
+</code></pre><pre><code>##是否以守护进程方式运行
+daemonize no
+
+pidfile /var/run/redis-site.pid
+
+port 7022
+#高并发环境下你需要一个高backlog值来避免慢客户端连接问题
+tcp-backlog 511 
+
+bind 10.0.10.22
+#客户端空闲关闭时间
+timeout 0
+#设置SO_KEEPALIVE选项来向空闲连接的客户端发送ACK
+tcp-keepalive 0
+#指定日志记录级别
+loglevel notice
+#指明日志文件名
+logfile &quot;/var/log/redis/redis.log&quot;
+#redis日志记录到系统日志
+## syslog-enabled no
+#redis日志在系统日志中的标识
+## syslog-ident redis
+#指定数据库个数
+databases 16
+#指定rdb快照频率
+#save &quot;&quot;
+save 900 1
+save 300 10
+save 60 100000
+#默认如果开启RDB快照(至少一条save指令)并且最新的后台保存失败，Redis将会停止接受写操作
+stop-writes-on-bgsave-error yes 
+#指定存储至本地数据库时是否压缩数据，默认为yes
+rdbcompression yes
+#生成的关闭校验的RDB文件有一个0的校验和，它将告诉加载代码跳过检查
+rdbchecksum yes 
+#指定本地数据库文件名，默认值为dump.rdb
+dbfilename dump.rdb
+#指定本地数据库存放目录
+dir ./
+#设置当本机为slav服务时，设置master服务的IP地址及端口，在Redis启动时，它会自动从master进行数据同步
+#slaveof x.x.x.x 6379
+#设置Redis连接密码，如果配置了连接密码，客户端在连接Redis时需要通过AUTH &lt;password&gt;命令提供密码，默认关闭
+## masterauth &lt;master-password&gt;
+
+# 主从同步。通过 slaveof 指令来实现Redis实例的备份
+slave-serve-stale-data yes 
+# 从Redis2.6默认所有的slave为只读
+slave-read-only yes 
+# 在slave套接字发送SYNC之后禁用 TCP_NODELAY 
+repl-diskless-sync no
+#客户端最大连接数
+#maxclients 10000
+##指定Redis最大内存限制
+maxmemory 40gb
+#指定是否在每次更新操作后进行日志记录
+appendonly no
+#指定更新日志文件名，默认为appendonly.aof
+appendfilename &quot;appendonly.aof&quot;
+#指定更新日志条件
+## appendfsync always
+appendfsync everysec
+## appendfsync no
+#当hash只有少量的entry时，并且最大的entry所占空间没有超过指定的限#制时，会用一种节省内存的 数据结构来编码。可以通过下面的指令来设定限制
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+# 与hash似，数据元素较少的list，可以用另一种方式来编码从而节省大量空间。
+# # 这种特殊的方式只有在符合下面限制时才可以用
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
+#重建hash表的时候如果内存不足 如果此值设置为no则延时，如果为yes则尽快释放内存
+activerehashing yes
+#一个任务可以使用的cpu数目
+hz 10
+#当一个子进程重写AOF文件时，如果启用下面的选项，则文件每生成32M数据会被同步。为了增量式写入硬盘并且避免大的延迟高峰这个指令是非常有用的
+aof-rewrite-incremental-fsync yes
+
+#发送个slave的命令缓存大小
+repl-backlog-size 10gb
+
+#单次会话允许最大量
+#client-output-buffer-limit normal 0 0 0
+#client-output-buffer-limit pubsub 32mb 8mb 60
+#client-output-buffer-limit slave 256mb 64mb 60
+#集群配置
+cluster-enabled yes    #开启集群
+cluster-config-file nodes.conf   #保存节点配置，自动创建，自动更新
+cluster-node-timeout 5000    #集群超时时间
+</code></pre><blockquote>
+<p>启动服务【每节点操作】</p>
+</blockquote>
+<pre><code> #分别启动服务
+nohup redis-server /usr/local/redis/etc/redis.conf 2&gt;/dev/null &amp;  
+nohup redis-server /usr/local/redis/etc/redis-site.conf 2&gt;/dev/null &amp;   
+
+#查看进程和端口
+ps -ef |grep redis
+
+#查看log信息
+[root@localhost ~]# tailf /var/log/redis/redis.log
+</code></pre><blockquote>
+<p>解决log错误</p>
+</blockquote>
+<pre><code>报错：
+13395:M 07 Nov 02:31:59.980 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add &#39;vm.overcommit_memory = 1&#39; to /etc/sysctl.conf and then reboot or run the command &#39;sysctl vm.overcommit_memory=1&#39; for this to take effect.
+13395:M 07 Nov 02:31:59.980 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &#39;echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled&#39; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+2060:M 07 Nov 03:06:16.211 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+</code></pre><p>解决方法(纯属翻译)：</p>
+<pre><code>echo &quot;vm.overcommit_memory = 1&quot; &gt;&gt;/etc/sysctl.conf
+sysctl vm.overcommit_memory=1
+echo &quot;1024&quot; &gt; /proc/sys/net/core/somaxconn
+echo &quot;never&quot; &gt; /sys/kernel/mm/transparent_hugepage/enabled
+
+cat &gt;&gt; /etc/rc.d/rc.local &lt;&lt; EOF
+echo &quot;1024&quot; &gt; /proc/sys/net/core/somaxconn
+
+#禁用THP
+if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+    echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled
+fi
+if test -f /sys/kernel/mm/transparent_hugepage/defrag; then
+    echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag
+fi
+EOF
+
+重启虚拟机并重启redis服务
+</code></pre><blockquote>
+<p>重启服务【全节点】</p>
+</blockquote>
+<pre><code>&gt;/var/log/redis/redis.log 
+
+#分别启动服务
+nohup redis-server /usr/local/redis/etc/redis.conf 2&gt;/dev/null &amp;  
+nohup redis-server /usr/local/redis/etc/redis-site.conf 2&gt;/dev/null &amp; 
+</code></pre><h4 id="Redis集群创建"><a href="#Redis集群创建" class="headerlink" title="Redis集群创建"></a>Redis集群创建</h4><blockquote>
+<p>安装ruby【所有节点】</p>
+</blockquote>
+<pre><code>yum -y install ruby ruby-devel rubygems rpm-build
+#安装RVM(升级ruby为2.4.0)
+curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+curl -L get.rvm.io | bash -s stable
+source /etc/profile.d/rvm.sh
+rvm reload
+rvm requirements run
+rvm install 2.4.0
+#设置默认ruby版本
+rvm list
+rvm use 2.4.0 --default
+ruby --version
+
+
+#安装redis模块（否则后面横向扩展redis节点会不成功）
+gem install redis
+</code></pre><blockquote>
+<p>创建集群【只在10.0.10.21上面创建即可】</p>
+</blockquote>
+<pre><code>cd /root/redis-stable/src  #进入源码目录
+./redis-trib.rb create --replicas 1 \
+10.0.10.21:7021 \
+10.0.10.22:7022 \
+10.0.10.23:7023 \
+10.0.10.21:7024 \
+10.0.10.22:7025 \
+10.0.10.23:7026 
+
+#注：上面的6个节点中，前3个节点被配置成了master，而其他的则为slave从节点--可以通过cluster info查看。
+注意：这个主从并未在配置文件中做，而是通过专属redis集群管理工具来创建的。
+
+根据提示，交互输入: yes
+[OK] All nodes agree about slots configuration.
+&gt;&gt;&gt; Check for open slots...
+&gt;&gt;&gt; Check slots coverage...
+[OK] All 16384 slots covered.
+</code></pre><blockquote>
+<p>集群验证</p>
+</blockquote>
+<pre><code>[root@localhost ~]# redis-cli -h 10.0.10.22 -p 7022  #登陆任意一台redis集群节点
+10.0.10.22:7022&gt; cluster nodes   #查看集群
+22d8c2b425a200c923b81f2682219733f44d9977 10.0.10.21:7024@17024 slave 779eb8b2d6a932d535cfbb1574e4f7c4eb34b2b0 0 1510054584000 4 connected
+aa54c9b2b8c191fe3536a63816ba6179ae8e993a 10.0.10.21:7021@17021 master - 0 1510054585000 1 connected 0-5460
+779eb8b2d6a932d535cfbb1574e4f7c4eb34b2b0 10.0.10.22:7022@17022 myself,master - 0 1510054585000 2 connected 5461-10922
+00687f86b61031950ee38ca02968676ebc9e08e2 10.0.10.22:7025@17025 slave aa54c9b2b8c191fe3536a63816ba6179ae8e993a 0 1510054585551 5 connected
+1e3ede5d80592aab56066559f079ba3f877dbf56 10.0.10.23:7023@17023 master - 0 1510054584048 3 connected 10923-16383
+e5ea2d992183903068695b553fff8016cbe678dd 10.0.10.23:7026@17026 slave 1e3ede5d80592aab56066559f079ba3f877dbf56 0 1510054584000 6 connected
+</code></pre><h4 id="横向扩容-向集群中添加节点"><a href="#横向扩容-向集群中添加节点" class="headerlink" title="横向扩容-向集群中添加节点"></a>横向扩容-向集群中添加节点</h4><pre><code>准备工作：
+【重要】拷贝源码文件到/usr/local/redis/目录下，为了以后节点增加删除
+cp -a /root/redis-stable /usr/local/redis/
+
+Redis30：10.0.10.24 7027
+Redis30：10.0.10.24 7028
+在Redis30节点启动两个Redis实例，确保服务启动。
+
+[root@localhost etc]# ps -ef |grep redis
+root      2064  2047  0 04:55 pts/0    00:00:06 redis-server 10.0.10.30:7027 [cluster]
+root     15365 14614  0 06:33 pts/0    00:00:00 redis-server 10.0.10.30:7028 [cluster]
+</code></pre><pre><code>向集群中添加节点
+cd /usr/local/redis/redis-stable/src/    #切换到新拷贝的源码目录
+
+#添加主节点
+./redis-trib.rb add-node 10.0.10.24:7027 10.0.10.22:7022
+注：10.0.10.24:7027为新增主节点，10.0.10.22:7022为已存在的任意节点
+
+#添加从节点
+./redis-trib.rb add-node --slave --master-id 03ccad2ba5dd1e062464bc7590400441fafb63f2 10.0.10.24:7028 10.0.10.22:7022
+
+--slave，表示添加的是从节点
+--master-id 03ccad2ba5dd1e062464bc7590400441fafb63f2,主节点的node id，在这里是前面新添加的7027的node id
+10.0.10.24:7028 新节点
+10.0.10.22:7022 集群任一个旧节点
+</code></pre><blockquote>
+<p>重新分配slots</p>
+</blockquote>
+<pre><code>新增加的主节点是没有slots的,所以需要重新分配，主节点如果没有slots的话，存取数据就都不会被选中。
+</code></pre><pre><code>cd /usr/local/redis/redis-stable/src/    #切换到新拷贝的源码目录
+./redis-trib.rb reshard 10.0.10.24:7024  #10.0.10.24:7024为新加的主节点
+以下为交互输入部分
+</code></pre><pre><code>#你想移动多少个slots？
+How many slots do you want to move (from 1 to 16384)? 1000 
+
+#谁来接收这些指定多的slots？
+What is the receiving node ID? 03ccad2ba5dd1e062464bc7590400441fafb63f2 //新节点node id  
+
+Please enter all the source node IDs.  
+ Type &#39;all&#39; to use all the nodes as source nodes for the hash slots.  
+ Type &#39;done&#39; once you entered all the source nodes IDs.  
+Source node #1:all   //表示全部节点重新洗牌  
+Do you want to proceed with the proposed reshard plan (yes/no)? yes   //确认重新分配slots
+</code></pre><blockquote>
+<p>查看集群情况</p>
+</blockquote>
+<pre><code> ./redis-trib.rb check 10.0.10.24:7024   #后边输入任意节点即可
+</code></pre><h4 id="从集群中删除节点"><a href="#从集群中删除节点" class="headerlink" title="从集群中删除节点"></a>从集群中删除节点</h4><blockquote>
+<p>删除从节点</p>
+</blockquote>
+<pre><code>格式：./redis-trib.rb del-node 从节点ip:port  &#39;从节点ID&#39;
+
+./redis-trib.rb del-node 10.0.10.24:7025 &#39;a86c1a2d62fec9a51d6657a0b424730d820b8e65&#39;
+</code></pre><pre><code>[root@localhost src]# ./redis-trib.rb del-node 10.0.10.24:7025 &#39;a86c1a2d62fec9a51d6657a0b424730d820b8e65&#39;
+&gt;&gt;&gt; Removing node a86c1a2d62fec9a51d6657a0b424730d820b8e65 from cluster 10.0.10.24:7025
+&gt;&gt;&gt; Sending CLUSTER FORGET messages to the cluster...
+&gt;&gt;&gt; SHUTDOWN the node.
+</code></pre><blockquote>
+<p>删除主节点</p>
+</blockquote>
+<pre><code>如果主节点有slot，需要先去掉分配的slot，然后在删除主节点
+</code></pre><p>删除其中一个master节点的slots (以删除10.0.0.24:7024主节点为例)</p>
+<pre><code>./redis-trib.rb check 10.0.10.24:7024  #查看24的slots数量，假如是6040
+./redis-trib.rb reshard 10.0.10.24:7024
+</code></pre><pre><code>#被删除master的所有slot数量
+How many slots do you want to move (from 1 to 16384)? 6040  
+#接收10.0.0.24:7024节点slot的master 
+What is the receiving node ID? 5d8ef5a7fbd72ac586bef04fa6de8a88c0671052 
+
+Please enter all the source node IDs.  
+ Type &#39;all&#39; to use all the nodes as source nodes for the hash slots.  
+ Type &#39;done&#39; once you entered all the source nodes IDs.
+
+#复制粘贴被删除master的node-id，此处为“10.0.0.24:7024”的node id
+Source node #1:03ccad2ba5dd1e062464bc7590400441fafb63f2     
+Source node #2:done    #输入done已完成
+
+Do you want to proceed with the proposed reshard plan (yes/no)? yes   //重新确认slots变更操作
+</code></pre><pre><code>删除了主节点的master slots，这样就可以删除主节点了，这样就回到了没添加节点的状态
+[root@localhost src]# ./redis-trib.rb del-node 10.0.10.24:7024 &#39;3f80334052a981e729377ec55415d0c20b51895c&#39;
+&gt;&gt;&gt; Removing node 3f80334052a981e729377ec55415d0c20b51895c from cluster 10.0.10.24:7024
+&gt;&gt;&gt; Sending CLUSTER FORGET messages to the cluster...
+&gt;&gt;&gt; SHUTDOWN the node.
+
+最后使用已存在集群中的节点来查看集群状态：
+./redis-trib.rb check 10.0.10.22:7022
+</code></pre><h4 id="如果主节点有从节点，在删除主节点之前，需要改变从节点的master"><a href="#如果主节点有从节点，在删除主节点之前，需要改变从节点的master" class="headerlink" title="如果主节点有从节点，在删除主节点之前，需要改变从节点的master"></a>如果主节点有从节点，在删除主节点之前，需要改变从节点的master</h4><pre><code>以此为例
+[root@localhost src]# ./redis-trib.rb check 10.0.10.22:7022
+&gt;&gt;&gt; Performing Cluster Check (using node 10.0.10.22:7022)
+M: 779eb8b2d6a932d535cfbb1574e4f7c4eb34b2b0 10.0.10.22:7022
+   slots:7004-14687 (7684 slots) master
+   1 additional replica(s)
+S: 22d8c2b425a200c923b81f2682219733f44d9977 10.0.10.21:7024
+   slots: (0 slots) slave
+   replicates 779eb8b2d6a932d535cfbb1574e4f7c4eb34b2b0
+M: aa54c9b2b8c191fe3536a63816ba6179ae8e993a 10.0.10.21:7021
+   slots:0-7003,14688-15379 (7696 slots) master
+   1 additional replica(s)
+S: 00687f86b61031950ee38ca02968676ebc9e08e2 10.0.10.22:7025
+   slots: (0 slots) slave
+   replicates aa54c9b2b8c191fe3536a63816ba6179ae8e993a
+M: 1e3ede5d80592aab56066559f079ba3f877dbf56 10.0.10.23:7023
+   slots:15380-16383 (1004 slots) master
+   1 additional replica(s)
+S: e5ea2d992183903068695b553fff8016cbe678dd 10.0.10.23:7026
+   slots: (0 slots) slave
+   replicates 1e3ede5d80592aab56066559f079ba3f877dbf56
+[OK] All nodes agree about slots configuration.
+&gt;&gt;&gt; Check for open slots...
+&gt;&gt;&gt; Check slots coverage...
+[OK] All 16384 slots covered.
+</code></pre><pre><code>计划删除10.0.10.23:7023这个主节点，先改变10.0.10.23:7026的从节点
+将10.0.10.23:7026加入新的master
+
+[root@localhost src]# redis-cli -h 10.0.10.23 -p 7026
+10.0.10.23:7026&gt; 
+10.0.10.23:7026&gt; cluster replicate aa54c9b2b8c191fe3536a63816ba6179ae8e993a   //新master id
+OK
+10.0.10.23:7026&gt; quit
+
+#删除master 主节点
+./redis-trib.rb del-node 10.0.10.23:7023 &#39;1e3ede5d80592aab56066559f079ba3f877dbf56&#39;
+错误提示：[ERR] Node 10.0.10.23:7023 is not empty! Reshard data away and try again.
+
+#删除该master的slots后再删除master节点
+./redis-trib.rb reshard 10.0.10.23:7023
+
+#再次删除master 主节点
+./redis-trib.rb del-node 10.0.10.23:7023 &#39;1e3ede5d80592aab56066559f079ba3f877dbf56&#39;
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-13T09:45:17.014Z" itemprop="dateUpdated">2017-11-13 17:45:17</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/07/Redis-Cluster集群部署-实战1/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cluster/">cluster</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis集群/">redis集群</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/&title=《Redis Cluster集群部署-实战1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/&title=《Redis Cluster集群部署-实战1》 — Gary Wu&source=
+架构图
+
+
+                
+                    
+                    
+           ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Redis Cluster集群部署-实战1》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/12/zabbix监控高级-进阶2/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">zabbix监控高级-进阶2</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/04/DNS加密代理之shadowDNS/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">DNS加密代理之shadowDNS</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/&title=《Redis Cluster集群部署-实战1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/&title=《Redis Cluster集群部署-实战1》 — Gary Wu&source=
+架构图
+
+
+                
+                    
+                    
+           ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Redis Cluster集群部署-实战1》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/07/Redis-Cluster集群部署-实战1/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

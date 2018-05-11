@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Nginx upstream模块配置-官方翻译版 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,nginx,upstream">
+    <meta name="description" content="ngx_http_upstream_module 模块用于定义可以被proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass和memcached_pass指令引用的服务器集群。">
+<meta name="keywords" content="高级运维,nginx,upstream">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx upstream模块配置-官方翻译版">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="ngx_http_upstream_module 模块用于定义可以被proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass和memcached_pass指令引用的服务器集群。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-03T04:11:18.293Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx upstream模块配置-官方翻译版">
+<meta name="twitter:description" content="ngx_http_upstream_module 模块用于定义可以被proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass和memcached_pass指令引用的服务器集群。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Nginx upstream模块配置-官方翻译版</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Nginx upstream模块配置-官方翻译版</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-03T03:50:27.000Z" itemprop="datePublished" class="page-time">
+  2018-04-03
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置范例"><span class="post-toc-number">1.</span> <span class="post-toc-text">配置范例</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#upstream指令"><span class="post-toc-number">2.</span> <span class="post-toc-text">upstream指令</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#upstream范例"><span class="post-toc-number">3.</span> <span class="post-toc-text">upstream范例</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#server指令"><span class="post-toc-number">4.</span> <span class="post-toc-text">server指令</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ip-hash指令"><span class="post-toc-number">5.</span> <span class="post-toc-text">ip-hash指令</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#least-conn指令"><span class="post-toc-number">6.</span> <span class="post-toc-text">least_conn指令</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Nginx-upstream模块配置-官方翻译版"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Nginx upstream模块配置-官方翻译版</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-03 11:50:27" datetime="2018-04-03T03:50:27.000Z"  itemprop="datePublished">2018-04-03</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>ngx_http_upstream_module 模块用于定义可以被proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass和memcached_pass指令引用的服务器集群。
+</code></pre><a id="more"></a>
+<h5 id="配置范例"><a href="#配置范例" class="headerlink" title="配置范例"></a>配置范例</h5><pre><code>upstream backend {
+    server backend1.example.com       weight=5;
+    server backend2.example.com:8080;
+    server unix:/tmp/backend3;
+
+    server backup1.example.com:8080   backup;
+    server backup2.example.com:8080   backup;
+}
+
+server {
+    location / {
+        proxy_pass http://backend;
+    }
+}
+</code></pre><h5 id="upstream指令"><a href="#upstream指令" class="headerlink" title="upstream指令"></a>upstream指令</h5><pre><code>upstream指令用于定义服务器集群。服务器可以监听在不同端口。另外，监听在TCP和UNIX-domain socket的服务器可以混合使用
+</code></pre><h5 id="upstream范例"><a href="#upstream范例" class="headerlink" title="upstream范例"></a>upstream范例</h5><pre><code>upstream backend {
+    server backend1.example.com weight=5;
+    server 127.0.0.1:8080       max_fails=3 fail_timeout=30s;
+    server unix:/tmp/backend3;
+
+    server backup1.example.com  backup;
+}
+</code></pre><pre><code>默认，使用带权重的round-robin平衡算法将请求分派到服务器。在上面的例子中， 每7个请求将被如下分配：
+
+5个请求去backend1.example.com
+1个请求去127.0.0.1:8080
+1个请求去unix:/tmp/backend3
+
+在和某台服务器通讯的过程中，如果发生错误， 请求将被分派给下一个服务器， 以此类推直到所有可用服务器都被尝试。如果没有任何一个服务器可以可以返回成功的应答，则客户端将会收到和最后一台机器的通讯结果。
+</code></pre><h5 id="server指令"><a href="#server指令" class="headerlink" title="server指令"></a>server指令</h5><pre><code>server指令用于定义一台服务器的地址和其他参数。地址可以是域名或者IP地址，端口可选，或者是以&quot;unix:&quot;前缀指定的UNIX-domain socket路径。
+如果端口没有指定，将使用80端口。可以解析为多个IP地址的域名将一次性定义多台服务器。
+</code></pre><pre><code>下面是可用的参数列表:
+
+weight=number
+设置服务器的权重，默认为1.
+
+max_fails=number
+定义在参数fail_timeout定义的时间内，与服务器通讯的不成功的数量。
+默认情况，不成功尝试次数被设置为1.如果设置为0则关闭尝试计数。
+
+fail_timeout=time
+在此时间段期间与服务器通讯的不成功尝试，以判断服务器是否不可到达和服务器被判定为不可到达的时间
+注：如果设置为max_fails=5;fail_timeout=30s，表示如果有5次请求失败，则该服务器被断定为不可到达，之后30s之内将不再尝试这台机器。再之后的每30s，都将进行最多5次尝试，如果继续失败则继续判断为不可到达并不再尝试。
+
+backup
+标记当前服务器为备用服务器。当主服务器(注：应该是没有标记为backup和down的服务器)都不能达到时,请求将被分派到backup服务器上。
+
+down
+将当前服务器标记为永久不可到达。
+</code></pre><h5 id="ip-hash指令"><a href="#ip-hash指令" class="headerlink" title="ip-hash指令"></a>ip-hash指令</h5><pre><code>指定集群使用的负载均衡算法，基于客户端IP地址将请求分派给服务器。这个算法保证从同一个客户端来的请求总是被分派到同样的服务器，除非这个服务器不可达到。后面这种情况下客户端请求将被分派到其他服务器。大多数情况，请求总是被分派到同一个服务器。
+
+如果某台服务器需要被永久移除，那么应该将它标记为down以便保持当前的客户端IP地址的哈希。
+</code></pre><pre><code>例如：
+upstream backend {
+    ip_hash;
+
+    server backend1.example.com;
+    server backend2.example.com;
+    server backend3.example.com down;
+    server backend4.example.com;
+}
+</code></pre><h5 id="least-conn指令"><a href="#least-conn指令" class="headerlink" title="least_conn指令"></a>least_conn指令</h5><pre><code>指定集群应该使用的负载均衡方法，分派请求到活动连接数量最少的服务器。如果有多台这样的服务器，这些服务器将尝试轮流使用带权重的round-robin平衡算法。
+</code></pre><pre><code>例如：
+upstream backend {
+    least_conn;
+
+    server backend1.example.com;
+    server backend2.example.com;
+    server backend3.example.com down;
+    server backend4.example.com;
+}
+</code></pre><p>参考：<a href="https://skyao.gitbooks.io/learning-nginx/content/documentation/upstream_doc.html" target="_blank" rel="noopener">敖小剑的博客</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-03T04:11:18.293Z" itemprop="dateUpdated">2018-04-03 12:11:18</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/04/03/Nginx-upstream模块配置-官方翻译版/" target="_blank" rel="external">https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/upstream/">upstream</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/&title=《Nginx upstream模块配置-官方翻译版》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/&title=《Nginx upstream模块配置-官方翻译版》 — Gary Wu&source=ngx_http_upstream_module 模块用于定义可以被proxy_pass, fastcgi_pass, uwsgi_pass, scgi_..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Nginx upstream模块配置-官方翻译版》 — Gary Wu&url=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/03/HTTP状态码301和302的区别/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">HTTP状态码301和302的区别</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/03/TIME-WAIT过多-问题处理/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">TIME_WAIT过多-问题处理</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/&title=《Nginx upstream模块配置-官方翻译版》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/&title=《Nginx upstream模块配置-官方翻译版》 — Gary Wu&source=ngx_http_upstream_module 模块用于定义可以被proxy_pass, fastcgi_pass, uwsgi_pass, scgi_..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Nginx upstream模块配置-官方翻译版》 — Gary Wu&url=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

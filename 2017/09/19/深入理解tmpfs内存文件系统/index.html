@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>深入理解tmpfs内存文件系统 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,PHP,内存,tmpfs,VM,RM,Mysql,swap,内存文件系统">
+    <meta name="description" content="什么是tmpfs？  tmpfs是一种基于内存的虚拟文件系统,它最大的特点就是它的存储空间在VM(virtual memory)里面,VM是由linux内核里面的vm子系统管理，现在大多数操作系统都采用了虚拟内存管理机制。">
+<meta name="keywords" content="高级运维,PHP,内存,tmpfs,VM,RM,Mysql,swap,内存文件系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解tmpfs内存文件系统">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="什么是tmpfs？  tmpfs是一种基于内存的虚拟文件系统,它最大的特点就是它的存储空间在VM(virtual memory)里面,VM是由linux内核里面的vm子系统管理，现在大多数操作系统都采用了虚拟内存管理机制。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-09-19T03:40:47.612Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解tmpfs内存文件系统">
+<meta name="twitter:description" content="什么是tmpfs？  tmpfs是一种基于内存的虚拟文件系统,它最大的特点就是它的存储空间在VM(virtual memory)里面,VM是由linux内核里面的vm子系统管理，现在大多数操作系统都采用了虚拟内存管理机制。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">深入理解tmpfs内存文件系统</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">深入理解tmpfs内存文件系统</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-19T02:35:41.000Z" itemprop="datePublished" class="page-time">
+  2017-09-19
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-深入理解tmpfs内存文件系统"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">深入理解tmpfs内存文件系统</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-19 10:35:41" datetime="2017-09-19T02:35:41.000Z"  itemprop="datePublished">2017-09-19</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>什么是tmpfs？</p>
+</blockquote>
+<pre><code>tmpfs是一种基于内存的虚拟文件系统,它最大的特点就是它的存储空间在VM(virtual memory)里面,VM是由linux内核里面的vm子系统管理，现在大多数操作系统都采用了虚拟内存管理机制。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>VM(virtual memory)介绍</p>
+</blockquote>
+<pre><code>linux下面VM(virtual memory）的大小由RM(Real Memory)和swap组成
+
+RM的大小就是物理内存的大小，而Swap的大小是由你自己决定的。Swap是通过硬盘虚拟出来的内存空间，因此它的读写速度相对RM(Real Memory）要慢许多。
+
+那为什么还需要Swap呢？当一个进程申请一定数量的内存时，如内核的vm子系统发现没有足够的RM时，就会把RM里面的一些不常用的数据交换到Swap里面，如果需要重新使用这些数据再把它们从Swap交换到RM里面。 如果你有足够大的物理内存，根本不需要划分Swap分区。
+
+所以综上所述, 就会明白: VM最大的存储空间=真实内存大小+swap空间大小。
+但是对于tmpfs本身而言，它并不知道自己使用的空间是RM还是Swap，这一切都是由内核的vm子系统管理的
+</code></pre><blockquote>
+<p>tmpfs优缺点</p>
+</blockquote>
+<pre><code>缺点：不具备持久性，即系统重启后，数据将会丢失
+优点: 
+(1)动态文件系统大小
+/mnt/tmpfs 最初会只有很小的空间，但随着文件的复制和创建，tmpfs 文件系统驱动程序会分配更多的 VM，并按照需求动态地增加文件系统的空间。而且，当 /mnt/tmpfs 中的文件被删除时，tmpfs 文件系统驱动程序会动态地减小文件系统并释放 VM 资源，这样做可以将 VM 返回到循环当中以供系统中其它部分按需要使用。因为 VM 是宝贵的资源，所以您一定不希望任何东西浪费超出它实际所需的 VM，tmpfs 的好处之一就在于这些都是自动处理的。
+
+(2)tmpfs 的另一个主要的好处是它闪电般的速度。因为典型的 tmpfs 文件系统会完全驻留在 RAM 中，读写几乎可以是瞬间的。
+</code></pre><blockquote>
+<p>/dev/shm介绍</p>
+</blockquote>
+<pre><code>/dev/shm/是一个设备文件，它使用就是tmpfs文件系统。
+
+注：/dev/shm/这个目录不在硬盘上，而是在内存里，它就所谓的tmpfs。
+
+可通过“df -h”命令来查看
+</code></pre><blockquote>
+<p>如何动态调整/dev/shm tmpfs的大小？</p>
+</blockquote>
+<pre><code>(1)修改文件：/etc/fstab
+
+(2)tmpfs   /dev/shm    tmpfs   defaults    0 0
+   改为
+   tmpfs   /dev/shm    tmpfs,defaults,size=512m    0 0
+
+(3)然后执行命令：mount -o remount /dev/shm
+
+(4)最后通过df -h命令查看大小就变了
+
+注：默认tmpfs空间大小为物理内存的一半，比如:64G物理内存，默认tmpfs大小为32G
+</code></pre><blockquote>
+<p>tmpfs(/dev/shm)的使用及应用场景(重点)</p>
+</blockquote>
+<pre><code>tmpfs是基于内存的，速度是不用说的，硬盘和它没法比。Oracle 中的Automatic Memory Management特性就使用了/dev/shm。另外如果在运维中好好利用tmpfs，将有意想不到的收获。
+</code></pre><p>应用实例</p>
+<pre><code>在/dev/shm建一个tmp，并在业务中与/tmp绑定。
+
+mkdir /dev/shm/tmp -p
+chmod  1777  /dev/shm/tmp   
+ls -ld /dev/shm/tmp
+</code></pre><pre><code>以下/tmp使用tmpfs文件系统的一些应用示例，一般tmpfs内存文件系统在做web缓存，临时文件存储时会对web访问有很好的加速作用，从而提高网站访问的速度。
+
+示例1: 将squid的缓存目录cache_dir放到/tmp下
+vi /etc/squid/squid.conf 修改成 cache_dir ufs /tmp 256 16 256
+这里的第一个256表示使用256M内存,重启一下squid服务，这样缓存目录都放在了tmpfs文件中了。
+
+
+示例2:将php的session文件放在/tmp下
+对于一个访问量大的Nginx php的网站，可能tmp下的临时文件都会很多，比如seesion或者一些缓存文件，那么你可以把它保存到tmpfs文件。保存seesion的方法很简单了:只要修改php.ini就行了，通过phpinfo测试文件查看你的php session存储位置，如果不在/tmp下，修改php.ini文件，修改如下：
+session.save_path = “/tmp”
+
+
+示例3:将服务的socket文件放在/tmp下
+如nginx.socket和mysql.sock
+
+按照此套路，其他应用也可以这么做。再次强调下：tmpfs数据在重新启动之后不会保留，重启tmpfs数据会丢失，所以有必要做一些脚本做诸如加载，绑定的操作！
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-19T03:40:47.612Z" itemprop="dateUpdated">2017-09-19 11:40:47</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/19/深入理解tmpfs内存文件系统/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/">Mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RM/">RM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VM/">VM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/swap/">swap</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tmpfs/">tmpfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存/">内存</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存文件系统/">内存文件系统</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/&title=《深入理解tmpfs内存文件系统》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/&title=《深入理解tmpfs内存文件系统》 — Gary Wu&source=
+什么是tmpfs？
+
+tmpfs是一种基于内存的虚拟文件系统,它最大的特点就是它的存储空间在VM(virtual memory)里面,VM是由linux..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解tmpfs内存文件系统》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/19/Opcache让PHP性能加速/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Opcache让PHP性能加速</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/19/RAID阵列卡缓存机制/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">RAID阵列卡缓存机制</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/&title=《深入理解tmpfs内存文件系统》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/&title=《深入理解tmpfs内存文件系统》 — Gary Wu&source=
+什么是tmpfs？
+
+tmpfs是一种基于内存的虚拟文件系统,它最大的特点就是它的存储空间在VM(virtual memory)里面,VM是由linux..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解tmpfs内存文件系统》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/19/深入理解tmpfs内存文件系统/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

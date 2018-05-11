@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>LNMP架构-部署与配置 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,LNMP,LAMP,LNMP编译,linux,Nginx,wordpress,mysql数据库迁移">
+    <meta name="description" content="LNMP架构部署：">
+<meta name="keywords" content="高级运维,LNMP,LAMP,LNMP编译,linux,Nginx,wordpress,mysql数据库迁移">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LNMP架构-部署与配置">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/16/LNMP架构部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="LNMP架构部署：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/LNMP%E5%8E%9F%E7%90%86.png">
+<meta property="og:updated_time" content="2017-09-23T04:59:52.249Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LNMP架构-部署与配置">
+<meta name="twitter:description" content="LNMP架构部署：">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/LNMP%E5%8E%9F%E7%90%86.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">LNMP架构-部署与配置</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">LNMP架构-部署与配置</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-16T09:44:09.000Z" itemprop="datePublished" class="page-time">
+  2017-09-16
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#编译安装Nginx"><span class="post-toc-number">1.</span> <span class="post-toc-text">编译安装Nginx</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#二进制安装Mysql"><span class="post-toc-number">2.</span> <span class="post-toc-text">二进制安装Mysql</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#编译安装PHP"><span class="post-toc-number">3.</span> <span class="post-toc-text">编译安装PHP</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Nginx与php建立连接测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">Nginx与php建立连接测试</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Nginx与Mysql连接测试"><span class="post-toc-number">5.</span> <span class="post-toc-text">Nginx与Mysql连接测试</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#blog配置"><span class="post-toc-number">6.</span> <span class="post-toc-text">blog配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MySQL数据库迁移"><span class="post-toc-number">7.</span> <span class="post-toc-text">MySQL数据库迁移</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#可以将图片等资源放入NFS实现共享"><span class="post-toc-number">8.</span> <span class="post-toc-text">可以将图片等资源放入NFS实现共享</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-LNMP架构部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">LNMP架构-部署与配置</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-16 17:44:09" datetime="2017-09-16T09:44:09.000Z"  itemprop="datePublished">2017-09-16</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>LNMP架构部署：</p>
+</blockquote>
+<a id="more"></a>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/LNMP%E5%8E%9F%E7%90%86.png" alt="lnmp原理" title="">
+                </div>
+                <div class="image-caption">lnmp原理</div>
+            </figure>
+<pre><code>L:Linux
+  ① 系统安装好，基础优化（关闭防火墙、关闭selinux、/tmp/权限1777）
+N：Nginx
+M: mysql
+P: php
+</code></pre><h4 id="编译安装Nginx"><a href="#编译安装Nginx" class="headerlink" title="编译安装Nginx"></a>编译安装Nginx</h4><blockquote>
+<p>安装nginx所需的pcre库</p>
+</blockquote>
+<pre><code>pcre 即perl兼容正则表达式，官方：http://www.pcre.org. 安装pcre库是为了使Nginx支持具备URI重写功能的rewrite模块。Nginx的rewirte模块功能几乎是企业应用必须的。
+</code></pre><pre><code>[root@web01]# yum install -y pcre pcre-devel openssl-devel   #yum安装这两个软件包
+
+#下面是gcc编译环境
+yum install gcc gcc-c++ gcc-g77 flex bison autoconf automake bzip2-devel zlib-devel ncurses-devel libjpeg-devel libpng-devel libtiff-devel freetype-devel pam-devel libxml2-devel gettext-devel pcre-devel openssl-devel 
+</code></pre><blockquote>
+<p>下载编译nginx</p>
+</blockquote>
+<pre><code>官方：http://nginx.org/en/download.html
+
+wget http://nginx.org/download/nginx-1.10.3.tar.gz
+tar -zxvf nginx-1.10.3.tar.gz
+cd nginx-1.10.3
+useradd www -s /sbin/nologin -M    #创建Nginx管理用户
+id www
+</code></pre><pre><code>开始编译   
+1， 配置软件        指定软件有哪些功能  用哪些模块 
+2， 编译软件        编译成机器能识别的信息   就是 二进制  
+3， 编译安装软件    安装软件 
+
+=================开始编译  ============================
+#编译
+./configure --prefix=/application/nginx-1.10.3 --user=www --group=www --with-http_stub_status_module  --with-http_ssl_module
+
+#安装
+make &amp;&amp; make install
+
+#检查上个命令执行是否成功[0表示成功，非0表示失败]
+echo  $?
+</code></pre><pre><code>#创建软连接
+cd  /application
+ln -s /application/nginx-1.10.3/ /application/nginx
+nginx_PATH=/application/nginx
+echo $nginx_PATH
+
+#启动服务
+/application/nginx/sbin/nginx
+
+#查看nginx进程
+ps -ef |grep nginx
+
+#Web浏览器访问测试
+http://192.168.56.8/
+</code></pre><blockquote>
+<p>Nginx目录结构</p>
+</blockquote>
+<pre><code>[root@bind-master-23 nginx]# ls -lh
+total 36K
+drwx------ 2 www  root 4.0K Sep 14 15:33 client_body_temp
+drwxr-xr-x 2 root root 4.0K Sep 14 15:29 conf     #Nginx所有相关配置
+drwx------ 2 www  root 4.0K Sep 14 15:33 fastcgi_temp
+drwxr-xr-x 2 root root 4.0K Sep 14 15:29 html     #Web站点目录
+drwxr-xr-x 2 root root 4.0K Sep 14 15:33 logs     #Nginx服务相关日志文件目录
+drwx------ 2 www  root 4.0K Sep 14 15:33 proxy_temp
+drwxr-xr-x 2 root root 4.0K Sep 14 15:29 sbin     #相关命令保存目录
+drwx------ 2 www  root 4.0K Sep 14 15:33 scgi_temp
+drwx------ 2 www  root 4.0K Sep 14 15:33 uwsgi_temp
+</code></pre><blockquote>
+<p>nginx配置文件-详解</p>
+</blockquote>
+<pre><code>worker_processes  1;         #定义worker进程数量,多并发可以修改此项
+
+events {                     #此处定义每个worker进程可以处理多少个请求
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;  #支持媒体类型库,即Nginx可以处理什么类型的请求
+    default_type  application/octet-stream;     #默认处理的类型
+    sendfile        on;        #启用高效传输
+    keepalive_timeout  65;     #长连接,超时时间
+
+    server {                   #独立的虚拟主机站点
+        listen       80;       # 监控的端口
+        server_name  localhost;   #主机头,虚拟主机的域名
+        location / {              #定义的站点根目录
+            root   html;          #这里指定的是html
+            index  index.html index.htm;  #默认首页文件
+        }
+        error_page   500 502 503 504  /50x.html;  #当访问出现50x状态错误后，请求的页面    
+        location = /50x.html {
+            root   html;
+        }
+    }
+
+}
+</code></pre><blockquote>
+<p>检查nginx配置文件是否有错误</p>
+</blockquote>
+<pre><code>/application/nginx/sbin/nginx -t
+</code></pre><blockquote>
+<p>nginx平滑重启</p>
+</blockquote>
+<pre><code>/application/nginx/sbin/nginx -s reload
+</code></pre><blockquote>
+<p>Nginx多站点配置</p>
+</blockquote>
+<pre><code>worker_processes  3;
+events {
+    worker_connections  1024;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen       80;
+        server_name  www.etiantian.org;
+        location / {
+            root   html/www;                  \\\\ 站点
+            index  index.html index.htm;
+        }
+   } 
+    server {
+        listen       80;
+        server_name  blog.etiantian.org;
+        location / {
+            root   html/blog;
+            index  index.html index.htm;
+        }
+   } 
+    server {
+        listen       80;
+        server_name  bbs.etiantian.org;
+        location / {
+            root   html/bbs;
+            index  index.html index.htm;
+        }
+   } 
+}
+</code></pre><p>Nginx高级配置: <a href="https://wuyanteng.github.io/2017/09/16/Nginx%E7%B2%BE%E8%AE%B2/#more">参考Nginx详解</a></p>
+<h4 id="二进制安装Mysql"><a href="#二进制安装Mysql" class="headerlink" title="二进制安装Mysql"></a>二进制安装Mysql</h4><pre><code>① 上传软件包
+② 解压mysql
+  tar -zxvf mysql-5.6.34-linux-glibc2.5-x86_64.tar.gz
+③ 添加mysql程序运行时的管理用户
+  useradd -s /sbin/nologin  -M mysql
+④ 将解压后的程序目录放到/application目录，并进行重命名
+  mv mysql-5.6.34-linux-glibc2.5-x86_64 /application/mysql-5.6.34
+⑤ 创建软链
+  ln -s /application/mysql-5.6.34/ /application/mysql
+⑥ 修改权限
+  cd /application/mysql &amp;&amp; chown -R mysql.mysql data/
+⑦ 初始化数据库
+  /application/mysql/scripts/mysql_install_db --basedir=/application/mysql --datadir=/application/mysql/data --user=mysql
+
+#### 注释: #############
+  --basedir= 软件安装目录
+  --datadir= 数据存储目录
+#### 注释: #############
+
+⑧ 拷贝脚本文件到/etc/init.d/目录
+  cp /application/mysql/support-files/mysql.server /etc/init.d/mysqld
+  ll /etc/init.d/mysqld
+
+⑨ 修改启动脚本和mysql命令的路径（默认/usr/local/目录下）
+sed -i &#39;s#/usr/local/mysql#/application/mysql#g&#39; /application/mysql/bin/mysqld_safe /etc/init.d/mysqld
+
+⑩ 复制默认配置文件
+  \cp /application/mysql/support-files/my-default.cnf /etc/my.cnf 
+
+最后启动MySQL的
+/etc/init.d/mysqld start
+
+
+配置Mysql命令-环境变量
+echo &#39;export PATH=/application/mysql/bin:$PATH&#39; &gt;&gt;/etc/profile
+source /etc/profile
+which mysql
+</code></pre><blockquote>
+<p>Mysql使用</p>
+</blockquote>
+<pre><code>[root@web01 ~]# mysql 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.
+mysql&gt; 
+
+mysql&gt; show databases;   #查看数据库
+mysql&gt; use mysql;        #进入mysql数据库
+Database changed
+mysql&gt; show tables;      #查看数据库表
+mysql&gt; quit;             #退出数据库
+
+show databases;       &lt;--- 查询默认的数据库信息
+create database oldboy;  &lt;---创建新的数据库
+drop database oldboy;    &lt;---删除存在的数据库
+use mysql;               &lt;--- 表示选择使用一个数据库，相当于cd进入一个数据库
+show tables；            &lt;---查看数据库中表信息
+select database();       &lt;--- 表示查看当前所在数据库，类似于pwd命令的功能
+select user();           &lt;--- 查看当前登录数据库的用户，类似于whoami命令
+select * from user\G;    &lt;---查看user表中所有信息，并且纵行显示
+select user,host from user;   &lt;---查看user表中指定信息，并且横行显示
+select user,host from mysql.user;  &lt;---查看可以登录mysql数据库的目录，以及都可以从哪里进行管理mysql数据库
+grant all on *.* to user@&#39;host&#39; identified by &#39;oldboy123&#39;;  ---创建用户 
+grant all on *.* to Old_Boy@&#39;localhost&#39; identified by &#39;oldboy123&#39;; ---创建用户（大写用户）
+drop user &#39;user&#39;@&#39;host&#39;;
+flush privileges；&lt;--- 刷新权限
+</code></pre><blockquote>
+<p>设置密码</p>
+</blockquote>
+<pre><code>/application/mysql/bin/mysqladmin -u root password &#39;123&#39;  #本地方式修改密码
+/application/mysql/bin/mysqladmin -h web01 -u root password &#39;oldboy123&#39; #修改远程密码
+
+再次登录
+mysql -uroot -poldboy123
+</code></pre><h4 id="编译安装PHP"><a href="#编译安装PHP" class="headerlink" title="编译安装PHP"></a>编译安装PHP</h4><pre><code>yum install -y zlib-devel libxml2-devel libjpeg-devel libjpeg-turbo-devel libiconv-devel freetype-devel libpng-devel gd-devel libcurl-devel libxslt-devel gcc
+
+epel源安装如下依赖：
+yum -y install libmcrypt-devel mhash mcrypt openssl-devel
+</code></pre><p>安装libiconv</p>
+<pre><code>tar zxf libiconv-1.14.tar.gz
+cd libiconv-1.14
+./configure --prefix=/usr/local/libiconv
+make
+make install
+</code></pre><blockquote>
+<p>编译安装php</p>
+</blockquote>
+<p>编译</p>
+<pre><code>注：LNMP架构如果mysql和web架构不在同一机器上，mysql编译参数需要有所调整
+把下面的--with-mysql=/application/mysql/改为--with-mysql=mysqlnd,表示mysql不在本地，下面的防报错配置也无需操作，直接可编译安装
+
+cd /server/tools/
+tar xf php-5.5.32.tar.gz
+cd php-5.5.32
+./configure \
+--prefix=/application/php-5.5.32 \
+--with-mysql=/application/mysql/ \
+--with-pdo-mysql=mysqlnd \
+--with-iconv-dir=/usr/local/libiconv \
+--with-freetype-dir \
+--with-jpeg-dir \
+--with-png-dir \
+--with-zlib \
+--with-libxml-dir=/usr \
+--enable-xml \
+--disable-rpath \
+--enable-bcmath \
+--enable-shmop \
+--enable-sysvsem \
+--enable-inline-optimization \
+--with-curl \
+--enable-mbregex \
+--enable-fpm \
+--enable-mbstring \
+--with-mcrypt \
+--with-gd \
+--enable-gd-native-ttf \
+--with-openssl \
+--with-mhash \
+--enable-pcntl \
+--enable-sockets \
+--with-xmlrpc \
+--enable-soap \
+--enable-short-tags \
+--enable-static \
+--with-xsl \
+--with-fpm-user=www \
+--with-fpm-group=www \
+--enable-ftp \
+--enable-opcache=no
+</code></pre><pre><code>防报错配置：
+ln -s /application/mysql/lib/libmysqlclient.so.18  /usr/lib64/
+touch ext/phar/phar.phar
+make
+make install
+</code></pre><pre><code>创建软链
+ln -s /application/php-5.5.32/   /application/php
+
+配置php解析文件-php-fpm
+cp /server/tools/php-5.5.32/php.ini-production /application/php/lib/php.ini
+cp /application/php/etc/php-fpm.conf.default   /application/php/etc/php-fpm.conf
+
+启动php
+/application/php/sbin/php-fpm
+netstat -lntup|grep php
+</code></pre><h4 id="Nginx与php建立连接测试"><a href="#Nginx与php建立连接测试" class="headerlink" title="Nginx与php建立连接测试"></a>Nginx与php建立连接测试</h4><pre><code>location ~* .*\.(php|php5)?$ {
+            root html/blog;
+            fastcgi_pass  127.0.0.1:9000;
+            fastcgi_index index.php;
+            include fastcgi.conf;
+}
+</code></pre><pre><code>配置参考:
+server {
+        listen       80;
+        server_name  blog.etiantian.org;
+        location / {
+            root   html/blog;
+            index  index.php index.html index.htm;
+        }
+        location ~* .*\.(php|php5)?$ {
+            root html/blog;
+            fastcgi_pass  127.0.0.1:9000;
+            fastcgi_index index.php;
+            include fastcgi.conf;
+        }
+   }
+</code></pre><pre><code>追加测试页
+echo &#39;&lt;?php phpinfo(); ?&gt;&#39;     &gt;/application/nginx/html/blog/test_info.php
+
+访问测试
+http://blog.etiantian.org/test_info.php
+</code></pre><h4 id="Nginx与Mysql连接测试"><a href="#Nginx与Mysql连接测试" class="headerlink" title="Nginx与Mysql连接测试"></a>Nginx与Mysql连接测试</h4><pre><code>[root@web01 blog]# cat test_mysql.php 
+&lt;?php
+//$link_id=mysql_connect(&#39;主机名&#39;,&#39;用户&#39;,&#39;密码&#39;);
+//mysql -u用户 -p密码 -h 主机
+$link_id=mysql_connect(&#39;localhost&#39;,&#39;root&#39;,&#39;oldboy123&#39;) or mysql_error();
+if($link_id){
+             echo &quot;mysql successful by root !\n&quot;;
+            }else{
+             echo mysql_error();
+            }
+?&gt;
+</code></pre><pre><code>访问测试：
+http://blog.etiantian.org/test_mysql.php
+</code></pre><h4 id="blog配置"><a href="#blog配置" class="headerlink" title="blog配置"></a>blog配置</h4><pre><code>1.下载网站代码，比如：WordPress
+   tar xf wordpress-4.7.3-zh_CN.tar.gz
+2. 进入代码程序目录中，将代码移动到站点目录下
+   mv ./* /application/nginx/html/blog/
+3. 修改站点目录权限
+   chown -R www.www /application/nginx/html/blog
+4. 网站初始化-创建数据库
+   create database wordpress;
+5. 数据库授权
+   grant  all on wordpress.* to &#39;wordpress&#39;@&#39;localhost&#39; identified by &#39;oldboy123&#39;;
+   flush privileges;
+   select user,hosts from mysql.user;
+</code></pre><h4 id="MySQL数据库迁移"><a href="#MySQL数据库迁移" class="headerlink" title="MySQL数据库迁移"></a>MySQL数据库迁移</h4><pre><code>在新的db服务器上进行如下操作：
+(1)重复以上mysql数据库二进制安装
+(2)备份源数据库信息
+   mysqldump -uroot -poldboy123 --all-databases &gt;/tmp/bak.sql
+   ll /tmp/bak.sql
+   压缩并scp到新的db服务器/tmp目录
+   scp /tmp/bak.sql 172.16.1.51:/tmp/
+(3)新的db数据库登陆并读入【恢复数据库】
+   mysql -uroot -poldboy123 &lt; /tmp/bak.sql
+   flush privileges; 刷新权限
+(4)测试   
+   mysql远程登陆: mysql -uroot -poldboy123 -h 172.16.1.51
+   修改数据库连接配置，改为远程db服务器IP地址（需提前授权，并刷新权限）
+(5)数据库迁移成功，停止源mysql数据库
+   /etc/init.d/mysqld stop
+</code></pre><h4 id="可以将图片等资源放入NFS实现共享"><a href="#可以将图片等资源放入NFS实现共享" class="headerlink" title="可以将图片等资源放入NFS实现共享"></a>可以将图片等资源放入NFS实现共享</h4>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-23T04:59:52.249Z" itemprop="dateUpdated">2017-09-23 12:59:52</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/16/LNMP架构部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/16/LNMP架构部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LAMP/">LAMP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LNMP/">LNMP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LNMP编译/">LNMP编译</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql数据库迁移/">mysql数据库迁移</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wordpress/">wordpress</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/&title=《LNMP架构-部署与配置》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/&title=《LNMP架构-部署与配置》 — Gary Wu&source=
+LNMP架构部署：
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《LNMP架构-部署与配置》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/17/使用Nginx反向代理做cache缓存-实现CDN功能/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">使用Nginx反向代理做cache缓存-实现CDN功能</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/16/Nginx精讲/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Nginx精讲</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/&title=《LNMP架构-部署与配置》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/&title=《LNMP架构-部署与配置》 — Gary Wu&source=
+LNMP架构部署：
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《LNMP架构-部署与配置》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/16/LNMP架构部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

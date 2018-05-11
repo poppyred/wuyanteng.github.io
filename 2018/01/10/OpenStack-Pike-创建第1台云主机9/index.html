@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OpenStack-Pike-创建第1台云主机9 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,OpenStack,创建云主机">
+    <meta name="description" content="####创建Provider Network网络 使用提供者（外部）网络，提供者网络通过L2（桥/交换机）设备连接到物理网络。这个网络包括为云主机提供IP地址的DHCP服务器。">
+<meta name="keywords" content="高级运维,OpenStack,创建云主机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenStack-Pike-创建第1台云主机9">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="####创建Provider Network网络 使用提供者（外部）网络，提供者网络通过L2（桥/交换机）设备连接到物理网络。这个网络包括为云主机提供IP地址的DHCP服务器。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-14T04:56:45.553Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenStack-Pike-创建第1台云主机9">
+<meta name="twitter:description" content="####创建Provider Network网络 使用提供者（外部）网络，提供者网络通过L2（桥/交换机）设备连接到物理网络。这个网络包括为云主机提供IP地址的DHCP服务器。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OpenStack-Pike-创建第1台云主机9</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OpenStack-Pike-创建第1台云主机9</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-10T06:23:47.000Z" itemprop="datePublished" class="page-time">
+  2018-01-10
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#创建虚拟机"><span class="post-toc-number">1.</span> <span class="post-toc-text">创建虚拟机</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-OpenStack-Pike-创建第1台云主机9"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OpenStack-Pike-创建第1台云主机9</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-10 14:23:47" datetime="2018-01-10T06:23:47.000Z"  itemprop="datePublished">2018-01-10</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>####创建Provider Network网络</p>
+<pre><code>使用提供者（外部）网络，提供者网络通过L2（桥/交换机）设备连接到物理网络。这个网络包括为云主机提供IP地址的DHCP服务器。
+</code></pre><a id="more"></a>
+<p><strong>注：如果选择“提供者网络”则只需创建一个公有网络。但如果选择“自服务网络”，需要同时创建一个公有网络和一个私有网络！切记！</strong></p>
+<hr>
+<blockquote>
+<p>创建Provider Networks</p>
+</blockquote>
+<p>确保配置了以下参数</p>
+<pre><code>vim /etc/neutron/plugins/ml2/ml2_conf.ini
+[ml2_type_flat] 
+flat_networks  =  provider
+
+------------------------------------------------
+vim /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+
+[linux_bridge] 
+physical_interface_mappings  =  provider：eth0
+注：生产环境服务器有多个网卡，所以“提供者（外部）网络可能会配置在eth1网卡”。
+</code></pre><pre><code>source /scripts/admin_openrc
+</code></pre><p>创建公共网络</p>
+<pre><code>openstack network create  --share --external --provider-physical-network provider --provider-network-type flat provider
+
+参数释义：
+--share 参数选项允许所有项目使用虚拟网络
+--external选项将虚拟网络定义为外部
+</code></pre><p>在公共网络上创建一个子网(注意:需要与现有机器同一网段,并确保DHCP不冲突)</p>
+<pre><code>openstack subnet create --network provider \
+  --allocation-pool start=192.168.56.50,end=192.168.56.100 \
+  --dns-nameserver 8.8.8.8 --gateway 192.168.56.2 \
+  --subnet-range 192.168.56.0/24 provider
+
+参数：
+--allocation-pool  指定一个地址池
+--dns-nameserver   指定一个DNS
+--gateway 指定网关
+--subnet-range  指定网络地址
+</code></pre><!-- more -->
+<p>创建一个主机规格,名称为mini.nano</p>
+<pre><code>openstack flavor create --id 0 --vcpus 2 --ram 768 --disk 5 mini.nano
+</code></pre><p>注：使用Demo进行以下操作，这样生成的虚拟机都在Demo项目下</p>
+<!-- more -->
+<ul>
+<li>生成一个key来实现无密码登陆虚拟云主机(可选)</li>
+</ul>
+<pre><code>source /scripts/demo-openrc
+
+生成一个key或使用现有的key
+ssh-keygen -q -N &quot;&quot;
+
+添加key的公钥到计算服务中,并定义名称为mykey
+openstack keypair create --public-key ~/.ssh/id_rsa.pub mykey
+</code></pre><p>验证公钥</p>
+<pre><code>openstack keypair list
++-------+-------------------------------------------------+
+| Name  | Fingerprint                                     |
++-------+-------------------------------------------------+
+| mykey | 85:0f:61:f5:f8:ec:7b:86:7e:7a:c0:10:78:f8:01:29 |
++-------+-------------------------------------------------+
+</code></pre><!-- more -->
+<ul>
+<li>增加安全组规则</li>
+</ul>
+<pre><code>开启icmp ping
+openstack security group rule create --proto icmp default
+
+允许ssh访问
+openstack security group rule create --proto tcp --dst-port 22 default
+</code></pre><!-- more -->
+<hr>
+<blockquote>
+<p>启动一个虚拟机</p>
+</blockquote>
+<ul>
+<li>列出可用云主机类型</li>
+</ul>
+<pre><code>openstack flavor list
+</code></pre><ul>
+<li>列出可用镜像</li>
+</ul>
+<pre><code>openstack image list
++--------------------------------------+--------+--------+
+| ID                                   | Name   | Status |
++--------------------------------------+--------+--------+
+| 3e41628d-4dc9-4f73-8517-50dbc60ba5b4 | cirros | active |
++--------------------------------------+--------+--------+
+</code></pre><ul>
+<li>列出可用网络</li>
+</ul>
+<pre><code>openstack network list
++--------------------------------------+----------+--------------------------------------+
+| ID                                   | Name     | Subnets                              |
++--------------------------------------+----------+--------------------------------------+
+| 605a77b4-d232-4d0b-b915-d6572542c3d5 | provider | 925bb8f3-0e13-40d3-aa12-3c5e25d81238 |
++--------------------------------------+----------+--------------------------------------+
+</code></pre><h4 id="创建虚拟机"><a href="#创建虚拟机" class="headerlink" title="创建虚拟机"></a>创建虚拟机</h4><pre><code>openstack server create --flavor mini.nano --image cirros \
+ --nic net-id=605a77b4-d232-4d0b-b915-d6572542c3d5 \
+ --security-group default \
+ --key-name mykey First1Host
+
+指定网络ID：--nic net-id=PROVIDER_NET_ID （使用provider公有网络的ID替换PROVIDER_NET_ID）
+指定虚拟机的云主机规格mini.nano、image镜像:cirros、网络ID号、安全组和导入的免密公钥名称，最后命名这台云主机名称为First1Host
+</code></pre><pre><code>查看云主机状态
+[root@controller ~]# openstack server list
++--------------------------------------+------------+--------+----------------------+--------+-----------+
+| ID                                   | Name       | Status | Networks             | Image  | Flavor    |
++--------------------------------------+------------+--------+----------------------+--------+-----------+
+| 6d3d639b-18a1-4bc2-8a71-6f4b4a95b444 | First1Host | ACTIVE | provider=172.16.1.13 | cirros | mini.nano |
++--------------------------------------+------------+--------+----------------------+--------+-----------+
+
+当构建过程完全成功后，状态会从 BUILD``变为``ACTIVE
+</code></pre><p>此时计算节点ifconfig命令结果如下：</p>
+<pre><code>[root@compute ~]# ifconfig
+brq605a77b4-d2: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.56.12  netmask 255.255.255.0  broadcast 192.168.56.255
+
+eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet6 fe80::20c:29ff:feca:1571  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 00:0c:29:ca:15:71  txqueuelen 1000  (Ethernet)
+
+出现此结果说明创建云主机正常。        
+</code></pre><p>使用虚拟控制台访问虚拟机</p>
+<pre><code>获取云主机First1Host的VNC虚拟控制台地址
+openstack console url show First1Host
+
+将结果在浏览器中打开即可，账户:cirros   密码：cubswin:)
+</code></pre><blockquote>
+<p>在云主机中验证</p>
+</blockquote>
+<p>验证能否ping通公共网络的网关</p>
+<pre><code>$ ping -c 4 192.168.56.2
+</code></pre><p>验证能否上网</p>
+<pre><code>$ ping -c 4 qq.com
+</code></pre><blockquote>
+<p>验证云主机远程访问</p>
+</blockquote>
+<pre><code>ping -c 4 192.168.56.53
+</code></pre><p>SSH访问</p>
+<pre><code>ssh  cirros@192.168.56.53
+</code></pre><blockquote>
+<p>故障总结</p>
+</blockquote>
+<pre><code>虚拟机运行故障取决于两大组件，即neutron和nova,出了问题优先查这两个日志
+</code></pre><p>云主机软重启</p>
+<pre><code>openstack server list
+openstack server reboot SERVER       #软重启
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-14T04:56:45.553Z" itemprop="dateUpdated">2018-01-14 12:56:45</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/10/OpenStack-Pike-创建第1台云主机9/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenStack/">OpenStack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/创建云主机/">创建云主机</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/&title=《OpenStack-Pike-创建第1台云主机9》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/&title=《OpenStack-Pike-创建第1台云主机9》 — Gary Wu&source=####创建Provider Network网络
+使用提供者（外部）网络，提供者网络通过L2（桥/交换机）设备连接到物理网络。这个网络包括为云主机提供IP..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack-Pike-创建第1台云主机9》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/14/OpenStack-Pike-Horizen-Web管理10/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">OpenStack-Pike-Horizen Web管理10</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/10/批量测试HTTP代理成功率脚本/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">批量测试HTTP代理成功率脚本</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/&title=《OpenStack-Pike-创建第1台云主机9》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/&title=《OpenStack-Pike-创建第1台云主机9》 — Gary Wu&source=####创建Provider Network网络
+使用提供者（外部）网络，提供者网络通过L2（桥/交换机）设备连接到物理网络。这个网络包括为云主机提供IP..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack-Pike-创建第1台云主机9》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/10/OpenStack-Pike-创建第1台云主机9/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

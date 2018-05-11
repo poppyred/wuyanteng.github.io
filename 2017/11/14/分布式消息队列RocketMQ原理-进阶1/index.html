@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>分布式消息队列RocketMQ原理-进阶1 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MQ,高级运维,Producer,RocketMQ,Consumer,TOPIC,Name Server">
+    <meta name="description" content="RocketMQ介绍  RocketMQ是阿里开源的一款分布式、高性能、高吞吐量的消息中间件。所谓消息中间件，即与两个角色有关：消息生产者和消息消费者。 消息生产者负责创建消息并发送到RocketMQ服务器，RocketMQ服务器会将消息持久化到磁盘，消息消费者从RocketMQ服务器拉取消息并提交给应用消费。">
+<meta name="keywords" content="MQ,高级运维,Producer,RocketMQ,Consumer,TOPIC,Name Server">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式消息队列RocketMQ原理-进阶1">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="RocketMQ介绍  RocketMQ是阿里开源的一款分布式、高性能、高吞吐量的消息中间件。所谓消息中间件，即与两个角色有关：消息生产者和消息消费者。 消息生产者负责创建消息并发送到RocketMQ服务器，RocketMQ服务器会将消息持久化到磁盘，消息消费者从RocketMQ服务器拉取消息并提交给应用消费。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E7%94%9F%E4%BA%A7%E6%B6%88%E6%81%AF.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/RocketMQ.jpg">
+<meta property="og:updated_time" content="2017-11-14T11:03:40.301Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式消息队列RocketMQ原理-进阶1">
+<meta name="twitter:description" content="RocketMQ介绍  RocketMQ是阿里开源的一款分布式、高性能、高吞吐量的消息中间件。所谓消息中间件，即与两个角色有关：消息生产者和消息消费者。 消息生产者负责创建消息并发送到RocketMQ服务器，RocketMQ服务器会将消息持久化到磁盘，消息消费者从RocketMQ服务器拉取消息并提交给应用消费。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E7%94%9F%E4%BA%A7%E6%B6%88%E6%81%AF.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">分布式消息队列RocketMQ原理-进阶1</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">分布式消息队列RocketMQ原理-进阶1</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-14T10:33:09.000Z" itemprop="datePublished" class="page-time">
+  2017-11-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-分布式消息队列RocketMQ原理-进阶1"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">分布式消息队列RocketMQ原理-进阶1</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-14 18:33:09" datetime="2017-11-14T10:33:09.000Z"  itemprop="datePublished">2017-11-14</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>RocketMQ介绍</p>
+</blockquote>
+<pre><code>RocketMQ是阿里开源的一款分布式、高性能、高吞吐量的消息中间件。所谓消息中间件，即与两个角色有关：消息生产者和消息消费者。
+消息生产者负责创建消息并发送到RocketMQ服务器，RocketMQ服务器会将消息持久化到磁盘，消息消费者从RocketMQ服务器拉取消息并提交给应用消费。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>快速理解&lt;生产消息&gt;与&lt;消费消息&gt;</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E7%94%9F%E4%BA%A7%E6%B6%88%E6%81%AF.png" alt="生产消费消息"></p>
+<blockquote>
+<p>RocketMQ特点</p>
+</blockquote>
+<pre><code>1、支持严格的消息顺序；
+2、支持Topic与Queue两种模式；
+3、亿级消息堆积能力；
+4、比较友好的分布式特性；
+5、同时支持Push与Pull方式消费消息；
+</code></pre><blockquote>
+<p>架构图</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/RocketMQ.jpg" alt="RocketMQ" title="">
+                </div>
+                <div class="image-caption">RocketMQ</div>
+            </figure>
+<blockquote>
+<p>RocketMQ集群方式优缺点</p>
+</blockquote>
+<pre><code>单个master:
+
+这种方式风险较大，一旦Broker
+重启或者宕机时，会导致整个服务不可用，不建议线上环境使用。
+</code></pre><pre><code>多Master模式:
+
+一个集群无 Slave，全是 Master，例如 2 个 Master 或者 3 个 Master
+优点：配置简单，单个Master 宕机或重启维护对应用无影响，在磁盘配置为
+RAID10 时，即使机器宕机不可恢复情况下，由与 RAID10
+磁盘非常可靠，消息也不会丢（异步刷盘丢失少量消息，同步刷盘一条不丢）。性
+能最高。
+缺点：单台机器宕机期间，这台机器上未被消费的消息在机器恢复之前不可订阅
+，消息实时性会受到受到影响。
+先启动 NameServer
+在机器 A，启动第一个 Master
+在机器 B，启动第二个 Master
+</code></pre><pre><code>多 Master 多 Slave 模式，异步复制:
+
+每个 Master 配置一个 Slave，有多对Master-Slave，HA
+采用异步复制方式，主备有短暂消息延迟，毫秒级。
+优点：即使磁盘损坏，消息丢失的非常少，且消息实时性不会受影响，因为
+Master 宕机后，消费者仍然可以从 Slave
+消费，此过程对应用透明。不需要人工干预。性能同多 Master 模式几乎一样。
+缺点：Master 宕机，磁盘损坏情况，会丢失少量消息。
+先启动 NameServer
+在机器 A，启动第一个 Master
+在机器 B，启动第二个 Master
+在机器 C，启动第一个 Slave
+在机器 D，启动第二个 Slave
+</code></pre><pre><code>多 Master 多 Slave 模式，同步双写:
+
+每个 Master 配置一个 Slave，有多对Master-Slave，HA
+采用同步双写方式，主备都写成功，向应用返回成功。
+优点：数据与服务都无单点，Master宕机情况下，消息无延迟，服务可用性与数据
+可用性都非常高
+缺点：性能比异步复制模式略低，大约低 10%左右，发送单个消息的 RT
+会略高。目前主宕机后，备机不能自动切换为主机，后续会支持自动切换功能。
+先启动 NameServer
+在机器 A，启动第一个 Master
+在机器 B，启动第二个 Master
+在机器 C，启动第一个 Slave
+在机器 D，启动第二个 Slave
+以上 Broker 与 Slave 配对是通过指定相同的brokerName 参数来配对，Master
+的 BrokerId 必须是 0，Slave 的BrokerId 必须是大与 0 的数。另外一个 Master
+下面可以挂载多个 Slave，同一 Master 下的多个 Slave通过指定不同的 BrokerId
+来区分。
+</code></pre><p>参考来源：<a href="http://www.jianshu.com/p/9d4e0ff358c6" target="_blank" rel="noopener">RocketMQ集群方式</a></p>
+<blockquote>
+<p>RocketMQ网络部署特点：</p>
+</blockquote>
+<pre><code>Name Server 是一个几乎无状态节点，可集群部署，节点之间无任何信息同步。
+
+Broker部署相对复杂，Broker分为Master与Slave，一个Master可以对应多个Slave，但是一个Slave只能对应一个Master，Master与Slave的对应关系通过指定相同的BrokerName，不同的BrokerId来定义，BrokerId=0表示Master，非0表示Slave。Master也可以部署多个。每个Broker与Name Server集群中的所有节点建立长连接，定时注册Topic信息到所有Name Server。
+
+Producer与Name Server集群中的其中一个节点（随机选择）建立长连接，定期从Name Server取Topic路由信息，并向提供Topic 服务的Master建立长连接，且定时向Master发送心跳。Producer 完全无状态，可集群部署。
+
+Consumer与Name Server集群中的其中一个节点（随机选择）建立长连接，定期从Name Server取Topic 路由信息，并向提供Topic服务的Master、Slave建立长连接，且定时向Master、Slave发送心跳。Consumer既可以从Master订阅消息，也可以从Slave订阅消息，订阅规则由Broker配置决定。
+</code></pre><p>通过这篇“<a href="http://www.jianshu.com/p/468176c6bc1b" target="_blank" rel="noopener">RocketMQ原理与实践</a>”可以很容易理解，RocketMQ是如何解决 &lt;消息顺序&gt;和&lt;消息重复&gt;的。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-14T11:03:40.301Z" itemprop="dateUpdated">2017-11-14 19:03:40</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/14/分布式消息队列RocketMQ原理-进阶1/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Consumer/">Consumer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MQ/">MQ</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Name-Server/">Name Server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Producer/">Producer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RocketMQ/">RocketMQ</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TOPIC/">TOPIC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/&title=《分布式消息队列RocketMQ原理-进阶1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/&title=《分布式消息队列RocketMQ原理-进阶1》 — Gary Wu&source=
+RocketMQ介绍
+
+RocketMQ是阿里开源的一款分布式、高性能、高吞吐量的消息中间件。所谓消息中间件，即与两个角色有关：消息生产者和消息消费者。..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分布式消息队列RocketMQ原理-进阶1》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/16/CentOS6-X安装Python2-7/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">CentOS6.X安装Python2.7</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/13/Redis代理Twemproxy安装配置使用/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Redis代理Twemproxy安装配置使用</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/&title=《分布式消息队列RocketMQ原理-进阶1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/&title=《分布式消息队列RocketMQ原理-进阶1》 — Gary Wu&source=
+RocketMQ介绍
+
+RocketMQ是阿里开源的一款分布式、高性能、高吞吐量的消息中间件。所谓消息中间件，即与两个角色有关：消息生产者和消息消费者。..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分布式消息队列RocketMQ原理-进阶1》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/14/分布式消息队列RocketMQ原理-进阶1/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

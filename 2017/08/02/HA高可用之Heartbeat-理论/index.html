@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HA高可用之Heartbeat[理论] | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,HA,高可用,双机热备">
+    <meta name="description" content="Hearbeat简介  在生产环境中，在很多场景中为了保证防止服务器出现单点故障，则会考虑使用高可用的一些软件来实现双机热备，例如常见的web服务就可以使用两台服务器进行双机热备解决单点故障的问题">
+<meta name="keywords" content="高级运维,HA,高可用,双机热备">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HA高可用之Heartbeat[理论]">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Hearbeat简介  在生产环境中，在很多场景中为了保证防止服务器出现单点故障，则会考虑使用高可用的一些软件来实现双机热备，例如常见的web服务就可以使用两台服务器进行双机热备解决单点故障的问题">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-02T10:10:29.563Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HA高可用之Heartbeat[理论]">
+<meta name="twitter:description" content="Hearbeat简介  在生产环境中，在很多场景中为了保证防止服务器出现单点故障，则会考虑使用高可用的一些软件来实现双机热备，例如常见的web服务就可以使用两台服务器进行双机热备解决单点故障的问题">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HA高可用之Heartbeat[理论]</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">HA高可用之Heartbeat[理论]</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-02T07:02:57.000Z" itemprop="datePublished" class="page-time">
+  2017-08-02
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Heartbeat-主备的模式"><span class="post-toc-number">1.</span> <span class="post-toc-text">Heartbeat 主备的模式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Heartbeat-主主模式"><span class="post-toc-number">2.</span> <span class="post-toc-text">Heartbeat 主主模式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Heartbeat心跳连接"><span class="post-toc-number">3.</span> <span class="post-toc-text">Heartbeat心跳连接</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Heartbeat裂脑"><span class="post-toc-number">4.</span> <span class="post-toc-text">Heartbeat裂脑</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Heartbeat消息类型"><span class="post-toc-number">5.</span> <span class="post-toc-text">Heartbeat消息类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Heartbeat-IP-地址接管和故障转移过程"><span class="post-toc-number">6.</span> <span class="post-toc-text">Heartbeat IP 地址接管和故障转移过程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Heartbeat-VIP-IP-与-别名-辅助IP"><span class="post-toc-number">7.</span> <span class="post-toc-text">Heartbeat VIP/IP 与 别名/辅助IP</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-HA高可用之Heartbeat-理论"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HA高可用之Heartbeat[理论]</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-02 15:02:57" datetime="2017-08-02T07:02:57.000Z"  itemprop="datePublished">2017-08-02</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>Hearbeat简介</p>
+</blockquote>
+<pre><code>在生产环境中，在很多场景中为了保证防止服务器出现单点故障，则会考虑使用高可用的一些软件来实现双机热备，例如常见的web服务就可以使用两台服务器进行双机热备解决单点故障的问题
+</code></pre><a id="more"></a>
+<blockquote>
+<p>Hearbeat原理</p>
+</blockquote>
+<h4 id="Heartbeat-主备的模式"><a href="#Heartbeat-主备的模式" class="headerlink" title="Heartbeat 主备的模式"></a>Heartbeat 主备的模式</h4><pre><code>通过修改 heartbeat 软件的配置文件可以指定哪一台 Heartbeat 服务器作为主服务器，则另一台将自动成为热备服务器。然后在热备服务器上配置 Heartbeat 守护程序来监听来自主服务器的心跳消息。如果热备服务器在指定时间内未监听到来自主服务器的心跳，就会启动故障转移程序，并取得主服务器上的相关资源服务的所有权，接替主服务器继续不间断的提供服务，从而达到资源及服务高可用性的目的。
+
+</code></pre><h4 id="Heartbeat-主主模式"><a href="#Heartbeat-主主模式" class="headerlink" title="Heartbeat 主主模式"></a>Heartbeat 主主模式</h4><pre><code>即两台服务器互为主备，这时它们之间会相互发送报文来告诉对方自己当前的状态，如果在指定的时间内未收到对方发送的心跳报文，那么，一方就会认为对方失效或者宕机了，这时每个运行正常的主机就会启动自身的资源接管模块来接管运行在对方主机上的资源或者服务，继续为用户提供服务。一般情况下，可以较好的实现一台主机故障后，企业业务仍能够不间断的持续运行。
+
+注意：
+所谓的业务不间断，在故障转移期间也是需要切换时间的（例如：停止数据库及存储服务等），heartbeat 的主备高可用的切换时间一般是在5-20秒左右（服务器宕机的切换比人工切换要快）
+</code></pre><h4 id="Heartbeat心跳连接"><a href="#Heartbeat心跳连接" class="headerlink" title="Heartbeat心跳连接"></a>Heartbeat心跳连接</h4><pre><code>要部署 heartbeat 服务，至少需要两台服务器来完成，要实现高可用服务，需要heartbeat服务器之间互相通信和互相监测。
+高可用服务器上的 Heartbeat 软件会利用这条心跳线来检查对端的机器是否存活，进而决定是否做故障转移，资源切换，来保证业务的连续性。如果条件允许，以上的连接可以同时使用，来加大保险系数防止裂脑问题发生。
+</code></pre><h4 id="Heartbeat裂脑"><a href="#Heartbeat裂脑" class="headerlink" title="Heartbeat裂脑"></a>Heartbeat裂脑</h4><pre><code>由于某些原因，导致两台高可用服务器之间在指定时间内，无法互相检测到对方心跳而各自启动故障转移功能，取得了资源及服务的所有权，而此时的两台高可用服务器都还活着并在正常运行，这样就会导致同一个IP或服务在两端同时启动而发生冲突的严重问题，最严重的是两台主机占用同一个VIP地址，当用户写入数据时可能会分别写入到两端，这样可能会导致服务器两端的数据不一致或造成数据丢失，这种情况就被称为裂脑，也有人称其为分区集群或大脑垂直分割，英文为 split brain。
+</code></pre><pre><code>影响：
+发生裂脑时，对业务的影响是及其严重的，有时甚至是致命的，如：两台高可用服务器之间发生裂脑，导致互相争用同一 IP 资源，就如同我们在局域网内常见的 IP 地址冲突一样，两个机器就会有一个或者两个都不正常，影响用户正常访问服务器。如果是应用在数据库或者存储服务这种极重要的高可用上，那就可能会导致用户发布的数据间断的写在两台不同服务器上的恶果，最终数据恢复极困难或难以恢复
+</code></pre><pre><code>预防：
+可以通过编写脚本来实现以下功能
+1）只要备节点出现 VIP 就报警（a、主节点机器宕机了，备节点机器接管了 b、主节点机器没宕，裂脑了），不管哪种情况都需要人工查看
+2）严谨判断，备机出现VIP，并且主机及服务还活着，裂脑了（依然报警）
+
+检查心跳状态-脚本参考：http://blog.chinaunix.net/uid-7921481-id-1617030.html
+</code></pre><h4 id="Heartbeat消息类型"><a href="#Heartbeat消息类型" class="headerlink" title="Heartbeat消息类型"></a>Heartbeat消息类型</h4><blockquote>
+<p>Heart 高可用软件有三种消息类型，具体为:</p>
+<p>1）心跳消息<br>2）集群转换消息<br>3）重传消息</p>
+</blockquote>
+<p>心跳消息</p>
+<pre><code>心跳消息为约150字节的数据包，可能为串口、单播、广播或多播的方式，控制心跳频率及出现故障要等待多久进行故障转换
+</code></pre><p>集群转换消息</p>
+<pre><code>ip-request 和 ip-request-resp
+当主服务器恢复在线状态时，通过 ip-request 消息要求备机释放主服务器失败时备服务器取得的资源，然后备服务器关闭释放主服务器失败时取得的资源及服务。
+
+备服务器释放主服务器失败时取得的资源及服务后，就会通过 ip-request-resp 消息通知主服务器它不在拥有该资源及服务，主服务器收到来自备节点的 ip-request-resp 消息通知后，启动失败时释放的资源及服务，并开始提供正常的访问服务。
+</code></pre><p>重传请求</p>
+<pre><code>rexmit-request 控制重传心跳请求。此消息不太重要
+
+注：心跳控制消息都使用UDP协议发送到 /etc/ha.d/ha.cf 文件指定的任意端口，或指定的多播地址，如果使用多播默认端口为694
+</code></pre><h4 id="Heartbeat-IP-地址接管和故障转移过程"><a href="#Heartbeat-IP-地址接管和故障转移过程" class="headerlink" title="Heartbeat IP 地址接管和故障转移过程"></a>Heartbeat IP 地址接管和故障转移过程</h4><pre><code>Heartbeat 是通过IP地址接管和ARP广播进行故障转移的。
+
+ARP广播：
+在主服务器故障时，备用节点接管资源后，会立即强制更新所有客户端本地的ARP表（即清除客户端本地缓存的失败服务器的VIP地址和mac地址的解析记录）,确保客户端和新的主服务器对话。
+
+提示： 这里所说的客户端是和 Heartbeat 高可用服务器所在同一网络的客户机，并不是最终的互联网网用户，这里的客户端机器是相对 Heartbeat 高可用服务器来说的。
+</code></pre><h4 id="Heartbeat-VIP-IP-与-别名-辅助IP"><a href="#Heartbeat-VIP-IP-与-别名-辅助IP" class="headerlink" title="Heartbeat VIP/IP 与 别名/辅助IP"></a>Heartbeat VIP/IP 与 别名/辅助IP</h4><pre><code>真实IP:
+真实IP又被称为管理IP，一般是配置在物理网卡上的实际IP，这可以看作你本人的姓名，如：张三在负载均衡及高可用环境中，管理IP是不对外提供用户访问服务的，而作为管理服务器用，如SSH可以通过这个管理IP连接服务器。
+
+虚拟IP:
+虚拟IP即VIP，这只是一个概念而已，实际上就是heartbeat临时绑定在物理网卡上的别名（heartbeat3以上页采用了辅助IP）
+</code></pre><pre><code>别名IP（alias ip）:
+ip alias 是由 Linux 系统的 ifconfig 命令来创建和维护的，别名IP就是在网卡设备上绑定的第二个及以上的IP
+
+# 创建别名VIP（两种方法）
+[root@crazy-acong ~]# ifconfig eth0:1 192.168.40.20 netmask 255.255.255.0 up
+[root@crazy-acong ~]# ifconfig eth0:1 192.168.40.20/24 up 
+# heartbeat2 软件默认是使用这个命令来添加的
+
+# 使用别名的方法配置的VIP可以通过ifconfig查看，也可以通过ip addr 查看
+[root@crazy-acong ~]# ifconfig eth0:1
+这个ip就是启动heartbeat服务时，由heartbeat调用相关脚本配置的
+
+# 删除别名VIP的方法（两种方法）
+[root@crazy-acong ~]# ifconfig eth0:1 192.168.40.20 netmask 255.255.255.0 down
+[root@crazy-acong ~]# ifconfig eth0:1 down
+</code></pre><pre><code>辅助IP（secondary ip address）:
+
+辅助IP则是由Linux系统的ip命令创建和维护的，ip addr add 创建的辅助IP，不能通过ifconfig查看，但是通过ifconfig创建的别名IP却可以在ip addr show 命令查看。
+
+手工配置辅助VIP的方法：
+[root@crazy-acong ~]# ip addr add 192.168.40.20/24 dev eth0
+# keepalived 软件默认使用这个命令来添加VIP，也是heartbeat3软件采用的方案
+# ip add 可以查看别名和辅助IP，用ifconfig无法查到辅助IP配置情况
+
+手工查看VIP别名的方法
+不同的命令配置的VIP查看方法也是由区别的，使用辅助IP的方法配置的VIP，不能通过ifconfig查看，只能通过 ip addr 来查看
+
+手工删除辅助IP的方法
+[root@crazy-acong ~]# ip addr del 192.168.40.20/24 dev eth0
+</code></pre><blockquote>
+<p> heartbeat 和 keepalived 在启动时就是分别利用上面命令来配置VIP的。在停止时利用下面的命令来删除VIP。</p>
+<p> 以上两种方式配置VIP，在高可用环境中的作用是一样的，没什么区别，只是由于当时的系统环境等历史原因，选择的配置命令方式不同。heartbeat3 版本起，不在使用别名，而是使用辅助IP提供服务，而 keepalived 软件一直都是使用的辅助IP技术。</p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-02T10:10:29.563Z" itemprop="dateUpdated">2017-08-02 18:10:29</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/02/HA高可用之Heartbeat-理论/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HA/">HA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/双机热备/">双机热备</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高可用/">高可用</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/&title=《HA高可用之Heartbeat[理论]》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/&title=《HA高可用之Heartbeat[理论]》 — Gary Wu&source=
+Hearbeat简介
+
+在生产环境中，在很多场景中为了保证防止服务器出现单点故障，则会考虑使用高可用的一些软件来实现双机热备，例如常见的web服务就可以..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HA高可用之Heartbeat[理论]》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/02/Cacti实战-交换机接口显示错误以及流量断图/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Cacti实战-交换机接口显示错误以及流量断图</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/02/zabbix添加收取邮件-短信等告警权限/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">zabbix添加收取邮件/短信等告警权限</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/&title=《HA高可用之Heartbeat[理论]》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/&title=《HA高可用之Heartbeat[理论]》 — Gary Wu&source=
+Hearbeat简介
+
+在生产环境中，在很多场景中为了保证防止服务器出现单点故障，则会考虑使用高可用的一些软件来实现双机热备，例如常见的web服务就可以..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HA高可用之Heartbeat[理论]》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/02/HA高可用之Heartbeat-理论/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

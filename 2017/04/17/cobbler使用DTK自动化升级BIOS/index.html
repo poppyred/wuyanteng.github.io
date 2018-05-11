@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>cobbler使用DTK自动化升级BIOS | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,自动化,cobbler,DTK,BIOS">
+    <meta name="description" content="cobbler使用DTK自动化升级BIOS">
+<meta name="keywords" content="高级运维,自动化,cobbler,DTK,BIOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cobbler使用DTK自动化升级BIOS">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="cobbler使用DTK自动化升级BIOS">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-20T06:33:12.225Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cobbler使用DTK自动化升级BIOS">
+<meta name="twitter:description" content="cobbler使用DTK自动化升级BIOS">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">cobbler使用DTK自动化升级BIOS</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">cobbler使用DTK自动化升级BIOS</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-17T14:19:13.000Z" itemprop="datePublished" class="page-time">
+  2017-04-17
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#挂载iso并安装rpm基础包"><span class="post-toc-number">1.</span> <span class="post-toc-text">挂载iso并安装rpm基础包</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#了解文件SA-1和SA-2"><span class="post-toc-number">2.</span> <span class="post-toc-text">了解文件SA.1和SA.2</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#手动添加dtk所需文件到cobbler启动菜单"><span class="post-toc-number">3.</span> <span class="post-toc-text">手动添加dtk所需文件到cobbler启动菜单</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置BIOS自动化升级脚本并与distro进行关联"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置BIOS自动化升级脚本并与distro进行关联</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-cobbler使用DTK自动化升级BIOS"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">cobbler使用DTK自动化升级BIOS</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-17 22:19:13" datetime="2017-04-17T14:19:13.000Z"  itemprop="datePublished">2017-04-17</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>cobbler使用DTK自动化升级BIOS
+</code></pre><a id="more"></a>
+<p>下载DTK ISO镜像</p>
+<pre><code>地址：https://www.dell.com/support/home/cn/zh/cndhs1/Drivers/DriversDetails?driverId=GYHHX
+</code></pre><h5 id="挂载iso并安装rpm基础包"><a href="#挂载iso并安装rpm基础包" class="headerlink" title="挂载iso并安装rpm基础包"></a>挂载iso并安装rpm基础包</h5><pre><code>mount -o loop dtk_5.3.0_1908_Linux64_A00.iso /mnt
+cd /mnt/RPMs/rhel7/x86_64
+ls        
+
+#注:以下包安装有前后顺序
+yum install -y srvadmin*
+yum install -y raidcfg-5.3.0-1908.9058.el7.x86_64.rpm
+yum install -y syscfg-5.3.0-1908.9058.el7.x86_64.rpm
+yum install -y dtk-scripts-5.3.0-1908.9058.el7.x86_64.rpm
+
+命令软链
+ln -sv /opt/dell/toolkit/bin/raidcfg /usr/sbin/raidcfg
+
+注：我的cobbler部署在了CentOS7上，所以需要进入rhel7目录。
+</code></pre><h5 id="了解文件SA-1和SA-2"><a href="#了解文件SA-1和SA-2" class="headerlink" title="了解文件SA.1和SA.2"></a>了解文件SA.1和SA.2</h5><pre><code># ls -lh /mnt/isolinux/
+......
+-r--r--r-- 1 root root 4.0M Feb 15  2016 SA.1
+-r--r--r-- 1 root root 158M Feb 15  2016 SA.2
+......
+
+# file /mnt/isolinux/SA.1 
+# file /mnt/isolinux/SA.2
+
+上面可以看到有两个文件SA.1和SA.2, 这两个文件分别是kernel和initrd文件,稍后导入到cobbler的时候会用到它们。
+</code></pre><h5 id="手动添加dtk所需文件到cobbler启动菜单"><a href="#手动添加dtk所需文件到cobbler启动菜单" class="headerlink" title="手动添加dtk所需文件到cobbler启动菜单"></a>手动添加dtk所需文件到cobbler启动菜单</h5><pre><code>mkdir -p /var/www/cobbler/ks_mirror/BIOS/R610
+mkdir -p /var/www/cobbler/ks_mirror/BIOS/R620
+mkdir -p /var/www/cobbler/ks_mirror/BIOS/R710
+mkdir -p /var/www/cobbler/ks_mirror/BIOS/R720
+cp /mnt/isolinux/SA* /var/www/cobbler/ks_mirror/BIOS/R610
+cp /mnt/isolinux/SA* /var/www/cobbler/ks_mirror/BIOS/R620
+cp /mnt/isolinux/SA* /var/www/cobbler/ks_mirror/BIOS/R710
+cp /mnt/isolinux/SA* /var/www/cobbler/ks_mirror/BIOS/R720
+
+将dtk导入到cobbler
+#R610
+cobbler distro add --name=R610_bios_upgrade --kernel=/var/www/cobbler/ks_mirror/BIOS/R610/SA.1  --initrd=/var/www/cobbler/ks_mirror/BIOS/R610/SA.2
+cobbler profile add --name=R610_bios_upgrade --distro=R610_bios_upgrade
+
+#R620
+cobbler distro add --name=R620_bios_upgrade --kernel=/var/www/cobbler/ks_mirror/BIOS/R620/SA.1  --initrd=/var/www/cobbler/ks_mirror/BIOS/R620/SA.2
+cobbler profile add --name=R620_bios_upgrade --distro=R620_bios_upgrade
+
+#R710
+cobbler distro add --name=R710_bios_upgrade --kernel=/var/www/cobbler/ks_mirror/BIOS/R710/SA.1  --initrd=/var/www/cobbler/ks_mirror/BIOS/R710/SA.2
+cobbler profile add --name=R710_bios_upgrade --distro=R710_bios_upgrade
+
+#R720
+cobbler distro add --name=R720_bios_upgrade --kernel=/var/www/cobbler/ks_mirror/BIOS/R720/SA.1  --initrd=/var/www/cobbler/ks_mirror/BIOS/R720/SA.2
+cobbler profile add --name=R720_bios_upgrade --distro=R720_bios_upgrade
+
+#查看
+cobbler profile list 
+cobbler distro list
+</code></pre><h5 id="配置BIOS自动化升级脚本并与distro进行关联"><a href="#配置BIOS自动化升级脚本并与distro进行关联" class="headerlink" title="配置BIOS自动化升级脚本并与distro进行关联"></a>配置BIOS自动化升级脚本并与distro进行关联</h5><pre><code>mkdir -p  /var/lib/tftpboot/bios/R610
+mkdir -p  /var/lib/tftpboot/bios/R620
+mkdir -p  /var/lib/tftpboot/bios/R710
+mkdir -p  /var/lib/tftpboot/bios/R720
+
+Dell官网分别下载对应服务器型号的*.BIN格式的BIOS升级文件到以上对应目录中
+</code></pre><pre><code>#R610
+
+[root@cobbler-9 bios]# cat R610/R610_bios_upgrade.sh 
+#!/bin/bash
+
+cat &gt;&gt;/tmp/r610_bios.sh &lt;&lt;EOF
+tftp -g -r bios/R610/R610_BIOS_C6MRW_LN_6.4.0.BIN -l r610_bios.sh 192.168.1.1
+sh r610_bios.sh -q 
+sleep 10
+reboot
+EOF
+
+sh /tmp/r610_bios.sh
+
+
+参数-解释：
+-g 表示下载文件
+-r 表示远程文件名
+-l 表示本地文件名
+-p 表示上传文件
+IP=tftp_server_ip
+
+注：(1)如果不加上 -q(untended) 参数，则表示以交互式的方式进行，这明显不符合自动化需求。
+    (2)若升级的固件版本与现有版本一致则跳过升级
+</code></pre><pre><code>#R620
+
+[root@cobbler-9 bios]# cat R620/R620_bios_upgrade.sh 
+#!/bin/bash
+
+cat &gt;&gt;/tmp/r620_bios.sh &lt;&lt;EOF
+tftp -g -r bios/R620/R620_BIOS_KR1XT_LN_2.5.4.BIN -l r620_bios.sh 192.168.1.1
+sh r620_bios.sh -q 
+sleep 10
+reboot
+EOF
+
+sh /tmp/r620_bios.sh
+</code></pre><pre><code>#R710
+
+[root@cobbler-9 bios]# cat R710/R710_bios_upgrade.sh 
+#!/bin/bash
+
+cat &gt;&gt;/tmp/r710_bios.sh &lt;&lt;EOF
+tftp -g -r bios/R710/R710_BIOS_4HKX2_LN_6.4.0.BIN -l r710_bios.sh 192.168.1.1
+sh r710_bios.sh -q 
+sleep 10
+reboot
+EOF
+
+sh /tmp/r710_bios.sh
+</code></pre><pre><code>#R720
+
+[root@cobbler-9 bios]# cat R720/R720_bios_upgrade.sh 
+#!/bin/bash
+
+cat &gt;&gt;/tmp/r720_bios.sh &lt;&lt;EOF
+tftp -g -r bios/R720/R720_BIOS_NPPKY_LN32_1.3.6.BIN -l r720_bios.sh 192.168.1.1
+sh r720_bios.sh -q 
+sleep 10
+reboot
+EOF
+
+sh /tmp/r720_bios.sh
+</code></pre><pre><code>修改权限
+chmod 755  R610/R610_bios_upgrade.sh 
+chmod 755  R620/R620_bios_upgrade.sh 
+chmod 755  R710/R710_bios_upgrade.sh 
+chmod 755  R720/R720_bios_upgrade.sh 
+</code></pre><pre><code>#R610
+cobbler distro edit --name=R610_bios_upgrade --kopts=&quot;share_type=tftp share_location=/bios/R610 share_script=R610_bios_upgrade.sh tftp_ip=192.168.1.1&quot;
+
+#R620
+cobbler distro edit --name=R620_bios_upgrade --kopts=&quot;share_type=tftp share_location=/bios/R620 share_script=R620_bios_upgrade.sh tftp_ip=192.168.1.1&quot;
+
+#R710
+cobbler distro edit --name=R710_bios_upgrade --kopts=&quot;share_type=tftp share_location=/bios/R710 share_script=R710_bios_upgrade.sh tftp_ip=192.168.1.1&quot;
+
+#R720
+cobbler distro edit --name=R720_bios_upgrade --kopts=&quot;share_type=tftp share_location=/bios/R720 share_script=R720_bios_upgrade.sh tftp_ip=192.168.1.1&quot;
+</code></pre><p>保存配置并重启相关服务</p>
+<pre><code>cobbler sync
+</code></pre><p>注意事项：</p>
+<pre><code>注：脚本中，如果不加上 -q(untended) 参数，则表示以交互式的方式进行，这明显不符合自动化需求。
+</code></pre><p>关于BIOS降级：</p>
+<pre><code>如果需要降级，在脚本中sh后面需要加上 -f(force) 参数，同时要配合 -q 使用。
+
+降级脚本示例如下：
+[root@cobbler-9 bios]# cat R720/R720_bios_slow.sh 
+#!/bin/bash
+cat &gt;&gt;/tmp/r720_bios.sh &lt;&lt;EOF
+tftp -g -r bios/R720/R720_BIOS_NPPKY_LN32_1.3.6.BIN -l r720_bios.sh 192.168.1.1
+sh -f r720_bios.sh -q 
+sleep 10
+reboot
+EOF
+
+sh /tmp/r720_bios.sh
+</code></pre><p>Done.</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-20T06:33:12.225Z" itemprop="dateUpdated">2018-04-20 14:33:12</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/04/17/cobbler使用DTK自动化升级BIOS/" target="_blank" rel="external">https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BIOS/">BIOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DTK/">DTK</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cobbler/">cobbler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自动化/">自动化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/&title=《cobbler使用DTK自动化升级BIOS》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/&title=《cobbler使用DTK自动化升级BIOS》 — Gary Wu&source=cobbler使用DTK自动化升级BIOS
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cobbler使用DTK自动化升级BIOS》 — Gary Wu&url=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/04/27/使用jq命令行处理json数据/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">使用jq命令行处理json数据</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/13/cacti配置邮件告警/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">cacti配置邮件短信告警</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/&title=《cobbler使用DTK自动化升级BIOS》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/&title=《cobbler使用DTK自动化升级BIOS》 — Gary Wu&source=cobbler使用DTK自动化升级BIOS
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cobbler使用DTK自动化升级BIOS》 — Gary Wu&url=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/04/17/cobbler使用DTK自动化升级BIOS/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

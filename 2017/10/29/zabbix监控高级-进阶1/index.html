@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>zabbix监控高级-进阶1 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,zabbix,snmp,agent,自定义key监控,图形乱码">
+    <meta name="description" content="zabbix数据采集方式共分两种： (1) server通过轮询方式被动去agent采集 (2) agent主动汇报给server">
+<meta name="keywords" content="高级运维,zabbix,snmp,agent,自定义key监控,图形乱码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zabbix监控高级-进阶1">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="zabbix数据采集方式共分两种： (1) server通过轮询方式被动去agent采集 (2) agent主动汇报给server">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-30T10:18:14.786Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zabbix监控高级-进阶1">
+<meta name="twitter:description" content="zabbix数据采集方式共分两种： (1) server通过轮询方式被动去agent采集 (2) agent主动汇报给server">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">zabbix监控高级-进阶1</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">zabbix监控高级-进阶1</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-29T04:28:20.000Z" itemprop="datePublished" class="page-time">
+  2017-10-29
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#zabbix数据采集方式"><span class="post-toc-number">1.</span> <span class="post-toc-text">zabbix数据采集方式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#zabbix基本组件"><span class="post-toc-number">2.</span> <span class="post-toc-text">zabbix基本组件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#使用snmp监控"><span class="post-toc-number">3.</span> <span class="post-toc-text">使用snmp监控</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#图形"><span class="post-toc-number">4.</span> <span class="post-toc-text">图形</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#维护"><span class="post-toc-number">5.</span> <span class="post-toc-text">维护</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#告警邮件-配置"><span class="post-toc-number">6.</span> <span class="post-toc-text">告警邮件-配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#自定义-key-监控"><span class="post-toc-number">7.</span> <span class="post-toc-text">自定义(key)监控</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实例2：自定义key-监控nginx-status状态页信息"><span class="post-toc-number">8.</span> <span class="post-toc-text">实例2：自定义key-监控nginx_status状态页信息</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PS-说说脚本中的黑洞-dev-null"><span class="post-toc-number">9.</span> <span class="post-toc-text">PS:说说脚本中的黑洞/dev/null</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-zabbix监控高级-进阶1"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">zabbix监控高级-进阶1</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-29 12:28:20" datetime="2017-10-29T04:28:20.000Z"  itemprop="datePublished">2017-10-29</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="zabbix数据采集方式"><a href="#zabbix数据采集方式" class="headerlink" title="zabbix数据采集方式"></a>zabbix数据采集方式</h4><pre><code>共分两种：
+(1) server通过轮询方式被动去agent采集
+(2) agent主动汇报给server
+</code></pre><a id="more"></a>
+<h4 id="zabbix基本组件"><a href="#zabbix基本组件" class="headerlink" title="zabbix基本组件"></a>zabbix基本组件</h4><p>Agent体系</p>
+<pre><code>saltstack-minion作业执行
+zabbix-agent数据采集
+logstash日志采集
+agent安全扫描
+</code></pre><p>数据存储</p>
+<pre><code>支持存储类型：
+(1)关系型数据库(如:mysql)
+(2)非关系型数据库
+(3)时间序列的数据库（如:Hbase Opentsdb）
+</code></pre><p>数据展示体系</p>
+<pre><code>Kibana
+Grafana
+echarts
+rrdtools (存储+展示)
+</code></pre><p>告警通知</p>
+<pre><code>告警通知基于表达式的计算，如：判断进程数量若大于50则触发告警
+告警平台：QQ、微信、邮件、语音和短信
+</code></pre><h4 id="使用snmp监控"><a href="#使用snmp监控" class="headerlink" title="使用snmp监控"></a>使用snmp监控</h4><pre><code>谈及snmp协议，就需要了解MIB（管理信息库）的概念。
+管理信息库MIB指明了网络元素所维持的变量（即能够被管理进程查询和设置的信息）。MIB给出了一个网络中所有可能的被管理对象的集合的数据结构。SNMP的管理信息库采用和域名系统DNS相似的树型结构，它的根在最上面。
+</code></pre><blockquote>
+<p>在Linux中配置snmp</p>
+</blockquote>
+<pre><code>vim /etc/snmp/snmpd.conf
+
+com2sec admin  default       admin
+group   admin v2c           admin
+view    admin         included   .1 80
+access  admin &quot;&quot;      any       noauth    exact  admin admin none
+</code></pre><pre><code>grep &#39;^[a-Z]&#39; /etc/snmp/snmpd.conf  #确认配置是否有误
+systemctl start snmpd
+systemctl start snmpd
+netstat -nulp | grep 161
+
+取值测试：snmpget -v2c -c admin 192.168.56.11 .1.3.6.1.4.1.2021.10.1.3.1
+OID for Linux参考：http://blog.csdn.net/buster2014/article/details/46925633
+</code></pre><blockquote>
+<p>在zabbix的Web平台添加snmp主机</p>
+</blockquote>
+<pre><code>zabbix添加snmp主机
+配置--主机--添加主机：
+填写被控端主机名--加入相关组 -- 配置SNMP接口信息 -- 添加被控机业务相关描述 -- 勾选已启用 -- 选择并添加SNMP模板 -- 宏：{$SNMP_COMMUNITY} value：admin ------最后添加即可
+
+注：宏在此主要用来配置“团体名称” ，宏的不同变量是在所有SNMP模板中定义的，可以导出SNMP模板查看。所以遵循规则即可
+</code></pre><h4 id="图形"><a href="#图形" class="headerlink" title="图形"></a>图形</h4><pre><code>检测中 -- 图形 -- 选择界面右上角的“群组、主机和指定图形”来查看具体数值。
+</code></pre><blockquote>
+<p>图形界面乱码解决方案</p>
+</blockquote>
+<pre><code>(1) windows控制面板--搜索“字体” -- 搜索“微软雅黑” -- 并临时复制到桌面上
+(2) 在zabbix服务器中切换到zabbix web目录后，执行如下操作：
+    cd fonts/
+    把“桌面”的微软雅黑字体上传到该目录下
+    mv DejaVuSans.ttf DejaVuSans.ttf.bak   #备份zabbix默认使用的原字体
+    mv msyh.ttc DejaVuSans.ttf             #把微软雅黑字体重命名为DejaVuSans.ttf
+(3) 刷新zabbix web图形界面，可以看到中文已经识别    
+</code></pre><h4 id="维护"><a href="#维护" class="headerlink" title="维护"></a>维护</h4><pre><code>维护期间不告警
+维护规则定义：配置 -- 维护 -- 创建维护周期
+</code></pre><h4 id="告警邮件-配置"><a href="#告警邮件-配置" class="headerlink" title="告警邮件-配置"></a>告警邮件-配置</h4><pre><code>(1) 管理 -- 告警媒介 -- 配置Email邮件或短信信息（配置邮件服务器或短信平台信息）
+(2) 用户 -- 报警媒介 -- 添加配置报警媒介（告警邮件发给谁以及哪些发送哪些级别的邮件）
+(3) 配置 -- 动作 -- 创建动作 （即定义哪些状态的问题会触发动作，然后告警）
+</code></pre><h4 id="自定义-key-监控"><a href="#自定义-key-监控" class="headerlink" title="自定义(key)监控"></a>自定义(key)监控</h4><pre><code>确保zabbix-agent配置文件确定打开以下选项：
+
+Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d
+UnsafeUserParameters=1
+修改完重启zabbix-agent
+</code></pre><blockquote>
+<p>示例：监控nginx存活</p>
+</blockquote>
+<pre><code>(1)在zabbix-agent上自定义key:
+
+cd /etc/zabbix/zabbix_agentd.d/
+vim zabbix-nginx.conf
+UserParameter=nginx-alive,curl --head -s http://127.0.0.1/ | grep &#39;200 OK&#39; | wc -l
+
+注: nginx-alive为自定义的key名称，而key的值则是&quot;英文逗号后面是shell命令&quot;结果
+    自定义key也可以这样写：
+     UserParameter=nginx-alive, sh  /var/scripts/nginx-alive.sh
+
+重启zabbix-agent服务
+systemctl restart zabbix-agent
+systemctl status zabbix-agent
+</code></pre><p>测试key并添加监控</p>
+<pre><code>(1)在zabbix-server中通过zabbix_get命令获取命令
+   zabbix_get --help
+   zabbix_get -s 192.168.56.12 -k nginx-alive
+
+(2) Web中linux-node2创建监控项
+   配置--主机--linux-node2 --监控项--创建监控项
+
+(3) 检测中--最新数据--过滤linux-node2，然后观察最新值是否为1
+</code></pre><pre><code>zabbix_get常见错误：
+zabbix_get [25517]: Check access restrictions in Zabbix agent configuration
+
+这是因为linux-node2 zabbix-agent配置文件不允许通过zabbix_get命令获取值.
+
+或者需要在server参数中定义获取值的服务器IP地址后即可取值，如下：
+Server=192.168.56.11,127.0.0.1
+</code></pre><blockquote>
+<p>创建触发器</p>
+</blockquote>
+<pre><code>配置--主机--找到“linux-node2”--触发器--创建触发器
+表达式规则：最新的T值等于0就告警
+</code></pre><pre><code>手动stop linux-node2服务器的nginx服务
+然后稍等片刻，在检测中--仪表盘界面，就能看的刚才的nginx告警了
+</code></pre><h4 id="实例2：自定义key-监控nginx-status状态页信息"><a href="#实例2：自定义key-监控nginx-status状态页信息" class="headerlink" title="实例2：自定义key-监控nginx_status状态页信息"></a>实例2：自定义key-监控nginx_status状态页信息</h4><pre><code>linux-node2配置nginx
+
+ server {
+        server_name 127.0.0.1;
+        location /nginx_status{
+                stub_status on;
+                access_log off;
+                allow 127.0.0.1;
+                deny all;
+                }
+         }         
+</code></pre><pre><code>重启nginx
+
+访问状态页测试：
+[root@linux-node2 zabbix_agentd.d]# curl http://127.0.0.1/nginx_status
+Active connections: 1 
+server accepts handled requests
+ 3 3 3 
+Reading: 0 Writing: 1 Waiting: 0 
+</code></pre><blockquote>
+<p>linux-node2配置监控nginx状态值的脚本</p>
+</blockquote>
+<pre><code>cd /etc/zabbix/
+vim zabbix_nginx_plugin.sh
+
+#!/bin/bash
+NGINX_PORT=$1
+nginx_active(){
+        /usr/bin/curl &quot;http://127.0.0.1:&quot;$NGINX_PORT&quot;/nginx_status/&quot; 2&gt;/dev/null| grep &#39;Active&#39; | awk &#39;{print $NF}&#39;
+        }
+nginx_reading(){
+        /usr/bin/curl &quot;http://127.0.0.1:&quot;$NGINX_PORT&quot;/nginx_status/&quot; 2&gt;/dev/null| grep &#39;Reading&#39; | awk &#39;{print $2}&#39;
+       }
+nginx_writing(){
+        /usr/bin/curl &quot;http://127.0.0.1:&quot;$NGINX_PORT&quot;/nginx_status/&quot; 2&gt;/dev/null| grep &#39;Writing&#39; | awk &#39;{print $4}&#39;
+       }
+nginx_waiting(){
+        /usr/bin/curl &quot;http://127.0.0.1:&quot;$NGINX_PORT&quot;/nginx_status/&quot; 2&gt;/dev/null| grep &#39;Waiting&#39; | awk &#39;{print $6}&#39;
+       }
+nginx_accepts(){
+        /usr/bin/curl &quot;http://127.0.0.1:&quot;$NGINX_PORT&quot;/nginx_status/&quot; 2&gt;/dev/null| awk NR==3 | awk &#39;{print $1}&#39;
+       }
+nginx_handled(){
+        /usr/bin/curl &quot;http://127.0.0.1:&quot;$NGINX_PORT&quot;/nginx_status/&quot; 2&gt;/dev/null| awk NR==3 | awk &#39;{print $2}&#39;
+       }
+nginx_requests(){
+        /usr/bin/curl &quot;http://127.0.0.1:&quot;$NGINX_PORT&quot;/nginx_status/&quot; 2&gt;/dev/null| awk NR==3 | awk &#39;{print $3}&#39;
+       }
+
+main(){
+    case $2 in
+        active)
+            nginx_active;
+            ;;
+        reading)
+            nginx_reading;
+            ;;
+        writing)
+            nginx_writing;
+            ;;
+        waiting)
+            nginx_waiting;
+            ;;
+        accepts)
+            nginx_accepts;
+            ;;
+        handled)
+            nginx_handled;
+            ;;
+        requests)
+            nginx_requests;
+        esac 
+}
+
+main $1 $2
+
+
+chmod 755 zabbix_nginx_plugin.sh 
+chown -R zabbix.zabbix zabbix_nginx_plugin.sh
+自定义key
+UserParameter=nginx-status[*],/etc/zabbix/zabbix_nginx_plugin.sh &quot;$1&quot; &quot;$2&quot;
+</code></pre><pre><code>在zabbix server上,测试7个监控项的取值：
+zabbix_get -s 192.168.56.12 -k nginx-status[80,accepts]
+zabbix_get -s 192.168.56.12 -k nginx-status[80,handled]
+zabbix_get -s 192.168.56.12 -k nginx-status[80,reading]
+zabbix_get -s 192.168.56.12 -k nginx-status[80,requests]
+zabbix_get -s 192.168.56.12 -k nginx-status[80,waiting]
+zabbix_get -s 192.168.56.12 -k nginx-status[80,writing]
+zabbix_get -s 192.168.56.12 -k nginx-status[80,active]
+</code></pre><blockquote>
+<p>zabbix web上配置监控/图形/聚合图形等</p>
+</blockquote>
+<pre><code>1. 创建Ngin Status模板
+2. 创建应用集
+3. 创建监控项
+   名称：nginx_accepts
+   键值：nginx-status[80,accepts]     #其他键值参考上面的脚本
+   应用集：选择刚刚创建的即可
+   启用：勾选
+4. 创建触发器
+5. 创建图形
+6. 创建聚合图形
+7. 创建幻灯片
+</code></pre><!-- more -->
+<h4 id="PS-说说脚本中的黑洞-dev-null"><a href="#PS-说说脚本中的黑洞-dev-null" class="headerlink" title="PS:说说脚本中的黑洞/dev/null"></a>PS:说说脚本中的黑洞/dev/null</h4><pre><code>先聊聊数字：
+数字0表示标准输入－stdin
+数字1表示标准输出－stdout
+数字2表示标准错误－stderr
+
+回到黑洞：
+
+2&gt;/dev/null    把错误信息输出到黑洞(而此时正确的信息可以使用grep或awk命令提取)
+1&gt;/dev/null    把正确信息输出到黑洞
+&gt;/dev/null  2&gt;&amp;1     等同于&amp;&gt;/dev/null ,把正确信息和错误新一一起放到黑洞里
+
+范例：
+curl &quot;http://127.0.0.1:&quot;$NGINX_PORT&quot;/nginx_status/&quot; 2&gt;/dev/null| awk NR==3 | awk &#39;{print $2}&#39;
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-10-30T10:18:14.786Z" itemprop="dateUpdated">2017-10-30 18:18:14</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/10/29/zabbix监控高级-进阶1/" target="_blank" rel="external">https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/">agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/snmp/">snmp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/图形乱码/">图形乱码</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自定义key监控/">自定义key监控</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/&title=《zabbix监控高级-进阶1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/&title=《zabbix监控高级-进阶1》 — Gary Wu&source=zabbix数据采集方式共分两种：
+(1) server通过轮询方式被动去agent采集
+(2) agent主动汇报给server
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《zabbix监控高级-进阶1》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/04/redis入门及使用/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">redis入门及使用</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/25/saltstack安装redis/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">saltstack安装redis</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/&title=《zabbix监控高级-进阶1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/&title=《zabbix监控高级-进阶1》 — Gary Wu&source=zabbix数据采集方式共分两种：
+(1) server通过轮询方式被动去agent采集
+(2) agent主动汇报给server
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《zabbix监控高级-进阶1》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/10/29/zabbix监控高级-进阶1/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>curl命令详解 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,curl,cookie,POST,response,模拟浏览器,伪造referer">
+    <meta name="description" content="curl是一个利用URL规则在命令行下工作的强大文件传输工具。  语法： # curl [option] [url]">
+<meta name="keywords" content="高级运维,curl,cookie,POST,response,模拟浏览器,伪造referer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="curl命令详解">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/05/09/curl命令详解/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="curl是一个利用URL规则在命令行下工作的强大文件传输工具。  语法： # curl [option] [url]">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-09T07:30:28.103Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="curl命令详解">
+<meta name="twitter:description" content="curl是一个利用URL规则在命令行下工作的强大文件传输工具。  语法： # curl [option] [url]">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">curl命令详解</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">curl命令详解</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-05-09T06:17:40.000Z" itemprop="datePublished" class="page-time">
+  2018-05-09
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#常见参数"><span class="post-toc-number">1.</span> <span class="post-toc-text">常见参数</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#基本用法"><span class="post-toc-number">2.</span> <span class="post-toc-text">基本用法</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#保存访问的网页"><span class="post-toc-number">3.</span> <span class="post-toc-text">保存访问的网页</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#测试网页返回值"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试网页返回值</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#指定proxy服务器以及端口"><span class="post-toc-number">5.</span> <span class="post-toc-text">指定proxy服务器以及端口</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#保存http的response里面的header信息"><span class="post-toc-number">6.</span> <span class="post-toc-text">保存http的response里面的header信息</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#模仿浏览器User-agent"><span class="post-toc-number">7.</span> <span class="post-toc-text">模仿浏览器User-agent</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#伪造referer-盗链"><span class="post-toc-number">8.</span> <span class="post-toc-text">伪造referer-盗链</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#下载显示进度条"><span class="post-toc-number">9.</span> <span class="post-toc-text">下载显示进度条</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-curl命令详解"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">curl命令详解</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-05-09 14:17:40" datetime="2018-05-09T06:17:40.000Z"  itemprop="datePublished">2018-05-09</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>curl是一个利用URL规则在命令行下工作的强大文件传输工具。
+
+语法：
+# curl [option] [url]
+</code></pre><a id="more"></a>
+<h5 id="常见参数"><a href="#常见参数" class="headerlink" title="常见参数"></a>常见参数</h5><pre><code>-A/--user-agent &lt;string&gt;          设置用户代理发送给服务器
+-b/--cookie &lt;name=string/file&gt;    cookie字符串或文件读取位置
+-c/--cookie-jar &lt;file&gt;            操作结束后把cookie写入到这个文件中
+-C/--continue-at &lt;offset&gt;         断点续转
+-D/--dump-header &lt;file&gt;           把header信息写入到该文件中
+-e/--referer                      来源网址
+-f/--fail                         连接失败时不显示http错误
+-o/--output                       把输出写到该文件中
+-O/--remote-name                  把输出写到该文件中，保留远程文件的文件名
+-r/--range &lt;range&gt;                检索来自HTTP/1.1或FTP服务器字节范围
+-s/--silent                       静音模式。不输出任何东西
+-T/--upload-file &lt;file&gt;          上传文件
+-u/--user &lt;user[:password]&gt;      设置服务器的用户和密码
+-w/--write-out [format]          什么输出完成后
+-x/--proxy &lt;host[:port]&gt;         在给定的端口上使用HTTP代理
+-#/--progress-bar                进度条显示当前的传送状态
+</code></pre><h5 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h5><pre><code>curl  http://www.baidu.com
+</code></pre><h5 id="保存访问的网页"><a href="#保存访问的网页" class="headerlink" title="保存访问的网页"></a>保存访问的网页</h5><pre><code>使用重定向功能保存
+curl http://www.baidu.com &gt;baidu.html
+</code></pre><pre><code>使用内置option选项保存
+curl -o qq.html http://www.qq.com
+</code></pre><h5 id="测试网页返回值"><a href="#测试网页返回值" class="headerlink" title="测试网页返回值"></a>测试网页返回值</h5><pre><code>curl -o /dev/null -s -w %{http_code} www.qq.com
+在脚本中，这是很常见的测试网站是否正常的用法
+</code></pre><h5 id="指定proxy服务器以及端口"><a href="#指定proxy服务器以及端口" class="headerlink" title="指定proxy服务器以及端口"></a>指定proxy服务器以及端口</h5><pre><code>通过-x 选项来支持设置http代理
+curl -x 10.10.10.100:1080 http://www.google.com
+</code></pre><h5 id="保存http的response里面的header信息"><a href="#保存http的response里面的header信息" class="headerlink" title="保存http的response里面的header信息"></a>保存http的response里面的header信息</h5><pre><code>curl -D header.txt http://www.qq.com
+</code></pre><h5 id="模仿浏览器User-agent"><a href="#模仿浏览器User-agent" class="headerlink" title="模仿浏览器User-agent"></a>模仿浏览器User-agent</h5><pre><code>curl -A &quot;Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/48 (like Gecko) Safari/48&quot; http://www.qq.com &gt; qq.html
+</code></pre><p>参考：<a href="https://youruseragent.info/commonua.en.htm" target="_blank" rel="noopener">所有版本User-agent列表</a></p>
+<h5 id="伪造referer-盗链"><a href="#伪造referer-盗链" class="headerlink" title="伪造referer-盗链"></a>伪造referer-盗链</h5><pre><code>很多服务器会检查http访问的referer从而来控制访问。比如：你是先访问首页，然后再访问首页中的邮箱页面。其中这里访问邮箱的referer地址就是访问首页成功后的页面地址，如果服务器发现对邮箱页面访问的referer地址不是首页的地址，就断定那是个盗连了
+</code></pre><pre><code>curl中内置-e 选项可以自定义referer
+curl -e &quot;www.qq.com&quot; https://mail.qq.com
+</code></pre><h5 id="下载显示进度条"><a href="#下载显示进度条" class="headerlink" title="下载显示进度条"></a>下载显示进度条</h5><pre><code>curl -# -O https://codeload.github.com/shadowsocks/shadowsocks-windows/zip/master
+注：-#表示显示进度条
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-05-09T07:30:28.103Z" itemprop="dateUpdated">2018-05-09 15:30:28</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/05/09/curl命令详解/" target="_blank" rel="external">https://wuyanteng.github.io/2018/05/09/curl命令详解/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/POST/">POST</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cookie/">cookie</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/response/">response</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/伪造referer/">伪造referer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模拟浏览器/">模拟浏览器</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/05/09/curl命令详解/&title=《curl命令详解》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/05/09/curl命令详解/&title=《curl命令详解》 — Gary Wu&source=curl是一个利用URL规则在命令行下工作的强大文件传输工具。
+
+语法：
+# curl [option] [url]
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/05/09/curl命令详解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《curl命令详解》 — Gary Wu&url=https://wuyanteng.github.io/2018/05/09/curl命令详解/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/05/09/curl命令详解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/05/10/shell-if小数判断/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">shell if小数判断</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/28/让mongo的从库支持读操作/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">让mongo的从库支持读操作</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/05/09/curl命令详解/&title=《curl命令详解》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/05/09/curl命令详解/&title=《curl命令详解》 — Gary Wu&source=curl是一个利用URL规则在命令行下工作的强大文件传输工具。
+
+语法：
+# curl [option] [url]
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/05/09/curl命令详解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《curl命令详解》 — Gary Wu&url=https://wuyanteng.github.io/2018/05/09/curl命令详解/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/05/09/curl命令详解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/05/09/curl命令详解/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

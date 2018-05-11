@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Nginx配置文件-用法详解 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Nginx,php-fpm,FastCGI,php">
+    <meta name="description" content="Nginx配置文件-详解">
+<meta name="keywords" content="高级运维,Nginx,php-fpm,FastCGI,php">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx配置文件-用法详解">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Nginx配置文件-详解">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-09-28T09:34:00.747Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx配置文件-用法详解">
+<meta name="twitter:description" content="Nginx配置文件-详解">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Nginx配置文件-用法详解</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Nginx配置文件-用法详解</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-28T06:07:47.000Z" itemprop="datePublished" class="page-time">
+  2017-09-28
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Nginx配置文件-详解"><span class="post-toc-number">1.</span> <span class="post-toc-text">Nginx配置文件-详解</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Nginx配置文件-用法详解"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Nginx配置文件-用法详解</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-28 14:07:47" datetime="2017-09-28T06:07:47.000Z"  itemprop="datePublished">2017-09-28</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="Nginx配置文件-详解"><a href="#Nginx配置文件-详解" class="headerlink" title="Nginx配置文件-详解"></a>Nginx配置文件-详解</h4><a id="more"></a>
+<blockquote>
+<p>全局选项</p>
+</blockquote>
+<pre><code>user  www www;           #定义Nginx运行的用户和用户组
+
+worker_processes  8;   #定义nginx worker进程数。
+一般配置为与可用的CPU内核数相等或者配置成&quot;auto&quot;来自动检测。最多开启8个，8个以上性能就不会再提升了，而且稳定性会变的更低。
+
+worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
+#配置利用8核CPU(默认没有开启)
+
+worker_rlimit_nofile  51200;   #更改worker进程的最大打开文件数限制。
+如果没设置的话，这个值为操作系统的限制。设置后你的操作系统和Nginx可以处理比“ulimit -a”的值更多的文件，所以把这个值设高，这样nginx就不会有“too many open files”问题了。
+
+error_log /var/log/nginx/error.log  warn;
+全局错误日志及错误日志定义等级，[ debug |info | notice | warn | error | crit ]
+
+pid  /var/run/nginx.pid        #nginx进程文件
+</code></pre><blockquote>
+<p>events模块</p>
+</blockquote>
+<pre><code>events{  
+    use epoll;      #复用客户端线程的轮询方法使用epoll的I/O 模型
+    worker_connections 51200;   #每个worker进程打开的最大连接数,与worker_rlimit_nofile一致即可。
+｝
+</code></pre><blockquote>
+<p>HTTP模块</p>
+</blockquote>
+<pre><code>http {
+    include     /etc/nginx/mime.types;   #文件扩展名与文件类型映射表,默认保存在conf/mime.types中
+    default_type    application/octet-stream;    #默认文件类型
+    charset  utf-8;   #设置默认编码
+
+    log_format main   #定义日志格式
+        &#39;$remote_addr - $remote_user [$time_local] &#39;
+        &#39;&quot;$request&quot; $status $bytes_sent &#39;
+        &#39;&quot;$http_referer&quot; &quot;$http_user_agent&quot; &#39;
+        &#39;&quot;$gzip_ratio&quot; &quot;$request_time&quot; &#39;
+        &#39;&quot;$upstream_addr&quot; &quot;$upstream_status&quot; &quot;$upstream_response_time&quot;&#39;;
+
+    server_names_hash_bucket_size 128;   #服务器名字的hash表大小
+    client_header_buffer_size 2k;        
+    #为客户端请求头分配一个缓冲区,如果大小大于此值，则使用large_client_header_buffers分配的值
+
+    large_client_header_buffers 4 8k;
+
+    client_max_body_size 25M;     
+    #设置NGINX能处理的最大请求主体大小。 如果请求大于指定的大小，则NGINX发回HTTP 413（Request Entity too large）错误。 如果服务器处理大文件上传，则该指令非常重要。
+
+    client_body_buffer_size 1024k;  #一般设置1024即可
+
+    fastcgi_connect_timeout 1800;  #指定连接到后端FastCGI的超时时间。
+    fastcgi_send_timeout 1800;     #指定向FastCGI传送请求的超时时间（已经完成两次握手后的时间）
+    fastcgi_read_timeout 1800;     #nginx中fastcgi读取超时时间
+    fastcgi_buffer_size 1024k;     #用于指定读取FastCGI应答第一部分需要用多大的缓冲区
+    fastcgi_buffers 32 1024k;      #指定FastCGI的缓冲区大小
+    fastcgi_busy_buffers_size 2048k; #默认值是fastcgi_buffers的两倍
+    fastcgi_temp_file_write_size 2048k; #写入缓存文件时使用多大的数据块，默认为fastcgi_buffers的两倍
+
+    sendfile on;      #开启高效文件传输模式
+    #autoindex on;    #开启目录列表访问，合适下载服务器，默认关闭。
+    tcp_nopush on;    #防止网络阻塞
+    tcp_nodelay on;   #防止网络阻塞
+    keepalive_timeout 60;   #长连接超时时间，单位是秒
+
+    gzip on;                #开启gzip压缩输出
+    gzip_min_length  1100;  #最小压缩文件大小
+    gzip_buffers     4 32k; #压缩缓冲区
+    gzip_comp_level  9;     #压缩等级
+    gzip_types   text/plain application/x-javascript text/xml text/css application/json;
+    #压缩类型
+    gzip_disable &quot;MSIE [1-6]\.(?!.*SV1)&quot;;  #不压缩IE
+
+    ignore_invalid_headers    on; #忽略不合法的http头部
+    server_tokens off;       #是否在错误页面中显示nginx的版本号
+
+    server {
+        listen       127.0.0.1:80;
+        server_name  localhost;
+        location /NginxStatus {
+            stub_status on;
+        }
+    }
+
+    index index.html, index.php;        #定义首页文件
+    include /etc/nginx/conf.d/*.conf;   #引用conf.d目录中的配置以规范与简化管理
+
+}
+</code></pre><blockquote>
+<p>http中的server模块</p>
+</blockquote>
+<pre><code>cd  /etc/nginx/conf.d/    
+单独配置虚拟主机,为简化管理，每个虚拟主机为独立*.conf配置文件
+</code></pre><p>【前端机】vim  game.garywu.com.conf</p>
+<pre><code>upstream game_garywu {
+        server  192.168.50.140 max_fails=3 fail_timeout=10s;
+        server  192.168.50.141 max_fails=3 fail_timeout=10s;
+        server  192.168.50.142 max_fails=3 fail_timeout=10s;
+        }
+
+server {
+        listen    1.1.1.1:80;
+        server_name game.garywu.com;
+
+        root /usr/share/html/game.garywu.com;    #定义虚拟目录(前端机可以不存在此目录)
+
+
+        location / {                                                         
+          proxy_pass http://game_garywu;   #启用负载均衡，用上面定义的“game_garywu”                         proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;           #当其中一台返回错误码error/500等错误时，可以分配到下一台服务器程序继续处理，提高访问成功率
+
+          set $proxy_host &quot;game.garywu&quot;;   
+          # 定义$proxy_host的值为后端定义的servername &quot;game.garywu&quot;  
+          proxy_set_header   Host  $proxy_host;  
+          #替换用户请求数据包头部的Host信息为$proxy_host值信息                 
+          proxy_set_header   X-Forwarded-For  $remote_addr;   
+          #设置显示访问客户端的真实源IP地址         
+        }
+
+        location = /favicon.ico {        #定义favicon.ico文件
+                access_log off;          #不记录ico访问日志
+                log_not_found off;       #不记录ico访问日志
+
+        }
+
+
+
+        access_log      /var/log/nginx/game.garywu.com.access_log main;  #定义访问日志
+        error_log       /var/log/nginx/game.garywu.com.error_log warn;   #定义错误日志
+}
+</code></pre><p>【后端机】vim  game.garywu.com.conf</p>
+<p>以第一台后端机为例，其他后端机需修改listen IP</p>
+<pre><code>server {
+    listen          192.168.50.140:80;     #后端机IP地址
+    server_name     game.garywu;           #与前端机定义的头部host信息保持一致
+
+    root /usr/share/html/game.garywu.com;  #定义虚拟目录(必须存在且有源码等)
+
+    location ~ ^(.*)\/\.svn\/ {            #漏洞预防-过滤.*和.svn
+        deny all;
+    }
+
+    location = /favicon.ico {              #定义ico
+        access_log off;
+        log_not_found off;
+    }   
+
+    location ~ \.php$ {    
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /PHP文件路径$fastcgi_script_name;   #PHP文件路径
+        #fastcgi_pass  127.0.0.1:9000;  #PHP-FPM地址和端口号
+        fastcgi_pass  unix:/var/run/php5-fpm.sock;   #可以使用php-fpm的socket
+        #fastcgi_pass  php-garywu;       #也可以指定upstream字段名称（如下） 
+    }
+        access_log      /var/log/nginx/game.garywu.com.access_log main;  #定义访问日志
+        error_log       /var/log/nginx/game.garywu.com.error_log warn;   #定义错误日志
+}
+</code></pre><p>配置中将.php结尾的请求通过FashCGI交给PHP-FPM处理，PHP-FPM是PHP的一个FastCGI管理器。</p>
+<blockquote>
+<p>[PHP-FPM]在conf.d目录下创建文件：vim php-garywu.conf</p>
+</blockquote>
+<pre><code>upstream php-garywu  {
+  server  unix:/var/run/php5-fpm.sock weight=100 max_fails=10 fail_timeout=30;
+}
+
+upstream php7-garywu  {
+server   unix:/var/run/php7-fpm.sock weight=100 max_fails=10 fail_timeout=30;
+} 
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-28T09:34:00.747Z" itemprop="dateUpdated">2017-09-28 17:34:00</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/28/Nginx配置文件-用法详解/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FastCGI/">FastCGI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php-fpm/">php-fpm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/&title=《Nginx配置文件-用法详解》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/&title=《Nginx配置文件-用法详解》 — Gary Wu&source=Nginx配置文件-详解" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Nginx配置文件-用法详解》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">在生产环境中-P2P分发大软件包的应用-Murder</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/26/SSDB-NoSQL数据库部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">SSDB-NoSQL数据库部署</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/&title=《Nginx配置文件-用法详解》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/&title=《Nginx配置文件-用法详解》 — Gary Wu&source=Nginx配置文件-详解" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Nginx配置文件-用法详解》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/28/Nginx配置文件-用法详解/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

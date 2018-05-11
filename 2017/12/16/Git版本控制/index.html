@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Git分布式版本控制 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Gitlab,Git,svn,版本控制">
+    <meta name="description" content="Git  Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。">
+<meta name="keywords" content="高级运维,Gitlab,Git,svn,版本控制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git分布式版本控制">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/16/Git版本控制/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Git  Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-22T09:58:27.929Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git分布式版本控制">
+<meta name="twitter:description" content="Git  Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Git分布式版本控制</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Git分布式版本控制</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-16T01:45:10.000Z" itemprop="datePublished" class="page-time">
+  2017-12-16
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#常规使用"><span class="post-toc-number">1.</span> <span class="post-toc-text">常规使用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看提交历史记录"><span class="post-toc-number">2.</span> <span class="post-toc-text">查看提交历史记录</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#还原历史数据"><span class="post-toc-number">3.</span> <span class="post-toc-text">还原历史数据</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#对比数据"><span class="post-toc-number">4.</span> <span class="post-toc-text">对比数据</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Git分支结构"><span class="post-toc-number">5.</span> <span class="post-toc-text">Git分支结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Git-服务器仓库上传下载代码"><span class="post-toc-number">6.</span> <span class="post-toc-text">Git 服务器仓库上传下载代码</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Git版本控制"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Git分布式版本控制</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-16 09:45:10" datetime="2017-12-16T01:45:10.000Z"  itemprop="datePublished">2017-12-16</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>Git</p>
+</blockquote>
+<pre><code>Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>安装git</p>
+</blockquote>
+<pre><code>yum install -y git
+
+[root@gitlab ~]# git version
+git version 1.8.3.1
+</code></pre><blockquote>
+<p>Git全局配置</p>
+</blockquote>
+<pre><code>git config --global user.name &quot;garywu&quot;  #配置git使用用户
+git config --global user.email &quot;617597237@qq.com&quot;  #配置git使用邮箱
+git config --global color.ui true  #语法高亮
+git config --list   # 查看全局配置
+
+以上配置实际上修改的是当前用户家目录的gitconfig文件
+cat ~/.gitconfig
+</code></pre><blockquote>
+<p>初始化git目录</p>
+</blockquote>
+<pre><code>#创建git工作目录
+mkdir git_data &amp;&amp; cd git_data
+
+#初始化
+git init
+
+#查看工作去状态
+git status
+</code></pre><h4 id="常规使用"><a href="#常规使用" class="headerlink" title="常规使用"></a>常规使用</h4><blockquote>
+<p>创建数据 –&gt; 提交数据</p>
+</blockquote>
+<pre><code>cd git_data &amp;&amp; touch README  #在工作目录创建测试文件
+git status
+git add filename  #把数据放到暂存区域或 git add *
+git status
+git commit -m &#39;first commit&#39;  #提交暂存区域数据到本地仓库, -m为提交添加注释
+</code></pre><blockquote>
+<p>直接提交(针对已存在的文件)</p>
+</blockquote>
+<pre><code>README文件上一步已经存在
+
+echo &quot;hello&quot; &gt;&gt; README      #向README文件追加新内容
+
+git commit -a -m &#39;内容新增了hello字符串&#39; 
+注: -a, --all参数表示直接提交
+</code></pre><blockquote>
+<p>删除暂存区数据</p>
+</blockquote>
+<p>方式一:</p>
+<pre><code>touch test.txt
+git add test.txt    #添加test.txt到暂存区
+git status
+git reset HEAD test.txt   #将文件从暂存区撤回
+git status
+</code></pre><p>方式二：</p>
+<pre><code>git add test.txt   #将文件添加到暂存区
+git status
+git rm --cached test.txt  #将文件从暂存区撤回
+git status
+</code></pre><blockquote>
+<p>重命名</p>
+</blockquote>
+<pre><code>git mv kkk.txt test.txt
+</code></pre><h4 id="查看提交历史记录"><a href="#查看提交历史记录" class="headerlink" title="查看提交历史记录"></a>查看提交历史记录</h4><pre><code>#查看提交历史记录
+git log   
+
+#查看最近几条记录
+git log -2  
+
+#-p显示每次提交的内容差异,例如仅查看最近一次差异
+git log -p -1 
+
+#--stat简要显示数据增改行数，这样能够看到提交中修改过的内容，对文件添加或移动的行数，并在最后列出所有增减行的概要信息
+git log --stat -2
+
+#--pretty根据不同的格式展示提交的历史信息
+git log --pretty=oneline
+
+#以更详细的模式输出提交的历史记录
+git log --pretty=fuller -2
+
+#查看当前所有提交记录的简短SHA-1哈希字串与提交者的姓名，其他格式见备注。
+git log --pretty=fomat:&quot;%h %cn&quot;  
+</code></pre><h4 id="还原历史数据"><a href="#还原历史数据" class="headerlink" title="还原历史数据"></a>还原历史数据</h4><pre><code>Git服务程序中有一个叫做HEAD的版本指针，每次进行数据还原可以理解为断开当前版本的软链并与指定版本进行软链
+</code></pre><ul>
+<li>从本地仓库回滚到指定版本号</li>
+</ul>
+<pre><code>[root@gitlab git_data]# git reset --hard 2c1897
+HEAD is now at 2c1897c touch创建README
+#注2c1897是要还原到目标版本的版本号，为了简写可以保留前几位，只要与其他不重复即可。
+
+[root@gitlab git_data]# 
+[root@gitlab git_data]# git log
+commit 2c1897c75502d0fa637f938c20d35db92d6587f1
+Author: garywu &lt;617597237@qq.com&gt;
+Date:   Fri Dec 15 21:23:26 2017 -0500
+
+    touch创建README
+</code></pre><ul>
+<li>还原未来数据</li>
+</ul>
+<pre><code>回滚后，之前的数据相当于是未来数据，那么假如说回滚错误，如何重新回滚？
+
+[root@gitlab git_data]# git reflog    #查看所有的本地仓库版本信息
+2c1897c HEAD@{0}: reset: moving to 2c1897
+242bac0 HEAD@{1}: commit: 内容新增了hello字符串
+d1c2c7b HEAD@{2}: commit: 第2次commit
+2c1897c HEAD@{3}: commit (initial): touch创建README
+
+[root@gitlab git_data]# git reset --hard 242bac0   #回滚到指定版本
+HEAD is now at 242bac0 内容新增了hello字符串
+</code></pre><blockquote>
+<p>给当前版本打标签Tag</p>
+</blockquote>
+<pre><code>前面回滚使用的是一串字符串，又长又难记。
+
+git tag v1.0   #当前提交内容打一个标签(方便快速回滚)，每次提交都可以打个tag。
+
+git tag        #查看当前所有的标签
+
+git show v1.0  #查看当前1.0版本的详细信息
+
+git tag v1.2 -m &quot;version 1.2 release is test&quot;  
+#创建带有说明的标签,-a指定标签名字，-m指定说明文字
+
+git tag -d v1.0  
+#我们为同一个提交版本设置了两次标签,删除之前的v1.0
+</code></pre><pre><code>git tag v20171111  #给当前版本打标签
+git tag   #查看所有标签
+git show v20171111  #查看当前tag对应的版本详情
+</code></pre><blockquote>
+<p>利用tag标签回滚</p>
+</blockquote>
+<pre><code>给当前版本打上标签后，切换到其他版本模拟tag回滚
+git reset --hard v20171111
+git log
+</code></pre><h4 id="对比数据"><a href="#对比数据" class="headerlink" title="对比数据"></a>对比数据</h4><pre><code>git diff &lt;filename&gt;
+</code></pre><pre><code>[root@gitlab git_data]# echo &quot;test&quot; &gt;&gt; kkk.txt 
+
+[root@gitlab git_data]# git diff kkk.txt 
+diff --git a/kkk.txt b/kkk.txt
+index e69de29..9daeafb 100644
+--- a/kkk.txt
++++ b/kkk.txt
+@@ -0,0 +1 @@
++test
+</code></pre><h4 id="Git分支结构"><a href="#Git分支结构" class="headerlink" title="Git分支结构"></a>Git分支结构</h4><pre><code>在实际的项目开发中，尽量保证master分支稳定，仅用于发布新版本，一般禁止直接修改里面的数据文件。开发可以在dev分支上。
+dev再创建多个自分支，让开发在各自分支进行开发，开发完成后合并分支到dev
+</code></pre><pre><code>[root@gitlab git_data]# git status
+# On branch master   #默认就在master分支
+</code></pre><blockquote>
+<p>创建分支</p>
+</blockquote>
+<pre><code>[root@gitlab git_data]# git branch dev     #创建dev分支
+[root@gitlab git_data]# git branch          #查看当前所在分支/查看所有分支
+  dev
+* master
+
+[root@gitlab git_data]# git checkout dev   #切换分支到dev
+[root@gitlab git_data]# git branch         #查看当前所在分支/查看所有分支
+* dev
+  master
+</code></pre><pre><code>注：切换分支之前请务必commit，否则修改会丢失。
+
+[root@gitlab git_data]# git checkout dev   #切换分支到dev
+[root@gitlab git_data]# echo &quot;dev branch&quot; &gt;&gt; kkk.txt 
+[root@gitlab git_data]# git status
+[root@gitlab git_data]# git commit -a -m &quot;dev-commit&quot;   #提交
+[root@gitlab git_data]# git log
+commit 995e05e17422e736eceb2d4230c93b78fcd0c9b2
+Author: garywu &lt;617597237@qq.com&gt;
+Date:   Sat Dec 16 01:14:37 2017 -0500
+
+    dev-commit
+</code></pre><blockquote>
+<p>分支自动合并</p>
+</blockquote>
+<ul>
+<li>自动合并：只有文件同一行内容没有冲突，就可以自动合并</li>
+</ul>
+<pre><code>[root@gitlab git_data]# git checkout master  #切换到master分支
+Switched to branch &#39;master&#39;
+
+[root@gitlab git_data]# git merge dev    #把dev分支自动合并到当前分支
+Updating 242bac0..995e05e
+Fast-forward
+ kkk.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+</code></pre><ul>
+<li>合并冲突： 文件冲突 – 文件的同一行有不同的内容</li>
+</ul>
+<pre><code>模拟冲突(分别修改不同分支文件中的同一行的内容并提交)：
+echo &quot;master-test&quot;  &gt;&gt;kkk.txt    #在master分支向文件输出测试内容
+git commit -a -m &quot;this is master-test&quot;  #提交
+
+git checkout dev     #切换分支到dev
+echo &quot;dev-test&quot; &gt;&gt; kkk.txt   #在dev分支向文件输出测试内容
+git commit -a -m &quot;this is dev-test&quot;   #提交
+
+git branch master    #再次切换到master分支
+git merge dev    #进行合并
+</code></pre><pre><code>合并冲突：
+[root@gitlab git_data]# git merge dev
+Auto-merging kkk.txt
+CONFLICT (content): Merge conflict in kkk.txt
+Automatic merge failed; fix conflicts and then commit the result.
+</code></pre><ul>
+<li>手动解决合并冲突</li>
+</ul>
+<pre><code>修改提交的文件，保留要留下的内容，其他冲突内容删除
+[root@gitlab git_data]# cat kkk.txt 
+test
+dev branch
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+master-test
+=======
+dev-test
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev
+#比如要保留master-test，其他提示内容都删除，删除后文件内容如下：
+[root@gitlab git_data]# cat kkk.txt 
+test
+dev branch
+master-test
+
+#再次提交
+[root@gitlab git_data]# git commit -a -m &quot;解决合并冲突&quot; 
+[master 071f8cd] 解决合并冲突
+
+#重新进行合并
+[root@gitlab git_data]# git merge dev
+Already up-to-date.
+
+可以看到，冲突已经解决。
+</code></pre><ul>
+<li>删除dev分支</li>
+</ul>
+<pre><code>git branch -d dev
+</code></pre><h4 id="Git-服务器仓库上传下载代码"><a href="#Git-服务器仓库上传下载代码" class="headerlink" title="Git 服务器仓库上传下载代码"></a>Git 服务器仓库上传下载代码</h4><blockquote>
+<p>安装gitlab</p>
+</blockquote>
+<pre><code>https://wuyanteng.github.io/2017/12/05/Gitlab%E9%83%A8%E7%BD%B2CentOS7/
+</code></pre><blockquote>
+<p>创建仓库</p>
+</blockquote>
+<pre><code>#全局配置
+git config --global user.name &quot;GaryWu&quot;
+git config --global user.email &quot;617597237@qq.com&quot;
+
+#首次下载仓库使用git clone命令
+git clone git@linux16:root/37team.git  
+
+#切换到project目录
+cd 37team
+touch README.md     #创建文件
+git add README.md   #添加到缓存区
+git commit -m &quot;add README&quot; #提交
+git push -u origin master  #传输到远端Git Server
+</code></pre><blockquote>
+<p>测试</p>
+</blockquote>
+<pre><code>在Gitlab中的README.md中编辑添加一些内容,然后点击下面的提交Commit changes
+</code></pre><blockquote>
+<p>git客户端pull下载代码库</p>
+</blockquote>
+<pre><code>git pull    #非首次下载仓库直接git pull即可
+
+[root@linux16 37team]# git pull
+remote: Counting objects: 3, done.
+remote: Total 3 (delta 0), reused 0 (delta 0)
+Unpacking objects: 100% (3/3), done.
+From 192.168.56.16:root/37team
+   eea16b7..5d40d9c  master     -&gt; origin/master
+Updating eea16b7..5d40d9c
+Fast-forward
+ README.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-12-22T09:58:27.929Z" itemprop="dateUpdated">2017-12-22 17:58:27</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/16/Git版本控制/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/16/Git版本控制/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gitlab/">Gitlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/svn/">svn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/16/Git版本控制/&title=《Git分布式版本控制》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/16/Git版本控制/&title=《Git分布式版本控制》 — Gary Wu&source=
+Git
+
+Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/16/Git版本控制/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Git分布式版本控制》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/16/Git版本控制/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/16/Git版本控制/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/18/zabbix监控https-ssl证书是否过期/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">zabbix监控https_ssl证书是否过期</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/14/logstash收集java日志/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">logstash收集java日志</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/16/Git版本控制/&title=《Git分布式版本控制》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/16/Git版本控制/&title=《Git分布式版本控制》 — Gary Wu&source=
+Git
+
+Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/16/Git版本控制/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Git分布式版本控制》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/16/Git版本控制/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/16/Git版本控制/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/16/Git版本控制/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

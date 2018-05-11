@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>inotify+rsync实时同步 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,sersync,inotify,实时同步">
+    <meta name="description" content="实时同步原理">
+<meta name="keywords" content="高级运维,sersync,inotify,实时同步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="inotify+rsync实时同步">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="实时同步原理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/inotify%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5-%E5%8E%9F%E7%90%86.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/inotyfy%E5%91%BD%E4%BB%A4%E6%A0%BC%E5%BC%8F.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/inotify%E4%BA%8B%E4%BB%B6%E6%B1%87%E6%80%BB.png">
+<meta property="og:updated_time" content="2017-08-26T06:05:45.960Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="inotify+rsync实时同步">
+<meta name="twitter:description" content="实时同步原理">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/inotify%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5-%E5%8E%9F%E7%90%86.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">inotify+rsync实时同步</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">inotify+rsync实时同步</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-26T01:48:23.000Z" itemprop="datePublished" class="page-time">
+  2017-08-26
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实现实时同步备份数据的过程（从原理方面）"><span class="post-toc-number">1.</span> <span class="post-toc-text">实现实时同步备份数据的过程（从原理方面）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署rsync服务"><span class="post-toc-number">2.</span> <span class="post-toc-text">部署rsync服务</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署inotify服务"><span class="post-toc-number">3.</span> <span class="post-toc-text">部署inotify服务</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#rsync与inotify脚本结合"><span class="post-toc-number">4.</span> <span class="post-toc-text">rsync与inotify脚本结合</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#kill扩展"><span class="post-toc-number">5.</span> <span class="post-toc-text">kill扩展</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-inotify+rsync实时同步"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">inotify+rsync实时同步</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-26 09:48:23" datetime="2017-08-26T01:48:23.000Z"  itemprop="datePublished">2017-08-26</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>实时同步原理</p>
+</blockquote>
+<a id="more"></a>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/inotify%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5-%E5%8E%9F%E7%90%86.png" alt="实时同步-原理" title="">
+                </div>
+                <div class="image-caption">实时同步-原理</div>
+            </figure>
+<h4 id="实现实时同步备份数据的过程（从原理方面）"><a href="#实现实时同步备份数据的过程（从原理方面）" class="headerlink" title="实现实时同步备份数据的过程（从原理方面）"></a>实现实时同步备份数据的过程（从原理方面）</h4><blockquote>
+<p>1）部署rsync服务</p>
+<p>2）部署inotify监控服务</p>
+<p>3）让rsync服务与inotify服务结合(利用脚本结合)。</p>
+</blockquote>
+<h4 id="部署rsync服务"><a href="#部署rsync服务" class="headerlink" title="部署rsync服务"></a>部署rsync服务</h4><blockquote>
+<p>部署rsync服务端</p>
+</blockquote>
+<pre><code>#检查rsync软件是否安装并安装
+
+#配置rsync配置文件
+ vim /etc/rsyncd.conf
+ man rsyncd.conf  #查看配置帮助
+
+#创建备份目录管理用户
+ useradd  -s /sbin/nologin -M rsync
+
+#创建备份目录
+ mkdir /nfsbackup -p
+ chown -R rsync:rsync /nfsbackup
+
+# 创建安全认证文件
+  echo “rsync_bak:123456” &gt;/etc/rsync.password
+  chmod 600 /etc/rsync.password
+
+#启动rsync服务
+ rsync --daemon -c /etc/password
+
+ ###########################################################################################
+ yum install -y rsync
+ /etc/init.d/xinetd start
+ 说明：有很多服务类似rsync一样没有启动脚本，需要使用命令开启守护进程，因此服务启动停止很麻烦。因此为了解决以上软件的启动停止与重启问题，开发了xinetd服务，将通过命令启动守护进程的命令统一管理起来。
+ cd /etc/xinetd.d/
+ vim rsync   #修改为disable=no
+ /etc/init.d/xinetd restart
+ netstat -lntup |grep 873
+</code></pre><blockquote>
+<p>部署rsync客户端</p>
+</blockquote>
+<pre><code>#检查rsync客户端是否安装
+#编写安全认证文件
+  echo “123456” &gt;/etc/rsync.password
+  chmod 600 /etc/rsync.password
+# 推送测试
+</code></pre><h4 id="部署inotify服务"><a href="#部署inotify服务" class="headerlink" title="部署inotify服务"></a>部署inotify服务</h4><pre><code>软件名称：inotify-tools
+而sersync是原金山公司周洋在inotify基础上二次开发，多了定时重试机制、过滤机制、支持多线程等。
+</code></pre><pre><code>PS: yum源仓库搭建：http://blog.oldboyedu.com/autodeploy-yum/
+</code></pre><pre><code>安装阿里云普通源与epel源
+参考：http://mirrors.aliyun.com/help/centos
+
+#安装
+yum install -y inotify-tools
+
+#检查
+[root@nfs01 data]# ls -l /proc/sys/fs/inotify/
+total 0
+-rw-r--r-- 1 root root 0 Aug  6 07:38 max_queued_events
+-rw-r--r-- 1 root root 0 Aug  6 07:38 max_user_instances
+-rw-r--r-- 1 root root 0 Aug  6 07:38 max_user_watches
+
+[root@nfs01 data]# rpm -ql inotify-tools
+/usr/bin/inotifywait
+/usr/bin/inotifywatch
+
+[root@nfs01 data]# cd /proc/sys/fs/inotify/
+max_user_watches  #定义监控文件数量,默认8192
+max_user_instances #定义每个用户可以运行的实例数量，默认128。
+max_queued_events  #设置inotify实例事件（event）队列容纳的数量，默认:16384。
+
+#编写监控命令
+inotifywait -mrq --format “%w%f” -e moved_to,delete,create,close_write /data
+</code></pre><blockquote>
+<p>参数</p>
+</blockquote>
+<pre><code>-e |--event 指定监听1个或多个事件，比如:create,delete。如果省略表示所有事件都监听
+-d |--daemon  以守护进程方式运行
+-r |--recursive 递归监控目录数据信息变化
+-q | --quiet  输出信息少，只打印事件信息
+-m |--monitor   始终保持事件监听状态
+--timefmt   指定时间输出格式
+--format 用自定义的格式显示监控输出的内容。
+        %w 事件出现时，显示监控的文件或目录名称信息
+        %f 事件出现时，显示监控的文件或目录的名称信息。
+        %T 匹配或调用--timefmt语法中输出的时间格式。
+        %e 事件发生时，不同的事件状态信息之间使用逗号（,）分隔
+        %Xe 事件发生时，不同的时间状态信息之间使用X分隔
+</code></pre><blockquote>
+<p>事件</p>
+</blockquote>
+<pre><code>close_write  文件或目录关闭，在写入模式打开后关闭的
+move  文件或目录不管移动到货是移动出监控目录都触发事件
+create 文件或目录创建在监控的目录中就触发事件
+</code></pre><pre><code># 开启inotifywait监控
+inotifywait /data    #默认只监控一次
+inotifywait -m /data  #始终保持事件监听，但是如果在子目录创建文件不会产生事件，因为没有添加-r参数。
+inotifywait -mrq /data   #主要用到的三个参数。
+</code></pre><p>inotify命令格式</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/inotyfy%E5%91%BD%E4%BB%A4%E6%A0%BC%E5%BC%8F.png" alt="inotify命令格式" title="">
+                </div>
+                <div class="image-caption">inotify命令格式</div>
+            </figure>
+<blockquote>
+<p>常见时间参数信息</p>
+</blockquote>
+<pre><code>%F   以yy-mm-dd方式显示时间
+</code></pre><blockquote>
+<p>事件测试</p>
+</blockquote>
+<pre><code>测试create事件
+inotifywait -mrq --timefmt &#39;%d/%m/%y %H:%M&#39; --format &#39;%T %w%f&#39; -e create /data
+inotifywait -mrq --timefmt &#39;%d/%m/%y %H:%M&#39; --format &#39;%T %w%f 触发事件:%e&#39; -e create /data
+
+删除delete事件
+inotifywait -mrq --timefmt &#39;%F&#39; --format &#39;%T %w%f 触发事件:%?e&#39; -e create,delete /data
+
+修改close_write事件
+inotifywait -mrq --timefmt &#39;%F&#39; --format &#39;%T %w%f 触发事件:%?e&#39; -e create,delete,close_write /data
+
+测试moved_to事件
+[root@inotify_server ~]# inotifywait -mrq --timefmt &#39;%d/%m/%y %H:%M&#39; --format &#39;%T %w%f&#39; -e moved_to /data
+
+测试moved_from事件
+[root@inotify_server ~]# inotifywait -mrq --timefmt &#39;%F&#39; --format &#39;%T %w%f&#39; -e moved_from /data
+
+#####以我们习惯的时间格式显示：########
+inotifywait -mrq --timefmt &#39;%F&#39; --format &#39;%T %w%f&#39; -e create /data
+2017-08-06 /data/dir_02
+</code></pre><blockquote>
+<p>事件汇总</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/inotify%E4%BA%8B%E4%BB%B6%E6%B1%87%E6%80%BB.png" alt="事件汇总" title="">
+                </div>
+                <div class="image-caption">事件汇总</div>
+            </figure>
+<h4 id="rsync与inotify脚本结合"><a href="#rsync与inotify脚本结合" class="headerlink" title="rsync与inotify脚本结合"></a>rsync与inotify脚本结合</h4><pre><code>vim monitor.sh 
+
+#!/bin/bash
+/usr/bin/inotifywait -mrq --format “%w%f” -e moved_to,delete,create,close_write /data|\
+while read line
+do
+   rsync -az --delete /data/  rsync_backup@172.16.1.41::nfsbackup --password-file=/etc/rsync.password
+done
+</code></pre><p>–delete 是无差异同步，即同步之前如果两边不一致先清空源数据。</p>
+<h4 id="kill扩展"><a href="#kill扩展" class="headerlink" title="kill扩展"></a>kill扩展</h4><pre><code>1. kill/killall/pkill只能杀掉正在后台运行的进程，而后台暂停（ctrl+z）的进程无法杀死
+2. 需要将后台暂停运行的程序开启，再利用kill杀进程。
+   jobs
+   fg 序号     #把后台运行的程序放在前台运行
+   killall  sh
+</code></pre><p>将脚本放入后台运行的方式</p>
+<pre><code>1. 在脚本后面放入&amp;符号，表示脚本在后台运行（centos5使用&amp;有bug）
+2. 利用nohup命令
+   nohup sh /server/scripts/monitor.sh &amp;
+   jobs查看后台运行的进程
+3. screen命令实现后台管理服务功能
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-26T06:05:45.960Z" itemprop="dateUpdated">2017-08-26 14:05:45</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/26/inotify+rsync实时同步/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/inotify/">inotify</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sersync/">sersync</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/实时同步/">实时同步</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/&title=《inotify+rsync实时同步》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/&title=《inotify+rsync实时同步》 — Gary Wu&source=
+实时同步原理
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《inotify+rsync实时同步》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/26/sersync+rsync实时同步/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">sersync+rsync实时同步</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/25/ceph存储/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">ceph分布式存储</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/&title=《inotify+rsync实时同步》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/&title=《inotify+rsync实时同步》 — Gary Wu&source=
+实时同步原理
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《inotify+rsync实时同步》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Shell编程之Bash循环 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,shell,for循环,while循环,until循环,select循环,break">
+    <meta name="description" content="for循环 for循环的基本语法：  for i in item1 item2 ... itemN do    command1   command2   ... done">
+<meta name="keywords" content="高级运维,shell,for循环,while循环,until循环,select循环,break">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell编程之Bash循环">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="for循环 for循环的基本语法：  for i in item1 item2 ... itemN do    command1   command2   ... done">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-29T12:47:27.835Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell编程之Bash循环">
+<meta name="twitter:description" content="for循环 for循环的基本语法：  for i in item1 item2 ... itemN do    command1   command2   ... done">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Shell编程之Bash循环</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Shell编程之Bash循环</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-24T12:37:09.000Z" itemprop="datePublished" class="page-time">
+  2017-07-24
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#for循环"><span class="post-toc-number">1.</span> <span class="post-toc-text">for循环</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#while循环"><span class="post-toc-number">2.</span> <span class="post-toc-text">while循环</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#定义无限while循环-又称死循环"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">定义无限while循环(又称死循环)</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#expr手工命令计数器"><span class="post-toc-number">2.0.2.</span> <span class="post-toc-text">expr手工命令计数器</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#until循环"><span class="post-toc-number">3.</span> <span class="post-toc-text">until循环</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#select循环语句"><span class="post-toc-number">4.</span> <span class="post-toc-text">select循环语句</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#循环控制"><span class="post-toc-number"></span> <span class="post-toc-text">循环控制</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#break语句"><span class="post-toc-number">1.</span> <span class="post-toc-text">break语句</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number"></span> <span class="post-toc-text">总结</span></a>
+        </nav>
+    </aside>
+
+
+<article id="post-Shell编程之Bash循环"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Shell编程之Bash循环</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-24 20:37:09" datetime="2017-07-24T12:37:09.000Z"  itemprop="datePublished">2017-07-24</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h4><blockquote>
+<p>for循环的基本语法：</p>
+</blockquote>
+<pre><code>for i in item1 item2 ... itemN
+do 
+  command1
+  command2
+  ...
+done
+</code></pre><a id="more"></a>
+<p>在for循环中，每次指定列表中的新值被赋予变量i后，for循环都会执行一次，它将重复运行do和done之间的所有语句，直到条件不满足时为止。</p>
+<p>实例：</p>
+<pre><code>要求：
+①找到已经开启服务   chkconfig --list|grep 3:on
+②需要开机自启的服务  crond sshd network rsyslog sysstat
+③for循环执行  chkconfig 服务名 off
+
+[root@oldboy202 scripts]#vim services.sh
+#/bin/bash
+services=`chkconfig --list|grep 3:on |egrep -v &quot;crond|sshd|network|rsyslog|sysstat&quot; |awk &#39;{print $1}&#39;`          #把服务名称通过筛选然后定义一个变量；最后需要反引号进行括起来
+
+for i in $services     #把服务名称列表变量赋值给i变量
+do 
+  chkconfig $i off     #调用i变量
+done
+
+注：变量中如果包含单引号和双引号，那么此变量需要使用反引号括起来，否则会报错。
+</code></pre><p>for循环练习1：批量创建10个用户，设置并显示用户随机密码</p>
+<pre><code>vim useradd.sh
+#/bin/bash
+
+for i in {1..5}           #定义序列并将其赋值给变量i
+  do
+    useradd gary$i        #创建用户
+    pass=`echo $RANDOM|md5sum|cut -c 1-8`   #生成随机密码，并将此赋值给变量pass
+    echo $pass |passwd --stdin gary$i       #为用户设置随机密码
+    echo $pass                              #显示用户随机密码
+done
+
+#################################################################
+执行结果：
+[root@oldboy202 scripts]# sh useradd.sh 
+useradd: user &#39;gary1&#39; already exists
+Changing password for user gary1.
+passwd: all authentication tokens updated successfully.
+47608eed
+useradd: user &#39;gary2&#39; already exists
+Changing password for user gary2.
+passwd: all authentication tokens updated successfully.
+5c50971b
+useradd: user &#39;gary3&#39; already exists
+Changing password for user gary3.
+passwd: all authentication tokens updated successfully.
+2997217d
+useradd: user &#39;gary4&#39; already exists
+Changing password for user gary4.
+passwd: all authentication tokens updated successfully.
+eefdc4c3
+
+注：echo $RANDOM|md5sum|cut -c 1-8可以生成5位随机数字，然后使用md5sum加密，最后通过cut命令获取8位字符
+</code></pre><pre><code>扩展：批量删除用户
+#!/bin/bash
+
+for i in {1..10}
+do
+   userdel -r stu$i
+   exit 0
+done
+</code></pre><p>for循环练习2：打印操作系统名称</p>
+<pre><code>#!/bin/bash
+
+for linux in Redhat CentOS Gentoo Suse Fedora
+  do
+    echo &quot;The os is: $linux&quot;  
+
+  done
+
+############################################## 
+执行结果：
+[root@oldboy202 ~]# sh linux.sh 
+The os is: Redhat
+The os is: CentOS
+The os is: Gentoo
+The os is: Suse
+The os is: Fedora
+</code></pre><p>for循环案例3：如果文件存在，则打印此文件，否则打印一个错误信息。</p>
+<pre><code>vim file_check.conf
+#!/bin/bash
+
+filenames=&quot;/etc/yp.conf /etc/passwd /etc/shadow /etc/gary.conf&quot;
+for file in $filenames
+  do
+    [[ -f $file ]] &amp;&amp; echo &quot;$file&quot; || echo &quot;Error: $file file not find&quot;     
+
+done
+
+########################################
+执行结果
+[root@oldboy202 ~]# sh file_check.sh 
+Error: /etc/yp.conf file not find
+/etc/passwd
+/etc/shadow
+Error: /etc/gary.conf file not find
+</code></pre><p>for 循环案例4：使用命令替换的for循环实例</p>
+<pre><code>[root@oldboy202 ~]# vim change.sh
+#!/bin/bash
+
+for file in `ls /tmp/*`            #把命令结果赋值给file变量；注：命令外是反引号
+  do
+  echo $file                       #调用file变量
+
+done
+
+###########################################
+执行结果：
+[root@oldboy202 ~]# sh change.sh 
+Printing file list in /tmp dirctory:
+ls /tmp/etc-services-2017-07-05_18.tar.gz /tmp/oldboy.txt /tmp/swap_1000M /tmp/tar.log
+</code></pre><p>案例5：for语句倒计时脚本-生成序列</p>
+<pre><code>预备知识：
+seq 1 10   seq命令用于生成序列
+seq -w 10 -1 1  生成倒序数字（每次减一）；-w命令自动使用0补全；
+echo -n 意思是不换行
+echo -e参数是支持特殊字符
+/b 退一格
+##########################################################
+[root@oldboy202 scripts]# vim daojishi.sh
+#/bin/bash
+for i in `seq -w 10 -1 1`
+  do
+   echo -ne &quot;\b\b$i&quot;   #此处需要使用双引号括起来，单引号会报错，因为单引号所见即所得
+   sleep 1
+done
+</code></pre><h4 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h4><blockquote>
+<p>while循环用于重复的执行一个命令列表。语法如下：</p>
+</blockquote>
+<pre><code>while [ 条件 ]
+do
+   command1
+   command2
+   ...
+   commandN
+done
+
+即，当条件CONDITION为真时，command1...commandN命令将被执行。
+</code></pre><p>实例：</p>
+<pre><code>#!/bin/bash
+declare -i var     #定义var为整型变量，目的是让变量值进行加减乘除等计算
+var=1
+while [[ $var -le 3 ]]   
+   do
+   echo &quot;The for loop is run $var times.&quot;
+   var=$var+1      #数值计算
+done
+
+#####################################
+执行结果
+[root@cm-master scripts]# sh while.sh 
+The for loop is run 1 times.
+The for loop is run 2 times.
+The for loop is run 3 times.
+</code></pre><p>案例1：【釜底抽薪法-逐行读取文件】将read命令和while循环来读取一个文本文件</p>
+<pre><code>#!/bin/bash
+FilePath=$1                      #把位置参数1的值给变量file
+
+if [[ $# -lt 1 ]];then       #判断位置参数个数，如果小于1则打印错误提示并退出，同时返回错误码1
+   echo &quot;Usage: $0 FILEPATH.&quot;
+   exit 1
+fi
+
+while read -r line       #使用read命令从标准输入读取文件的一行，并赋值给变量hang
+  do
+   echo $line            #打印读入的行
+
+done &lt; &quot;$FilePath&quot;          
+
+注释：我习惯把这种方式叫做read釜底抽薪，因为这种方式在结束的时候需要执行文件，就好像是执行完的时候再把文件读进去一样。
+
+################################
+[root@cm-master scripts]# sh while.sh /etc/fstab 
+
+# /etc/fstab
+# Created by anaconda on Wed Jul 5 15:52:21 2017
+#
+# Accessible filesystems, by reference, are maintained under &#39;/dev/disk&#39;
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+/dev/mapper/vg_cm5-lv_root / ext4 defaults 1 1
+UUID=f1c12bb9-1eb3-4c89-95c9-f8ca8ef1ce88 /boot ext4 defaults 1 2
+/dev/mapper/vg_cm5-lv_home /home ext4 defaults 1 2
+/dev/mapper/vg_cm5-lv_swap swap swap defaults 0 0
+tmpfs /dev/shm tmpfs defaults 0 0
+devpts /dev/pts devpts gid=5,mode=620 0 0
+sysfs /sys sysfs defaults 0 0
+proc /proc proc defaults 0 0
+</code></pre><p>案例2：还可以按列读取文件的内容，将文件分为3列输出</p>
+<pre><code>#!/bin/bash
+
+FilePath=$1
+
+if [[ $# -lt 1 ]];then
+   echo &quot;Usage: $0 FILEPATH.&quot;
+fi
+
+while read -r f1 f2 f3       #从文件内读取内容赋值给f1、f2和f3
+  do
+  echo &quot;第一列: $f1;第二列: $f2;第三列: $f3&quot;    #按照我们预定的格式输出
+done &lt; &quot;$FilePath&quot;
+##############################
+执行结果：
+第一列: #;第二列: ;第三列: 
+第一列: /dev/mapper/vg_cm5-lv_root;第二列: /;第三列: ext4    defaults   1 1
+第一列: UUID=f1c12bb9-1eb3-4c89-95c9-f8ca8ef1ce88;第二列: /boot;第三列: ext4    defaults    1 2
+第一列: /dev/mapper/vg_cm5-lv_home;第二列: /home;第三列: ext4    defaults    1 2
+第一列: /dev/mapper/vg_cm5-lv_swap;第二列: swap;第三列: swap    defaults    0 0
+第一列: tmpfs;第二列: /dev/shm;第三列: tmpfs   defaults   0 0
+第一列: devpts;第二列: /dev/pts;第三列: devpts  gid=5,mode=620  0 0
+第一列: sysfs;第二列: /sys;第三列: sysfs   defaults    0 0
+第一列: proc;第二列: /proc;第三列: proc    defaults    0 0
+</code></pre><h6 id="定义无限while循环-又称死循环"><a href="#定义无限while循环-又称死循环" class="headerlink" title="定义无限while循环(又称死循环)"></a>定义无限while循环(又称死循环)</h6><blockquote>
+<p>一般当条件永远不被满足时，就会发生一个无限循环。</p>
+<p>定义一个无限循环可以使用如下3种命令：</p>
+<p>true命令（也可以使用“:”） – 一直表示成功，给定语句将被执行。</p>
+<p>false命令 – 不会执行任何语句，脚本/程序将跳转到done语句后的下一行。</p>
+</blockquote>
+<p>实例1：使用“:” 定义一个无限循环</p>
+<pre><code>#!/bin/bash
+
+while :
+  do
+  echo &quot;Do something...&quot;
+  echo &quot;Hit [CTRL+C] to stop!&quot;
+  sleep 3    #定义每次循环时间间隔,单位：秒
+
+done
+注：“:” 冒号命令是Bash的内部命令，也就意味着其他shell并不支持。
+#########################
+执行结果：
+[root@cm-master scripts]# sh xh.sh 
+Do something...
+Hit [CTRL+C] to stop!
+Do something...
+Hit [CTRL+C] to stop!
+</code></pre><p>实例2：使用“true” 定义一个无限循环</p>
+<pre><code>#!/bin/bash
+#!/bin/bash
+
+while true
+  do
+  echo &quot;Do something...&quot;
+  echo &quot;Hit [CTRL+C] to stop!&quot;
+  sleep 2       #定义每次循环时间间隔,单位：秒
+done
+</code></pre><p>实例3：使用while循环显示数字0-9</p>
+<pre><code>#!/bin/bash
+
+a=0
+
+while [[ $a -lt 10 ]];do
+      echo $a
+      a=`expr $a + 1`
+done
+###############################
+执行结果：
+[root@cm-master scripts]# sh num.sh 
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</code></pre><h6 id="expr手工命令计数器"><a href="#expr手工命令计数器" class="headerlink" title="expr手工命令计数器"></a>expr手工命令计数器</h6><pre><code class="shell">expr命令一般用于整数值，但也可用于字符串。
+expr的常用运算符： 
+加法运算：+ 
+减法运算：- 
+乘法运算：\* 
+除法运算：/ 
+
+比如：
+$ expr 10 + 10
+20
+$ expr 5 \* 6
+30
+$ expr 30 / 3
+10
+$ expr 30 / 3 / 2
+5
+(注意运算符左右都有空格)
+使用乘号时，必须用反斜线屏蔽其特定含义。因为shell可能会误解显示星号的意义
+</code></pre>
+<p>实例4：编写菜单驱动程序</p>
+<pre><code>#!/bin/bash
+
+while true
+do
+
+  clear
+  echo &quot;======================&quot;
+  echo &quot;    MAIN - 菜单    &quot;
+  echo &quot;======================&quot;
+  echo &quot;1. 显示日期与时间.&quot;
+  echo &quot;2. 显示系统信息.&quot;
+  echo &quot;3. 显示用户正在做什么.&quot;
+  echo &quot;4. Exit.&quot;
+
+read -p &quot;Enter your choice [1-4]：&quot; choice
+  case $choice in
+         1)
+         echo &quot;Today is $(date +%Y-%m-%d).&quot;
+         echo &quot;Current time: $(date +%H:%M:%S)&quot;
+         read -p &quot;Press [Enter] key to continue...&quot; readEnterkey
+         ;;
+
+         2)
+         uname -a
+         read -p &quot;Press [Enter] key to continue...&quot; readEnterkey
+         ;;
+
+         3)
+          w
+          read -p &quot;Press [Enter] key to continue...&quot; readEnterkey
+          ;;
+
+         4)
+          echo &quot;Bye!&quot;
+          exit 0
+          ;;
+
+         *)
+         echo &quot;Error: Invalid option!&quot;
+         read -p &quot;Press [Enter] key to continue...&quot; readEnterkey
+         ;;
+
+    esac
+done
+
+###################################################################
+执行结果：
+======================
+    MAIN - 菜单    
+======================
+1. 显示 日期与时间.
+2. 显示系统信息.
+3. 显示用户正在做什么.
+4. Exit.
+Enter your choice [1-4]：3
+ 19:01:53 up 6 days,  4:20,  1 user,  load average: 0.27, 0.13, 0.07
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+root     pts/0    10.255.255.1     15:37    0.00s  0.05s  0.00s sh menu.sh
+Press [Enter] key to continue...
+</code></pre><h4 id="until循环"><a href="#until循环" class="headerlink" title="until循环"></a>until循环</h4><blockquote>
+<p>until循环与while循环类似，也同样基于一个条件。但util循环的判断条件正好与while循环的判断条件相反。</p>
+<p>until循环在条件为假的情况下才会继续运行;  一旦条件被满足，即为真，就会退出循环。</p>
+</blockquote>
+<pre><code>until [ CONDITION ]
+do
+  command1
+  command2
+  ......
+done
+</code></pre><p>until循环与while循环相比：</p>
+<ul>
+<li>until循环执行直到返回0的状态就退出，因为0表示为真。</li>
+<li>while循环执行知道返回非0状态就退出，因为非0表示为假。</li>
+<li>until循环总是执行至少一次。</li>
+</ul>
+<p>实例：</p>
+<pre><code>#!/bin/bash
+
+var=1
+until [ $var -gt 5 ]
+do
+   echo &quot;The for loop is run $var times.&quot;
+   var=$(( var+1 ))
+done
+
+##########################
+执行结果：
+[root@CactiEZ ~]# sh until.sh 
+The for loop is run 1 times.
+The for loop is run 2 times.
+The for loop is run 3 times.
+The for loop is run 4 times.
+The for loop is run 5 times.
+
+脚本会被执行5次，第6次条件被满足，则退出until循环。
+</code></pre><h4 id="select循环语句"><a href="#select循环语句" class="headerlink" title="select循环语句"></a>select循环语句</h4><blockquote>
+<p>bash还提供select循环，其语法如下所示：</p>
+</blockquote>
+<pre><code>select VAR in LIST
+do
+  command1
+  command2
+  ......
+done
+</code></pre><p>select循环语句具有如下特点：</p>
+<ul>
+<li>select语句使用Bash内部变量PS3的值作为它的提示信息。</li>
+<li>打印到屏幕上的列表LIST中的每一项会在前面加上一个数字编号</li>
+<li>当用户输入数字与某一个数字编号一致时，列表中相应的项即被赋予给变量VAR。</li>
+<li>如果用户的内容为空，将重新显示列表LIST中的项和提示符信息。</li>
+<li>可以通过添加一个退出选项，或按Ctrl+C或 Ctrl+D组合键退出select循环。</li>
+</ul>
+<p>实例：</p>
+<pre><code>#!/bin/bash
+
+PS3=&quot;Run command: &quot;   #定义PS3提示符
+select choice in date w hostname &quot;uname -a&quot; Exit    #指定select循环列表
+
+do 
+  case $choice in
+    date)
+        echo &quot;===============================&quot;
+        echo &quot;Current system date and time: &quot;
+        echo &quot;===============================&quot;
+        $choice        #直接将变量的值作为命令运行
+        ;;
+      w)
+        echo &quot;==========================================&quot;
+        echo &quot;Who is logged on and what they are doing: &quot;
+        echo &quot;==========================================&quot;
+        $choice
+        ;;    
+hostname)
+        echo &quot;==========&quot;
+        echo &quot;Hostname: &quot;
+        echo &quot;==========&quot;
+        $choice
+        ;;
+&quot;uname -a&quot;)
+        echo &quot;====================&quot;
+        echo &quot;System information: &quot;
+        echo &quot;====================&quot;
+        $choice
+        ;;
+    Exit)
+        echo &quot;Bye!&quot;
+        exit
+        ;;
+
+  esac
+
+done
+</code></pre><p>执行结果</p>
+<pre><code>[root@CactiEZ ~]# sh select.sh 
+1) date
+2) w
+3) hostname
+4) uname -a
+5) Exit
+Run command: 1
+===============================
+Current system date and time: 
+===============================
+Wed Aug 23 16:43:49 CST 2017
+Run command: 5
+Bye!
+</code></pre><h2 id="循环控制"><a href="#循环控制" class="headerlink" title="循环控制"></a>循环控制</h2><blockquote>
+<p>break和continue是Bash中的循环控制命令，其用法与在其他编程语言中的同名语句完全一致。</p>
+</blockquote>
+<h4 id="break语句"><a href="#break语句" class="headerlink" title="break语句"></a>break语句</h4><blockquote>
+<p>作用：break语句用于从for、while、until或select循环中退出，停止循环。</p>
+</blockquote>
+<p>break语句的语法如下：</p>
+<pre><code>break [n]
+
+n代表嵌套循环的层级，如果指定了n, break 将退出n级嵌套循环。如果没有指定或n不≥1，则退出状态码0，否则退出状态码为n.
+</code></pre><p>实例：</p>
+<pre><code>#!/bin/sh
+
+#如果未指定参数，则打印脚本的使用方法，并返回退出状态码1
+[ $# -eq 0 ] &amp;&amp; { echo &quot;Usage: sh $0 file path&quot;; exit 1; }
+
+#将位置1的值献给变量match
+match=$1
+found=0
+
+#遍历目录/etc下的所有文件
+for file in /etc/*
+do
+#如果文件的路径与指定的参数文件路径相匹配，则打印文件已找到，并退出for循环
+  if [ $file == &quot;$match&quot; ];then
+     echo &quot;The file $match was found!&quot;
+     found=1
+     #使用break退出for循环
+     break
+
+  fi
+
+done
+
+[ $found -ne 1 ] &amp;&amp; echo &quot;the $match not found in /etc directory.&quot;
+</code></pre><p>执行结果：</p>
+<pre><code>[root@CactiEZ ~]# sh break1.sh /etc/passwd
+The file /etc/passwd was found!
+
+[root@ ~]# sh break1.sh /etc/shadow
+The file /etc/shadow was found!
+
+[root@ ~]# sh break1.sh /etc/kkk
+the /etc/kkk not found in /etc directory.
+</code></pre><p>实例2：使用break n语句退出嵌套循环</p>
+<pre><code>#!/bin/bash
+
+#如果未指定参数，则打印脚本的使用方法，并返回退出状态码1
+[[ $# -eq 0 ]] &amp;&amp; { echo &quot;Usage: $0 command&quot;; exit 1; }
+
+#将位置参数1的值赋给变量match
+match=$1
+found=0
+
+for dir in /bin /usr/bin
+do
+
+  #遍历目录下的所有文件
+  for file in $dir/*
+  do
+     #如果文件名与指定的参数文件名相匹配，则打印命令已找到，并退出嵌套的for循环。
+     if [[ $(basename $file) == &quot;$match&quot; ]];then
+       echo &quot;The command $match was found!&quot;
+       found=1
+       #退出两层的for循环
+       break 2
+     fi
+
+  done
+
+done
+
+[[ $found -ne 1 ]] &amp;&amp; echo &quot;The command $match not found.&quot; 
+</code></pre><p>测试</p>
+<pre><code>[root@openvpn2]# cd /bin
+[root@openvpn2 bin]# sh /opt/break.sh arch
+The command arch was found!
+</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p>什么叫shell循环？</p>
+</blockquote>
+<pre><code>shell 可以重复的执行特定指令，直到特定的条件被满足为止。这重复执行的一组命令就叫做循环。
+</code></pre><blockquote>
+<p>shell循环特点</p>
+</blockquote>
+<pre><code>循环条件中使用的变量必须是已初始化的，然后再循环中开始执行；在每一次循环开始时进行一次测试，重复的执行一个代码块。
+</code></pre><blockquote>
+<p>for循环总结</p>
+</blockquote>
+<pre><code>在for循环中，每次指定列表中的新值被赋给变量VAR后，for循环都会执行一次，它将重复运行do和done之间的所有语句，直到条件不满足时为止。
+</code></pre><blockquote>
+<p>while循环总结</p>
+</blockquote>
+<pre><code>1) while循环语句用于重复的执行一个命令列表
+2) while循环可以与read命令结合使用来读取一个文本文件
+3）while循环和专用命令&quot;:&quot;结合使用来定义一个无限循环
+
+定义一个无限循环可以使用3种命令：true命令、false命令和&quot;:&quot; 命令。
+</code></pre><blockquote>
+<p>until循环总结</p>
+</blockquote>
+<pre><code>until循环与while循环类似，也同样基于一个条件。但until循环的判断条件正好与while循环的判断条件相反，until循环在条件为假的情况下才会持续的运行。一旦条件被满足，即为真，就会退出循环。
+</code></pre><blockquote>
+<p>select循环总结</p>
+</blockquote>
+<pre><code>1) select语句使用Bash内置变量PS3的值作为它的提示符信息
+2）打印到屏幕上的列表LIST中的每一项会在前面加上一个数字编号
+3）当用户输入的数字与某一个数字编号一致时，列表中相应的项即被赋予变量VAR
+4）如果用户输入的为空，将重新显示列表LIST中的项和提示符信息。
+5）可以通过添加一个退出选项，或按Ctrl+C或Ctrl+D组合键退出select循环
+</code></pre><blockquote>
+<p>break控制命令总结</p>
+</blockquote>
+<pre><code>break是Bash中的循环控制命令，break语句用于从for、while、until或select循环中退出，停止循环的执行。使用break n将退出n级嵌套循环。
+
+注：break的英文意思是“打破”，即打破n级嵌套循环
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-29T12:47:27.835Z" itemprop="dateUpdated">2017-08-29 20:47:27</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/07/24/Shell编程之Bash循环/" target="_blank" rel="external">https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/break/">break</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/for循环/">for循环</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/select循环/">select循环</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/until循环/">until循环</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/while循环/">while循环</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/&title=《Shell编程之Bash循环》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/&title=《Shell编程之Bash循环》 — Gary Wu&source=for循环
+for循环的基本语法：
+
+for i in item1 item2 ... itemN
+do 
+  command1
+  command2
+ ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Shell编程之Bash循环》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/29/期中架构-流程图/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">期中架构-流程图</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/19/shell if语句-条件执行/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">shell if语句-条件执行</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/&title=《Shell编程之Bash循环》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/&title=《Shell编程之Bash循环》 — Gary Wu&source=for循环
+for循环的基本语法：
+
+for i in item1 item2 ... itemN
+do 
+  command1
+  command2
+ ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Shell编程之Bash循环》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/07/24/Shell编程之Bash循环/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

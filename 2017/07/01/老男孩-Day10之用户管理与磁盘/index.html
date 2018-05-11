@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>老男孩-Day10之用户管理与磁盘 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,用户管理,磁盘">
+    <meta name="description" content="用户管理/etc/passwd    倒数第二列表示用户宿主目录；最后一列表示用户所使用的shell(即命令解释器) 注：如果想把某个用户配置为傀儡用户（不能登录），对应用户shell需要改为/sbin/nologin /etc/skel   作用：该目录存放着新用户默认环境变量等配置文件。">
+<meta name="keywords" content="Linux基础,用户管理,磁盘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="老男孩-Day10之用户管理与磁盘">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="用户管理/etc/passwd    倒数第二列表示用户宿主目录；最后一列表示用户所使用的shell(即命令解释器) 注：如果想把某个用户配置为傀儡用户（不能登录），对应用户shell需要改为/sbin/nologin /etc/skel   作用：该目录存放着新用户默认环境变量等配置文件。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-05T12:20:51.704Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="老男孩-Day10之用户管理与磁盘">
+<meta name="twitter:description" content="用户管理/etc/passwd    倒数第二列表示用户宿主目录；最后一列表示用户所使用的shell(即命令解释器) 注：如果想把某个用户配置为傀儡用户（不能登录），对应用户shell需要改为/sbin/nologin /etc/skel   作用：该目录存放着新用户默认环境变量等配置文件。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">老男孩-Day10之用户管理与磁盘</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">老男孩-Day10之用户管理与磁盘</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-01T01:41:48.000Z" itemprop="datePublished" class="page-time">
+  2017-07-01
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#用户管理"><span class="post-toc-number">1.</span> <span class="post-toc-text">用户管理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#“-bash-4-1-”-案例"><span class="post-toc-number">1.0.0.1.</span> <span class="post-toc-text">“-bash-4.1$” 案例</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#添加用户"><span class="post-toc-number">1.0.0.2.</span> <span class="post-toc-text">添加用户</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#删除用户"><span class="post-toc-number">1.0.0.3.</span> <span class="post-toc-text">删除用户</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#修改用户"><span class="post-toc-number">1.0.0.4.</span> <span class="post-toc-text">修改用户</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#passwd命令的-–stdin参数-只能root用户使用此命令"><span class="post-toc-number">1.0.0.5.</span> <span class="post-toc-text">passwd命令的 –stdin参数(只能root用户使用此命令)</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#企业场景"><span class="post-toc-number">1.0.0.6.</span> <span class="post-toc-text">企业场景</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#用户查询-命令"><span class="post-toc-number">1.0.0.7.</span> <span class="post-toc-text">用户查询-命令</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#sudo"><span class="post-toc-number">1.0.0.8.</span> <span class="post-toc-text">sudo</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#行为-审计系统-堡垒机-跳板机"><span class="post-toc-number">1.0.0.9.</span> <span class="post-toc-text">行为/审计系统-堡垒机/跳板机</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#chkconfig脚本开机自启动"><span class="post-toc-number">1.0.0.10.</span> <span class="post-toc-text">chkconfig脚本开机自启动</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#sed命令回顾"><span class="post-toc-number">1.0.0.11.</span> <span class="post-toc-text">sed命令回顾</span></a></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#磁盘"><span class="post-toc-number">2.</span> <span class="post-toc-text">磁盘</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#buffers与cache"><span class="post-toc-number">2.0.0.1.</span> <span class="post-toc-text">buffers与cache</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#CDN"><span class="post-toc-number">2.0.0.2.</span> <span class="post-toc-text">CDN</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#Linux计算器"><span class="post-toc-number">2.0.0.3.</span> <span class="post-toc-text">Linux计算器</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#买一个块硬盘-500G-但是实际格式化后不到500G，为什么？"><span class="post-toc-number">2.0.0.4.</span> <span class="post-toc-text">买一个块硬盘 500G, 但是实际格式化后不到500G，为什么？</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#批量添加10个用户，并将用户密码改为随机8位字符"><span class="post-toc-number">2.0.0.5.</span> <span class="post-toc-text">批量添加10个用户，并将用户密码改为随机8位字符</span></a></li></ol></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-老男孩-Day10之用户管理与磁盘"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">老男孩-Day10之用户管理与磁盘</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-01 09:41:48" datetime="2017-07-01T01:41:48.000Z"  itemprop="datePublished">2017-07-01</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><pre><code>/etc/passwd    倒数第二列表示用户宿主目录；最后一列表示用户所使用的shell(即命令解释器)
+注：如果想把某个用户配置为傀儡用户（不能登录），对应用户shell需要改为/sbin/nologin
+/etc/skel   作用：该目录存放着新用户默认环境变量等配置文件。
+</code></pre><a id="more"></a>
+<pre><code>/etc/default/useradd  该文件定义了新用户的家目录、默认shell等参数。
+/etc/login.defs   该文件定义了新建目录或文件默认权限、添加用户是否创建家目录等。 
+
+ls -lrt ./old*     最新文件显示到最下方（排序）
+</code></pre><h6 id="“-bash-4-1-”-案例"><a href="#“-bash-4-1-”-案例" class="headerlink" title="“-bash-4.1$” 案例"></a>“-bash-4.1$” 案例</h6><pre><code>现象: 以某个用户登录系统后，出现
+-bash-4.1$ 
+-bash-4.1$ 
+
+原因：这个用户家目录下的环境变量文件（ .bashrc 和.bash_profile）被删除了。
+
+解决方案：
+从/etc/skel目录，把被删除的.bashrc和.bash_profile恢复，然后重新登录进入
+cp /etc/skel/.bash* ~
+</code></pre><h6 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h6><pre><code>useradd  -g  指定用户组
+useradd  -u  指定用户uid (一般傀儡用户uid范围：1-499)
+useradd  -s  指定用户使用的shell
+useradd  -M  不创建家目录
+useradd  -c   给用户添加说明信息
+示例：usermod -c &quot;傀儡用户&quot; www1
+www1:x:12306:12306:傀儡用户:/home/www1:/sbin/nologin
+
+示例：添加一个用户www 指定uid为888，禁止用户登录系统，不创建家目录
+useradd -u 888 -s /sbin/nologin  -M www
+检查：id  www
+     ls -ld /home/www
+</code></pre><h6 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h6><pre><code>方法1（推荐）：
+       vim /etc/passwd  给指定用户添加注释。
+       #www:x:888:888::/home/www:/sbin/nologin
+
+方法2: 
+       userdel www   默认不删除用户家目录
+       userdel -r www    连窝端
+</code></pre><h6 id="修改用户"><a href="#修改用户" class="headerlink" title="修改用户"></a>修改用户</h6><pre><code>usermod  -s   修改用户使用的shell
+usermod  -g   修改用户所属的组
+</code></pre><h6 id="passwd命令的-–stdin参数-只能root用户使用此命令"><a href="#passwd命令的-–stdin参数-只能root用户使用此命令" class="headerlink" title="passwd命令的 –stdin参数(只能root用户使用此命令)"></a>passwd命令的 –stdin参数(只能root用户使用此命令)</h6><pre><code>passwd --stdin username  非交互式设置密码或理解为从管道中获取密码
+
+示例：
+[root@oldboy202 ~]# echo &quot;1QAZ2wsx&quot; |passwd --stdin oldgirl
+Changing password for user oldgirl.
+passwd: all authentication tokens updated successfully.
+
+除此之外，还需要清理历史记录。 history -c
+</code></pre><h6 id="企业场景"><a href="#企业场景" class="headerlink" title="企业场景"></a>企业场景</h6><pre><code>1. 密码至少12位以上
+   密码保存工具：keepass、lastpass
+
+2. 安全措施
+   (1)/var/log/secure日志分析:failure
+
+   (2)给文件添加指纹
+      md5sum filename &gt;&gt;check.md5
+      echo &quot;111&quot; &gt;&gt; filename
+      md5sum -c check.md5
+</code></pre><h6 id="用户查询-命令"><a href="#用户查询-命令" class="headerlink" title="用户查询-命令"></a>用户查询-命令</h6><pre><code>id     查看用户uid、gid、用户所属组等信息，也可以判断某个用户是否存在
+w      显示已经远程登陆的用户以及在干什么，以及系统运行了多久，系统平均负载
+uptime 显示系统时间
+</code></pre><h6 id="sudo"><a href="#sudo" class="headerlink" title="sudo"></a>sudo</h6><pre><code>普通用户没有权限执行root命令，这时候需要使用sudo
+[oldboy@oldboy202 ~]$sudo -l   查看当前用户有哪些sudo权限
+[oldboy@oldboy202 ~]$ls /root
+ls: cannot open directory /root: Permission denied
+
+解决方案：
+root编辑 visudo， 91gg定位到如下行并添加：
+92 oldboy  ALL=(ALL)       /bin/ls,/usr/sbin/useradd     让普通用户具有ls和添加用户权限
+93 oldboy  ALL=(ALL)       /sbin/*         授权sbin目录下的所有命令（慎用）
+94 oldboy  ALL=(ALL)   /bin/*, !/bin/rm    授权/bin下的所有命令（除了rm）
+
+注：添加多个命令，中间使用英文的逗号&quot;,&quot; 
+vimsudo命令等同于vim /etc/sudoers
+</code></pre><pre><code>运维人员可以这样赋权：
+
+# visudo
+oldboy  ALL=(ALL)  NOPASSWD:ALL   给予用户所有权限，且不需要密码。
+
+切换到root用户
+sudo su -
+</code></pre><h6 id="行为-审计系统-堡垒机-跳板机"><a href="#行为-审计系统-堡垒机-跳板机" class="headerlink" title="行为/审计系统-堡垒机/跳板机"></a>行为/审计系统-堡垒机/跳板机</h6><pre><code>1. 齐治堡垒机（硬件）
+2. jumpserver跳板机
+3. gateone web跳板机
+4. Alex写的 crazyEYE
+</code></pre><h6 id="chkconfig脚本开机自启动"><a href="#chkconfig脚本开机自启动" class="headerlink" title="chkconfig脚本开机自启动"></a>chkconfig脚本开机自启动</h6><pre><code>vim /etc/init.d/hostnamed
+    #!/bin/bash
+    # chkconfig: 2345 99 99      2345表示运行级别；两个99分别表示开机顺序和关机循序
+    # descrption: This is a cripts.  注释信息
+    hostname
+
+chmod +x /etc/init.d/oldboyd
+chkconfig --add oldboyd
+chkconfig oldboyd on
+</code></pre><h6 id="sed命令回顾"><a href="#sed命令回顾" class="headerlink" title="sed命令回顾"></a>sed命令回顾</h6><pre><code>sed 显示行
+sed -n &#39;1p&#39; filename      显示第一行
+sed -n &#39;1,5p&#39; filename    显示1-5行
+sed -n &#39;1p;5p;10p&#39; filename 显示第1行、第5行、第10行
+sed -n &#39;$p&#39;   显示文件最后一行
+
+删除
+sed &#39;/oldboy/d&#39; filename
+
+查找
+sed -n &#39;/oldboy/p&#39; filename  查找字符串
+
+sed通用方法1：  sed -r &#39;/找谁/s#找谁#替换谁#g&#39;  filename 
+sed通用方法2：  sed -ri &#39;1,5s#找谁#替换成谁#g&#39; filename   （替换1-5行的某些内容,-r支持扩展正则）
+比如：sed -ri &#39;1,5s#oldboy#oldgirl#g&#39; filename   替换第一行到第5行的oldboy为oldgirl
+
+注：1. sed修改文件内容的时候需要提前备份。
+    2. sed -i 一定要放在最后，比如：sed -ri &#39;//s###g&#39; filename
+    3.使用-i参数时，禁止加上 -n参数（s###g后面也不能加p），否则除了修改的行之外，其他内容均会丢失。
+</code></pre><h3 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h3><h6 id="buffers与cache"><a href="#buffers与cache" class="headerlink" title="buffers与cache"></a>buffers与cache</h6><pre><code># free -m
+Linux特点：把不用的内存临时作为了buffers和cache
+内存实际剩余= free+buffers+cached
+
+Linux把我的内存吃掉了：http://www.linuxatemyram.com/
+</code></pre><h6 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h6><pre><code>CDN
+1.尽量让用户访问读取缓存（每个地方的缓存）
+2.尽量根据用户的所在位置 让用户就近访问缓存 --提高用户的访问速度
+</code></pre><h6 id="Linux计算器"><a href="#Linux计算器" class="headerlink" title="Linux计算器"></a>Linux计算器</h6><pre><code>方法1【推荐】：AWK 
+[root@oldboy202 ~]# awk &#39;BEGIN{print 10*25.7+3}&#39;
+260
+计算结果准确，可以出现小数
+
+方法2：python
+# python
+3.0/10
+0.29999999999999999
+&gt;&gt;&gt; 
+
+方法3：echo $((10/3))    只能是整数计算
+</code></pre><h6 id="买一个块硬盘-500G-但是实际格式化后不到500G，为什么？"><a href="#买一个块硬盘-500G-但是实际格式化后不到500G，为什么？" class="headerlink" title="买一个块硬盘 500G, 但是实际格式化后不到500G，为什么？"></a>买一个块硬盘 500G, 但是实际格式化后不到500G，为什么？</h6><pre><code>1. 在计算机中GB、MB、KB 默认是按照1024为单位的
+2. 生产硬盘的厂商是按照1000为单位进行计算，所以会出现不足500G
+</code></pre><h6 id="批量添加10个用户，并将用户密码改为随机8位字符"><a href="#批量添加10个用户，并将用户密码改为随机8位字符" class="headerlink" title="批量添加10个用户，并将用户密码改为随机8位字符"></a>批量添加10个用户，并将用户密码改为随机8位字符</h6><pre><code>预备知识：
+[root@oldboy202 ~]# echo 123456 |sed -r &#39;s#.*#&lt;&amp;&gt;#g&#39;      找到的内容，全部放到&amp;位置
+&lt;123456&gt;
+[root@oldboy202 ~]# echo 123456 |sed -r &#39;s#[0-9]+#&lt;&amp;&gt;#g&#39;    找到的内容，全部放到&amp;位置
+&lt;123456&gt;
+
+
+1. 先确定目标: useradd stu01;echo 123456 |passwd --stdin stu01
+
+2. 拼接这种命令，然后交给bash执行
+
+第一步：
+echo stu{01..5} |xargs -n1     排成一列
+echo stu{01..5} |tr &quot; &quot; &quot;\n&quot;   把空格替换为换行
+
+第二步：匹配.*的内容，放到&amp;的位置。
+[root@oldboy202 ~]# echo stu{01..5} |tr &quot; &quot; &quot;\n&quot; |sed &#39;s#.*#useradd &amp;;#g&#39;
+useradd stu01;
+useradd stu02;
+useradd stu03;
+useradd stu04;
+useradd stu05;
+
+第三步：拼接为想要的格式
+[root@oldboy202 ~]# echo stu{01..5} |tr &quot; &quot; &quot;\n&quot; |sed &#39;s#.*#useradd &amp;;echo 123456 |passwd --stdin &amp;#g&#39;
+useradd stu01;echo 123456 |passwd --stdin stu01
+useradd stu02;echo 123456 |passwd --stdin stu02
+useradd stu03;echo 123456 |passwd --stdin stu03
+useradd stu04;echo 123456 |passwd --stdin stu04
+useradd stu05;echo 123456 |passwd --stdin stu05
+
+第四步：交给bash执行
+[root@oldboy202 ~]# echo stu{01..5} |tr &quot; &quot; &quot;\n&quot; |sed &#39;s#.*#useradd &amp;;echo 123456 |passwd --stdin &amp;#g&#39; |bash
+Changing password for user stu01.
+passwd: all authentication tokens updated successfully.
+Changing password for user stu02.
+passwd: all authentication tokens updated successfully.
+Changing password for user stu03.
+passwd: all authentication tokens updated successfully.
+Changing password for user stu04.
+passwd: all authentication tokens updated successfully.
+Changing password for user stu05.
+passwd: all authentication tokens updated successfully.
+
+
+第五步：随机字符生成（缺点：密码看不到）
+date +%N|md5sum|cut -c 1-8   先输出微秒，然后使用md5加密，取出前8位随机数字
+
+echo stu{01..10} |tr &quot; &quot; &quot;\n&quot; |sed &#39;s#.*#useradd &amp;;echo $(date +%N|md5sum|cut -c1-8) |passwd --stdin &amp;#g&#39; |bash
+
+
+第五步：优化版本
+echo stu{40..43}|xargs -n1|sed &#39;s#.*#useradd &amp;;pass=$(date +%N|md5sum |cut -c-8);echo $pass|passwd --stdin &amp;;echo &amp; $pass &gt;&gt;/tmp/pass.log#g&#39; |bash
+
+先定义一个变量，变量名称为pass；后面需要的地方使用$pass来获取变量值
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-05T12:20:51.704Z" itemprop="dateUpdated">2017-07-05 20:20:51</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/07/01/老男孩-Day10之用户管理与磁盘/" target="_blank" rel="external">https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/用户管理/">用户管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/磁盘/">磁盘</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/&title=《老男孩-Day10之用户管理与磁盘》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/&title=《老男孩-Day10之用户管理与磁盘》 — Gary Wu&source=用户管理/etc/passwd    倒数第二列表示用户宿主目录；最后一列表示用户所使用的shell(即命令解释器)
+注：如果想把某个用户配置为傀儡用户（..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-Day10之用户管理与磁盘》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/01/切换用户错误-This-account-is-currently-not-available/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">切换用户错误:This account is currently not available</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/29/Apache账号密码登陆验证-配置/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Apache账号密码登陆验证-配置</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/&title=《老男孩-Day10之用户管理与磁盘》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/&title=《老男孩-Day10之用户管理与磁盘》 — Gary Wu&source=用户管理/etc/passwd    倒数第二列表示用户宿主目录；最后一列表示用户所使用的shell(即命令解释器)
+注：如果想把某个用户配置为傀儡用户（..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-Day10之用户管理与磁盘》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/07/01/老男孩-Day10之用户管理与磁盘/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

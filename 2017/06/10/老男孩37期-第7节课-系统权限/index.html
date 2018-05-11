@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>老男孩37期-第7节课-系统权限 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,系统权限">
+    <meta name="description" content="本节课上午的重点是对正则新增了awk和sed用法 下午重点是精讲了系统权限剩余部分">
+<meta name="keywords" content="Linux基础,系统权限">
+<meta property="og:type" content="article">
+<meta property="og:title" content="老男孩37期-第7节课-系统权限">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="本节课上午的重点是对正则新增了awk和sed用法 下午重点是精讲了系统权限剩余部分">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-06-10T10:49:42.577Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="老男孩37期-第7节课-系统权限">
+<meta name="twitter:description" content="本节课上午的重点是对正则新增了awk和sed用法 下午重点是精讲了系统权限剩余部分">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">老男孩37期-第7节课-系统权限</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">老男孩37期-第7节课-系统权限</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-10T01:48:54.000Z" itemprop="datePublished" class="page-time">
+  2017-06-10
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sed与awk提取权限"><span class="post-toc-number">1.</span> <span class="post-toc-text">sed与awk提取权限</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#sed、awk提取文件权限"><span class="post-toc-number">1.0.0.1.</span> <span class="post-toc-text">sed、awk提取文件权限</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#硬链接数-问题"><span class="post-toc-number">1.0.0.2.</span> <span class="post-toc-text">硬链接数-问题</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#AWK提取IP地址"><span class="post-toc-number">1.0.0.3.</span> <span class="post-toc-text">AWK提取IP地址</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#命令复习"><span class="post-toc-number">1.0.0.4.</span> <span class="post-toc-text">命令复习</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#【了解】如何知道系统某些命令被修改？"><span class="post-toc-number">1.0.0.5.</span> <span class="post-toc-text">【了解】如何知道系统某些命令被修改？</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#echo-命令技巧"><span class="post-toc-number">1.0.0.6.</span> <span class="post-toc-text">echo 命令技巧</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#日期"><span class="post-toc-number">1.0.0.7.</span> <span class="post-toc-text">日期</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#环境变量-复习"><span class="post-toc-number">1.0.0.8.</span> <span class="post-toc-text">环境变量-复习</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#文件作用"><span class="post-toc-number">1.0.0.9.</span> <span class="post-toc-text">文件作用</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#常用命令"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">常用命令</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#系统权限"><span class="post-toc-number">2.</span> <span class="post-toc-text">系统权限</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#环境创建"><span class="post-toc-number">2.0.0.1.</span> <span class="post-toc-text">环境创建</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#删除文件原理："><span class="post-toc-number">2.0.0.2.</span> <span class="post-toc-text">删除文件原理：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#添加权限"><span class="post-toc-number">2.0.0.3.</span> <span class="post-toc-text">添加权限</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#网站权限-如何才能更安全"><span class="post-toc-number">2.0.0.4.</span> <span class="post-toc-text">网站权限-如何才能更安全</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#默认权限控制命令umask"><span class="post-toc-number">2.0.0.5.</span> <span class="post-toc-text">默认权限控制命令umask</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#了解特殊权限"><span class="post-toc-number">2.0.0.6.</span> <span class="post-toc-text">了解特殊权限</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#【了解】Linux系统经典文件-passwd"><span class="post-toc-number">2.0.0.7.</span> <span class="post-toc-text">【了解】Linux系统经典文件-passwd</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#【了解】经典目录：-tmp"><span class="post-toc-number">2.0.0.8.</span> <span class="post-toc-text">【了解】经典目录：/tmp</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#文件系统权限-chattr-lsattr"><span class="post-toc-number">2.0.0.9.</span> <span class="post-toc-text">文件系统权限 - chattr lsattr</span></a></li></ol></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-老男孩37期-第7节课-系统权限"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">老男孩37期-第7节课-系统权限</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-10 09:48:54" datetime="2017-06-10T01:48:54.000Z"  itemprop="datePublished">2017-06-10</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>本节课上午的重点是对正则新增了awk和sed用法</p>
+<p>下午重点是精讲了系统权限剩余部分</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="sed与awk提取权限"><a href="#sed与awk提取权限" class="headerlink" title="sed与awk提取权限"></a>sed与awk提取权限</h2><h5 id="sed、awk提取文件权限"><a href="#sed、awk提取文件权限" class="headerlink" title="sed、awk提取文件权限"></a>sed、awk提取文件权限</h5><pre><code>##sed提取/etc/hosts权限
+[root@oldboy202 ~]# stat /etc/hosts |sed -n &#39;4p&#39; |sed -r &#39;s#^.*\(0(.*)/-.*$#\1#g&#39;
+644 
+
+sed -n &#39;4p&#39; 取第4行
+其中（.*）是我要提取的内容，所以需要括起来，后面使用\1提取
+
+
+##awk提取/etc/hosts权限
+[root@oldboy202 ~]# stat /etc/hosts |awk &#39;NR==4&#39;|awk -F &quot;[(/]&quot; &#39;{print $1}&#39;
+Access: 
+
+
+#以（或/来切割，然后使用{print $n} 提取对应列
+[root@oldboy202 ~]# stat /etc/hosts |awk &#39;NR==4&#39;|awk -F &quot;[(/]&quot; &#39;{print $2}&#39;
+0644
+#以0或/来切割，然后使用{print $n} 提取对应列
+[root@oldboy202 ~]# stat /etc/hosts |awk &#39;NR==4&#39; |awk -F &quot;[0/]&quot; &#39;{print $2}&#39;
+644
+
+awk &#39;NR==4&#39; 取第4行
+awk -F 切割
+
+
+[root@oldboyedu37-nb ~]# stat -c %a /etc/hosts 
+644
+[root@oldboyedu37-nb ~]# stat -c%a /etc/hosts 
+644
+</code></pre><pre><code>sed 使用-n参数来过滤出某行
+[root@oldboyedu37-nb ~]# stat /etc/hosts |sed -n &#39;4p&#39;
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+
+使用cut来提取并显示/etc/hosts权限
+[root@oldboyedu37-nb ~]# stat /etc/hosts |sed -n &#39;4p&#39;|cut -d &quot;(&quot; -f2
+0644/-rw-r--r--)  Uid: 
+cut使用-d参数以“（” 分割，提取第二列
+
+[root@oldboyedu37-nb ~]# stat /etc/hosts |sed -n &#39;4p&#39;|cut -d &quot;(&quot; -f2|cut -d &quot;/&quot; -f1
+0644
+再以“/”作为分割，使用-f参数提取第1列
+
+cut 切割
+    -d 指定一把菜刀
+    -f1 取第一列
+    -f1,5 取第一列和第五列
+    -f2-6 取第2列到第6列
+</code></pre><h5 id="硬链接数-问题"><a href="#硬链接数-问题" class="headerlink" title="硬链接数-问题"></a>硬链接数-问题</h5><pre><code>问：新建一个目录ett，目录下无任何内容，请问为什么硬链接数是2 ？
+ls -lid ett ett/.
+143560 drwxr-xr-x 2 root root 4096 Jun  3 19:36 ett
+143560 drwxr-xr-x 2 root root 4096 Jun  3 19:36 ett/.
+
+在上面的目录基础上，再创建一个ett/test为什么硬链接数成了3？
+[root@oldboyedu37-nb oldboy]# ls -lid ett ett/. ett/test/..
+143560 drwxr-xr-x 3 root root 4096 Jun  3 19:39 ett
+143560 drwxr-xr-x 3 root root 4096 Jun  3 19:39 ett/.
+143560 drwxr-xr-x 3 root root 4096 Jun  3 19:39 ett/test/..
+</code></pre><h5 id="AWK提取IP地址"><a href="#AWK提取IP地址" class="headerlink" title="AWK提取IP地址"></a>AWK提取IP地址</h5><pre><code>[root@oldboy202 ~]# ifconfig eth0|awk &#39;NR==2&#39;|awk -F &quot;[ :]+&quot; &#39;{print $4}&#39;
+10.0.0.202
+
+NR==2 提取第二行
+AWK -F 切割
+我们要提取IP地址，所以以空格和冒号作为切割条件，最后打印输出$4的内容
+</code></pre><h5 id="命令复习"><a href="#命令复习" class="headerlink" title="命令复习"></a>命令复习</h5><pre><code>查找目录下的所有文件并进行字符串替换
+方法一
+find /oldboy -type f|xargs sed &#39;s#www.etiantian.org#www.oldboyedu.com#g&#39; 
+
+方法二
+sed &#39;s#www.etiantian.org#www.oldboyedu.com#g&#39; $(find /oldboy -type f ) 
+
+方法三
+find /oldboy -type f -exec sed &#39;s#www.etiantian.org#www.oldboyedu.com#g&#39;  {} \;
+</code></pre><h5 id="【了解】如何知道系统某些命令被修改？"><a href="#【了解】如何知道系统某些命令被修改？" class="headerlink" title="【了解】如何知道系统某些命令被修改？"></a>【了解】如何知道系统某些命令被修改？</h5><pre><code>给重要的文件或目录做指纹
+[root@oldboyedu37-nb oldboy]# md5sum /bin/ls
+8b57585ec1d53e855c4e72edc4146213  /bin/ls
+</code></pre><h5 id="echo-命令技巧"><a href="#echo-命令技巧" class="headerlink" title="echo 命令技巧"></a>echo 命令技巧</h5><pre><code>echo -n &quot;oldboy&quot;;echo &quot;oldboy&quot; 
+-n参数：内容显示在1行中
+
+面试题：https://wenku.baidu.com/view/ebd66638b9f3f90f77c61bc6.html
+
+echo -e 处理特殊字符
+[root@oldboy202 oldboy]# echo -e &quot;oldboy\noldboy\toldgirl&quot;
+oldboy
+oldboy    oldgirl
+
+-e 开启了转义字符的支持。
+\n 换行
+\t 插入tab
+</code></pre><h5 id="日期"><a href="#日期" class="headerlink" title="日期"></a>日期</h5><pre><code>date +%F  当前日期
+date +%F -d &quot;-1 day&quot;  显示昨天日期
+[root@oldboy202 ~]# date +%F -d &quot;+1 day&quot;  显示明天日期
+2017-05-22
+
+工作常用
+touch access-$(date +%F).log      创建文件加入时间
+tar zcf /tmp/etc-$(date +%F).tar.gz /etc 压缩时给压缩包加入时间
+</code></pre><h5 id="环境变量-复习"><a href="#环境变量-复习" class="headerlink" title="环境变量-复习"></a>环境变量-复习</h5><pre><code>如何修改PATH环境变量
+1. 临时修改
+   export PATH=/usr/local/sbin:/usr/local/bin
+2. 永久修改
+   修改/etc/profile
+   添加export PATH=/usr/local/sbin:/usr/local/bin
+   source /etc/profile
+</code></pre><h5 id="文件作用"><a href="#文件作用" class="headerlink" title="文件作用"></a>文件作用</h5><pre><code>/var/log/message   系统日志文件
+/var/log/secure    用户登录日志（大量passwd失败记录可能意味着密码被破解）
+/etc/fstab         开机磁盘挂载配置文件
+/etc/profile        环境变量配置文件
+
+命令
+which   在PATH里面查找命令的全路径
+whereis  找到命令位置及命令相关的帮助文档
+find    从指定位置查找文件，例如：find / -type f -name &quot;ls&quot;
+</code></pre><h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><pre><code>shutdown -h now   立刻关机 ，
+shutdown -h 10    10分钟后立即关机，可按“Ctrl+C”键取消关机
+halt   立即停止系统，需要人工关闭电源（生产环境常用）
+
+reboot 重启
+shutdown -r  10   10分钟后立即重启
+chmod  修改权限（-R参数，递归修改文件权限）
+
+“Ctrl+D”组合键，退出当前用户  [作用等同于logout]
+“Ctrl+L” 清屏，功能等于clear
+&quot;Ctrl+a&quot; 把光标移到行首
+&quot;Ctrl+e&quot; 把光标移到行尾
+“Ctrl+u” 剪切光标之前的内容
+“Ctrl+y” 粘贴
+
+&quot;Ctrl+左方向键&quot; 
+“Ctrl+右方向键”  命令光标左右切换
+
+“Ctrl+r”    //快速搜索history历史命令，然后输入命令关键字即可。
+              如果命令不是自己想要的，继续按“Ctrl+r”    //[生产环境常用]
+
+ESC + .   引用上一个命令的最后一个参数  
+</code></pre><h2 id="系统权限"><a href="#系统权限" class="headerlink" title="系统权限"></a>系统权限</h2><h5 id="环境创建"><a href="#环境创建" class="headerlink" title="环境创建"></a>环境创建</h5><pre><code>groupadd incahome
+useradd oldboy  -g incahome   创建用户的时候同时加入组
+useradd oldgirl -g incahome
+useradd test
+id oldboy      查看用户信息
+id oldgirl
+id test
+
+//更改用户属组信息
+usermod -g incahome oldboy 
+usermod -g incahome oldgirl 
+userdel -r username  删用户的时候同时删除家目录
+chmod  u=rx  filename  修改文件属主的权限为读执行
+</code></pre><pre><code>文件权限
+结论1：如果oldboy用户对于一个脚本只有执行（x）权限，这个脚本也无法正常运行，因为其不清楚里面脚本的具体内容。一般至少需要读（r）和执行（x）权限一起使用
+
+结论2：w可以修改文件内容（也需要r配合）
+
+文件访问过程：访问一个文件时，系统根据文件名与inode对应关系查找到block的位置，同时根据文件权限控制（文件权限是限制你是否能访问到block的关键），最后到达block存储的实体数据。这个文件实际存储在上级目录的block里面。
+</code></pre><pre><code>目录权限
+结论1：对于目录来说，读（r）权限需要与执行权限（x）配合，否则会出现权限错误。
+
+对目录来说，r权限就是读目录内容
+对目录来说，x权限表示可以进入目录，比如cd oldboydir/。x权限也可以表示可以看到目录下面文件的属性。
+目录的w权限，表示可以在目录里面创建、删除、修改文件名。
+
+结论2：对于目录来说，w权限需要x权限配合，才可以在此目录下创建文件。
+
+结论3：删除或创建文件，需要上级目录具有有wx或rwx权限
+</code></pre><h5 id="删除文件原理："><a href="#删除文件原理：" class="headerlink" title="删除文件原理："></a>删除文件原理：</h5><pre><code>硬链接数为0 ：删除文件需要看上级目录是否有w权限
+进程调用数为0： 通过lsof命令查找文件被哪个程序占用，然后重启服务即可取消进程占用
+</code></pre><h5 id="添加权限"><a href="#添加权限" class="headerlink" title="添加权限"></a>添加权限</h5><pre><code>chmod +x test.sh   ===== chmod ugo+x test.sh
+</code></pre><h5 id="网站权限-如何才能更安全"><a href="#网站权限-如何才能更安全" class="headerlink" title="网站权限-如何才能更安全"></a>网站权限-如何才能更安全</h5><pre><code>对于文件或目录来说，什么权限比较好？
+文件： rw-r--r--  即，644
+目录： rwxr-xr-x  即，755
+</code></pre><pre><code>步骤1： 文件权限:644 ;目录权限：755；文件或目录的所有者都是root，一般企业中会单独创建一个普通用户（即傀儡用户），比如：www用户和www组
+
+步骤2: 与用户有关的网站子目录，文件权限644，目录权限755，属主属组改为www
+
+其他：开发人员配合，比如：限制上传压缩文件后缀、指定目录禁止PHP解析等；
+</code></pre><h5 id="默认权限控制命令umask"><a href="#默认权限控制命令umask" class="headerlink" title="默认权限控制命令umask"></a>默认权限控制命令umask</h5><pre><code>umask能控制Linux里面创建文件或目录的默认权限
+
+[root@oldboy202 oldboy]# umask
+0022
+
+umask是怎么计算的？
+文件最大权限=666 - umask值022=644（文件默认权限）
+目录最大权限=777 - umask值022=755（目录默认权限）
+
+[root@oldboy202 oldboy]# umask 023    修改umask值
+对文件来说。如果文件权限哪一位出现基数时，文件最终权限在原权限上+1
+
+测试：umask 035     //临时修改umask权限为035
+创建一个文件和一个目录，计算下权限值。file=? dir=?
+file=666-035
+dirc=777-035
+</code></pre><h5 id="了解特殊权限"><a href="#了解特殊权限" class="headerlink" title="了解特殊权限"></a>了解特殊权限</h5><pre><code>suid作用：运行某个命令的时候，相当于是命令的所有者。
+
+[root@oldboy202 ~]# ls -l /usr/bin/passwd
+-rwsr-xr-x. 1 root root 30768 Nov 24  2015 /usr/bin/passwd
+[root@oldboy202 ~]# ls -l /bin/rm
+-rwxr-xr-x. 1 root root 53592 Mar 23 02:52 /bin/rm
+[root@oldboy202 ~]# chmod u+s /bin/rm                   //或chmod 4755 /bin/rm
+[root@oldboy202 ~]# ls -l /bin/rm
+-rwsr-xr-x. 1 root root 53592 Mar 23 02:52 /bin/rm
+
+sgid作用：运行命令的时候，临时属于命令的所有者的组中。
+
+</code></pre><h5 id="【了解】Linux系统经典文件-passwd"><a href="#【了解】Linux系统经典文件-passwd" class="headerlink" title="【了解】Linux系统经典文件-passwd"></a>【了解】Linux系统经典文件-passwd</h5><pre><code>普通用户使用passwd修改密码，密码需要写入到/etc/shadow里面
+为了解决这个问题，/usr/bin/passwd 文件默认具有Suid特殊权限，所以普通用户才可以像root一样自行修改密码。
+-rwsr-xr-x. 1 root root 30768 Nov 24  2015 /usr/bin/passwd
+
+</code></pre><h5 id="【了解】经典目录：-tmp"><a href="#【了解】经典目录：-tmp" class="headerlink" title="【了解】经典目录：/tmp"></a>【了解】经典目录：/tmp</h5><pre><code>[root@oldboy202 oldboy]# ls -ld /tmp
+drwxrwxrwt. 4 root root 4096 May 22 03:29 /tmp       //权限表示777,t表示黏滞位。
+
+特点：任何人都可以在/tmp目录创建文件，但每个人只能修改、删除自己文件，即黏滞位特点
+chmod 1777 /tmp  或 chmod 0+t /tmp
+</code></pre><h5 id="文件系统权限-chattr-lsattr"><a href="#文件系统权限-chattr-lsattr" class="headerlink" title="文件系统权限 - chattr lsattr"></a>文件系统权限 - chattr lsattr</h5><pre><code>a(append) 如果设置了这个权限，只能对文件进行追加操作。不能删除，不能修改
+[root@oldboy202 oldboy]# chattr +a kkk.txt   //修改文件只追加权限
+[root@oldboy202 oldboy]# lsattr kkk.txt      //查看文件只追加权限  
+[root@oldboy202 oldboy]# chattr -a garywu.txt //取消文件只追加权限
+
+
+i(immutable 无敌) 无法修改、无法删除
+
+场景：用chattr命令防止系统中某个关键文件被修改：chattr +i /etc/resolv.conf
+
+测试：
+用mv /etc/resolv.conf等命令操作于该文件，都是得到Operation not permitted 的结果。
+vim编辑该文件时会提示W10: Warning: Changing a readonly file错误。
+要想修改此文件就要把i属性去掉： chattr -i /etc/resolv.conf
+</code></pre><p>常用工具-Xshell上传下载lrzsz</p>
+<pre><code>yum install -y lrzsz   //安装lrzsz
+
+rz 上传文件到Linux
+sz 下载Linux文件到Windows
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-06-10T10:49:42.577Z" itemprop="dateUpdated">2017-06-10 18:49:42</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/10/老男孩37期-第7节课-系统权限/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/系统权限/">系统权限</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/&title=《老男孩37期-第7节课-系统权限》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/&title=《老男孩37期-第7节课-系统权限》 — Gary Wu&source=
+本节课上午的重点是对正则新增了awk和sed用法
+下午重点是精讲了系统权限剩余部分
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩37期-第7节课-系统权限》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/14/读无字书-杯子取水/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">读无字书-杯子取水 </h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/08/防止403-SQL注入漏洞/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nginx中防止SQL注入规则</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/&title=《老男孩37期-第7节课-系统权限》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/&title=《老男孩37期-第7节课-系统权限》 — Gary Wu&source=
+本节课上午的重点是对正则新增了awk和sed用法
+下午重点是精讲了系统权限剩余部分
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩37期-第7节课-系统权限》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/10/老男孩37期-第7节课-系统权限/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

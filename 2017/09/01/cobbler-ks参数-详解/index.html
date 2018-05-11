@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>cobbler ks参数-详解 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,自动化,cobbler,kickstart,ks,系统批量安装">
+    <meta name="description" content="kickstart文件结构介绍：  1) 命令部分：配置系统的属性及安装中的各种必要设置信息 2) %packages部分：设定需要安装的软件包及包组，Anaconda会自动解决依赖关系 3) 脚本部分：用于定制系统，分为%pre部分在安装前运行，%post在安装后运行     %pre 部分脚本作为一个bash shell脚本执行，在Kickstart文件解析后执行；     %post 解析">
+<meta name="keywords" content="高级运维,自动化,cobbler,kickstart,ks,系统批量安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cobbler ks参数-详解">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="kickstart文件结构介绍：  1) 命令部分：配置系统的属性及安装中的各种必要设置信息 2) %packages部分：设定需要安装的软件包及包组，Anaconda会自动解决依赖关系 3) 脚本部分：用于定制系统，分为%pre部分在安装前运行，%post在安装后运行     %pre 部分脚本作为一个bash shell脚本执行，在Kickstart文件解析后执行；     %post 解析">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-09-01T10:50:08.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cobbler ks参数-详解">
+<meta name="twitter:description" content="kickstart文件结构介绍：  1) 命令部分：配置系统的属性及安装中的各种必要设置信息 2) %packages部分：设定需要安装的软件包及包组，Anaconda会自动解决依赖关系 3) 脚本部分：用于定制系统，分为%pre部分在安装前运行，%post在安装后运行     %pre 部分脚本作为一个bash shell脚本执行，在Kickstart文件解析后执行；     %post 解析">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">cobbler ks参数-详解</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">cobbler ks参数-详解</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-01T06:17:21.000Z" itemprop="datePublished" class="page-time">
+  2017-09-01
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#最后磁盘分区的问题"><span class="post-toc-number">1.</span> <span class="post-toc-text">最后磁盘分区的问题</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-cobbler-ks参数-详解"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">cobbler ks参数-详解</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-01 14:17:21" datetime="2017-09-01T06:17:21.000Z"  itemprop="datePublished">2017-09-01</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p><strong>kickstart文件结构介绍：</strong></p>
+</blockquote>
+<pre><code>1) 命令部分：配置系统的属性及安装中的各种必要设置信息
+2) %packages部分：设定需要安装的软件包及包组，Anaconda会自动解决依赖关系
+3) 脚本部分：用于定制系统，分为%pre部分在安装前运行，%post在安装后运行
+    %pre 部分脚本作为一个bash shell脚本执行，在Kickstart文件解析后执行；
+    %post 解析器默认为bash，可以自定义，缺省为chroot状态，也可指定非chroot状态；
+</code></pre><a id="more"></a>
+<blockquote>
+<p><strong>Kickstart文件主要参数</strong></p>
+</blockquote>
+<pre><code>install (可选)
+    明确指定系统次次进行的是全新安装系统；是默认项；
+
+
+cdrom（可选）
+     以本地CD-ROM为源安装系统；
+
+
+url (可选)
+    指定通过FTP或HTTP从网络获取安装树；
+    --url    指定资源位置
+    例：
+    url  --url  ftp://&lt;username&gt;:&lt;password&gt;@install.example.com/iso
+    url  --url  http://install.example.com/iso
+
+
+bootloader（必需）
+    设定boot loader安装选项；
+    --append=        可以指定内核参数
+    --driveorder=    设定设备BIOS中的开机设备启动顺序
+    --location=      设定引导记录的位置； mbr：默认值；
+                     partition：将boot loader安装于包含kernel的分区超级快中；
+                     none：不安装boot loder。
+     示例：
+     bootloader  --location=mbr  --append=“rhgb quiet” --driveorder=sda,sdb
+
+
+clearpart （可选）
+    在建立新分区前清空系统上原有的分区表，默认不删除分区；
+     --all      擦除系统上原有所有分区；
+     --drives    删除指定驱动器上的分区
+     --initlabel    初始化磁盘卷标为系统架构的默认卷标
+     --linux        擦除所有的linux分区
+     --none（default）不移除任何分区
+     例：
+     clearpart  --drives=hda,hdb --all  --initlabel
+
+zerombr （可选）
+    清除mbr信息，会同时清空系统用原有分区表
+
+
+firewall （可选）
+     配置系统防火墙选项；
+     firewall –enable|--disable  [ --trust ] &lt;device&gt; [ --port= ]
+     --enable       拒绝外部发起的任何主动连接；
+     --disable      不配置任何iptables防御规则；
+     --trust        指定完全信任网卡设备；
+     --port        使用port:protocol格式指定可以通过防火墙的服务；
+     示例：
+     firewall --enable --trust eth0  --trust eth1  --port=80:tcp
+
+
+selinux （可选）
+     设置系统selinux状态；默认为启用并处于enforcing模式；
+     selinux [ --disabled|–enforcing|--premissive ]
+
+
+reboot （可选）
+     在系统成功安装完成后，自动重启系统（默认）；
+     注：使用cobbler安装系统时，该选项不会导致死循环，因为cobbler默认从local启动。
+
+
+graphical （可选）
+    默认值，在图形模式下进行kickstart方式安装；---- 不推荐！
+
+
+text （可选）
+    以文本方式进行kickstart安装；--- 默认为图形界面
+
+
+skipx （可选）
+    如果该项存在，就不对系统的X(图形组件)进行设置；
+
+
+keyboard （必需）
+    设置键盘类型；一般设置为us；
+
+
+lang （必需）
+    设置安装过程使用的语言及系统的缺省语言；
+    文本模式安装时不支持中文，所以仍以默认的英文方式安装；默认en_us，
+    装中文时，需要后期%packages部分装上中文支持组件chineses-suppot；
+    例：lang en_US
+
+
+timezone （可选）
+    设置系统的时区；
+    timezone  [ --utc ]  &lt;timezone&gt;
+    例：
+    timezone  --utc  Asia/Shanghai    
+
+
+
+logging
+     # 设置安装日志输出级别
+     logging --level=info
+
+
+# 第一次启动时不运行设置向导
+firstboot --disable
+
+
+
+ignoredisk --only-use=sda
+
+
+
+auth/authconfig (必需)
+    设置系统的认证方式；默认为加密但不隐藏(shadow)；
+    --enablemd5    使用MD5加密方式
+    --useshadow或—enableshadow  使用隐藏密码；
+    例：
+    authconfig --enableshadow --passalgo=sha512
+
+
+rootpw （必需）
+    设置系统root账号的密码；
+    rootpw [ --iscrypted ]  &lt;passwd&gt;
+    --iscrypted    表示设置的密码为加密过的串；
+    例：
+    rootpw --iscrypted  $1$RPYyxobb$/LtxMNLybNuEARg2Vu2s1
+
+###########################################################
+注：cobbler ks文件中, rootpw密码生成方法
+
+[root@localhost]# perl -e &#39;print crypt(&quot;123&quot;,q($1$password)),&quot;\n&quot;&#39;
+$1$password$7KQhqIXUBf.cvy2wwAfzc1
+
+1. 其中,123为我们要定义的密码，然后将输出后的密文，复制粘贴到rootpw参数里即可。
+2. 而$1$password字符串是自定义字符串，shadow里一般用“ $1$后面跟8个字符 ” 这种格式，所以就是用了passwd代替。
+
+############################################################
+
+network （可选）
+    配置网络信息；在网络安装（NFS/HTTP/FTP）时必须指定；
+    --bootproto=dhcp|bootp|static    指定ip获取方式，默认为dhcp/bootp;
+    --device=    设置安装时激活来进行系统安装的网卡设备；
+    --ip=          ip设置
+    --gateway=     网关
+    --nameserver=  DNS设置
+    --nodns        不设置DNS
+    --netmask=     掩码
+    --hostname=    设置安装后主机名称
+    --onboot=       设置是否在系统启动时激活网卡
+    --class=        设置DHCP的class值
+    --noipv4        禁用该设备的ipv4功能
+    --noipv6        禁用该设备的ipv6功能
+    如将网络模式设置为静态模式，则必须在一行内写上ip，netmask、dns、gateway等信息；
+    例：
+    network –bootproto=static –ip=1.1.1.1 --netmask=255.0.0.0 --gateway=1.1.1.254 --nameserver=1.1.1.2  onboot=on --noipv6
+
+
+
+services （可选）
+    设置禁用或允许列出的服务；
+    --disabled 设置服务为禁用
+    --enabled  启动服务
+    例：
+    services --disabled autid,cups,smartd,nfslock  服务之间用逗号隔开，不能有空格
+
+
+
+建立新分区；
+part  &lt;mntpoint&gt;|swap  options
+
+    mntpoint:挂载点，是在创建普通分区时指定新分区挂载位置的项,比如: /data/A
+    swap： 创建swap分区；
+    --size=  设置分区的最小值，默认单位为M，但是不能写单位,也不能指定单位G或T；
+    --grow  让分区自动增长利用可用的磁盘空间，或是增长到设置的maxsize值；
+    --maxsize 设置分区自动增长(grow)时的最大容量值，以M为单位，但不能写单位；
+    --noformat     设置不格式化指定的分区
+    --onpart=/dev/sdb1   安装在哪个分区上
+    --asprimary    强制制定该分区为主分区；若指定失败，分区会失败，导致安装停止；
+    --fstype=      新增普通分区时指定分区的类型，可以为ext2、ext3、ext4、swap、vfat及hfs；
+    --ondisk=/--ondrive=    设定该分区创建在一个具体的磁盘上,如：--ondisk=/dev/sda
+    --start   指定分区以磁盘上那个磁道开始；需要跟--ondisk参数一块使用；
+    --end    指定分区以磁盘上那个磁道结束；需要跟上述两个参数一起使用；
+    --bytes-pre-inode=    指定分区格式化时inode的大小；默认值为4096
+    --fsoptions=    指定创建fstab文件时该分区挂载参数项；
+    例：
+    part  /boot  --fstype=“ext3” --size=200
+    part  swap  --fstype=“swap” –size=8192  
+    part  /  --bytes-pre-inode=4096  --fstype=“ext4” --size=10000
+    part  /data/A    --onpart=/dev/sdb1  --noformat
+
+
+
+%packages 
+@base 
+@chinese-support
+bind-utils
+lrzsz
+vim*
+%end
+
+
+%post
+systemctl disable postfix.service
+%end
+</code></pre><h4 id="最后磁盘分区的问题"><a href="#最后磁盘分区的问题" class="headerlink" title="最后磁盘分区的问题"></a>最后磁盘分区的问题</h4><pre><code>当磁盘大于2TB, cobbler安装CentOS7将会出错，错误如下：
+Your BIOS-based system needs a special partition to boot from a GPT disk label. To continue, please create a 1MB &#39;biosboot&#39; type partition.
+
+解决方法：
+在ks文件中添加如下：
+part biosboot --fstype=biosboot --size=1
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-01T10:50:08.922Z" itemprop="dateUpdated">2017-09-01 18:50:08</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/01/cobbler-ks参数-详解/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cobbler/">cobbler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kickstart/">kickstart</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ks/">ks</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/系统批量安装/">系统批量安装</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自动化/">自动化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/&title=《cobbler ks参数-详解》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/&title=《cobbler ks参数-详解》 — Gary Wu&source=
+kickstart文件结构介绍：
+
+1) 命令部分：配置系统的属性及安装中的各种必要设置信息
+2) %packages部分：设定需要安装的软件包及包组，..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cobbler ks参数-详解》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/02/ssh基于密钥的安全认证/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ssh基于密钥的安全认证</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/31/nginx优化/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nginx优化</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/&title=《cobbler ks参数-详解》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/&title=《cobbler ks参数-详解》 — Gary Wu&source=
+kickstart文件结构介绍：
+
+1) 命令部分：配置系统的属性及安装中的各种必要设置信息
+2) %packages部分：设定需要安装的软件包及包组，..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cobbler ks参数-详解》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/01/cobbler-ks参数-详解/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

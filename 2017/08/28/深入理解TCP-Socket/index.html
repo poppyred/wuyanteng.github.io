@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>深入理解TCP Socket | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP,socket,套接字,firebug,五元组">
+    <meta name="description" content="什么是Socket ？  大家都用电脑上网，当我们访问运维社区https://www.unixhot.com的时候，我们的电脑和运维社区的服务器就会创建一条Socket，我们称之为网络套接字。那么既然是网络通信，肯定是成对的。至少有一个客户端和服务端，我们称之为套接字对。">
+<meta name="keywords" content="HTTP,socket,套接字,firebug,五元组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解TCP Socket">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="什么是Socket ？  大家都用电脑上网，当我们访问运维社区https://www.unixhot.com的时候，我们的电脑和运维社区的服务器就会创建一条Socket，我们称之为网络套接字。那么既然是网络通信，肯定是成对的。至少有一个客户端和服务端，我们称之为套接字对。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tcp%E5%A4%B4%E9%83%A81.jpg">
+<meta property="og:updated_time" content="2017-08-28T11:18:35.622Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解TCP Socket">
+<meta name="twitter:description" content="什么是Socket ？  大家都用电脑上网，当我们访问运维社区https://www.unixhot.com的时候，我们的电脑和运维社区的服务器就会创建一条Socket，我们称之为网络套接字。那么既然是网络通信，肯定是成对的。至少有一个客户端和服务端，我们称之为套接字对。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tcp%E5%A4%B4%E9%83%A81.jpg">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">深入理解TCP Socket</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">深入理解TCP Socket</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-28T11:04:07.000Z" itemprop="datePublished" class="page-time">
+  2017-08-28
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-深入理解TCP-Socket"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">深入理解TCP Socket</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-28 19:04:07" datetime="2017-08-28T11:04:07.000Z"  itemprop="datePublished">2017-08-28</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>什么是Socket ？</p>
+</blockquote>
+<p>大家都用电脑上网，当我们访问运维社区<a href="https://www.unixhot.com/" target="_blank" rel="noopener">https://www.unixhot.com</a>的时候，我们的电脑和运维社区的服务器就会创建一条Socket，我们称之为网络套接字。那么既然是网络通信，肯定是成对的。至少有一个客户端和服务端，我们称之为套接字对。</p>
+<a id="more"></a>
+<p>一个套接字对（socket pair）是一个定义该网络连接的两个端点的五元组，包括：</p>
+<pre><code>1. 源IP地址
+2. 源端口
+3. 目的IP地址
+4. 目的端口
+5. 类型：TCP or UDP
+</code></pre><p>那么针对于HTTP请求来说，我们知道底层是建立了一条TCP的Socket，那么TCP的套接字对就是一个四元组，因为协议已经确定了：  1.源IP地址、2.源端口、3.目的IP地址、4.目的端口。</p>
+<blockquote>
+<p>客户机的随机端口</p>
+</blockquote>
+<pre><code>当客户端192.168.56.11访问192.168.56.12的9999端口的时候，那么会选择一个随机端口来进行通信，那么这个随机端口，到底是从什么范围随机出来了呢，端口总有一个范围不可能无穷多的。   
+
+那么对于TCP套接字来说客户端的一个IP地址，到底能有多少个端口呢？由于TCP协议头部使用16位来保存端口号，所以端口的个数最多为65536个，2^16=65536。
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tcp%E5%A4%B4%E9%83%A81.jpg" alt="tcp_head" title="">
+                </div>
+                <div class="image-caption">tcp_head</div>
+            </figure>
+<pre><code>没错，是65536个。但是为什么我们经常看到网上说可用端口最大65535个呢，也就是2^16-1个。因为端口号是从0开始算的，0-65535那就是65536个。而0端口是保留端口，无论是TCP还是UDP都是不用使用的，当然这个是标准。
+
+好的，我们现在知道了端口的范围0-65535，那么作为客户端访问其它服务端的时候，能用多少呢？并不是这个范围都可以用的。那么在Linux下我们可以这么获取本地的随机端口范围：
+
+[root@test ~]# cat/proc/sys/net/ipv4/ip_local_port_range 
+32768     61000
+
+不要惊讶答案确实是32768到61000，现在你应该明白，别人说的发10万并发进行压力测试代表什么意思了吧。至少默认情况下是无法实现的，读完这句话，是否有启发呢？并不是不能实现哦。
+</code></pre><blockquote>
+<p><strong>瓶颈真的只有随机端口范围吗？</strong></p>
+</blockquote>
+<pre><code>刚才我们也看了，我们访问其它服务器，作为客户端，我们要使用一个随机端口，32768-61000，貌似也不少，当然你还可以修改它，扩大随机端口范围。例如我们使用Nginx做反向代理负载均衡的时候，用户端和Nginx建立Socket进行通信，Nginx还需要和后端真实服务器也建立Socket进行通信，在高并发的场景下，这个随机端口肯定是一个瓶颈。但是真的只有随机端口范围是瓶颈吗？下面我们使用ab命令来对百度进行一次压力测试。
+
+ab是Apache的性能测试工具，可以模拟并发进行Web性能测试。在CenotOS下，你可以这样来安装:
+[root@test ~]# yuminstall -y httpd-devel
+</code></pre><pre><code>按照咱们之前的认识，随机端口61000-32768=28232，那么我实验的机器是一台刚安装的系统，没有什么网络传输，即便有，我们创建2万个套接字对应该是没问题吧。事实真的如此吗？我们用实验来证明：
+
+我们模拟发送2万个请求，2000的并发来测试百度：
+
+[root@test ~]#ab -n 10000 -c 2000 https://www.baidu.com/
+This isApacheBench, Version 2.3 &lt;$Revision: 1430300 $&gt;
+Copyright 1996Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to TheApache Software Foundation, http://www.apache.org/
+
+Benchmarkingwww.baidu.com (be patient)
+socket: Toomany open files (24)
+
+
+这不可能，为什么报错了？不要担心，报错我们很容易看懂了socket: Too many open files (24),，不能打开太多的文件。我们使用ulimit来看看系统资源限制。
+</code></pre><pre><code>[root@test ~]# ulimit -a
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 31219
+max locked memory       (kbytes, -l) 64
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1024
+(省略部分输出)
+
+没错，默认情况下，当前用户能够打开的文件数量最大是1024，但是这个和我们使用ab测试有什么关系呢？ab测试创建的不是socket吗？如果你不理解，那就要回归本质，想想我们刚刚学习Linux的时候，经常听到的一句Linux的思想“一切皆文件”！谁说socket不是一个文件呢？
+
+我相信你知道怎么做了，你可以使用ulimit –n来修改当前用户、当前session的限制，也可以修改配置文件/etc/security/limits.conf来彻底解决这个问题，这也是进行系统性能调优的必备基础。
+</code></pre><blockquote>
+<p>创建一条TCP Socket</p>
+</blockquote>
+<p>好的，刚才只是一个小插曲，我们继续探索TCP Socket，光说不练是个棒槌。我们来创建一个套接字对看看：</p>
+<p><strong>服务端：</strong></p>
+<p>首先，我们在192.168.56.12上使用nc命令，来监听9999端口。</p>
+<pre><code>[root@192.168.56.12 ~]#nc -l -4 -p 9999 -k 
+[root@192.168.56.12 ~]#netstat -ntlp | grep 9999
+tcp        0     0 0.0.0.0:9999     0.0.0.0:*      LISTEN     26789/n
+</code></pre><p><strong>客户端：</strong></p>
+<p>在客户端，同样使用nc命令来连接到服务端的9999端口。</p>
+<pre><code>[root@192.168.56.11 ~]#nc 192.168.56.12 9999
+</code></pre><p>好的，现在你可以在客户端上输入任何的语言和服务端愉快的聊天了?不过这不是重点。</p>
+<p><strong>查看Socket</strong></p>
+<p>我们先来看看客户端的TCPSocket。</p>
+<pre><code>[root@192.168.56.11 ~]#netstat -na | grep 9999
+tcp    0     0 192.168.56.11:11525    192.168.56.12:9999     ESTABLISHED
+</code></pre><p><strong>服务端的TCP Socket</strong></p>
+<pre><code>[root@192.168.56.12 ~]#netstat -na | grep 9999
+tcp    0     0 0.0.0.0:9999           0.0.0.0:*               LISTEN     
+tcp    0     0 192.168.56.12:9999     192.168.56.11:11525    ESTABLISHED
+</code></pre><p>我相信你已经真正理解了Socket，剩下的就是无尽的想象，还记得TIME_WAIT吗？如果有大量的TIME_WAIT存在，那么这个套接字对是不释放的，不释放也就代表着占用一个，资源嘛，占用一个就少一个。</p>
+<p>​    不过，如果你真的理解了Socket的概念，你已经有了一个终极解决方案。既然一个TCP Socket是一个四元组，那如果我这台机器有多个IP地址呢？哈哈，这是一句画龙点睛之语，你懂的！</p>
+<blockquote>
+<p>文章来源：运维社区-赵班长  <a href="https://www.unixhot.com/article/65" target="_blank" rel="noopener">Web性能优化之-深入理解TCP Socket</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-28T11:18:35.622Z" itemprop="dateUpdated">2017-08-28 19:18:35</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/28/深入理解TCP-Socket/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/firebug/">firebug</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/socket/">socket</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/五元组/">五元组</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/套接字/">套接字</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/&title=《深入理解TCP Socket》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/&title=《深入理解TCP Socket》 — Gary Wu&source=
+什么是Socket ？
+
+大家都用电脑上网，当我们访问运维社区https://www.unixhot.com的时候，我们的电脑和运维社区的服务器就会创建..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解TCP Socket》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/30/Cacti网卡流量达到100M后-流量图不准问题/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Cacti网卡流量达到100M后-流量图不准问题</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/28/OSI7层网络模型/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OSI7层网络模型</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/&title=《深入理解TCP Socket》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/&title=《深入理解TCP Socket》 — Gary Wu&source=
+什么是Socket ？
+
+大家都用电脑上网，当我们访问运维社区https://www.unixhot.com的时候，我们的电脑和运维社区的服务器就会创建..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解TCP Socket》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/28/深入理解TCP-Socket/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

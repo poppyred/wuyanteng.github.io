@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Opcache让PHP性能加速 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,PHP,opcache,性能加速">
+    <meta name="description" content="官方Doc  http://php.net/manual/zh/book.opcache.php">
+<meta name="keywords" content="高级运维,PHP,opcache,性能加速">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Opcache让PHP性能加速">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="官方Doc  http://php.net/manual/zh/book.opcache.php">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/php_opcache.png">
+<meta property="og:updated_time" content="2017-09-19T04:06:02.701Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Opcache让PHP性能加速">
+<meta name="twitter:description" content="官方Doc  http://php.net/manual/zh/book.opcache.php">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/php_opcache.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Opcache让PHP性能加速</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Opcache让PHP性能加速</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-19T03:51:00.000Z" itemprop="datePublished" class="page-time">
+  2017-09-19
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-Opcache让PHP性能加速"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Opcache让PHP性能加速</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-19 11:51:00" datetime="2017-09-19T03:51:00.000Z"  itemprop="datePublished">2017-09-19</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>官方Doc</p>
+</blockquote>
+<pre><code>http://php.net/manual/zh/book.opcache.php
+</code></pre><a id="more"></a>
+<blockquote>
+<p>说明</p>
+</blockquote>
+<pre><code>OPcache 通过将 PHP 脚本预编译的字节码存储到共享内存中来提升 PHP 的性能， 存储预编译字节码的好处就是 省去了每次加载和解析 PHP 脚本的开销。PHP 5.5.0 及后续版本中已经绑定了 OPcache 扩展。老版本可以使用PHP APC加速
+</code></pre><blockquote>
+<p>PHP开启opcache方法</p>
+</blockquote>
+<ol>
+<li>打开php.ini文件, 找到：[opcache]，设置为：</li>
+</ol>
+<pre><code>[opcache]
+; dll地址
+zend_extension=php_opcache.dll
+; 开关打开
+opcache.enable=1
+; 开启CLI
+opcache.enable_cli=1
+; 可用内存, 酌情而定, 单位为：Mb
+opcache.memory_consumption=528
+; Zend Optimizer + 暂存池中字符串的占内存总量.(单位:MB)
+opcache.interned_strings_buffer=8
+; 对多缓存文件限制, 命中率不到 100% 的话, 可以试着提高这个值
+opcache.max_accelerated_files=10000
+; Opcache 会在一定时间内去检查文件的修改时间, 这里设置检查的时间周期, 默认为 2, 定位为秒
+opcache.revalidate_freq=1
+; 打开快速关闭, 打开这个在PHP Request Shutdown的时候回收内存的速度会提高
+opcache.fast_shutdown=1
+复制代码
+</code></pre><ol start="2">
+<li>重启apache即可。</li>
+</ol>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p>配置完成后，可以使用如下代码查询opcache：</p>
+<pre><code>&lt;?php
+    phpinfo();
+?&gt;
+</code></pre><p>访问页面得到如下界面：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/php_opcache.png" alt="php_opcache" title="">
+                </div>
+                <div class="image-caption">php_opcache</div>
+            </figure>
+<blockquote>
+<p>opcache配置说明</p>
+</blockquote>
+<pre><code>[opcache]
+zend_extension = &quot;G:/PHP/php-5.5.6-Win32-VC11-x64/ext/php_opcache.dll&quot;
+
+; Zend Optimizer + 的开关, 关闭时代码不再优化.
+opcache.enable=1
+
+; Determines if Zend OPCache is enabled for the CLI version of PHP
+opcache.enable_cli=1
+
+
+; Zend Optimizer + 共享内存的大小, 总共能够存储多少预编译的 PHP 代码(单位:MB)
+; 推荐 128
+opcache.memory_consumption=64
+
+; Zend Optimizer + 暂存池中字符串的占内存总量.(单位:MB)
+; 推荐 8
+opcache.interned_strings_buffer=4
+
+
+; 最大缓存的文件数目 200  到 100000 之间
+; 推荐 4000
+opcache.max_accelerated_files=2000
+
+; 内存“浪费”达到此值对应的百分比,就会发起一个重启调度.
+opcache.max_wasted_percentage=5
+
+; 开启这条指令, Zend Optimizer + 会自动将当前工作目录的名字追加到脚本键上,
+; 以此消除同名文件间的键值命名冲突.关闭这条指令会提升性能,
+; 但是会对已存在的应用造成破坏.
+opcache.use_cwd=0
+
+
+; 开启文件时间戳验证 
+opcache.validate_timestamps=1
+
+
+; 2s检查一次文件更新 注意:0是一直检查不是关闭
+; 推荐 60
+opcache.revalidate_freq=2
+
+; 允许或禁止在 include_path 中进行文件搜索的优化
+;opcache.revalidate_path=0
+
+
+; 是否保存文件/函数的注释   如果apigen、Doctrine、 ZF2、 PHPUnit需要文件注释
+; 推荐 0
+opcache.save_comments=1
+
+; 是否加载文件/函数的注释
+;opcache.load_comments=1
+
+
+; 打开快速关闭, 打开这个在PHP Request Shutdown的时候会收内存的速度会提高
+; 推荐 1
+opcache.fast_shutdown=1
+
+;允许覆盖文件存在（file_exists等）的优化特性。
+;opcache.enable_file_override=0
+
+
+; 定义启动多少个优化过程
+;opcache.optimization_level=0xffffffff
+
+
+; 启用此Hack可以暂时性的解决”can’t redeclare class”错误.
+;opcache.inherited_hack=1
+
+; 启用此Hack可以暂时性的解决”can’t redeclare class”错误.
+;opcache.dups_fix=0
+
+; 设置不缓存的黑名单
+; 不缓存指定目录下cache_开头的PHP文件. /png/www/example.com/public_html/cache/cache_ 
+;opcache.blacklist_filename=
+
+
+; 通过文件大小屏除大文件的缓存.默认情况下所有的文件都会被缓存.
+;opcache.max_file_size=0
+
+; 每 N 次请求检查一次缓存校验.默认值0表示检查被禁用了.
+; 由于计算校验值有损性能,这个指令应当紧紧在开发调试的时候开启.
+;opcache.consistency_checks=0
+
+; 从缓存不被访问后,等待多久后(单位为秒)调度重启
+;opcache.force_restart_timeout=180
+
+; 错误日志文件名.留空表示使用标准错误输出(stderr).
+;opcache.error_log=
+
+
+; 将错误信息写入到服务器(Apache等)日志
+;opcache.log_verbosity_level=1
+
+; 内存共享的首选后台.留空则是让系统选择.
+;opcache.preferred_memory_model=
+
+; 防止共享内存在脚本执行期间被意外写入, 仅用于内部调试.
+;opcache.protect_memory=0
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-19T04:06:02.701Z" itemprop="dateUpdated">2017-09-19 12:06:02</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/19/Opcache让PHP性能加速/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/opcache/">opcache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/性能加速/">性能加速</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/&title=《Opcache让PHP性能加速》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/&title=《Opcache让PHP性能加速》 — Gary Wu&source=
+官方Doc
+
+http://php.net/manual/zh/book.opcache.php
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Opcache让PHP性能加速》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/19/Nginx忽略favicon-ico访问记录/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Nginx忽略favicon.ico访问记录</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/19/深入理解tmpfs内存文件系统/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">深入理解tmpfs内存文件系统</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/&title=《Opcache让PHP性能加速》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/&title=《Opcache让PHP性能加速》 — Gary Wu&source=
+官方Doc
+
+http://php.net/manual/zh/book.opcache.php
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Opcache让PHP性能加速》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/19/Opcache让PHP性能加速/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

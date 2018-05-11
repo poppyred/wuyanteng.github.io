@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Linux下route路由配置梳理 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Linux,Route,静态路由,默认路由,路由配置">
+    <meta name="description" content="在日常运维作业中，经常会碰到路由表的操作。下面就相关操作进行梳理">
+<meta name="keywords" content="高级运维,Linux,Route,静态路由,默认路由,路由配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下route路由配置梳理">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="在日常运维作业中，经常会碰到路由表的操作。下面就相关操作进行梳理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/route_sl1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/route_sl2.png">
+<meta property="og:updated_time" content="2018-04-07T04:11:30.003Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下route路由配置梳理">
+<meta name="twitter:description" content="在日常运维作业中，经常会碰到路由表的操作。下面就相关操作进行梳理">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/route_sl1.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Linux下route路由配置梳理</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Linux下route路由配置梳理</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-07T02:48:37.000Z" itemprop="datePublished" class="page-time">
+  2018-04-07
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#路由基础知识"><span class="post-toc-number">1.</span> <span class="post-toc-text">路由基础知识</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#路由概念"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">路由概念</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#静态路由和默认路由的特点"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">静态路由和默认路由的特点</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#路由器转发数据包时的封装过程"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">路由器转发数据包时的封装过程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#要完成对数据包的路由，一个路由器必须至少了解以下内容"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">要完成对数据包的路由，一个路由器必须至少了解以下内容</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#路由相关操作"><span class="post-toc-number">2.</span> <span class="post-toc-text">路由相关操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#使用route-n命令查看Linux内核路由表"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">使用route -n命令查看Linux内核路由表</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#三种路由类型说明"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">三种路由类型说明</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#route命令格式详解"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">route命令格式详解</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#route命令使用举例"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">route命令使用举例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#添加一条默认路由"><span class="post-toc-number">2.4.1.</span> <span class="post-toc-text">添加一条默认路由</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#添加一条静态路由"><span class="post-toc-number">2.4.2.</span> <span class="post-toc-text">添加一条静态路由</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#添加到一台主机的静态路由"><span class="post-toc-number">2.4.3.</span> <span class="post-toc-text">添加到一台主机的静态路由</span></a></li></ol></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#开启linux内核的包转发功能"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">开启linux内核的包转发功能</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#使用ip-route命令配置静态路由"><span class="post-toc-number">2.6.</span> <span class="post-toc-text">使用ip route命令配置静态路由</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实例1"><span class="post-toc-number">3.</span> <span class="post-toc-text">实例1</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实例2"><span class="post-toc-number">4.</span> <span class="post-toc-text">实例2</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Linux下route路由配置梳理"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Linux下route路由配置梳理</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-07 10:48:37" datetime="2018-04-07T02:48:37.000Z"  itemprop="datePublished">2018-04-07</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>在日常运维作业中，经常会碰到路由表的操作。下面就相关操作进行梳理
+</code></pre><a id="more"></a>
+<h4 id="路由基础知识"><a href="#路由基础知识" class="headerlink" title="路由基础知识"></a>路由基础知识</h4><h5 id="路由概念"><a href="#路由概念" class="headerlink" title="路由概念"></a>路由概念</h5><pre><code>路由：  跨越从源主机到目标主机的一个互联网络来转发数据包的过程
+路由器：能够将数据包转发到正确的目的地，并在转发过程中选择最佳路径的设备
+路由表：在路由器中维护的路由条目，路由器根据路由表做路径选择
+直连路由：当在路由器上配置了接口的IP地址，并且接口状态为up的时候，路由表中就出现直连路由项
+静态路由：是由管理员手工配置的，是单向的。
+默认路由：当路由器在路由表中找不到目标网络的路由条目时，路由器把请求转发到默认路由接口 。
+</code></pre><h5 id="静态路由和默认路由的特点"><a href="#静态路由和默认路由的特点" class="headerlink" title="静态路由和默认路由的特点"></a>静态路由和默认路由的特点</h5><pre><code>静态路由特点:
+路由表是手工设置的,除非网络管理员干预，否则静态路由不会发生变化；
+路由表的形成不需要占用网络资源；
+适用环境：一般用于网络规模很小、拓扑结构固定的网络中。
+</code></pre><pre><code>默认路由特点:
+在所有路由类型中，默认路由的优先级最低
+适用环境：一般应用在只有一个出口的末端网络中或作为其他路由的补充
+</code></pre><pre><code>浮动静态路由：
+路由表中存在相同目标网络的路由条目时，根据路由条目优先级的高低，将请求转发到相应端口；
+链路冗余的作用；
+</code></pre><h5 id="路由器转发数据包时的封装过程"><a href="#路由器转发数据包时的封装过程" class="headerlink" title="路由器转发数据包时的封装过程"></a>路由器转发数据包时的封装过程</h5><pre><code>源IP和目标IP不发生变化，在网络的每一段传输时，源和目标MAC发生变化，进行重新封装，分别是每一段的源和目标地址
+</code></pre><h5 id="要完成对数据包的路由，一个路由器必须至少了解以下内容"><a href="#要完成对数据包的路由，一个路由器必须至少了解以下内容" class="headerlink" title="要完成对数据包的路由，一个路由器必须至少了解以下内容"></a>要完成对数据包的路由，一个路由器必须至少了解以下内容</h5><pre><code>a）目的地址
+b）相连路由器，并可以从哪里获得远程网络的信息
+c）到所有远程网络的可能路由
+d）到达每个远程网络的最佳路由
+e）如何维护并验证路由信息
+f）路由和交换的对比
+
+路由工作在网络层
+   a)根据“路由表”转发数据
+   b)路由选择
+   c)路由转发
+交换工作在数据链路层
+   d)根据“MAC地址表”转发数据
+   e)硬件转发
+</code></pre><h4 id="路由相关操作"><a href="#路由相关操作" class="headerlink" title="路由相关操作"></a>路由相关操作</h4><h5 id="使用route-n命令查看Linux内核路由表"><a href="#使用route-n命令查看Linux内核路由表" class="headerlink" title="使用route -n命令查看Linux内核路由表"></a>使用route -n命令查看Linux内核路由表</h5><pre><code>[root@repo100 ~]# route -n
+Kernel IP routing table
+Destination     Gateway      Genmask         Flags Metric Ref    Use    Iface
+0.0.0.0         10.0.10.1    0.0.0.0         UG    100    0      0    eno16780032
+10.0.10.0       0.0.0.0      255.255.255.0   U     100    0      0    eno16780032
+
+
+Destination:目标网段或主机
+Gateway: 网关地址
+Genmask：网络掩码
+Flags: 标记
+       U -- 表示路由是活动的
+       H -- 表示目标是一个主机
+       G -- 表示路由指向网关
+       R -- 表示恢复动态路由产生的表项
+       D -- 由路由的后台程序动态的安装
+       M -- 由路由的后台程序修改
+       ！-- 拒绝路由
+Metric: 路由距离
+Ref: 路由项引用次数
+Use: 此路由项被路由软件查找的次数
+Iface: 该路由表项对应的输出接口
+</code></pre><h5 id="三种路由类型说明"><a href="#三种路由类型说明" class="headerlink" title="三种路由类型说明"></a>三种路由类型说明</h5><pre><code>(1)主机路由
+主机路由是路由选择表中指向单个IP地址或主机名的路由记录。主机路由的Flags字段为H。例如，在下面的示例中，本地主机通过IP地址192.168.1.1的路由器到达IP地址为10.0.0.10的主机。
+
+Destination    Gateway       Genmask        Flags     Metric    Ref    Use    Iface
+-----------    -------     -------            -----     ------    ---    ---    -----
+10.0.0.10     192.168.1.1    255.255.255.255   UH       0    0      0    eth0
+</code></pre><pre><code>(2)网络路由
+网络路由是代表主机可以到达的网络。网络路由的Flags字段为N。例如，在下面的示例中，本地主机将发送到网络192.19.12的数据包转发到IP地址为192.168.1.1的路由器。
+
+Destination    Gateway       Genmask      Flags    Metric    Ref     Use    Iface
+-----------    -------     -------         -----    -----   ---    ---    -----
+192.19.12     192.168.1.1    255.255.255.0      UN      0       0     0    eth0
+</code></pre><pre><code>(3)默认路由
+当主机不能在路由表中查找到目标主机的IP地址或网络路由时，数据包就被发送到默认路由（默认网关）上。默认路由的Flags字段为G。例如，在下面的示例中，默认路由是IP地址为192.168.1.1的路由器。
+
+Destination    Gateway       Genmask    Flags     Metric    Ref    Use    Iface
+-----------    -------     ------- -----      ------    ---    ---    -----
+default       192.168.1.1     0.0.0.0    UG       0        0     0    eth0
+</code></pre><h5 id="route命令格式详解"><a href="#route命令格式详解" class="headerlink" title="route命令格式详解"></a>route命令格式详解</h5><pre><code>设置和查看路由表都可以用 route 命令，设置内核路由表的命令格式是：
+
+route  [add|del] [-net|-host] target [netmask Nm] [gw Gw] [[dev] If]
+
+
+参数解释：
+add        添加一条路由规则
+del        删除一条路由规则
+-net       目的地址是一个网络
+-host      目的地址是一个主机
+target     目的网络或主机
+netmask    目的地址的网络掩码
+gw         路由数据包通过的网关
+dev        为路由指定的网络接口
+</code></pre><h5 id="route命令使用举例"><a href="#route命令使用举例" class="headerlink" title="route命令使用举例"></a>route命令使用举例</h5><pre><code>添加到主机的路由
+route add -host 192.168.1.2 dev eth0:0
+route add -host 10.20.30.148 gw 10.20.30.40
+</code></pre><pre><code>添加到网络的路由
+route add -net 10.20.30.40 netmask 255.255.255.248 eth0
+route add -net 10.20.30.48 netmask 255.255.255.248 gw 10.20.30.41
+route add -net 192.168.1.0/24 eth1
+</code></pre><pre><code>添加默认路由
+route add default gw 192.168.1.1
+</code></pre><pre><code>删除路由
+route del -host 192.168.1.2 dev eth0:0
+route del -host 10.20.30.148 gw 10.20.30.40
+route del -host 10.20.30.40 netmask 255.255.255.248 eth0
+route del -net 10.20.30.48 netmask 255.255.255.248 gw 10.20.30.41
+route del -net 192.168.1.0/24 eth1
+route del default gw 192.168.1.1
+
+注：route del default命令会删除所有默认路由,操作需谨慎
+</code></pre><h6 id="添加一条默认路由"><a href="#添加一条默认路由" class="headerlink" title="添加一条默认路由"></a>添加一条默认路由</h6><pre><code>添加一条默认路由
+route add default gw 10.0.0.1    //默认只在内存中生效
+
+永久生效：追加到/etc/rc.local文件里（CentOS7需要给文件执行权限）
+echo &quot;route add default gw 10.0.0.1&quot; &gt;&gt;/etc/rc.local
+</code></pre><h6 id="添加一条静态路由"><a href="#添加一条静态路由" class="headerlink" title="添加一条静态路由"></a>添加一条静态路由</h6><pre><code>添加一条静态路由
+route add -net 192.168.2.0/24 gw 192.168.2.254
+
+永久生效：
+echo &quot;any net 192.168.2.0/24 gw 192.168.2.254&quot; &gt;&gt;/etc/sysconfig/static-routes
+</code></pre><h6 id="添加到一台主机的静态路由"><a href="#添加到一台主机的静态路由" class="headerlink" title="添加到一台主机的静态路由"></a>添加到一台主机的静态路由</h6><pre><code>route add -host 192.168.2.2 gw 192.168.2.254
+
+永久生效：
+echo &quot;any host 192.168.2.2 gw 192.168.2.254&quot; &gt;&gt;/etc/sysconfig/static-routes 
+注：Linux 默认没有此文件,该命令会自动创建。
+</code></pre><h5 id="开启linux内核的包转发功能"><a href="#开启linux内核的包转发功能" class="headerlink" title="开启linux内核的包转发功能"></a>开启linux内核的包转发功能</h5><pre><code>在Linux中默认的内核配置已经包含了路由功能，但默认并没有在系统启动时启用此功能
+
+永久开启路由功能 
+# vim /etc/sysctl.conf
+net.ipv4.ip_forward = 1
+
+配置生效
+sysctl -p
+</code></pre><h5 id="使用ip-route命令配置静态路由"><a href="#使用ip-route命令配置静态路由" class="headerlink" title="使用ip route命令配置静态路由"></a>使用ip route命令配置静态路由</h5><pre><code>添加静态路由到路由表的语法如下：
+
+ip route [destination_network] [mask] [next-hop_address] administrative_distance]
+
+参数解析：
+ip route              用于创建静态路由的命令。
+Destination_network   需要发布到路由表中的网段。
+Mask                  在这一网络上使用的子网掩码。
+Next-hop_address      下一跳路由器的地址。
+administrative_distance    默认时，静态路由有一个取值为1 的管理性距离。在这个命令的尾部添加管理权来修改这个默认值。
+</code></pre><pre><code>例如
+
+ip route 172.16.1.0 255.255.255.0 172.16.2.1
+</code></pre><pre><code>查看路由表除了使用route -n命令外，还可以使用ip route
+[root@repo100 ~]# ip route
+default via 10.0.10.1 dev eno16780032 proto static metric 100 
+10.0.10.0/24 dev eno16780032 proto kernel scope link src 10.0.10.100 metric 100 
+</code></pre><h4 id="实例1"><a href="#实例1" class="headerlink" title="实例1"></a>实例1</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/route_sl1.png" alt="route_sl1" title="">
+                </div>
+                <div class="image-caption">route_sl1</div>
+            </figure>
+<pre><code>如上图所示, PC0机器和PC1机器之间经过两个路由器，要想使这两台机器通信，路由设置如下：
+</code></pre><pre><code>(1)Route0路由器设置：
+
+ip add 192.168.1.1 255.255.255.0
+ip add 192.168.2.1 255.255.255.0
+ip route 192.168.3.0 255.255.255.0 192.168.2.2
+</code></pre><pre><code>(2)Route1路由器设置：
+
+ip add 192.168.2.2 255.255.255.0
+ip add 192.168.3.1 255.255.255.0
+ip route 192.168.1.0 255.255.255.0 192.168.2.1
+</code></pre><h4 id="实例2"><a href="#实例2" class="headerlink" title="实例2"></a>实例2</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/route_sl2.png" alt="route_sl2" title="">
+                </div>
+                <div class="image-caption">route_sl2</div>
+            </figure>
+<pre><code>如上图所示，使用A主机192.168.1.2能够ping通E主机192.168.4.2，这两台机能够通信。
+操作思路：
+1）在主机B上设置默认路由下一跳为192.168.2.2，并开启路由转发功能；
+2）在主机C上设置2条静态路由，分别去192.168.1.0/24网段的下一跳为192.168.2.1，去192.168.4.0/24网段的下一跳为192.168.3.2，并开启路由转发功能；
+3）在主机D上设置默认路由下一跳为192.168.3.1，并开启路由转发功能。
+</code></pre><pre><code>操作纪录：
+1）A主机上操作：ip为192.168.1.2，设置网关为192.168.1.1
+   route add default gw 192.168.1.1
+
+2）B主机上操作：第一块网卡为192.168.1.1，第二块网卡为192.168.2.1
+   (2.1)B主机设置默认路由，下一跳为192.168.2.2
+     route add default gw 192.168.2.2
+   (2.2)B主机开启路由转发功能
+     echo 1 &gt; /proc/sys/net/ipv4/ip_forward
+
+3）C主机上操作：第一块网卡为192.168.2.2，第二块网卡为192.168.3.1
+   (3.1)C主机设置2条默认路由
+        route add -net 192.168.1.0/24 gw 192.168.2.1
+        route add -net 192.168.4.0/24 gw 192.168.3.2
+
+   (3.2)C主机开启路由转发功能
+        echo 1 &gt; /proc/sys/net/ipv4/ip_forward
+
+4）D主机上操作：第一块网卡为192.168.3.2，第二块网卡为192.168.4.1
+   (4.1)D主机设置默认路由，下一跳为192.168.3.1
+        route add default gw 192.168.3.1
+
+   (4.2)D主机开启路由转发功能
+        echo 1 &gt; /proc/sys/net/ipv4/ip_forward 
+
+5）E主机上操作：ip为192.168.4.2，设置网关为192.168.4.1
+   route add default gw 192.168.4.1
+</code></pre><p>参考: <a href="https://cloud.tencent.com/developer/article/1027213" target="_blank" rel="noopener">腾讯云社区</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-07T04:11:30.003Z" itemprop="dateUpdated">2018-04-07 12:11:30</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/04/07/Linux下route路由配置梳理/" target="_blank" rel="external">https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Route/">Route</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/路由配置/">路由配置</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/静态路由/">静态路由</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/默认路由/">默认路由</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/&title=《Linux下route路由配置梳理》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/&title=《Linux下route路由配置梳理》 — Gary Wu&source=在日常运维作业中，经常会碰到路由表的操作。下面就相关操作进行梳理
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux下route路由配置梳理》 — Gary Wu&url=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/11/Linux网卡限速/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Linux网卡限速</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/04/strace命令-追踪指定pid进程/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">strace命令-追踪指定pid进程</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/&title=《Linux下route路由配置梳理》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/&title=《Linux下route路由配置梳理》 — Gary Wu&source=在日常运维作业中，经常会碰到路由表的操作。下面就相关操作进行梳理
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux下route路由配置梳理》 — Gary Wu&url=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

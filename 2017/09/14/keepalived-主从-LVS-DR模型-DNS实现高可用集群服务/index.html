@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,高可用,keepalived,lvs,dns,dr,dns主从,集群,VRRP">
+    <meta name="description" content="keeplived+LVS+DNS三者之间的关系  LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了解决LVS的单点故障">
+<meta name="keywords" content="高级运维,高可用,keepalived,lvs,dns,dr,dns主从,集群,VRRP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="keeplived+LVS+DNS三者之间的关系  LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了解决LVS的单点故障">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-09-15T10:21:36.758Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务">
+<meta name="twitter:description" content="keeplived+LVS+DNS三者之间的关系  LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了解决LVS的单点故障">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-14T10:09:41.000Z" itemprop="datePublished" class="page-time">
+  2017-09-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置LB-1服务器"><span class="post-toc-number">1.</span> <span class="post-toc-text">配置LB-1服务器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置LB-2服务器"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置LB-2服务器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置DNS主从"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置DNS主从</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#在每台的real-server上执行脚本"><span class="post-toc-number">4.</span> <span class="post-toc-text">在每台的real server上执行脚本</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#同内网客户端-测试"><span class="post-toc-number">5.</span> <span class="post-toc-text">同内网客户端-测试</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#故障排查"><span class="post-toc-number">6.</span> <span class="post-toc-text">故障排查</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-keepalived-主从-LVS-DR模型-DNS实现高可用集群服务"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-14 18:09:41" datetime="2017-09-14T10:09:41.000Z"  itemprop="datePublished">2017-09-14</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p> keeplived+LVS+DNS三者之间的关系</p>
+</blockquote>
+<pre><code>LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了解决LVS的单点故障
+</code></pre><a id="more"></a>
+<blockquote>
+<p>测试环境</p>
+</blockquote>
+<p>本测试方案采用LVS（DR）+Keepalived部署高可用的DNS服务集群。</p>
+<pre><code>(1)服务器IP规划：
+   LB-1：192.168.56.21
+   LB-2：192.168.56.22
+   DNS1：192.168.56.23
+   DNS2：192.168.56.24
+   实验过程中，虚拟心跳检测VIP定义为：192.168.56.100
+
+(2)iptables和selinux已关闭
+</code></pre><h4 id="配置LB-1服务器"><a href="#配置LB-1服务器" class="headerlink" title="配置LB-1服务器"></a>配置LB-1服务器</h4><blockquote>
+<p>安装lvs和keepalived</p>
+</blockquote>
+<pre><code>#安装ipvsadm
+yum install ipvsadm* -y
+
+#安装keepalived
+yum install keepalived -y
+</code></pre><blockquote>
+<p>keepalived参数详解</p>
+</blockquote>
+<pre><code>! Configuration File for keepalived       #与#号一样，都是注释
+
+global_defs {                #全局设定
+   notification_email {      #email邮件通知配置
+   617597237@qq.com   
+}
+   notification_email_from Alexandre.Cassen@firewall.loc
+   smtp_server 127.0.0.1     #如果开启了sendmail，就可以使用这些默认配置实现邮件发送 
+   smtp_connect_timeout 30
+   router_id LVS_1     #LVS负载均衡器标识[router_id],一个局域网内是唯一的 
+}
+
+########################################################################################
+下面的每个vrrp_instance我们可以认为是一个keeplived实例，vrrp实例可以有多个。
+
+vrrp_instance VI_1 {   #大括号“{}”用来分隔定义块，因此必须成对出现！！！
+    state MASTER       #如果不指定Master或者BACKUP,那priority最高的就是master【字母大写】  
+    interface eth0     #监听的实际网口
+    virtual_router_id 50  #组播ID，通过224.0.0.18可以监听到现在已经存在的VRRP ID
+    priority 100          #优先级或者叫做权重，权重数字越大成为master的优先级就越高  
+    advert_int 1          ##发送组播包的间隔时间，默认为1秒
+    authentication {      #这个是验证类型为PASS（明文）,密码为1111。
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {     #定义虚拟VIP
+        192.168.56.100
+    }
+}
+
+virtual_server 192.168.56.100 53 {   #定义虚拟VIP服务器 
+    delay_loop 1                     #延迟轮询时间（单位秒）
+    lb_algo rr                       #负载均衡调度算法rr|wrr|lc|wlc|sh|dh|lblc
+    lb_kind DR                       #LVS调度类型NAT/DR/TUN,此处选择DR
+    nat_mask 255.255.255.255
+    !persistence_timeout 50          #会话保持时间，如果是动态服务，建议开启。默认50秒
+    protocol UDP                     #由于DNS协议涉及UDP和TCP，所以下面还会新增一个TCP实例
+
+    real_server 192.168.56.23 53 {    #定义真实IP【本例:DNS1的真实IP地址】
+        weight 1                      #配置服务节点的权值，数值越大，分发的可能越大
+        MISC_CHECK {                  #MISC健康检查方式，执行一个dig命令
+        misc_path &quot;/usr/bin/dig www.test.org @192.168.56.23 +time=1 +tries=5 +fail &gt;/dev/null&quot;
+        misc_timeout 6                ##脚本执行的超时时间
+       } 
+
+    }
+ real_server 192.168.56.24 53 {     #定义真实IP【本例:DNS2的真实IP地址】
+        weight 1
+        MISC_CHECK {     
+        #注：UDP协议健康检查方式是dig命令执行，所以需要事先安装dig命令。否则后端DNS将被踢出集群
+        misc_path &quot;/usr/bin/dig www.test.org @192.168.56.24 +time=1 +tries=5 +fail &gt;/dev/null&quot;
+        misc_timeout 6
+       }
+    }
+}
+
+####################################################################################
+
+vrrp_instance VI_2 {     #第二个实例命名为“VI_2”
+    state MASTER         #如果不指定Master或者BACKUP,那priority最高的就是master【字母大写】
+    interface eth0       #监听的实际网口
+    virtual_router_id 52 #组播ID，不能与上面实例中的组播ID重复
+    priority 100         #定义master节点优先级,需要与上面实例中的优先级一致  
+    advert_int 1         #发送组播包的间隔时间，默认为1秒
+    authentication {     #这个是验证类型为PASS（明文）,密码为1111。
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {   #定义虚拟VIP
+        192.168.56.100
+    }
+}
+
+virtual_server 192.168.56.100 53 {    #定义虚拟VIP服务器
+    delay_loop 1                      #延迟轮询时间（单位秒）
+    lb_algo rr                        #负载均衡调度算法rr|wrr|lc|wlc|sh|dh|lblc
+    lb_kind DR                        #LVS调度类型NAT/DR/TUN,此处选择DR
+    nat_mask 255.255.255.255
+    !persistence_timeout 50           #会话保持时间，如果是动态服务，建议开启。默认50秒
+    protocol TCP                      #本VRRP实例是TCP
+
+    real_server 192.168.56.23 53 {    #定义真实IP【本例:DNS1的真实IP地址】
+        weight 1                      #配置服务节点的权值，数值越大，分发的可能越大
+        TCP_CHECK {                   #TCP健康检查方式
+        connect_timeout 5             #TCP连接超时时间
+        nb_get_retry 3                #重试次数
+        connect_port 53               #健康检查连接的TCP端口
+}
+
+    }
+ real_server 192.168.56.24 53 {
+        weight 1
+         TCP_CHECK {
+        connect_timeout 5
+        nb_get_retry 3
+        connect_port 53
+}    
+     }
+
+}
+</code></pre><blockquote>
+<p>keeplived配置</p>
+</blockquote>
+<p>cat /etc/keepalived/keepalived.conf</p>
+<pre><code>! Configuration File for keepalived    
+
+global_defs {               
+   notification_email {    
+   617597237@qq.com   
+}
+   notification_email_from Alexandre.Cassen@firewall.loc
+   smtp_server 127.0.0.1    
+   smtp_connect_timeout 30
+   router_id LVS_1    
+}
+
+vrrp_instance VI_1 {   
+    state MASTER        
+    interface eth0     
+    virtual_router_id 50 
+    priority 100           
+    advert_int 1         
+    authentication {     
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {     
+        192.168.56.100
+    }
+}
+
+virtual_server 192.168.56.100 53 {   
+    delay_loop 1                    
+    lb_algo rr                      
+    lb_kind DR                    
+    nat_mask 255.255.255.255
+    !persistence_timeout 50         
+    protocol UDP                    
+
+    real_server 192.168.56.23 53 {    
+        weight 1                     
+        MISC_CHECK {                  
+        misc_path &quot;/usr/bin/dig www.test.org @192.168.56.23 +time=1 +tries=5 +fail &gt;/dev/null&quot;
+        misc_timeout 6                
+       } 
+
+    }
+ real_server 192.168.56.24  53 {     
+        weight 1
+        MISC_CHECK {
+        misc_path &quot;/usr/bin/dig www.test.org @192.168.56.24 +time=1 +tries=5 +fail &gt;/dev/null&quot;
+        misc_timeout 6
+       }
+    }
+}
+
+ #注：UDP协议健康检查方式是dig命令执行，所以需要事先安装dig命令。否则后端DNS将被踢出集群
+
+vrrp_instance VI_2 {    
+    state MASTER        
+    interface eth0       
+    virtual_router_id 52 
+    priority 100         
+    advert_int 1         
+    authentication {     
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {   
+        192.168.56.100
+    }
+}
+
+virtual_server 192.168.56.100 53 {   
+    delay_loop 1                      
+    lb_algo rr                       
+    lb_kind DR                        
+    nat_mask 255.255.255.255
+    !persistence_timeout 50           
+    protocol TCP                     
+
+    real_server 192.168.56.23 53 {   
+        weight 1                     
+        TCP_CHECK {                   
+        connect_timeout 5             
+        nb_get_retry 3                
+        connect_port 53               
+}
+
+    }
+ real_server 192.168.56.24  53 {
+        weight 1
+         TCP_CHECK {
+        connect_timeout 5
+        nb_get_retry 3
+        connect_port 53
+}    
+     }
+
+}
+</code></pre><blockquote>
+<p>启动keepalived服务</p>
+</blockquote>
+<pre><code>service keepalived restart
+chkconfig keepalived on
+</code></pre><blockquote>
+<p>查看配置是否生效</p>
+</blockquote>
+<pre><code>[root@LB-1 ~]# ipvsadm -Ln
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  192.168.56.100:53 rr
+UDP  192.168.56.100:53 rr
+</code></pre><h4 id="配置LB-2服务器"><a href="#配置LB-2服务器" class="headerlink" title="配置LB-2服务器"></a>配置LB-2服务器</h4><blockquote>
+<p>安装lvs和keepalived</p>
+</blockquote>
+<pre><code>#安装ipvsadm
+yum install ipvsadm* -y
+
+#安装keepalived
+yum install keepalived -y
+</code></pre><blockquote>
+<p>keepalived配置</p>
+</blockquote>
+<p>cat /etc/keepalived/keepalived.conf</p>
+<pre><code>! Configuration File for keepalived    
+
+global_defs {               
+   notification_email {    
+   617597237@qq.com   
+}
+   notification_email_from Alexandre.Cassen@firewall.loc
+   smtp_server 127.0.0.1    
+   smtp_connect_timeout 30
+   router_id LVS_2            #修改为LVS_2    
+}
+
+vrrp_instance VI_1 {   
+    state BACKUP              #修改为BACKUP
+    interface eth0     
+    virtual_router_id 50 
+    priority 50               #优先级改为50           
+    advert_int 1         
+    authentication {     
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {     
+        192.168.56.100
+    }
+}
+
+virtual_server 192.168.56.100 53 {   
+    delay_loop 1                    
+    lb_algo rr                      
+    lb_kind DR                    
+    nat_mask 255.255.255.255
+    !persistence_timeout 50         
+    protocol UDP                    
+
+    real_server 192.168.56.23 53 {    
+        weight 1                     
+        MISC_CHECK {                  
+        misc_path &quot;/usr/bin/dig www.test.org @192.168.56.23 +time=1 +tries=5 +fail &gt;/dev/null&quot;
+        misc_timeout 6                
+       } 
+
+    }
+ real_server 192.168.56.24  53 {     
+        weight 1
+        MISC_CHECK {
+        misc_path &quot;/usr/bin/dig www.test.org @192.168.56.24 +time=1 +tries=5 +fail &gt;/dev/null&quot;
+        misc_timeout 6
+       }
+    }
+}
+
+
+
+vrrp_instance VI_2 {    
+    state BACKUP         #修改为BACKUP        
+    interface eth0       
+    virtual_router_id 52 
+    priority 50         #优先级改为50
+    advert_int 1         
+    authentication {     
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {   
+        192.168.56.100
+    }
+}
+
+virtual_server 192.168.56.100 53 {   
+    delay_loop 1                      
+    lb_algo rr                       
+    lb_kind DR                        
+    nat_mask 255.255.255.255
+    !persistence_timeout 50           
+    protocol TCP                     
+
+    real_server 192.168.56.23 53 {   
+        weight 1                     
+        TCP_CHECK {                   
+        connect_timeout 5             
+        nb_get_retry 3                
+        connect_port 53               
+}
+
+    }
+ real_server 192.168.56.24  53 {
+        weight 1
+         TCP_CHECK {
+        connect_timeout 5
+        nb_get_retry 3
+        connect_port 53
+}    
+     }
+
+}
+</code></pre><blockquote>
+<p>启动keepalived服务</p>
+</blockquote>
+<pre><code>service keepalived restart
+chkconfig keepalived on
+</code></pre><blockquote>
+<p>查看配置是否生效</p>
+</blockquote>
+<pre><code>[root@LB-1 ~]# ipvsadm -Ln
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  192.168.56.100:53 rr
+UDP  192.168.56.100:53 rr
+</code></pre><h4 id="配置DNS主从"><a href="#配置DNS主从" class="headerlink" title="配置DNS主从"></a>配置DNS主从</h4><blockquote>
+<p>在DNS1和DNS2上操作</p>
+</blockquote>
+<pre><code>yum install bind-utils bind bind-devel bind-chroot -y
+
+注：
+bind-utils 组件可以运行dig命令
+bind-chroot组件可以实现的功能，假设由于DNS漏洞服务器被黑客攻击，黑客只能在DNS根目录进行破坏，而不是操作系统实际的根目录
+</code></pre><blockquote>
+<p>DNS1-主上配置</p>
+</blockquote>
+<pre><code>DNS配置文件/etc/named.conf，备份后清空源文件，自己创建
+注：安装完成后，bind DNS自有的根目录是/var/named/chroot/  ,为了安全，配置文件均可放在该目录下
+</code></pre><pre><code>配置文件：
+
+options {
+  version &quot;1.1.1&quot;;           //当请求时DNS服务器返回给客户端的bind版本，为了安全建议任意指定一个。
+  listen-on port 53 {any;};          //定义DNS监听在哪个IP的特定端口上
+  directory &quot;/var/named/chroot/etc/&quot;;         //指定DNS区域文件存放目录
+  pid-file &quot;/var/named/chroot/var/run/named/named.pid&quot;;   //指定named进程pid文件路径
+  allow-query { any; };            //定义哪些主机可以使用该DNS来解析
+  Dump-file &quot;/var/named/chroot/var/log/binddump.db&quot;;     //缓存转储位置
+  Statistics-file &quot;/var/named/chroot/var/log/named_stats&quot;;   //记录统计信息的文件
+  zone-statistics yes;  
+  //如果是yes，缺省情况下，服务器将会收集在服务器所有域的统计数据。这些统计数据可以通过使用rndc stats来访问，rndc stats命令可以将这些信息转储到statistics-file定义的文件中去。
+
+  memstatistics-file &quot;log/mem_stats&quot;;     //记录内存使用的统计信息
+  empty-zones-enable no;       //打开或者关闭空的区域,默认为开启
+  forwarders {114.114.114.114;8.8.8.8; };   //定义上游DNS
+};
+
+key &quot;rndc-key&quot; {                 
+        algorithm hmac-md5;
+        secret &quot;Eqw4hClGExUWeDkKBX/pBg==&quot;;
+};
+
+controls {
+       inet 127.0.0.1 port 953
+       allow { 127.0.0.1; } keys { &quot;rndc-key&quot;; };
+};
+#########################################################################################
+注：key的生成方式
+[root@master]# which rndc-confgen
+/usr/sbin/rndc-confgen
+[root@master]# /usr/sbin/rndc-confgen -s 127.0.0.1 -p 953  &gt;/etc/rndc.key
+此命令会在/etc目录下产生rndc.key文件，可把此文件粘贴到此处
+或者把文件放到/var/named/chroot目录下使用include加载，如下:
+include &quot;/etc/rndc.key&quot;;
+
+controls {
+        inet 127.0.0.1 port 953     
+        allow { localhost; } keys { &quot;rndc-key&quot;; };
+};
+
+注：如果命令没反应是因为服务器上没有random产生器，我们手动伪造一个文件代替/dev/random产生器
+新建一个random文件，然后随意输入一串字符，一定要长~~
+然后运行命令
+[root@master]# rndc-confgen -r random -s 127.0.0.1 -p 953 &gt;/etc/rndc.conf
+#########################################################################################
+
+logging {
+  channel warning {   
+  //记录了一些named的信息，如监听/解析记录等，当然warnning可以改为default_debug（默认）。
+    file &quot;/var/named/chroot/var/log/dns_warning&quot; versions 10 size 10m;  //日志文件路径/版本/大小
+    severity warning;     //如果warnning改为default_debug后，此处可以改为severity dynamic
+    print-category yes;   //日志中是否需要写入日志类别
+    print-severity yes;   //日志中是否需要写入消息级别
+    print-time yes;       //日志中是否需要写入时间
+  };
+  channel general_dns {     //绑定其他log channel通道，以下保持默认即可。
+    file &quot;/var/named/chroot/var/log/dns_log&quot; versions 10 size 100m;
+    severity info;    
+    print-category yes; 
+    print-severity yes;
+    print-time yes;
+  };
+  category default {
+    warning;
+  };
+  category queries {
+    general_dns;
+  };
+};
+
+include &quot;/var/named/chroot/etc/view.conf&quot;;    //加载文件，方便管理
+</code></pre><p>编辑/etc/named.conf</p>
+<pre><code>options {
+  version &quot;1.1.1&quot;;
+  listen-on port 53 {any;};
+  directory &quot;/var/named/chroot/etc/&quot;;
+  pid-file &quot;/var/named/chroot/var/run/named/named.pid&quot;;
+  allow-query { any; };
+  Dump-file &quot;/var/named/chroot/var/log/binddump.db&quot;;
+  Statistics-file &quot;/var/named/chroot/var/log/named_stats&quot;;
+  zone-statistics yes;
+  memstatistics-file &quot;log/mem_stats&quot;;
+  empty-zones-enable no;
+  forwarders {
+              114.114.114.114;
+              8.8.8.8;
+              };
+};
+
+key &quot;rndc-key&quot; {
+        algorithm hmac-md5;
+        secret &quot;iePWaBCTTwMeAC0WWUqLMA==&quot;;
+};
+
+controls {
+       inet 127.0.0.1 port 953
+               allow { 127.0.0.1; } keys { &quot;rndc-key&quot;; };
+};
+
+logging {
+  channel warning {
+    file &quot;/var/named/chroot/var/log/dns_warning&quot; versions 10 size 10m;
+    severity warning;
+    print-category yes;
+    print-severity yes;
+    print-time yes;
+  };
+  channel general_dns {
+    file &quot;/var/named/chroot/var/log/dns_log&quot; versions 10 size 100m;
+    severity info;
+    print-category yes;
+    print-severity yes;
+    print-time yes;
+  };
+  category default {
+    warning;
+  };
+  category queries {
+    general_dns;
+  };
+};
+
+include &quot;/var/named/chroot/etc/view.conf&quot;;
+</code></pre><p>编辑rndc.key文件(key来自于rndc-confgen生成的key)</p>
+<pre><code>key &quot;rndc-key&quot; {
+        algorithm hmac-md5;
+        secret &quot;iePWaBCTTwMeAC0WWUqLMA==&quot;;
+};
+</code></pre><p>查看/etc/rndc.conf文件</p>
+<pre><code>key &quot;rndc-key&quot; {
+        algorithm hmac-md5;
+        secret &quot;iePWaBCTTwMeAC0WWUqLMA==&quot;;
+};
+
+options {
+        default-key &quot;rndc-key&quot;;
+        default-server 127.0.0.1;
+        default-port 953;
+};
+</code></pre><p>编辑/var/named/chroot/etc/view.conf</p>
+<pre><code>view &quot;View&quot; {                  //配置bind视图功能
+  zone &quot;test.org&quot; {
+        type    master;     
+        file    &quot;test.org.zone&quot;;    //定义zone区域文件
+        allow-transfer {            //允许本区域传输给特定的从DNS服务器
+                192.168.56.24;      //slave IP,可以存在多个slave
+        };
+        notify  yes;  
+        also-notify {
+               192.168.56.24;
+        };
+  };
+
+  zone &quot;56.168.192.in-addr.arpa&quot; {     //定义反向zone区域文件
+        type    master;
+        file    &quot;56.168.192.zone&quot;;     
+        allow-transfer {               //允许本区域传输给特定的从DNS服务器
+                192.168.56.24;         //slave IP,可以存在多个slave
+                       };
+        notify  yes;
+        also-notify {
+                192.168.56.24;
+        };
+   };
+};
+</code></pre><pre><code>参数补充：
+(1)区域类型有type：｛hint（根）| master（主dns）| slave（辅助DNS）| forward（转发）｝
+(2)notify如果是yes（默认），当一个授权的服务器修改了一个域后，DNS NOTIFY信息被发送给列在also-notify选项中的服务器。
+</code></pre><p>编辑/var/named/chroot/etc/test.org.zone 【正向区域文件名称需与view.conf中一致】</p>
+<pre><code>$ORIGIN .
+$TTL 3600       ; 1 hour
+test.org                  IN SOA  ns1.test.org. root.test.org. (
+                                2017091101   ; serial
+                                900        ; refresh (15 minutes)
+                                600        ; retry (10 minutes)
+                                86400      ; expire (1 day)
+                                3600       ; minimum (1 hour)
+                                )
+                        NS      ns1.test.org. 
+$ORIGIN test.org.
+ns1        A       192.168.56.23         
+www        A       192.168.56.222
+w3       CNAME     www.test.org.
+mail     MX   5   192.168.56.251
+mail     MX   10   192.168.56.252
+</code></pre><p>编辑/var/named/chroot/etc/56.168.192.zone 【反向区域文件名称需与view.conf中一致】</p>
+<pre><code>$TTL 3600       ; 1 hour
+@         IN SOA  ns1.test.org. root.test.org. (
+          2017091101   ; serial
+          900        ; refresh (15 minutes)
+          600        ; retry (10 minutes)
+          86400      ; expire (1 day)
+          3600       ; minimum (1 hour)
+          )
+@      IN      NS      ns1.test.org. 
+@      IN      MX    5  mail.test.org.
+@      IN      MX    10  mail.test.org.
+222    IN      PTR     www.test.org.
+</code></pre><p>修改目录权限，并启动服务</p>
+<pre><code>修改DNS区域文件存放目录的权限
+cd /var &amp;&amp; chown -R named.named named/
+/etc/init.d/named start
+chkconfig named on
+</code></pre><p>管理DNS1</p>
+<pre><code>rndc reload  重新加载区域文件
+rndc stop   停止DNS服务
+/etc/init.d/named status  查看DNS运行状态
+</code></pre><p>DNS1测试-master节点</p>
+<pre><code>dig @192.168.56.23  www.test.org    #测试正向解析
+host 192.168.56.222 192.168.56.23   #测试反向解析
+</code></pre><blockquote>
+<p>DNS2-从上配置</p>
+</blockquote>
+<p>编辑主配置文件/etc/named.conf</p>
+<pre><code>options {
+  version &quot;1.1.1&quot;;
+  listen-on port 53 {any;};
+  directory &quot;/var/named/chroot/etc/&quot;;
+  pid-file &quot;/var/named/chroot/var/run/named/named.pid&quot;;
+  allow-query { any; };
+  Dump-file &quot;/var/named/chroot/var/log/binddump.db&quot;;
+  Statistics-file &quot;/var/named/chroot/var/log/named_stats&quot;;
+  zone-statistics yes;
+  memstatistics-file &quot;log/mem_stats&quot;;
+  empty-zones-enable no;
+  forwarders {
+              114.114.114.114;
+              8.8.8.8;
+              };
+};
+
+key &quot;rndc-key&quot; {
+        algorithm hmac-md5;
+        secret &quot;iePWaBCTTwMeAC0WWUqLMA==&quot;;
+};
+
+controls {
+       inet 127.0.0.1 port 953
+               allow { 127.0.0.1; } keys { &quot;rndc-key&quot;; };
+};
+
+logging {
+  channel warning {
+    file &quot;/var/named/chroot/var/log/dns_warning&quot; versions 10 size 10m;
+    severity warning;
+    print-category yes;
+    print-severity yes;
+    print-time yes;
+  };
+  channel general_dns {
+    file &quot;/var/named/chroot/var/log/dns_log&quot; versions 10 size 100m;
+    severity info;
+    print-category yes;
+    print-severity yes;
+    print-time yes;
+  };
+  category default {
+    warning;
+  };
+  category queries {
+    general_dns;
+  };
+};
+
+include &quot;/var/named/chroot/etc/view.conf&quot;;
+</code></pre><p>编辑/etc/rndc.key</p>
+<pre><code>key &quot;rndc-key&quot; {
+        algorithm hmac-md5;
+        secret &quot;iePWaBCTTwMeAC0WWUqLMA==&quot;;
+};
+</code></pre><p>编辑/etc/rndc.conf</p>
+<pre><code>key &quot;rndc-key&quot; {
+        algorithm hmac-md5;
+        secret &quot;iePWaBCTTwMeAC0WWUqLMA==&quot;;
+};
+
+options {
+        default-key &quot;rndc-key&quot;;
+        default-server 127.0.0.1;
+        default-port 953;
+};
+</code></pre><p>编辑/var/named/chroot/etc/view.conf</p>
+<pre><code>view &quot;SlaveView&quot; {
+        zone &quot;test.org&quot; {
+             type    slave;     //正向区域文件配置为slave模式         
+             masters { 192.168.56.23; };   //此处要指定masterIP，可以添加多个  
+             file    &quot;slave.test.org.zone&quot;;   //不需要对其创建，服务启动后，会自动同步过来
+        };
+
+        zone &quot;56.168.192.in-addr.arpa&quot; {
+        type    slave;               //反向区域文件配置为slave模式
+        masters { 192.168.56.23; };   //此处要指定masterIP，可以添加多个
+        file    &quot;slave.56.168.192.zone&quot;;     //不需要对其创建，服务启动后，会自动同步过来
+        };
+};
+</code></pre><p>启动从节点DNS</p>
+<pre><code>cd /var &amp;&amp; chown -R named.named named/
+/etc/init.d/named start
+chkconfig named on
+
+cd /var/named/chroot/etc
+ls -lh slave*
+-rw-r--r-- 1 named named 385 Sep 14 18:27 slave.56.168.192.zone
+-rw-r--r-- 1 named named 396 Sep 14 18:24 slave.test.org.zone
+</code></pre><p>从DNS2测试</p>
+<pre><code>dig @192.168.56.24  www.test.org    #测试正向解析
+host 192.168.56.222 192.168.56.24   #测试反向解析
+</code></pre><blockquote>
+<p>此时再回到LB-1和LB-2重新执行命令</p>
+</blockquote>
+<pre><code>[root@LB-1 ~]# ipvsadm -Ln
+[root@LB-2 ~]# ipvsadm -Ln
+结果均如下：
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  192.168.56.100:53 rr
+  -&gt; 192.168.56.23:53             Route   1      0          0         
+  -&gt; 192.168.56.24:53             Route   1      0          0         
+UDP  192.168.56.100:53 rr
+</code></pre><h4 id="在每台的real-server上执行脚本"><a href="#在每台的real-server上执行脚本" class="headerlink" title="在每台的real server上执行脚本"></a>在每台的real server上执行脚本</h4><p>我们定义的realserver其实是2台主从DNS,所以在主从DNS上执行如下脚本。</p>
+<pre><code>#!/bin/bash
+#description : Start Real Server
+VIP=192.168.56.100
+. /etc/rc.d/init.d/functions
+case &quot;$1&quot; in
+    start)
+        echo &quot; Start LVS  of  Real Server&quot;
+ /sbin/ifconfig lo:0 $VIP broadcast $VIP netmask 255.255.255.255 up
+        echo &quot;1&quot; &gt;/proc/sys/net/ipv4/conf/lo/arp_ignore
+        echo &quot;2&quot; &gt;/proc/sys/net/ipv4/conf/lo/arp_announce
+        echo &quot;1&quot; &gt;/proc/sys/net/ipv4/conf/all/arp_ignore
+        echo &quot;2&quot; &gt;/proc/sys/net/ipv4/conf/all/arp_announce
+        ;;
+    stop)
+        /sbin/ifconfig lo:0 down
+        echo &quot;close LVS Director server&quot;
+        echo &quot;0&quot; &gt;/proc/sys/net/ipv4/conf/lo/arp_ignore
+        echo &quot;0&quot; &gt;/proc/sys/net/ipv4/conf/lo/arp_announce
+        echo &quot;0&quot; &gt;/proc/sys/net/ipv4/conf/all/arp_ignore
+        echo &quot;0&quot; &gt;/proc/sys/net/ipv4/conf/all/arp_announce
+        ;;
+     *)
+        echo &quot;Usage: $0 {start|stop}&quot;
+        exit 1
+esac
+
+</code></pre><pre><code>注：此配置与上面的脚本功能一致，便于理解其含义
+1.  在lo上配置vip
+vim /etc/sysconfig/network-scripts/ifcfg-lo:0
+DEVICE=lo:0
+IPADDR=192.168.56.100
+NETMASK=255.255.255.255
+ONBOOT=yes
+NAME=loopback
+
+2.禁广播设置
+vim /etc/sysctl.conf  在配置文件最后进行添加
+net.ipv4.conf.lo.arp_ignore = 1  （只回答目标IP地址是来访网络接口本地地址的ARP查询请求）
+net.ipv4.conf.lo.arp_announce = 2 （忽略IP数据包的源地址并尝试选择与能该地址通信的本地址）
+net.ipv4.conf.all.arp_ignore = 1
+net.ipv4.conf.all.arp_announce = 2
+
+ifup lo:0        启用回环接口
+sysctl -p        刷新sysctl配置文件
+
+###################################################################################
+其中：
+arp_ignore:定义对目标地址为本地IP的ARP询问不同的应答模式0 
+0 - (默认值): 回应任何网络接口上对任何本地IP地址的arp查询请求 
+1 - 只回答目标IP地址是来访网络接口本地地址的ARP查询请求 
+2 -只回答目标IP地址是来访网络接口本地地址的ARP查询请求,且来访IP必须在该网络接口的子网段内 
+3 - 不回应该网络界面的arp请求，而只对设置的唯一和连接地址做出回应 
+4-7 - 保留未使用 
+8 -不回应所有（本地地址）的arp查询
+
+arp_announce:对网络接口上，本地IP地址的发出的，ARP回应，作出相应级别的限制: 确定不同程度的限制,宣布对来自本地源IP地址发出Arp请求的接口 
+0 - (默认) 在任意网络接口（eth0,eth1，lo）上的任何本地地址 
+1 -尽量避免不在该网络接口子网段的本地地址做出arp回应. 当发起ARP请求的源IP地址是被设置应该经由路由达到此网络接口的时候很有用.此时会检查来访IP是否为所有接口上的子网段内ip之一.如果改来访IP不属于各个网络接口上的子网段内,那么将采用级别2的方式来进行处理. 
+2 - 对查询目标使用最适当的本地地址.在此模式下将忽略这个IP数据包的源地址并尝试选择与能与该地址通信的本地地址.首要是选择所有的网络接口的子网中外出访问子网中包含该目标IP地址的本地地址. 如果没有合适的地址被发现,将选择当前的发送网络接口或其他的有可能接受到该ARP回应的网络接口来进行发送.
+</code></pre><p>执行脚本</p>
+<pre><code>[root@DNS1 ~]# sh realserver.sh start
+Start LVS  of  Real Server
+[root@DNS1 ~]# ip a  查看lo回环接口配置 
+
+[root@DNS2 ~]# sh realserver.sh start
+Start LVS  of  Real Server
+[root@DNS2 ~]# ip a  查看lo回环接口配置 
+</code></pre><h4 id="同内网客户端-测试"><a href="#同内网客户端-测试" class="headerlink" title="同内网客户端-测试"></a>同内网客户端-测试</h4><blockquote>
+<p>虚拟VIP-测试</p>
+</blockquote>
+<pre><code>C:\Users\mx-0123&gt;dig www.test.org @192.168.56.100
+;; ANSWER SECTION:
+www.test.org.           3600    IN      A       192.168.56.222
+;; AUTHORITY SECTION:
+test.org.               3600    IN      NS      ns1.test.org.
+;; ADDITIONAL SECTION:
+ns1.test.org.           3600    IN      A       192.168.56.23
+;; Query time: 10 msec
+;; SERVER: 192.168.56.100#53(192.168.56.100)
+;; WHEN: Fri Sep 15 16:11:32 中国标准时间 2017
+</code></pre><blockquote>
+<p>VIP抢占测试(简单粗暴)</p>
+</blockquote>
+<pre><code>1.直接shutdown LB-1 master节点
+  测试结果：
+  [root@LB-2 ~]# ip a
+  LB-2成了master,接管DNS服务，来继续看看客户端能否解析
+
+  C:\Users\mx-0123&gt; dig www.test.org @192.168.56.100 +tcp   
+  #出现如下字段说明VIP备用节点工作正常
+  ;; ANSWER SECTION:
+  www.test.org.           3600    IN      A       192.168.56.222
+
+2. 再启动LB-1后，无需任何操作，LB-1自动抢占成为了master节点，而LB-2成为了BACKUP节点，DNS解析服务也正常。
+</code></pre><h4 id="故障排查"><a href="#故障排查" class="headerlink" title="故障排查"></a>故障排查</h4><pre><code>VIP抢占过程中遇到的坑，而且是自己给自己埋的坑。不废话，直奔主题
+
+当我shutdown LB-1 master节点以后，LB-2顺利变成了master,VIP完成秒漂移. 在客户端使用dig命令竟然无法解析！！！问题是LB-1启用的时候，dig是可以解析的，所以把目光转移到了LB-2的keeplived配置上。
+dig www.test.org @192.168.56.100 
+
+难道是keepalived配置不对？仔细核对了代码配置之后，发现没有特殊异常。而且也参考这篇文章[http://www.bubuko.com/infodetail-1193942.html]进行了排查,最终没能解决问题。
+
+突然想起了dig有个参数叫做&quot;+tcp&quot;,意思是指定使用tcp协议进行DNS解析【默认使用UDP】，启动LB-1继续测试
+dig www.test.org @192.168.56.100【可以解析】 
+dig www.test.org @192.168.56.100 +tcp【可以解析】
+
+以上2条均可正常解析，那好再shutdown LB-1模拟脑裂,来测试LB-2
+dig www.test.org @192.168.56.100【不能解析】
+dig www.test.org @192.168.56.100 +tcp【可以解析】 卧槽，tcp可以解析，目标锁定，LB-2的UDP配置异常。打开LB-2的keeplived中UDP定义的地方进行挨个读，看看有没有语法错误，看到了最后有两条UDP针对real_server服务器的命令检测，如果检测可以解析，则认为DNS服务器正常，否则踢出集群。命令是“/usr/bin/dig www.test.org @192.168.56.23 +time=1 +tries=5 +fail” ,仔细看了看命令，也没啥错误啊，得，那是骡子是马拉出来溜溜吧，命令粘贴到LB-2使用命令行执行，卧槽！没安装dig，长叹了一声Fuck!赶紧安装，安装完了之后，重启keeplived，客户端再解析测试，终于OK了
+
+自己给自己埋了个炸弹！...因为LB-1和LB-2上面没有DNS，所以也每想着安装dig命令，吃一堑长一智
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-15T10:21:36.758Z" itemprop="dateUpdated">2017-09-15 18:21:36</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VRRP/">VRRP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dns/">dns</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dns主从/">dns主从</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dr/">dr</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/keepalived/">keepalived</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lvs/">lvs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集群/">集群</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高可用/">高可用</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/&title=《keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/&title=《keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务》 — Gary Wu&source=
+ keeplived+LVS+DNS三者之间的关系
+
+LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了解决LVS的单点故障
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/16/Nginx精讲/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Nginx精讲</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/14/HTTP-Web之Nginx详解/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTTP_Web之Nginx详解</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/&title=《keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/&title=《keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务》 — Gary Wu&source=
+ keeplived+LVS+DNS三者之间的关系
+
+LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了解决LVS的单点故障
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

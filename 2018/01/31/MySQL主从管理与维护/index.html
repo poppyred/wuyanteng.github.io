@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MySQL主从管理与维护 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,MySQL,主从同步,主从复制监控">
+    <meta name="description" content="上一个文章可以成功部署MySQL主从,主从同步状态如何以及relay log等等信息如何监控？ MySQL主从部署">
+<meta name="keywords" content="高级运维,MySQL,主从同步,主从复制监控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL主从管理与维护">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="上一个文章可以成功部署MySQL主从,主从同步状态如何以及relay log等等信息如何监控？ MySQL主从部署">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-31T11:18:39.382Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL主从管理与维护">
+<meta name="twitter:description" content="上一个文章可以成功部署MySQL主从,主从同步状态如何以及relay log等等信息如何监控？ MySQL主从部署">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MySQL主从管理与维护</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MySQL主从管理与维护</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-31T10:01:26.000Z" itemprop="datePublished" class="page-time">
+  2018-01-31
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-MySQL主从管理与维护"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MySQL主从管理与维护</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-31 18:01:26" datetime="2018-01-31T10:01:26.000Z"  itemprop="datePublished">2018-01-31</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>上一个文章可以成功部署MySQL主从,主从同步状态如何以及relay log等等信息如何监控？
+</code></pre><p><a href="">MySQL主从部署</a></p>
+<a id="more"></a>
+<blockquote>
+<p>如何确定MySQL主从关系？</p>
+</blockquote>
+<p>主库:</p>
+<pre><code>mysql&gt; show proccesslist;    
+#此命令可以看到哪些客户端在与主库连接，可以辅助判断从库。不代表列出的都是从库。
+</code></pre><p>从库:</p>
+<pre><code>mysql&gt; show slave status\G;   #此命令可以看到从库运行状态等等信息，下面详细说。
+</code></pre><!-- more -->
+<blockquote>
+<p>主从维护</p>
+</blockquote>
+<pre><code>mysql&gt; show slave status\G;
+
+*************************** 1. row ***************************
+ Slave_IO_State: Waiting for master to send event
+-----------------------------------------
+       Master_Host: 10.0.0.52
+       Master_User: repl
+       Master_Port: 3306
+       Connect_Retry: 60
+       Master_Log_File: mysql-bin.000007
+       Read_Master_Log_Pos: 211      
+
+以上信息来自于从库的master.info文件,列出了主库与连接端口等
+作用:
+    1.从库用来连接主库
+    2.从库会拿着Master_Log_File和Read_Master_Log_Pos, 去问主库有没有比这个新的数据,有的话就给我.
+</code></pre><pre><code>----------------------------------------------------------------- 
+ Relay_Log_File: 3307-relay-bin.000006
+  Relay_Log_Pos: 374
+  Relay_Master_Log_File: mysql-bin.000007
+
+以上信息来自于relay-log.info
+作用:    
+    1.记录了已经应用过的最后一个relay信息会被记录到此文件中
+    2.为了断点恢复
+</code></pre><pre><code>-----------------------------------------------------------------
+Slave_IO_Running: Yes
+Slave_SQL_Running: Yes
+
+从库线程状态        
+</code></pre><pre><code>-----------------------------------------------------------------
+Seconds_Behind_Master: 0
+
+从库落后主库多久
+</code></pre><pre><code>-----------------------------------------------------------------                
+Last_IO_Errno: 0
+Last_IO_Error: 
+Last_SQL_Errno: 0
+Last_SQL_Error: 
+
+线程的具体的报错代码和详细信息    
+</code></pre><pre><code>-----------------------------------------------------------------               
+SQL_Delay: 0    
+
+SQL线程延时配置                    
+</code></pre><pre><code>-----------------------------------------------------------------                    
+Slave_SQL_Running_State: Slave has read all relay log; waiting for the slave I/O thread to update it
+
+SQL线程运行状态
+</code></pre><!-- more -->
+<p>故障排查1：</p>
+<pre><code>监控主从复制状态:
+Last_IO_Error: error reconnecting to master &#39;repl@10.0.0.52:3306&#39; - retry-time: 60  retries: 1
+
+原因：
+1、主库没启动，或者宕机
+2、网络通信问题
+3、防火墙
+4、复制用户和密码、端口号、地址有问题
+5、mysql自动解析，会将连接的IP解析成主机名（skip-name-resolve）
+6、从库IO异常关闭
+7、bug
+</code></pre><p>故障排查2：</p>
+<pre><code>从库记录的已经主库已经给我传送的binlog事件的坐标，一般在繁忙的生产环境下会落后于主库（show master status）
+Master_Log_File: mysql-bin.000007
+Read_Master_Log_Pos: 729
+
+落后太远的原因：
+硬件条件有关的
+主要还是网络问题
+主库存放二进制日志的存储性能太低。
+
+主库DUMP太繁忙，一主多从环境下。
+从库IO线程太忙
+</code></pre><p>故障排查3：</p>
+<pre><code>主库update，从库迟迟的没有更新。
+
+特殊情况，日志已经传过来了，数据并没有同步
+
+跟SQL线程有很大关系：
+1、没开启SQL线程
+2、传的东西有问题（你要做的事情，我提前已经做了，不想重复做了，然后他就死了）
+3、SQL线程忙。
+4、人为控制了（delay节点、延时节点，一般生产设置为3-6小时之间，可以保证过去3-6小时之间的误操作，可以避免）。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-31T11:18:39.382Z" itemprop="dateUpdated">2018-01-31 19:18:39</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/31/MySQL主从管理与维护/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/主从同步/">主从同步</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/主从复制监控/">主从复制监控</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/&title=《MySQL主从管理与维护》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/&title=《MySQL主从管理与维护》 — Gary Wu&source=上一个文章可以成功部署MySQL主从,主从同步状态如何以及relay log等等信息如何监控？
+MySQL主从部署" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL主从管理与维护》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/03/MySQL-MHA高可用架构与实现/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">MySQL MHA高可用架构与实现</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/31/MySQL主从原理与部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL主从原理与部署</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/&title=《MySQL主从管理与维护》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/&title=《MySQL主从管理与维护》 — Gary Wu&source=上一个文章可以成功部署MySQL主从,主从同步状态如何以及relay log等等信息如何监控？
+MySQL主从部署" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL主从管理与维护》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/31/MySQL主从管理与维护/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

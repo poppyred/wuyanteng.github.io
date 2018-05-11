@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>老男孩-网络讲解 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,网络,IP划分">
+    <meta name="description" content="IP地址进制转换IP地址是十进制，系统只认二进制（8位,只用0或1来表示），所以需要学会计算  IP地址包括：网络位和主机位">
+<meta name="keywords" content="Linux基础,网络,IP划分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="老男孩-网络讲解">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="IP地址进制转换IP地址是十进制，系统只认二进制（8位,只用0或1来表示），所以需要学会计算  IP地址包括：网络位和主机位">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-02T06:55:27.524Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="老男孩-网络讲解">
+<meta name="twitter:description" content="IP地址进制转换IP地址是十进制，系统只认二进制（8位,只用0或1来表示），所以需要学会计算  IP地址包括：网络位和主机位">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">老男孩-网络讲解</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">老男孩-网络讲解</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-01T09:22:36.000Z" itemprop="datePublished" class="page-time">
+  2017-08-01
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#IP地址进制转换"><span class="post-toc-number">1.</span> <span class="post-toc-text">IP地址进制转换</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#IP别名与辅助IP配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">IP别名与辅助IP配置</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#要求回顾答出下列问题："><span class="post-toc-number">3.</span> <span class="post-toc-text">要求回顾答出下列问题：</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-老男孩-网络讲解"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">老男孩-网络讲解</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-01 17:22:36" datetime="2017-08-01T09:22:36.000Z"  itemprop="datePublished">2017-08-01</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h6 id="IP地址进制转换"><a href="#IP地址进制转换" class="headerlink" title="IP地址进制转换"></a>IP地址进制转换</h6><pre><code>IP地址是十进制，系统只认二进制（8位,只用0或1来表示），所以需要学会计算
+
+IP地址包括：网络位和主机位
+</code></pre><a id="more"></a>
+<p>特殊IP地址说明：</p>
+<pre><code>1. 主机位全为0的称为网络地址，比如:10.0.0.0   10.0.0.0就是网络地址
+2. 主机位全为1的称为广播地址，即向所有人发出消息。比如：10.0.0.0的广播地址为10.255.255.255
+</code></pre><p>一个局域网的主机个数=2的N次方-2 </p>
+<p>【N表示有多少个主机位；    “-2”-意思是去掉一个网段地址和去掉一个广播地址】</p>
+<pre><code>三个主类地址的掩码信息：
+    A类地址掩码: 255.0.0.0      /8
+    B类地址掩码：255.255.0.0    /16
+    C类地址掩码：255.255.255.0  /24
+</code></pre><p>IP地址划分-技巧</p>
+<pre><code>速算口诀：
+1    128
+11   192
+111  224
+1111 240
+11111 248
+111111 252
+1111111 254
+11111111 255
+###############################################
+例1：172.16.0.0/14 ,求子网掩码与可用主机数量
+(1)子网掩码计算：255.252.0.0 【一个255占用八位，不足8位查上面的口诀，剩余6位得出是252】
+(2)IP地址可用范围计算，使用255.255.255.255减去子网掩码得出第二个八位是3
+(3)即172.16.0.1 - 172.（16+3）.0.254. 
+   最后结果是：172.16.0.1 - 172.19.0.254 【已经减去网络地址和广播地址】
+
+例2：192.168.0.0/30
+子网掩码为：255.255.255.252
+可用IP地址范围：192.168.0.1-192.168.0.2
+
+例3；192.168.0.0/27
+子网掩码为：255.255.255.224
+可用IP地址计算：192.168.0.1 - 192.168.0.30
+
+例4：172.16.0.0/17
+子网掩码为：255.255.128.0
+可用IP地址范围：172.16.0.1 - 172.16.127.254
+</code></pre><p>网卡DNS配置问题</p>
+<pre><code>网卡配置文件 /etc/sysconfig/network-scripts/ifcfg-eth0
+
+vim /etc/sysconfig/network-scripts/ifcfg-eth0
+PEERDNS=yes        &lt;- 是否确认网卡配置文件中的DNS配置优先
+
+重启网卡：ifdown eth0 &amp;&amp; ifup eth0
+</code></pre><p>主机名修改</p>
+<pre><code>#修改配置文件
+vim /etc/sysconfig/network
+HOSTNAME=jd_web
+
+# 修改hosts文件，修改IP与域名的映射关系
+192.168.0.10     web_www.exmail.com
+</code></pre><p>查看网关信息</p>
+<pre><code>1. route -n
+2. netstat -rn
+3. ip route
+
+route更改
+#删除网关：
+[root@root ~]# route del default gw 192.168.100.2
+#添加网关
+[root@root ~]# route add default gw 192.168.100.2
+#1台服务器向访问另一个子网，如何添加路由？
+route add -net 172.16.1.0 network 255.255.255.0 gw 172.16.2.1
+注：-net 指定目的子网 gw指定通过哪个网关到达
+route add -net 172.16.1.0 network 255.255.255.0 dev tun0
+route add -net 172.16.1.0/24 dev tun0
+
+#永久添加路由
+vim /etc/sysconfig/static-routes
+any net 172.16.1.0/24 gw 172.16.1.0
+</code></pre><p>开启Linux路由转发功能</p>
+<pre><code>把路由器当做路由器进行跨网段访问
+# vim /etc/sysctl.conf
+  net.ipv4.ip_forward=1
+# sysctl -p
+</code></pre><h6 id="IP别名与辅助IP配置"><a href="#IP别名与辅助IP配置" class="headerlink" title="IP别名与辅助IP配置"></a>IP别名与辅助IP配置</h6><pre><code>(1) 不建议常用
+[root@root ~]# ifconfig eth0:0 192.168.100.101/24 up   配置别名IP，即启用虚拟IP
+ifconfig eth0:0 down  删除IP别名
+别名IP网卡重启也生效
+#编辑配置文件使其生效
+vim /etc/sysconfig/network-scripts/ifcfg-eth0:1
+
+(2)辅助IP配置【常用】
+#添加
+[root@root ~]# ip addr add 192.168.100.101/24 dev eth0
+[root@root ~]# ip addr add 192.168.100.102/24 dev eth0 label eth0:1
+#删除
+ [root@root ~]# ip addr del 192.168.100.102/24 dev eth0 label eth0:1
+ [root@root ~]# ip addr del 192.168.100.101/24 dev eth0
+注：label用来 添加辅助IP标签
+</code></pre><pre><code>Hostname取IP地址方法：
+hostname -I    列出所有网卡的IP地址
+hostname -i    
+</code></pre><pre><code>xinetd服务用来管理守护demon进程，例如：telnet 
+telnet默认安装后没有启动脚本，而xinetd的作用就是如此。
+</code></pre><pre><code>Ping命令扩展
+#共计ping 3次
+ping -c 10 baidu.com
+
+# 每次ping延迟5s 
+ping -c 3 -i 5 www.baidu.com
+
+# ping 5次不显示过程，直接给我结果
+[root@root ~]# ping -c5 -q qq.com
+
+# ping1000个包快速显示结果，无需等待
+[root@root ~]# ping -c 1000 -f www.qq.com
+</code></pre><p>统计访问服务器IP的ESTABLISHED连接数最多的IP？</p>
+<pre><code>[root@root ~]# awk -F &quot;[ :]+&quot; &#39;/EST/{print $6}&#39; netstat.log|sort|uniq -c|sort -rn -k1
+
+深入了解sort与uniq命令
+</code></pre><p>tcpdump语法格式</p>
+<pre><code>-i 指定一个网卡
+-nn 不需要将端口号转换为协议名称
+-c  指定抓包次数
+-w  保存抓包结果到指定文件
+-X  指定某个端口
+
+# 抓取53端口的数据包（待测试）
+[root@root ~]# tcpdump -i eth0 -nn -X &#39;port 53&#39; -c 10
+# 抓包后追加到指定文件
+[root@root ~]# tcpdump -i eth0 -c 10 -w /root/tcpdump.txt
+#查看tcpdump抓包文件
+[root@root ~]# tcpdump -r tcpdump.txt
+</code></pre><h6 id="要求回顾答出下列问题："><a href="#要求回顾答出下列问题：" class="headerlink" title="要求回顾答出下列问题："></a>要求回顾答出下列问题：</h6><pre><code>1. 回答TCP三次握手的过程和四次挥手的过程
+2. TCP 11种状态集的转换
+   closed --&gt;(创建socket)Listen监听状态
+3. soket五元组：协议（TCP UDP） 目标IP 目标端口  源IP 源端口
+4. ARP协议原理
+5. 传输层2种协议：TCP/UDP
+6. TCP报文结构：源端口 目标端口字段    序列号      确认号    控制位信息（syn fin ack）
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-02T06:55:27.524Z" itemprop="dateUpdated">2017-08-02 14:55:27</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/01/老男孩-网络讲解/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IP划分/">IP划分</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络/">网络</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/&title=《老男孩-网络讲解》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/&title=《老男孩-网络讲解》 — Gary Wu&source=IP地址进制转换IP地址是十进制，系统只认二进制（8位,只用0或1来表示），所以需要学会计算
+
+IP地址包括：网络位和主机位
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-网络讲解》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/01/老男孩-期中架构-Linux-路由转发-跨网段通信/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">老男孩-期中架构-Linux[路由转发]跨网段通信</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/29/期中架构-流程图/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">期中架构-流程图</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/&title=《老男孩-网络讲解》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/&title=《老男孩-网络讲解》 — Gary Wu&source=IP地址进制转换IP地址是十进制，系统只认二进制（8位,只用0或1来表示），所以需要学会计算
+
+IP地址包括：网络位和主机位
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-网络讲解》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/01/老男孩-网络讲解/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

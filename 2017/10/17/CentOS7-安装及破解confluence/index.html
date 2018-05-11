@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>CentOS7 安装及破解confluence | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,confluence,mysql二进制安装,jdk二进制安装,团队协作">
+    <meta name="description" content="confluence是什么？  简单说：它是一款卓越的团队协作软件,改变了现代团队的工作方式">
+<meta name="keywords" content="高级运维,confluence,mysql二进制安装,jdk二进制安装,团队协作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS7 安装及破解confluence">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="confluence是什么？  简单说：它是一款卓越的团队协作软件,改变了现代团队的工作方式">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-17T08:08:01.615Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS7 安装及破解confluence">
+<meta name="twitter:description" content="confluence是什么？  简单说：它是一款卓越的团队协作软件,改变了现代团队的工作方式">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">CentOS7 安装及破解confluence</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">CentOS7 安装及破解confluence</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-17T03:00:27.000Z" itemprop="datePublished" class="page-time">
+  2017-10-17
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#环境准备"><span class="post-toc-number">1.</span> <span class="post-toc-text">环境准备</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-CentOS7-安装及破解confluence"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">CentOS7 安装及破解confluence</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-17 11:00:27" datetime="2017-10-17T03:00:27.000Z"  itemprop="datePublished">2017-10-17</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>confluence是什么？</p>
+</blockquote>
+<pre><code>简单说：它是一款卓越的团队协作软件,改变了现代团队的工作方式
+</code></pre><a id="more"></a>
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><blockquote>
+<p>安装配置Java</p>
+</blockquote>
+<pre><code>官方：http://www.oracle.com/technetwork/cn/java/javase/downloads/jdk8-downloads-2133151-zhs.html
+
+(1)下载jdk-8u144-linux-x64.tar.gz二进制包
+wget http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz?AuthParam=1508210153_b10ed029a2d26362f2bc3c77cd760dc4
+
+(2)解压至/usr/local/web目录
+   mkdir /usr/local/web -p
+   tar -xf jdk-8u144-linux-x64.tar.gz 
+   mv jdk1.8.0_144 /usr/local/web/
+
+(3)配置环境变量
+JAVA_HOME=/usr/local/web/jdk1.8.0_144
+PATH=$JAVA_HOME/bin:$PATH:.
+CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:.
+export JAVA_HOME
+export PATH
+export CLASSPATH
+
+(4)查看java版本
+[root@localhost ~]# java -version
+java version &quot;1.8.0_144&quot;
+Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
+Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
+</code></pre><blockquote>
+<p>安装mysql-二进制</p>
+</blockquote>
+<pre><code>各版本下载源：http://mirrors.sohu.com/mysql/MySQL-5.6/    #不太好找的话搜索：“glibc2.5-x86_64”即可
+
+(1)下载mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz
+   http://mirrors.sohu.com/mysql/MySQL-5.6/mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz?crazycache=1
+
+(2) 添加mysql程序运行时的管理用户
+    useradd -s /sbin/nologin  -M mysql
+
+(3)将解压后的程序目录放到/usr/local/web目录，并进行软链为mysql
+   tar -zxvf mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz
+   mv mysql-5.6.35-linux-glibc2.5-x86_64 /usr/local/web/
+   cd /usr/local/web
+   ln -s mysql-5.6.35-linux-glibc2.5-x86_64 mysql
+
+(4)修改权限
+   cd mysql &amp;&amp; chown -R mysql.mysql data
+
+(5)初始化数据库
+   /usr/local/web/mysql/scripts/mysql_install_db --basedir=/usr/local/web/mysql --datadir=/usr/local/web/mysql/data --user=mysql
+
+(6)拷贝脚本文件到/etc/init.d/目录
+   cp /usr/local/web/mysql/support-files/mysql.server /etc/init.d/mysqld
+   ll /etc/init.d/mysqld
+
+(7) 修改启动脚本和mysql命令的路径（默认/usr/local/目录下）
+    sed -i &#39;s#/usr/local/mysql#/usr/local/web/mysql#g&#39; /usr/local/web/mysql/bin/mysqld_safe /etc/init.d/mysqld
+
+(8) 复制默认配置文件
+    \cp /usr/local/web/mysql/support-files/my-default.cnf /etc/my.cnf 
+
+(9) 启动mysql并配置开机自启
+    /etc/init.d/mysqld start
+    chkconfig --add mysqld
+    chkconfig mysqld on
+    chkconfig --list
+
+(10)配置mysql环境变量
+    echo &#39;export PATH=/usr/local/web/mysql/bin:$PATH&#39; &gt;&gt;/etc/profile
+    source /etc/profile
+    which mysql
+(11)设置密码
+    /usr/local/web/mysql/bin/mysqladmin -u root password &#39;123456&#39;
+    mysql -uroot -p
+
+(12)创建名为confluence的数据库并赋权
+    create database confluence default character set utf8 collate utf8_bin;
+    grant all on `confluence`.* to &#39;root&#39;@&#39;%&#39; identified by &#39;123456&#39;;
+    flush  privileges;
+</code></pre><blockquote>
+<p>下载安装confluence5.6.6</p>
+</blockquote>
+<pre><code>官方下载：https://www.atlassian.com/software/confluence/download-archives
+
+下载：atlassian-confluence-5.6.6-x64.bin
+(1)添加权限：
+   chmod 755 atlassian-confluence-5.6.6-x64.bin
+(2)执行bin来安装
+   ./atlassian-confluence-5.6.6-x64.bin
+
+  根据提示指定安装目录、端口等信息
+  Confluence 安装目录/usr/local/web/confluence/confluence
+  Confluence data目录: /usr/local/web/confluence/confluence_data
+  HTTP: 8090, Control: 8000
+
+(3)安装后的信息
+   (1)修改端口：vim /usr/local/web/confluence/confluence/conf/server.xml
+   (2)wiki 默认端口是8090  需要在防火墙开放8090端口
+</code></pre><blockquote>
+<p>破解confluence</p>
+</blockquote>
+<pre><code>(1)停止confluence服务
+   /etc/init.d/confluence stop
+
+(2)下载破解程序
+   confluence5.6.6-crack.zip   百度云：https://yun.baidu.com/s/1o88rrIU
+
+(3)删除confluence程序目录下的6个jar包
+   cd /usr/local/web/confluence/confluence/confluence/WEB-INF/lib
+
+   要删除的6个jar包名称分别为：
+           atlassian-extras-api-3.2.jar
+           atlassian-extras-common-3.2.jar
+           atlassian-extras-core-3.2.jar
+           atlassian-extras-decoder-api-3.2.jar
+           atlassian-extras-decoder-v2-3.2.jar
+           atlassian-extras-legacy-3.2.jar
+   为避免不必要的麻烦，把这6个jar文件移动到该目录新建的bak目录下
+
+(4)解压破解程序，把jar子目录里面的三个jar包，放到/usr/local/web/confluence/confluence/confluence/WEB-INF/lib目录下
+
+  cp atlassian-extras-3.2.jar /usr/local/web/confluence/confluence/confluence/WEB-INF/lib/
+
+  cp Confluence-5.6.6-language-pack-zh_CN.jar /usr/local/web/confluence/confluence/confluence/WEB-INF/lib/
+
+  cp mysql-connector-java-5.1.39-bin.jar /usr/local/web/confluence/confluence/confluence/WEB-INF/lib/
+</code></pre><blockquote>
+<p>Web配置</p>
+</blockquote>
+<pre><code>(1)Web配置
+   启动服务：/etc/init.d/confluence start
+   访问：http://server_ip:8090
+   选择“Production Installation”方式--&gt;Start setup进入输入激活码页面
+
+   好，接下来在windows上操作(前提：java环境配置好)
+   打开cmd--进入解压后的confluence5.6.6-crack目录，执行命令:java -jar confluence_keygen.jar,在弹出的窗口中输入Web页面的ServerID等信息获取License Key,最后粘贴到Web页面中。
+
+(2)选择Mysql数据库-- External Database -- Direct JDBC  -- 输入mysql账号和密码 -- Next
+
+注：如果安装的是MySQL5.7,此处会出现“InnoDB”错误，需要在/etc/my.ini文件中添加一行，然后重启mysql服务
+添加：default-storage-engine=InnoDB
+
+(3)然后选择“Empty Site”  -- Manage Users and groups within Confluence  -- 新建Web管理员账户 -- 完成
+
+用户前台页面：http://Server-IP:8090/dashboard.action
+管理员控制台：http://Server-IP:8090/admin/console.action
+</code></pre><blockquote>
+<p>故障处理</p>
+</blockquote>
+<pre><code>创建空间后发现有中文乱码，修改下mysql的配置文件即可。
+[root@localhost web2016]#vi  /etc/my.cnf
+[client]
+default-character-set=utf8
+
+[mysqld]
+character-set-server=utf8
+
+重启mysqld
+/etc/init.d/mysqld restart
+查看mysql字符集是否已经更正
+&gt; show variables like &#39;character_set%&#39;;
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-10-17T08:08:01.615Z" itemprop="dateUpdated">2017-10-17 16:08:01</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/10/17/CentOS7-安装及破解confluence/" target="_blank" rel="external">https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/confluence/">confluence</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jdk二进制安装/">jdk二进制安装</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql二进制安装/">mysql二进制安装</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/团队协作/">团队协作</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/&title=《CentOS7 安装及破解confluence》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/&title=《CentOS7 安装及破解confluence》 — Gary Wu&source=
+confluence是什么？
+
+简单说：它是一款卓越的团队协作软件,改变了现代团队的工作方式
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CentOS7 安装及破解confluence》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/18/saltstack进阶学习2/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">saltstack进阶学习2</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/16/ntp漏洞修复/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">ntp漏洞修复</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/&title=《CentOS7 安装及破解confluence》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/&title=《CentOS7 安装及破解confluence》 — Gary Wu&source=
+confluence是什么？
+
+简单说：它是一款卓越的团队协作软件,改变了现代团队的工作方式
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CentOS7 安装及破解confluence》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/10/17/CentOS7-安装及破解confluence/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

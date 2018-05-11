@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>NFS文件存储系统-部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,分布式存储,fastdfs,nfs">
+    <meta name="description" content="NFS工作流程">
+<meta name="keywords" content="高级运维,分布式存储,fastdfs,nfs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NFS文件存储系统-部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="NFS工作流程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/nfs_ys.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/NFS%E6%9C%8D%E5%8A%A1-%E7%94%A8%E6%88%B7%E6%98%A0%E5%B0%84.png">
+<meta property="og:updated_time" content="2017-08-21T01:22:22.757Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NFS文件存储系统-部署">
+<meta name="twitter:description" content="NFS工作流程">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/nfs_ys.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">NFS文件存储系统-部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">NFS文件存储系统-部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-19T02:07:15.000Z" itemprop="datePublished" class="page-time">
+  2017-08-19
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#NFS服务端部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">NFS服务端部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端配置（多个客户端可多次挂载）"><span class="post-toc-number">2.</span> <span class="post-toc-text">客户端配置（多个客户端可多次挂载）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#修改共享目录管理用户（不使用默认的nfsnobody）-实践"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">修改共享目录管理用户（不使用默认的nfsnobody）-实践</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端挂载排错思路"><span class="post-toc-number">3.</span> <span class="post-toc-text">客户端挂载排错思路</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端-系统开机自动挂载"><span class="post-toc-number">4.</span> <span class="post-toc-text">客户端-系统开机自动挂载</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端参数-扩展"><span class="post-toc-number">5.</span> <span class="post-toc-text">客户端参数-扩展</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#系统进入只读模式-修复"><span class="post-toc-number">6.</span> <span class="post-toc-text">系统进入只读模式-修复</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#扩展-使用命令共享目录"><span class="post-toc-number">7.</span> <span class="post-toc-text">扩展-使用命令共享目录</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#其他"><span class="post-toc-number">8.</span> <span class="post-toc-text">其他</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#NFS单点故障问题"><span class="post-toc-number">9.</span> <span class="post-toc-text">NFS单点故障问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#用户压缩映射-流程图"><span class="post-toc-number">10.</span> <span class="post-toc-text">用户压缩映射-流程图</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-NFS文件存储系统-部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">NFS文件存储系统-部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-19 10:07:15" datetime="2017-08-19T02:07:15.000Z"  itemprop="datePublished">2017-08-19</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>NFS工作流程</p>
+</blockquote>
+<a id="more"></a>
+<pre><code>NFS（文件存储系统）服务器启动后会随机启动N个进程并生成N个随机端口，NFS服务启动后首先会向PRC服务注册，注册后这些NFS进程和端口信息由RPC(类似房产中介)统一管理，然后NFS客户端统一使用RPC端口与NFS服务进行通信。rpc服务端口号：111
+
+服务启动：/etc/init.d/rpcbind start
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/nfs_ys.png" alt="nfs_ys" title="">
+                </div>
+                <div class="image-caption">nfs_ys</div>
+            </figure>
+<blockquote>
+<p>环境：</p>
+<p>NFS服务器：172.16.1.31</p>
+</blockquote>
+<h4 id="NFS服务端部署"><a href="#NFS服务端部署" class="headerlink" title="NFS服务端部署"></a>NFS服务端部署</h4><pre><code># 检查nfs和rpc是否安装(注：CentOS5 rpcbind软件为portmap)
+rpm -qa nfs-utils rpcbind
+yum install -y nfs-utils rpcbind
+
+#查看安装了哪些软件
+rpm -ql nfs-utils rpcbind
+</code></pre><blockquote>
+<p>启动NFS文件系统服务</p>
+</blockquote>
+<pre><code>#先启动rpc服务
+/etc/init.d/rpcbind start
+chkconfig rpcbind on
+#再启动nfs服务
+/etc/init.d/nfs start
+chkconfig nfs on
+
+#查看nfs服务注册端口信息
+[root@nfs01 ~]# rpcinfo -p localhost
+
+#新建配置文件
+cat &gt;&gt;/etc/exports&lt;&lt;EOF
+/data  172.16.1.0/24(rw,sync,all_squash)
+EOF
+
+############################################
+参数释义：
+/home/nfs/share 为共享的目录，使用绝对路径。
+192.168.1.0/24或10.10.10.1/32   允许访问的客户端主机IP
+rw：read-write，可读写；
+ro：read-only，只读；
+sync：文件直接写入硬盘；-- 同步数据
+async：文件暂存内存，再写入磁盘；数据易丢失 -- 异步同步
+no_root_squash：NFS客户端连接服务端时如果使用的是root的话，那么对服务端分享的目录来说，也拥有root权限。显然开启这项是不安全的。
+root_squash：NFS客户端连接服务端时如果使用的是root的话，那么对服务端分享的目录来说，拥有匿名用户权限，通常他将使用nobody或nfsnobody身份；
+all_squash：不论NFS客户端连接服务端时使用什么用户，对服务端分享的目录来说都是拥有nfsnobody身份用户权限；
+anonuid：指定匿名用户；
+anongid：匿名用户的GID值。
+##############################################
+
+#创建共享目录
+mkdir /data -p
+
+#检查NFS共享目录管理专用用户
+id nfsnobody
+
+#授权
+chown -R nfsnobody:nfsnobody /data
+ls -ld /data
+drwxr-xr-x 2 nfsnobody nfsnobody 4096 Aug  5 22:19 /data
+
+#重启nfs服务(只修改了NFS信息，所以无需重启rpc服务)
+/etc/init.d/nfs reload     平滑重启
+
+#排错
+[root@nfs01 data]# rpcinfo -p localhost    #检查nfs服务注册端口信息
+[root@nfs01 data]# showmount -e 172.16.1.31  #检查共享目录
+Export list for 172.16.1.31:
+/data/r 172.16.1.41/32
+/data/w 172.16.1.8/32
+
+
+[root@nfs01 data]# mount -t nfs 172.16.1.31:/data /mnt  #本地挂载测试
+[root@nfs01 data]# df -h
+</code></pre><pre><code>查看服务器进程
+[root@nfs01 mnt]# ps -ef |egrep &quot;rpc|nfs&quot;
+rpc        2847      1  0 22:12 ?        00:00:00 rpcbind
+root       2902      2  0 22:14 ?        00:00:00 [rpciod/0]
+root       2903      2  0 22:14 ?        00:00:00 [rpciod/1]
+root       2912      1  0 22:14 ?        00:00:00 rpc.mountd
+root       2919      2  0 22:14 ?        00:00:00 [nfsd4]
+root       2920      2  0 22:14 ?        00:00:00 [nfsd4_callbacks]
+root       2921      2  0 22:14 ?        00:00:00 [nfsd]
+root       2922      2  0 22:14 ?        00:00:00 [nfsd]
+root       2923      2  0 22:14 ?        00:00:00 [nfsd]
+root       2924      2  0 22:14 ?        00:00:00 [nfsd]
+root       2925      2  0 22:14 ?        00:00:00 [nfsd]
+root       2926      2  0 22:14 ?        00:00:00 [nfsd]
+root       2927      2  0 22:14 ?        00:00:00 [nfsd]
+root       2928      2  0 22:14 ?        00:00:00 [nfsd]
+root       2959      1  0 22:14 ?        00:00:00 rpc.idmapd
+root       3045      2  0 22:32 ?        00:00:00 [nfsiod]
+root       3046      2  0 22:32 ?        00:00:00 [nfsv4.0-svc]
+root       3112   2692  0 22:58 pts/0    00:00:00 egrep rpc|nfs
+</code></pre><h4 id="客户端配置（多个客户端可多次挂载）"><a href="#客户端配置（多个客户端可多次挂载）" class="headerlink" title="客户端配置（多个客户端可多次挂载）"></a>客户端配置（多个客户端可多次挂载）</h4><pre><code># 检查nfs和rpc是否安装(注：CentOS5 rpcbind软件为portmap)
+rpm -qa nfs-utils rpcbind
+yum install -y nfs-utils rpcbind
+#注：如果不安装nfs-utils软件就没有showmount命令，也没有不能正常挂载nfs。但服务无需启动！
+
+showmount -e 172.16.1.31  #查看共享
+mount -t nfs 172.16.1.31:/data /mnt  #挂载共享
+df -h  #查看
+
+#卸载共享目录
+方式1:退出共享目录
+方式2:在共享目录强制卸载
+命令：umount -lf /mnt     
+--l参数表示懒惰的卸载；-f参数表示强制卸载
+</code></pre><h6 id="修改共享目录管理用户（不使用默认的nfsnobody）-实践"><a href="#修改共享目录管理用户（不使用默认的nfsnobody）-实践" class="headerlink" title="修改共享目录管理用户（不使用默认的nfsnobody）-实践"></a>修改共享目录管理用户（不使用默认的nfsnobody）-实践</h6><pre><code>####服务端测试
+#创建指定匿名用户
+注：要求服务端与客户端的匿名用户uid和gid必须一致
+useradd -s /sbin/nologin -M www -u 888
+
+[root@nfs01 mnt]# id www
+uid=888(www) gid=888(www) groups=888(www)
+
+
+#修改配置文件
+vim /etc/exports
+/data  172.16.1.0/24(rw,sync,all_squash,anonuid=888,anongid=888)
+
+#重新授权共享目录
+chown -R www:www /data
+
+#重启nfs服务
+/etc/init.d/nfs reload
+</code></pre><pre><code>客户端-挂载测试
+mount -t nfs  172.16.1.31:/data /mnt
+cd /mnt
+touch 111.txt 
+
+[root@web01 mnt]# ls -l
+total 0
+-rw-r--r-- 1 nobody nobody 0 Aug  6 01:37 111.txt
+#查看发现文件的属主属组依然是之前的nobody，因为默认匿名用户变化时要与服务端的匿名用户uid和gid必须一致
+
+#创建用户并指定uid和gid为888
+[root@web01 mnt]# useradd -s /sbin/nologin -M www -u 888
+
+接下来是个重点了...否则不生效。。。
+
+服务端与客户端需要同时重启以下rpc服务
+/etc/init.d/rpcidmapd restart
+然后，客户端等待约2-3分钟，再次挂载，里面的文件属主属组就变为了www
+mount -t nfs 172.16.1.31:/data /mnt 
+</code></pre><h4 id="客户端挂载排错思路"><a href="#客户端挂载排错思路" class="headerlink" title="客户端挂载排错思路"></a>客户端挂载排错思路</h4><pre><code>1. 检查服务端NFS进程（房源）等信息
+   rpcinfo -p 172.16.1.31
+   如果没有注册房源信息，原因可能如下：
+   1) 服务器：nfs服务没有启动
+   2) 服务器：nfs服务与rpc服务启动顺序不正确。
+
+2. 检查服务端共享目录信息是否存在
+   showmount -e 172.16.1.31
+   如果共享目录没有，可能是nfs配置文件编写错误
+
+3. 直接进行目录挂载测试
+   mount -t nfs 172.16.1.31:/data  /mnt
+   挂载后进入挂载点创建或编辑文件测试权限
+</code></pre><h4 id="客户端-系统开机自动挂载"><a href="#客户端-系统开机自动挂载" class="headerlink" title="客户端-系统开机自动挂载"></a>客户端-系统开机自动挂载</h4><pre><code>方式1：
+echo &quot;/bin/mount -t nfs 172.16.1.31:/data  /mnt&quot; &gt;&gt;/etc/rc.local
+
+方式2：
+vim /etc/fstab
+172.16.1.31:/data/r  /data/r      nfs     defaults    0 0
+注：系统启动过程中，/etc/fstab在系统网卡启动之前被加载，所以系统启动后NFS挂载失败。
+解决方案：配合netfs服务实现/etc/fstab开机启动之后进行重新加载
+开机自启动netfs服务
+chkconfig netfs on
+</code></pre><h4 id="客户端参数-扩展"><a href="#客户端参数-扩展" class="headerlink" title="客户端参数-扩展"></a>客户端参数-扩展</h4><pre><code>mount挂载时使用以下参数：
+rsize 单位:bytes；高并发请求时，读取内存缓存可以降低磁盘IO，比如:200000bytes 200M 
+wsize 单位:bytes；高并发请求时，读取内存缓存可以降低磁盘IO
+注：具体大小由内存总量以及业务整体使用占比而定
+示例：
+[root@web01 ~]# mount -t nfs -o rsize=20000,wsize=20000 172.16.1.31:/data/w /data/w
+
+exec   文件具有可执行权限
+noexec 文件无可执行权限（推荐）
+示例：
+mount -t nfs -o noexec,rsize=20000,wsize=20000 172.16.1.31:/data/w /data/w
+</code></pre><h4 id="系统进入只读模式-修复"><a href="#系统进入只读模式-修复" class="headerlink" title="系统进入只读模式-修复"></a>系统进入只读模式-修复</h4><pre><code>remount命令
+案例：系统意外进入只读模式
+修复方案：
+在root用户下
+mount -o remount,rw  /     #重新挂载为读写模式
+remoot
+</code></pre><h4 id="扩展-使用命令共享目录"><a href="#扩展-使用命令共享目录" class="headerlink" title="扩展-使用命令共享目录"></a>扩展-使用命令共享目录</h4><pre><code>exportfs -o rw,sync  172.16.1.0/24:/data
+showmount -e localhost  #查看共享目录信息
+
+注；命令方式共享目录可以临时生效，重启服务共享则消失。
+
+##################################################
+/etc/init.d/nfs restart
+注：nfs服务器使用上述命令重启后，冷却时间需要等待90秒（无敌时间），之后客户端进行挂载后，才能进行写入操作。
+
+此文件中有指定,可以进行修改:
+vim /etc/sysconfig/nfs 
+#NFSD_V4_GRACE=90
+#NFSD_V4_LEASE=90
+#NLM_GRACE_PERIOD=90
+
+################################################
+客户端实际挂载与否，不能依据df -h，需要查看cat /proc/mounts。
+df -h没有的话，如果/proc/mounts文件中还存在挂载信息的话，就需要再多次卸载。否则再次挂载会出现“Stale file handle”的错误
+</code></pre><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><pre><code>#查看默认nfs服务端配置文件信息（如果定义了/etc/exports文件后，优先使用/etc/exports文件）
+
+[root@nfs01 ~]# cat /var/lib/nfs/etab
+
+注：在配置共享目录时，需要考虑共享目录的权限；如果存在多级目录，数据存储也会受到上级目录的权限影响。
+
+PS：
+suid命令，当一个普通用户没有权限查看root权限文件内容，给命令添加s权限后，就可以查看了。-- 不常用
+</code></pre><h4 id="NFS单点故障问题"><a href="#NFS单点故障问题" class="headerlink" title="NFS单点故障问题"></a>NFS单点故障问题</h4><pre><code>drbd+heartbeat 可以解决NFS单点故障。
+
+对于大中小网站（参考点：2000万以下的PV）可以使用NFS文件存储系统。
+</code></pre><h4 id="用户压缩映射-流程图"><a href="#用户压缩映射-流程图" class="headerlink" title="用户压缩映射-流程图"></a>用户压缩映射-流程图</h4><blockquote>
+<p>两种映射方式</p>
+<p>(1) all_squash</p>
+<p>(2) all_squash   root_squash</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/NFS%E6%9C%8D%E5%8A%A1-%E7%94%A8%E6%88%B7%E6%98%A0%E5%B0%84.png" alt="用户压缩映射" title="">
+                </div>
+                <div class="image-caption">用户压缩映射</div>
+            </figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-21T01:22:22.757Z" itemprop="dateUpdated">2017-08-21 09:22:22</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/19/NFS文件存储系统-部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fastdfs/">fastdfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nfs/">nfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式存储/">分布式存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/&title=《NFS文件存储系统-部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/&title=《NFS文件存储系统-部署》 — Gary Wu&source=
+NFS工作流程
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《NFS文件存储系统-部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/19/单用户模式下mount-o-remount-rw-用途/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">单用户模式下mount -o remount,rw / 用途</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/18/exit退出状态码的另类应用/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">exit退出状态码的另类应用</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/&title=《NFS文件存储系统-部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/&title=《NFS文件存储系统-部署》 — Gary Wu&source=
+NFS工作流程
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《NFS文件存储系统-部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/19/NFS文件存储系统-部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

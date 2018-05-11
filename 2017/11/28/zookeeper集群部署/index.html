@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>zookeeper集群部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="zookeeper,高级运维,codis">
+    <meta name="description" content="因为公司的业务发展，需要搭建codis集群（一个由国内豌豆荚开发的redis集群解决方案），但是codis集群是依赖与zookeeper集群的。所以这篇文章，我们主要介绍有关zookeeper集群的搭建。  Zookeeper介绍">
+<meta name="keywords" content="zookeeper,高级运维,codis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zookeeper集群部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="因为公司的业务发展，需要搭建codis集群（一个由国内豌豆荚开发的redis集群解决方案），但是codis集群是依赖与zookeeper集群的。所以这篇文章，我们主要介绍有关zookeeper集群的搭建。  Zookeeper介绍">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-29T07:42:34.858Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zookeeper集群部署">
+<meta name="twitter:description" content="因为公司的业务发展，需要搭建codis集群（一个由国内豌豆荚开发的redis集群解决方案），但是codis集群是依赖与zookeeper集群的。所以这篇文章，我们主要介绍有关zookeeper集群的搭建。  Zookeeper介绍">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">zookeeper集群部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">zookeeper集群部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-28T06:13:13.000Z" itemprop="datePublished" class="page-time">
+  2017-11-28
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">安装部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#集群部署"><span class="post-toc-number">2.</span> <span class="post-toc-text">集群部署</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-zookeeper集群部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">zookeeper集群部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-28 14:13:13" datetime="2017-11-28T06:13:13.000Z"  itemprop="datePublished">2017-11-28</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>因为公司的业务发展，需要搭建codis集群（一个由国内豌豆荚开发的redis集群解决方案），但是codis集群是依赖与zookeeper集群的。所以这篇文章，我们主要介绍有关zookeeper集群的搭建。
+</code></pre><blockquote>
+<p>Zookeeper介绍</p>
+</blockquote>
+<a id="more"></a>
+<pre><code>zookeeper是一个分布式的开源框架，它能很好的管理集群，而且提供协调分布式应用的基本服务。
+
+它向外部应用暴露一组通用服务——分布式同步（Distributed Synchronization）、命名服务（Naming Service）、集群维护（Group Maintenance）等，简化分布式应用协调及其管理的难度，提供高性能的分布式服务。
+
+zookeeper本身可以以standalone模式（单节点状态）安装运行，不过它的长处在于通过分布式zookeeper集群（一个leader，多个follower），基于一定的策略来保证zookeeper集群的稳定性和可用性，从而实现分布式应用的可靠性。
+</code></pre><blockquote>
+<p>zookeeper集群节点个数</p>
+</blockquote>
+<pre><code>一个zookeeper集群需要运行几个zookeeper节点呢？
+
+zookeeper节点部署的越多，服务的可靠性也就越高。当然建议最好是部署奇数个，偶数个不是不可以。但是zookeeper集群是以宕机个数过半才会让整个集群宕机的，所以奇数个集群更佳。
+
+你需要给每个zookeeper 1G左右的内存，如果可能的话，最好有独立的磁盘，因为独立磁盘可以确保zookeeper是高性能的。如果你的集群负载很重，不要把zookeeper和RegionServer运行在同一台机器上面，就像DataNodes和TaskTrackers一样。
+</code></pre><!-- more -->
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>OS: CentOS7 
+数量: 3台
+</code></pre><blockquote>
+<p>安装jdk</p>
+</blockquote>
+<pre><code>yum search jdk |grep openjdk
+yum install -y java-1.6.0-openjdk.x86_64
+java -version     #查看java版本
+</code></pre><blockquote>
+<p>安装zookeeper</p>
+</blockquote>
+<pre><code>下载最新稳定版zookeeper
+wget https://archive.apache.org/dist/zookeeper/stable/zookeeper-3.4.10.tar.gz
+
+解压
+tar -xf zookeeper-3.4.10.tar.gz -C /usr/local/
+cd /usr/local/
+mv zookeeper-3.4.10 zookeeper
+useradd zookeeper -s /sbin/nologin -M
+chown -R zookeeper:zookeeper zookeeper
+cd zookeeper
+cp conf/zoo_sample.cfg conf/zoo.cfg
+</code></pre><pre><code>配置zookeeper环境变量
+tail -1 /etc/profile
+export PATH=$PATH:/usr/local/zookeeper/bin
+
+source /etc/profile
+env |grep zookeeper
+</code></pre><blockquote>
+<p>单机启动zookeeper测试</p>
+</blockquote>
+<pre><code>在任意一台服务器上启动zookeeper
+zkServer.sh start       #启动zookeeper
+ss -lntup |grep 2181    #查看端口
+cat ./zookeeper.out     #查看日志
+
+[root@localhost ~]# zkServer.sh status
+ZooKeeper JMX enabled by default
+Using config: /usr/local/zookeeper/bin/../conf/zoo.cfg
+Mode: standalone
+可以很明显的看到zookeeper监听的是TCP的2181端口，是以standalone单机模式运行的，而且通过zookeeper日志也可以看到目前zookeeper是正常运行的。
+
+zkServer.sh stop  #停止单机模式zookeeper服务
+</code></pre><!-- more -->
+<h4 id="集群部署"><a href="#集群部署" class="headerlink" title="集群部署"></a>集群部署</h4><pre><code>zookeeper搭建完毕后，我们现在来配置zookeeper集群。
+
+注意：在搭建zookeeper集群时，一定要停止已经启动的zookeeper。
+</code></pre><blockquote>
+<p>修改zookeeper配置文件</p>
+</blockquote>
+<pre><code>创建日志和数据存放目录并授权
+[root@localhost conf]# mkdir /var/log/zookeeper -p
+[root@localhost conf]# chown -R zookeeper:zookeeper /var/log/zookeeper
+[root@localhost zookeeper]# mkdir /usr/local/zookeeper/data -p
+[root@localhost zookeeper]# chown -R zookeeper.zookeeper /usr/local/zookeeper/data
+
+cd /usr/local/zookeeper/conf/
+编辑配置文件zoo.cfg
+[root@localhost conf]# egrep -v &quot;^#|^$&quot; zoo.cfg 
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/usr/local/zookeeper/data
+clientPort=2181
+dataLogDir=/var/log/zookeeper
+server.1= 10.0.10.57:2888:3888
+server.2= 10.0.10.58:2888:3888
+server.3= 10.0.10.59:2888:3888
+</code></pre><pre><code>配置文件-参数说明:
+
+tickTime这个时间是作为zookeeper服务器之间或客户端与服务器之间维持心跳的时间间隔,也就是说每个tickTime时间就会发送一个心跳。
+
+initLimit这个配置项是用来配置zookeeper接受客户端（这里所说的客户端不是用户连接zookeeper服务器的客户端,而是zookeeper服务器集群中连接到leader的follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。
+
+当已经超过10个心跳的时间（也就是tickTime）长度后 zookeeper 服务器还没有收到客户端的返回信息,那么表明这个客户端连接失败。总的时间长度就是 10*2000=20秒。
+
+syncLimit这个配置项标识leader与follower之间发送消息,请求和应答时间长度,最长不能超过多少个tickTime的时间长度,总的时间长度就是5*2000=10秒。
+
+dataDir顾名思义就是zookeeper保存数据的目录,默认情况下zookeeper将写数据的日志文件也保存在这个目录里；
+
+clientPort这个端口就是客户端连接Zookeeper服务器的端口,Zookeeper会监听这个端口接受客户端的访问请求；
+
+server.A=B:C:D中的A是一个数字,表示这个是第几号服务器,B是这个服务器的IP地址，C第一个端口用来集群成员的信息交换,表示这个服务器与集群中的leader服务器交换信息的端口，D是在leader挂掉时专门用来进行选举leader所用的端口。
+</code></pre><blockquote>
+<p>创建ServerID标识</p>
+</blockquote>
+<pre><code>注：zookeeper集群模式下还要配置一个myid文件,这个文件需要放在dataDir目录下。
+
+(1)在10.0.10.57服务器上创建myid文件,并设置值为1,同时需要与zoo.cfg文件里面的server.1对应
+   echo &quot;1&quot; &gt; /usr/local/zookeeper/data/myid
+
+(2)在10.0.10.58服务器上创建myid文件,并设置值为2,同时需要与zoo.cfg文件里面的server.2对应
+   echo &quot;2&quot; &gt; /usr/local/zookeeper/data/myid
+
+(3)在10.0.10.59服务器上创建myid文件,并设置值为3,同时需要与zoo.cfg文件里面的server.3对应
+   echo &quot;3&quot; &gt; /usr/local/zookeeper/data/myid   
+</code></pre><blockquote>
+<p>启动并查看zookeeper集群</p>
+</blockquote>
+<pre><code>分别启动三台zookeeper服务器服务
+zkServer.sh start
+
+在任意一台查看zookeeper集群服务状态(注：需要所有成员服务器均启动服务后才能查看，否则会报错)
+zkServer.sh status
+</code></pre><pre><code>IP地址: 10.0.10.57/24
+[root@localhost ~]# zkServer.sh status
+ZooKeeper JMX enabled by default
+Using config: /usr/local/zookeeper/bin/../conf/zoo.cfg
+Mode: follower
+
+IP地址: 10.0.10.58/24
+[root@localhost ~]# zkServer.sh status
+ZooKeeper JMX enabled by default
+Using config: /usr/local/zookeeper/bin/../conf/zoo.cfg
+Mode: leader
+
+IP地址: 10.0.10.59/24
+[root@localhost ~]# zkServer.sh status
+ZooKeeper JMX enabled by default
+Using config: /usr/local/zookeeper/bin/../conf/zoo.cfg
+Mode: follower
+
+出现以上信息说明：zookeeper集群已经成功部署。
+</code></pre><blockquote>
+<p>连接zookeeper集群</p>
+</blockquote>
+<pre><code>对于客户端来说，zookeeper集群是一个整体，连接到zookeeper集群实际上感觉在独享整个集群的服务，所以，你可以在任何一个结点上建立到服务集群的连接。例如：
+
+在其中10.0.10.57节点使用zkCli.sh命令连接zookeeper服务器10.0.10.59:2181,如下
+[root@localhost ~]# zkCli.sh -server 10.0.10.59:2181
+Connecting to 10.0.10.59:2181
+2017-11-28 02:12:42,232 [myid:] - INFO  [main:Environment@100] - Client environment:zookeeper.version=3.4.10-39d3a4f269333c922ed3db283be479f9deacaa0f, built on 03/23/2017 10:13 GMT
+2017-11-28 02:12:42,238 [myid:] - INFO  [main:Environment@100] - Client environment:host.name=localhost
+
+WatchedEvent state:SyncConnected type:None path:null
+[zk: 10.0.10.59:2181(CONNECTED) 0] 
+[zk: 10.0.10.59:2181(CONNECTED) 0] ls /            
+[zookeeper]
+[zk: 10.0.10.59:2181(CONNECTED) 1] 
+[zk: 10.0.10.59:2181(CONNECTED) 1]
+
+到此有关zookeeper集群搭建就完全结束。
+</code></pre><blockquote>
+<p>开机自启</p>
+</blockquote>
+<p>脚本如下：</p>
+<pre><code>#!/bin/bash  
+#chkconfig:2345 20 90  
+#description:zookeeper  
+#processname:zookeeper
+case $1 in  
+        start) /usr/local/zookeeper/bin/zkServer.sh start;;  
+        stop) /usr/local/zookeeper/bin/zkServer.sh stop;;  
+        status) /usr/local/zookeeper/bin/zkServer.sh status;;  
+        restart) /usr/local/zookeeper/bin/zkServer.sh restart;;  
+        *) echo &quot;require start|stop|status|restart&quot; ;;  
+esac
+</code></pre><p>chkconfig  –add  zookeeper &amp;&amp; chkconfig –list |grep zookeeper</p>
+<p>参考： <a href="https://www.ilanni.com/?p=11393" target="_blank" rel="noopener">烂泥行天下</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-29T07:42:34.858Z" itemprop="dateUpdated">2017-11-29 15:42:34</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/28/zookeeper集群部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/codis/">codis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/&title=《zookeeper集群部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/&title=《zookeeper集群部署》 — Gary Wu&source=因为公司的业务发展，需要搭建codis集群（一个由国内豌豆荚开发的redis集群解决方案），但是codis集群是依赖与zookeeper集群的。所以这篇文..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《zookeeper集群部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/28/Codis3.2集群部署/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Codis3.2.0集群部署</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/27/Docker安装-CentOS7/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Docker安装-CentOS7</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/&title=《zookeeper集群部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/&title=《zookeeper集群部署》 — Gary Wu&source=因为公司的业务发展，需要搭建codis集群（一个由国内豌豆荚开发的redis集群解决方案），但是codis集群是依赖与zookeeper集群的。所以这篇文..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《zookeeper集群部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/28/zookeeper集群部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

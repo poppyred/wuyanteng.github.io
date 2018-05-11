@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Nginx精讲 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,apache,nginx,curl,htpasswd,日志切割">
+    <meta name="description" content="nginx官方文档  http://nginx.org/en/docs/">
+<meta name="keywords" content="高级运维,apache,nginx,curl,htpasswd,日志切割">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx精讲">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/16/Nginx精讲/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="nginx官方文档  http://nginx.org/en/docs/">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/nginx_status.png">
+<meta property="og:updated_time" content="2017-09-16T09:42:01.728Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx精讲">
+<meta name="twitter:description" content="nginx官方文档  http://nginx.org/en/docs/">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/nginx_status.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Nginx精讲</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Nginx精讲</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-16T02:03:50.000Z" itemprop="datePublished" class="page-time">
+  2017-09-16
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-Nginx精讲"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Nginx精讲</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-16 10:03:50" datetime="2017-09-16T02:03:50.000Z"  itemprop="datePublished">2017-09-16</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>nginx官方文档</p>
+</blockquote>
+<pre><code>http://nginx.org/en/docs/
+</code></pre><a id="more"></a>
+<blockquote>
+<p>基于域名的虚拟主机</p>
+</blockquote>
+<pre><code>[root@web01 conf]# cat nginx.conf
+worker_processes  3;
+events {
+    worker_connections  1024;
+}
+http {            #注：nginx server区块需要放在http标签内
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen       80;
+        server_name  www.etiantian.org;
+        location / {
+            root   html/www;
+            index  index.html index.htm;
+        }
+   } 
+    server {
+        listen       80;
+        server_name  blog.etiantian.org;
+        location / {
+            root   html/blog;
+            index  index.html index.htm;
+        }
+   } 
+    server {
+        listen       80;
+        server_name  bbs.etiantian.org;
+        location / {
+            root   html/bbs;
+            index  index.html index.htm;
+        }
+   } 
+}
+
+注：基于域名的配置虚拟主机，当输入IP地址访问的时候，默认加载展现的是配置中第一个配置。但如果使用了include加载目录下独立文件，默认显示的是该目录中ls -l结果中的第一个文件html结果。
+</code></pre><p>基于端口虚拟主机</p>
+<pre><code>[root@web01 conf]# cat nginx.conf
+worker_processes  3;
+events {
+    worker_connections  1024;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen       80;
+        server_name  www.etiantian.org;
+        location / {
+            root   html/www;
+            index  index.html index.htm;
+        }
+   } 
+    server {
+        listen       81;
+        server_name  blog.etiantian.org;
+        location / {
+            root   html/blog;
+            index  index.html index.htm;
+        }
+   } 
+    server {
+        listen       80;
+        server_name  bbs.etiantian.org;
+        location / {
+            root   html/bbs;
+            index  index.html index.htm;
+        }
+   } 
+}
+
+注：当基于域名和基于端口同时存在时，配置后测试会出现结果混乱。这时候nginx与OSI7层模型有直接关联，层层筛选，网络层（关注的是IP地址）首先被匹配，然后传输层（关注的是端口）被匹配，最后应用层（关注的是host域名，即定义的server_name）被匹配。当所有匹配没有的情况下，默认会显示第一个配置。所以本例中,当访问blog.etiantian.org的时候，展示的是www.etiantian.org的内容。
+</code></pre><p>基于IP虚拟主机</p>
+<pre><code>在nginx配置文件中，设计到IP信息的修改，都需要重启Nginx服务（不能使用reload），才能生效。
+</code></pre><pre><code>[root@web01 conf]# cat nginx.conf
+worker_processes  3;
+events {
+    worker_connections  1024;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen      10.0.0.8:80;
+        server_name  www.etiantian.org;
+        location / {
+            root   html/www;
+            index  index.html index.htm;
+        }
+   } 
+}
+</code></pre><blockquote>
+<p>状态码</p>
+</blockquote>
+<pre><code>HTTP 304: Not Modified   这是因为客户端（浏览器）有缓存
+304状态码再现：第一次访问 200,按F5刷新就会出现304状态码
+</code></pre><blockquote>
+<p>Nginx别名</p>
+</blockquote>
+<pre><code>[root@web01 conf]# cat nginx.conf
+worker_processes  3;
+events {
+    worker_connections  1024;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen       80;
+        server_name  www.etiantian.org t.org;  #别名功能配置-注：需提前完成域名解析
+        location / {
+            root   html/www;
+            index  index.html index.htm;
+        }
+  }      
+</code></pre><blockquote>
+<p>Nginx状态模块功能</p>
+</blockquote>
+<pre><code>1.查看已安装模块
+nginx -V
+
+2.状态页配置
+server{
+    listen  80;
+    server_name  status.etiantian.org;
+    location / {
+      stub_status on;
+      access_log   off;
+    }
+  }
+
+3. web_nginx状态页-参数说明
+   Active connections:44  活动连接数-当前有多少用户在访问
+   accepts                接收客户端连接的总数量
+   handled                处理连接的总数量
+   requests               客户端请求的总数(不代表已经建立连接)
+   reading                nginx当前有多少个请求报文
+   Writing                nginx当前响应客户端的报文
+   waiting                内存中等待异步处理数量
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/nginx_status.png" alt="nginx_status" title="">
+                </div>
+                <div class="image-caption">nginx_status</div>
+            </figure>
+<blockquote>
+<p>nginx日志文件生成</p>
+</blockquote>
+<pre><code>错误日志-配置（放在woker区块）
+[root@web01 conf]# cat nginx.conf
+worker_processes  3;
+   error_log logs/error.log error;
+
+events {
+    worker_connections  1024;
+}
+</code></pre><pre><code>访问日志-配置（放到http区块）
+log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;
+                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;
+                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;
+
+access_log  /var/log/nginx/access.log  main;
+
+注释：
+$remote_addr 客户端IP地址信息
+$remote_user 客户端的(基础认证时)用户信息
+[$time_local]  用户访问的时间
+&quot;$request&quot;  HTTP请求报文中的请求行的信息(HTTP协议版本等)
+$status     服务端返回的状态码信息
+$body_bytes_sent  服务端返回给客户端所请求的资源大小信息
+&quot;$http_referer&quot;   记录推荐链接过来的服务器地址信息
+&quot;$http_user_agent&quot; 客户端访问网站的方式-使用浏览器的类型
+&quot;$http_x_forwarded_for&quot; 
+</code></pre><blockquote>
+<p>脚本-实现日志切割</p>
+</blockquote>
+<pre><code>[root@web01 ~]# vim log_cut.sh
+#!/bin/bash
+/bin/mv /application/nginx/logs/access.log /application/nginx/logs/access_$(date +%F).log
+/application/nginx/sbin/nginx -s reload
+
+思路：
+1. 重命名access.log文件
+2. reload nginx服务，重新生成access.log文件
+3. 在脚本中添加判断access.log文件大小，比如达到2G就切割
+4. 在crontab中定时执行
+</code></pre><p>另外也可以使用logrotate来实现日志切割，参考<a href="https://wuyanteng.github.io/2017/06/07/logrotate%E6%97%A5%E5%BF%97%E7%AE%A1%E5%AE%B6/">logrotate使用</a></p>
+<blockquote>
+<p>nginx的location模块</p>
+</blockquote>
+<p>根据用户请求的URI来展示不同的应用内容</p>
+<pre><code>企业需求解决
+01. 搭建好一台nginx的web服务器。配置好内网卡地址与外网卡地址
+02. web服务的网站域名为www.etiantian.org，站点目录为html/www
+03. 要求内网用户可以访问网站http://www.etiantian.org/AV/ 
+04. 要求外网用户禁止访问网站http://www.etiantian.org/AV/ 
+
+解决方案：
+第1点: 定位资源信息  
+uri== /AV
+
+
+第二点：进行策略控制
+allow
+deny
+
+第三点：编辑配置文件
+[root@web01 www]# cat /application/nginx/conf/extra/www.conf 
+    server {
+        listen       80;
+        server_name  www.etiantian.org;
+        location / {
+            root   html/www;
+            index  index.html index.htm;
+        }
+        location /AV/ {
+            root   html/www;
+            index  index.html index.htm;
+            allow  172.16.1.0/24;
+            deny   all;
+        }
+   } 
+
+
+创建测试资源信息
+cd /application/nginx/html/www/
+mkdir AV &amp;&amp; ll
+echo oldboy_AV &gt;AV/oldboy.html
+
+进行客户端测试
+[root@nfs01 ~]# curl 10.0.0.8/AV/oldboy.html    #外网测试
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;403 Forbidden&lt;/title&gt;&lt;/head&gt;
+&lt;body bgcolor=&quot;white&quot;&gt;
+&lt;/html&gt;
+[root@nfs01 ~]# curl 172.16.1.8/AV/oldboy.html  #内网测试
+oldboy_AV
+</code></pre><blockquote>
+<p>localtion格式</p>
+</blockquote>
+<p>localtion        [=|~|~*|^~|@]              uri                                {…}</p>
+<p>指令                  匹配标识                 匹配的网站         匹配URI后要执行的配置段</p>
+<pre><code>&quot;=&quot;  优先匹配
+&quot;^~&quot; 匹配常规字符串
+&quot;~&quot;  匹配大小写
+&quot;~*&quot; 不区分大小写匹配
+</code></pre><pre><code>[root@web01 extra]# vim www.conf
+   server {
+        listen       80; 
+        server_name  www.etiantian.org etiantian.org;
+        root   html/www;
+        location / {
+           return 401; 
+        }
+        location = / {
+            return 402;
+        }
+        location /documents/ {
+            return 403;
+        }
+        location ^~ /images/ {
+            return 404;
+        }
+        location ~* \.（gif|jpg|jpeg）$ {
+                    return 500;
+        }
+        access_log logs/access_www.log main;
+    }
+</code></pre><pre><code>测试结果：
+[root@web01 log]# curl -I -s -w &quot;%{http_code}\n&quot; -o /dev/null  www.etiantian.org
+402
+[root@web01 log]# curl -I -s -w &quot;%{http_code}\n&quot; -o /dev/null  www.etiantian.org/index.html
+401
+[root@web01 log]# curl -I -s -w &quot;%{http_code}\n&quot; -o /dev/null  www.etiantian.org/documents/
+403
+[root@web01 log]# curl -I -s -w &quot;%{http_code}\n&quot; -o /dev/null  www.etiantian.org/images/1.jpg
+404
+[root@web01 log]# curl -I -s -w &quot;%{http_code}\n&quot; -o /dev/null  www.etiantian.org/1.jpg
+500
+</code></pre><blockquote>
+<p>nginx的rewirte重写模块（放在server区块）</p>
+</blockquote>
+<pre><code>包含&amp;符号的URI称为动态资源，其他叫做静态资源
+
+rewrite模块两个功能:
+1.实现网站地址信息跳转
+2.实现伪静态
+</code></pre><p>方法1: 通过if和rewrite结合来实现301跳转-避免无限跳转</p>
+<pre><code>    server {
+        listen       80;
+        server_name  www.etiantian.org t.org;
+        if ($host ~* &quot;^etiantian.org$&quot;) {
+           rewrite ^/(.*) http://www.etiantian.org/$1 permanent;
+        }
+        location / {
+            root   html/www;
+            index  index.html index.htm;
+        }
+   }
+
+逻辑：当客户端通过域名访问etiantian.org的时候，通过网络层找到了这台主机，然后通过传输层找到了80端口，最后通过应用层没有匹配到etiantian.org。此时，进入了if区块，if正则判断将etiantian.org替换成了http://www.etiantian.org。再次使用http://www.etiantian.org重新请求,通过网络层、传输层和应用层，匹配到了之后,再往下走匹配到了首页文件。
+</code></pre><p>方法2：</p>
+<pre><code>添加了一个server标签，在www.etiantian.org标签之上
+server {                   
+      server_name etiantian.org;
+      rewrite ^/(.*) http://www.etiantian.org/$1 permanent;
+       }
+</code></pre><p>测试</p>
+<pre><code>测试
+curl -Lv etiantian.org    可通过此命令查看rewrite详细过程
+curl -v etiantian.org
+</code></pre><blockquote>
+<p>nginx认证(location区块)</p>
+</blockquote>
+<pre><code>①. 修改nginx的相关配置文件
+    vim extra/www.conf
+    location / {
+            root   html/www;
+            index  index.html index.htm;
+            auth_basic           &quot;oldboy training&quot;;
+            auth_basic_user_file   /application/nginx/conf/htpasswd;
+     }
+
+②. 创建密码认证文件并进行授权
+    yum install httpd-tools -y
+    htpasswd -bc /application/nginx/conf/htpasswd oldboy 123456
+
+③. 修改权限
+   chmod 400 /application/nginx/conf/htpasswd     
+   chown -R www.www /application/nginx/conf/htpasswd   
+
+ htpasswd命令-参数
+-c  创建一个新的密码文件
+-b  采用免交互的方式输入用户的密码信息
+-m  强制使用md5加密
+-D  删除web认证用户
+</code></pre><p>测试</p>
+<pre><code>[root@web01 log]# curl www.etiantian.org
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;401 Authorization Required&lt;/title&gt;&lt;/head&gt;
+&lt;body bgcolor=&quot;white&quot;&gt;
+&lt;center&gt;&lt;h1&gt;401 Authorization Required&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.10.3&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+[root@web01 log]# curl -u oldboy www.etiantian.org
+Enter host password for user &#39;oldboy&#39;:
+10.0.0.8 www
+[root@web01 log]# curl -u oldboy:123456 www.etiantian.org
+10.0.0.8 www
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-16T09:42:01.728Z" itemprop="dateUpdated">2017-09-16 17:42:01</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/16/Nginx精讲/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/16/Nginx精讲/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/apache/">apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/htpasswd/">htpasswd</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日志切割/">日志切割</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/16/Nginx精讲/&title=《Nginx精讲》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/16/Nginx精讲/&title=《Nginx精讲》 — Gary Wu&source=
+nginx官方文档
+
+http://nginx.org/en/docs/
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/16/Nginx精讲/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Nginx精讲》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/16/Nginx精讲/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/16/Nginx精讲/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/16/LNMP架构部署/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">LNMP架构-部署与配置</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/16/Nginx精讲/&title=《Nginx精讲》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/16/Nginx精讲/&title=《Nginx精讲》 — Gary Wu&source=
+nginx官方文档
+
+http://nginx.org/en/docs/
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/16/Nginx精讲/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Nginx精讲》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/16/Nginx精讲/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/16/Nginx精讲/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/16/Nginx精讲/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>通过Logstash收集Tomcat日志 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,ELK,elasticsearch,kibana,Tomcat,Logstash,Java">
+    <meta name="description" content="基础环境配置   配置Logstash  #安装 rpm -ivh logstash-5.6.5.rpm   #配置软链 ln -s /etc/logstash /usr/share/logstash/config  #配置 vim /etc/logstash/logstash.yml  path.config: /usr/share/logstash/config/conf.d     #修改">
+<meta name="keywords" content="高级运维,ELK,elasticsearch,kibana,Tomcat,Logstash,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过Logstash收集Tomcat日志">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="基础环境配置   配置Logstash  #安装 rpm -ivh logstash-5.6.5.rpm   #配置软链 ln -s /etc/logstash /usr/share/logstash/config  #配置 vim /etc/logstash/logstash.yml  path.config: /usr/share/logstash/config/conf.d     #修改">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Tomcat-web-http.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/json%E9%AA%8C%E8%AF%81.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Tomcat%E6%97%A5%E5%BF%97%E7%B4%A2%E5%BC%95.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Kibana_message_access_log.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_tomcat_access_log.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_discover_tomcat.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana1000tomcat.png">
+<meta property="og:updated_time" content="2017-12-16T04:03:06.990Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过Logstash收集Tomcat日志">
+<meta name="twitter:description" content="基础环境配置   配置Logstash  #安装 rpm -ivh logstash-5.6.5.rpm   #配置软链 ln -s /etc/logstash /usr/share/logstash/config  #配置 vim /etc/logstash/logstash.yml  path.config: /usr/share/logstash/config/conf.d     #修改">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Tomcat-web-http.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">通过Logstash收集Tomcat日志</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">通过Logstash收集Tomcat日志</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-13T13:06:10.000Z" itemprop="datePublished" class="page-time">
+  2017-12-13
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#再Tomcat服务器上收集Tomcat日志"><span class="post-toc-number">1.</span> <span class="post-toc-text">再Tomcat服务器上收集Tomcat日志</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-通过Logstash收集Tomcat日志"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">通过Logstash收集Tomcat日志</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-13 21:06:10" datetime="2017-12-13T13:06:10.000Z"  itemprop="datePublished">2017-12-13</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>基础环境配置</p>
+</blockquote>
+<ul>
+<li>配置Logstash</li>
+</ul>
+<pre><code>#安装
+rpm -ivh logstash-5.6.5.rpm 
+
+#配置软链
+ln -s /etc/logstash /usr/share/logstash/config
+
+#配置
+vim /etc/logstash/logstash.yml 
+path.config: /usr/share/logstash/config/conf.d     #修改path.config到这个目录
+
+
+#启动
+systemctl start logstash
+systemctl status logstash
+systemctl enable logstash
+
+#软链启动命令
+ln -s /usr/share/logstash/bin/logstash  /sbin  
+</code></pre><a id="more"></a>
+<h4 id="再Tomcat服务器上收集Tomcat日志"><a href="#再Tomcat服务器上收集Tomcat日志" class="headerlink" title="再Tomcat服务器上收集Tomcat日志"></a>再Tomcat服务器上收集Tomcat日志</h4><ul>
+<li>配置java环境并部署Tomcat</li>
+</ul>
+<pre><code>#安装jdk
+yum install -y java-1.8.0*
+java -version
+
+
+#下载部署Tomcat
+cd /usr/local/src 
+wget https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.38/bin/apache-tomcat-8.0.38.tar.gz
+tar xvf apache-tomcat-8.0.38.tar.gz
+ln -sv /usr/local/src/apache-tomcat-8.0.38 /usr/local/tomcat
+
+#配置启动
+cd /usr/local/tomcat/webapps/
+mkdir /usr/local/tomcat/webapps/webdir
+echo &quot;Hello,Tomcat&quot; &gt; /usr/local/tomcat/webapps/webdir/index.html
+../bin/catalina.sh start &amp;&amp; ss -lntup | grep 8080
+</code></pre><!-- more -->
+<ul>
+<li>确认Tomcat Web正常访问</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Tomcat-web-http.png" alt="Tomcat-web-http" title="">
+                </div>
+                <div class="image-caption">Tomcat-web-http</div>
+            </figure>
+<!-- more -->
+<blockquote>
+<p>Tomcat日志格式转成json格式</p>
+</blockquote>
+<pre><code>vim /usr/local/tomcat/conf/server.xml
+搜索“Valve”字段，删除并添加如下：
+</code></pre><pre><code>        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot;
+directory=&quot;logs&quot;
+        prefix=&quot;tomcat_access_log&quot; suffix=&quot;.log&quot;
+        pattern=&quot;{&amp;quot;clientip&amp;quot;:&amp;quot;%h&amp;quot;,&amp;quot;ClientUser&amp;quot;:&amp;quot;%l&amp;quot;,&amp;quot;authenticated&amp;quot;:&amp;quot;%u&amp;quot;,&amp;quot;AccessTime&amp;quot;:&amp;quot;%t&amp;quot;,&amp;quot;method&amp;quot;:&amp;quot;%r&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;SendBytes&amp;quot;:&amp;quot;%b&amp;quot;,&amp;quot;Query?string&amp;quot;:&amp;quot;%q&amp;quot;,&amp;quot;partner&amp;quot;:&amp;quot;%{Referer}i&amp;quot;,&amp;quot;AgentVersion&amp;quot;:&amp;quot;%{User-Agent}i&amp;quot;}&quot;/&gt;
+</code></pre><pre><code>./bin/catalina.sh stop   #停止Tomcat
+cd /usr/local/tomcat/ &amp;&amp; rm -rf logs/*   #清除原日志
+./bin/catalina.sh start  #启动并访问Tomcat页面
+http://10.0.10.24:8080/webdir/   #web访问
+</code></pre><ul>
+<li>查看新的日志文件</li>
+</ul>
+<pre><code>[root@localhost tomcat]# tailf logs/tomcat_access_log.2017-12-13.log   
+
+{&quot;clientip&quot;:&quot;192.168.10.1&quot;,&quot;ClientUser&quot;:&quot;-&quot;,&quot;authenticated&quot;:&quot;-&quot;,&quot;AccessTime&quot;:&quot;[13/Dec/2017:08:49:52 -0500]&quot;,&quot;method&quot;:&quot;GET /webdir HTTP/1.1&quot;,&quot;status&quot;:&quot;&quot;,&quot;SendBytes&quot;:&quot;-&quot;,&quot;Query?string&quot;:&quot;&quot;,&quot;partner&quot;:&quot;-&quot;,&quot;AgentVersion&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36&quot;}
+
+可以看到，以上日志看起来很像json格式
+</code></pre><ul>
+<li><p>验证日志是否为json格式</p>
+<p> 网址：<a href="http://www.kjson.com" target="_blank" rel="noopener">www.kjson.com</a></p>
+</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/json%E9%AA%8C%E8%AF%81.png" alt="json验证" title="">
+                </div>
+                <div class="image-caption">json验证</div>
+            </figure>
+<blockquote>
+<p>如何获取json日志中的IP？</p>
+</blockquote>
+<pre><code>Python 脚本如下：
+
+#!/usr/bin/env python
+#coding:utf-8
+#Author Zhang Jie
+data={&quot;clientip&quot;:&quot;192.168.10.1&quot;,&quot;ClientUser&quot;:&quot;-&quot;,&quot;authenticated&quot;:&quot;-&quot;,&quot;AccessTime&quot;:&quot;[13/Dec/2017:08:49:52 -0500]&quot;,&quot;method&quot;:&quot;GET /webdir
+HTTP/1.1&quot;,&quot;status&quot;:&quot;&quot;,&quot;SendBytes&quot;:&quot;-&quot;,&quot;Query?string&quot;:&quot;&quot;,&quot;partner&quot;:&quot;-&quot;,&quot;AgentVersion&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36&quot;}
+ip=data[&quot;clientip&quot;]
+print ip
+</code></pre><!-- more -->
+<pre><code>vim /etc/logstash/conf.d/tomcat.conf
+</code></pre><pre><code>input {
+  file {
+    path =&gt; &quot;/usr/local/tomcat/logs/tomcat_access_log.*.log&quot;   #匹配所有日期log
+    start_position =&gt; &quot;end&quot;                    #监听文件的起始位置，默认是end
+    type =&gt; &quot;tomcat-access-log&quot;                #定义事件的唯一类型
+    stat_interval =&gt; &quot;3&quot;
+  }
+  file {
+    path =&gt; &quot;/var/log/messages&quot;
+    start_position =&gt; &quot;end&quot;
+    type =&gt; &quot;messages-log&quot;
+    stat_interval =&gt; &quot;3&quot;
+  }
+}
+
+output {
+  if [type] == &quot;tomcat-access-log&quot; {       #判断type类型的value，并写入相同(或不同)的ES集群
+    elasticsearch {
+      hosts =&gt; [&quot;10.0.10.21:9200&quot;]     #定义写到主es机器,注意:需要把双引号写入到中括号的里面
+      index =&gt; &quot;logstash-tomcat-10.24-access-%{+YYYY.MM.dd}&quot;   #指定收集到的日志索引名称
+      codec =&gt; &quot;json&quot;            #告诉logstash需要处理tomcat的json格式日志
+    }}
+  if [type] == &quot;messages-log&quot; {
+    elasticsearch {
+      hosts =&gt; [&quot;10.0.10.23:9200&quot;]      #定义写到同集群其他es机器(试试效果而已)
+      index =&gt; &quot;messages-log-10.24-access-%{+YYYY.MM.dd}&quot;
+    }}
+
+}
+</code></pre><ul>
+<li>测试配置文件</li>
+</ul>
+<pre><code>logstash -f /usr/share/logstash/config/conf.d/tomcat.conf -t
+Configuration OK
+</code></pre><ul>
+<li>重启logstash服务并查看日志</li>
+</ul>
+<pre><code>systemctl restart logstash
+tailf /var/log/logstash/logstash-plain.log
+
+注：如果log日志提示某个文件访问拒绝(如：/var/log/messages: Permission denied), 需要修改文件权限
+chmod 644  /var/log/messages
+systemctl restart logstash   #再次重启logstash
+</code></pre><ul>
+<li>访问Tomcat Web页面让其生成日志</li>
+</ul>
+<pre><code>http://10.0.10.24:8080/webdir       #通过访问页面让其生成Tomcat日志,可以多刷新几次
+echo &quot;Test!&quot; &gt;&gt; /var/log/messages   #通过追加内容模拟/var/log/messages生成日志
+</code></pre><blockquote>
+<p>访问elasticsearch插件验证索引</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Tomcat%E6%97%A5%E5%BF%97%E7%B4%A2%E5%BC%95.png" alt="Tomcat日志索引" title="">
+                </div>
+                <div class="image-caption">Tomcat日志索引</div>
+            </figure>
+<blockquote>
+<p>在kibana添加head中这两个索引</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Kibana_message_access_log.png" alt="kibana_messages_log-1024" title="">
+                </div>
+                <div class="image-caption">kibana_messages_log-1024</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_tomcat_access_log.png" alt="kibana_tomcat_access" title="">
+                </div>
+                <div class="image-caption">kibana_tomcat_access</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_discover_tomcat.png" alt="kibana_discover_tomcat" title="">
+                </div>
+                <div class="image-caption">kibana_discover_tomcat</div>
+            </figure>
+<blockquote>
+<p>阶段总结</p>
+</blockquote>
+<pre><code>1. logstash的output中，输入同一个集群的不同机器上效果是一致的，因为他们是一个集群。当然也可以指定输出到不同的集群中。
+2. 从kibana Tomcat页面中可以看出，Tomcat日志，已经变成了json格式，这是由于logstash中指定了参数codec=&quot;json&quot; 的结果，否则kibana这里就是一坨
+3. 这个坑是关于时间同步的，如果kibana与你的logstash时间不同步，kibana上的日志可能无法显示，这就需要养成做标准化的习惯，切记
+</code></pre><blockquote>
+<p>在其他机器上访问Tomcat并验证kibana数据</p>
+</blockquote>
+<pre><code>yum install -y httpd-tools
+ab -n1000 -c100 http://192.168.56.16:8080/webdir/    #批量访问测试
+打开kibana的Tomcat日志收集页面查看
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana1000tomcat.png" alt="kibana1000tomcat" title="">
+                </div>
+                <div class="image-caption">kibana1000tomcat</div>
+            </figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-12-16T04:03:06.990Z" itemprop="dateUpdated">2017-12-16 12:03:06</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/13/通过Logstash收集Tomcat日志/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ELK/">ELK</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Logstash/">Logstash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kibana/">kibana</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/&title=《通过Logstash收集Tomcat日志》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/&title=《通过Logstash收集Tomcat日志》 — Gary Wu&source=
+基础环境配置
+
+
+配置Logstash
+
+#安装
+rpm -ivh logstash-5.6.5.rpm 
+
+#配置软链
+ln -s /etc/logs..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《通过Logstash收集Tomcat日志》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/14/logstash收集java日志/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">logstash收集java日志</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/12/通过Logstash收集日志/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">通过Logstash收集日志</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/&title=《通过Logstash收集Tomcat日志》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/&title=《通过Logstash收集Tomcat日志》 — Gary Wu&source=
+基础环境配置
+
+
+配置Logstash
+
+#安装
+rpm -ivh logstash-5.6.5.rpm 
+
+#配置软链
+ln -s /etc/logs..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《通过Logstash收集Tomcat日志》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/13/通过Logstash收集Tomcat日志/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

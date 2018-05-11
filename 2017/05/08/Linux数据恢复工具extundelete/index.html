@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Linux数据恢复工具extundelete | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,数据恢复,inode,extundelete">
+    <meta name="description" content="extundelete的恢复原理在利用extundelete恢复文件时并不依赖特定文件格式，首先extundelete会通过文件系统的inode信息（根目录的inode一般为2）来获得当前文件系统下所有文件的信息,包括存在的和已经删除的文件，这些信息包括文件名和inode。  #查看inode # mount /dev/sdb2 /tmp # ls -id /tmp 2 /tmp  然后利用ino">
+<meta name="keywords" content="高级运维,数据恢复,inode,extundelete">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux数据恢复工具extundelete">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="extundelete的恢复原理在利用extundelete恢复文件时并不依赖特定文件格式，首先extundelete会通过文件系统的inode信息（根目录的inode一般为2）来获得当前文件系统下所有文件的信息,包括存在的和已经删除的文件，这些信息包括文件名和inode。  #查看inode # mount /dev/sdb2 /tmp # ls -id /tmp 2 /tmp  然后利用ino">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-08T06:10:29.726Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux数据恢复工具extundelete">
+<meta name="twitter:description" content="extundelete的恢复原理在利用extundelete恢复文件时并不依赖特定文件格式，首先extundelete会通过文件系统的inode信息（根目录的inode一般为2）来获得当前文件系统下所有文件的信息,包括存在的和已经删除的文件，这些信息包括文件名和inode。  #查看inode # mount /dev/sdb2 /tmp # ls -id /tmp 2 /tmp  然后利用ino">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Linux数据恢复工具extundelete</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Linux数据恢复工具extundelete</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-08T02:36:09.000Z" itemprop="datePublished" class="page-time">
+  2017-05-08
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#extundelete的恢复原理"><span class="post-toc-number">1.</span> <span class="post-toc-text">extundelete的恢复原理</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#适用场景"><span class="post-toc-number">2.</span> <span class="post-toc-text">适用场景</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#安装extundelete"><span class="post-toc-number">3.</span> <span class="post-toc-text">安装extundelete</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#extundelete用法详解"><span class="post-toc-number">4.</span> <span class="post-toc-text">extundelete用法详解</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#使用extundelete恢复数据"><span class="post-toc-number"></span> <span class="post-toc-text">使用extundelete恢复数据</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#通过extundelete恢复单个文件"><span class="post-toc-number">1.</span> <span class="post-toc-text">通过extundelete恢复单个文件</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#通过extundelete恢复单个目录"><span class="post-toc-number">2.</span> <span class="post-toc-text">通过extundelete恢复单个目录</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#通过extundelete恢复所有误删除数据"><span class="post-toc-number">3.</span> <span class="post-toc-text">通过extundelete恢复所有误删除数据</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#通过extundelete恢复某个时间段的数据"><span class="post-toc-number">4.</span> <span class="post-toc-text">通过extundelete恢复某个时间段的数据</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Linux数据恢复工具extundelete"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Linux数据恢复工具extundelete</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-08 10:36:09" datetime="2017-05-08T02:36:09.000Z"  itemprop="datePublished">2017-05-08</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h5 id="extundelete的恢复原理"><a href="#extundelete的恢复原理" class="headerlink" title="extundelete的恢复原理"></a>extundelete的恢复原理</h5><pre><code>在利用extundelete恢复文件时并不依赖特定文件格式，首先extundelete会通过文件系统的inode信息（根目录的inode一般为2）来获得当前文件系统下所有文件的信息,包括存在的和已经删除的文件，这些信息包括文件名和inode。
+
+#查看inode
+# mount /dev/sdb2 /tmp
+# ls -id /tmp
+2 /tmp
+
+然后利用inode信息结合日志去查询该inode所在的block位置，包括直接块，间接块等信息。最后利用dd命令将这些信息备份出来，从而恢复数据文件。
+</code></pre><a id="more"></a>
+<h5 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h5><pre><code>主要适用于ext3和ext4的文件系统，具备日志机制。
+</code></pre><h5 id="安装extundelete"><a href="#安装extundelete" class="headerlink" title="安装extundelete"></a>安装extundelete</h5><pre><code>extundelete的官方网站是http://extundelete.sourceforge.net/ ,目前的稳定版本是extundelete-0.2.4
+
+在安装extundelete之前需要安装e2fsprogs、e2fsprogs-devel和e2fsprogs-libs三个依赖包。
+</code></pre><pre><code>yum install -y e2fsprogs e2fsprogs-libs e2fsprogs-devel*
+
+wget https://jaist.dl.sourceforge.net/project/extundelete/extundelete/0.2.4/extundelete-0.2.4.tar.bz2
+bzip2 -d extundelete-0.2.4.tar.bz2 &amp;&amp; tar -xvf extundelete-0.2.4.tar
+cd extundelete-0.2.4
+./configure &amp;&amp; make &amp;&amp; make install
+</code></pre><pre><code>编译完成后会在/usr/local/bin目录生成一个extundelete可执行文件。可以通过“extundelete  --help”获得此软件的使用方法
+</code></pre><h5 id="extundelete用法详解"><a href="#extundelete用法详解" class="headerlink" title="extundelete用法详解"></a>extundelete用法详解</h5><pre><code># extundelete --help
+</code></pre><pre><code>命令格式: 
+extundelete [options] [action] device-file
+其中参数（options）有：
+--version, -[vV]，显示软件版本号。
+--help，显示软件帮助信息。
+--superblock，显示超级块信息。
+--journal，显示日志信息。
+--after dtime，时间参数，表示在某段时间之后被删的文件或目录。
+--before dtime，时间参数，表示在某段时间之前被删的文件或目录。
+
+
+动作（action）有：
+--inode ino，显示节点“ino”的信息。
+--block blk，显示数据块“blk”的信息。
+--restore-inode ino[,ino,...]，恢复命令参数，表示恢复节点“ino”的文件，恢复的文件会自动放在当前目录下的RESTORED_FILES文件夹中，使用节点编号作为扩展名。
+--restore-file &#39;path&#39;，恢复命令参数，表示将恢复指定路径的文件，并把恢复的文件放在当前目录下的RECOVERED_FILES目录中。
+--restore-files &#39;path&#39;，恢复命令参数，表示将恢复在路径中已列出的所有文件。
+--restore-all，恢复命令参数，表示将尝试恢复所有目录和文件。
+-j journal，表示从已经命名的文件中读取扩展日志。
+-b blocknumber，表示使用之前备份的超级块来打开文件系统，一般用于查看现有超级块是不是当前所要的文件。
+-B blocksize，表示使用数据块大小来打开文件系统，一般用于查看已经知道大小的文件。
+</code></pre><h4 id="使用extundelete恢复数据"><a href="#使用extundelete恢复数据" class="headerlink" title="使用extundelete恢复数据"></a>使用extundelete恢复数据</h4><pre><code>在数据被误删除后，第一时间要做的是卸载被删除数据所在的磁盘或磁盘分区，如果是系统根分区的数据遭到误删除，就需要将系统进入单用户，并且将根分区以只读模式挂载。这样做的原因很简单，因为将文件删除后，仅仅是将文件的inode结点中的扇区指针清零，实际文件还存储在磁盘上，如果磁盘以读写模式挂载，这些已删除的文件的数据块就可能被操作系统重新分配出去，在这些数据块被新的数据覆盖后，这些数据就真的丢失了，恢复工具也回力无天。所以，以只读模式挂载磁盘可以尽量降低数据块中数据被覆盖的风险，以提高恢复数据成功的几率。
+</code></pre><h5 id="通过extundelete恢复单个文件"><a href="#通过extundelete恢复单个文件" class="headerlink" title="通过extundelete恢复单个文件"></a>通过extundelete恢复单个文件</h5><p>模拟数据误删除环境</p>
+<pre><code>在演示通过extundelete恢复数据之前，首先要模拟一个数据误删除环境
+</code></pre><pre><code>parted /dev/sdb
+   mklabel gpt
+   mkpart primary 0 -1
+   p
+   quit
+mkfs.ext4 /dev/sdb1
+mount /dev/sdb1 /mnt
+
+#准备一些测试数据
+cp /etc/passwd /mnt
+cp -R /etc/skel /mnt
+mkdir /mnt/test
+[root@bogon ~]# echo &quot;extundelete test&quot; &gt;/mnt/test/mytest.txt
+[root@bogon ~]# cd /mnt/
+[root@bogon mnt]# md5sum passwd 
+ca8f3327c9a73cb6fd96ba88ec4d18ee  passwd
+[root@bogon mnt]# md5sum test/mytest.txt 
+eb42e4b3f953ce00e78e11bf50652a80  test/mytest.txt
+
+#删除
+rm -rf /mnt/*
+</code></pre><p>卸载磁盘分区</p>
+<pre><code>恢复数据时，务必需要卸载这块磁盘分区
+
+[root@bogon ~]# umount /mnt
+[root@bogon ~]# df -h
+</code></pre><p>查询可恢复的数据信息</p>
+<pre><code>注:一般一个分区挂载到一个目录下时，这个”根”目录的inode值为2, 我们为了查看根目录所有文件，所以查看分区inode为2的这个部分
+
+[root@bogon ~]# extundelete /dev/sdb1 --inode 2
+File name                   | Inode number | Deleted status
+.                           2
+..                          2
+lost+found                  11             Deleted
+passwd                      12             Deleted
+skel                        393217         Deleted
+test                        1048577        Deleted
+
+根据上面的输出，标记为Deleted状态的是已经删除的文件或目录。同时还可以看到每个已删除文件的inode值，接下来就可以恢复文件了。
+</code></pre><p>恢复单个文件</p>
+<pre><code>extundelete /dev/sdb1 --restore-file passwd
+或
+extundelete /dev/sdb1 --restore-inode 12
+</code></pre><pre><code>在文件恢复成功后，extundelete命令默认会在执行命令的当前目录下创建一个RECOVERED_FILES目录，此目录用于存放恢复出来的文件，所以执行extundelete命令的当前目录必须是可写的。
+
+根据上面的输出，通过md5sum命令校验，校验码与之前的完全一致，表明文件恢复成功。
+</code></pre><h5 id="通过extundelete恢复单个目录"><a href="#通过extundelete恢复单个目录" class="headerlink" title="通过extundelete恢复单个目录"></a>通过extundelete恢复单个目录</h5><pre><code>extundelete /dev/sdb1 --restore-directory /skel
+
+注：现在要恢复/mnt目录下的skel文件夹,所以后边需要使用相对路径；
+   而恢复的文件存放在执行命令的当前目录的RECOVERED_FILES目录中
+</code></pre><h5 id="通过extundelete恢复所有误删除数据"><a href="#通过extundelete恢复所有误删除数据" class="headerlink" title="通过extundelete恢复所有误删除数据"></a>通过extundelete恢复所有误删除数据</h5><pre><code>extundelete /dev/sdb1 --restore-all
+</code></pre><h5 id="通过extundelete恢复某个时间段的数据"><a href="#通过extundelete恢复某个时间段的数据" class="headerlink" title="通过extundelete恢复某个时间段的数据"></a>通过extundelete恢复某个时间段的数据</h5><pre><code>extundelete提供了”--after“和”--before“参数，可以通过指定某个时间段，进而只恢复这个时间段内的数据。
+
+查看或修改当前unix时间戳
+#date +%s
+1379150340
+
+恢复当前时间戳之内的所有数据
+# extundelete  --after 1379146740 --restore-all /dev/sdc1
+</code></pre><p>参考：<a href="https://my.oschina.net/shou1156226/blog/909678" target="_blank" rel="noopener">吃一堑消化不良</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-05-08T06:10:29.726Z" itemprop="dateUpdated">2018-05-08 14:10:29</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/05/08/Linux数据恢复工具extundelete/" target="_blank" rel="external">https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/extundelete/">extundelete</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/inode/">inode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据恢复/">数据恢复</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/&title=《Linux数据恢复工具extundelete》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/&title=《Linux数据恢复工具extundelete》 — Gary Wu&source=extundelete的恢复原理在利用extundelete恢复文件时并不依赖特定文件格式，首先extundelete会通过文件系统的inode信息（根目..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux数据恢复工具extundelete》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/05/24/Hexo搭建GitHub Blog/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hexo搭建GitHub Blog</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/04/运维利器-学会使用strace诊断问题/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">运维利器-学会使用strace诊断问题</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/&title=《Linux数据恢复工具extundelete》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/&title=《Linux数据恢复工具extundelete》 — Gary Wu&source=extundelete的恢复原理在利用extundelete恢复文件时并不依赖特定文件格式，首先extundelete会通过文件系统的inode信息（根目..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux数据恢复工具extundelete》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/05/08/Linux数据恢复工具extundelete/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

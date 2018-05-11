@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>iptables网络防火墙 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,iptables,防火墙">
+    <meta name="description" content="官网：http://www.netfilter.org/ iptables由Netfilter内核态组件实现防火墙功能, 包过滤功能强大，使用灵活 不适用于大并发场景，适用于并发量相对较少(500左右并发)的访问场景">
+<meta name="keywords" content="高级运维,iptables,防火墙">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iptables网络防火墙">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="官网：http://www.netfilter.org/ iptables由Netfilter内核态组件实现防火墙功能, 包过滤功能强大，使用灵活 不适用于大并发场景，适用于并发量相对较少(500左右并发)的访问场景">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/iptables%E8%A7%84%E5%88%99%E9%93%BE%E5%8C%B9%E9%85%8D%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/iptables%E8%A7%84%E5%88%99%E8%A1%A8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ping%E5%8F%8C%E5%90%91.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/iptables%E9%99%90%E9%80%9F%E4%BB%A4%E7%89%8C%E6%A1%B6.png">
+<meta property="og:updated_time" content="2018-04-08T07:41:11.532Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iptables网络防火墙">
+<meta name="twitter:description" content="官网：http://www.netfilter.org/ iptables由Netfilter内核态组件实现防火墙功能, 包过滤功能强大，使用灵活 不适用于大并发场景，适用于并发量相对较少(500左右并发)的访问场景">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/iptables%E8%A7%84%E5%88%99%E9%93%BE%E5%8C%B9%E9%85%8D%E6%B5%81%E7%A8%8B.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">iptables网络防火墙</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">iptables网络防火墙</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-10T01:36:25.000Z" itemprop="datePublished" class="page-time">
+  2018-02-10
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#概念理解"><span class="post-toc-number">1.</span> <span class="post-toc-text">概念理解</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#iptables数据包处理流程"><span class="post-toc-number">2.</span> <span class="post-toc-text">iptables数据包处理流程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#防火墙4个表-tables-5个链-chains"><span class="post-toc-number">3.</span> <span class="post-toc-text">防火墙4个表(tables)5个链(chains)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#默认包括5种规则链"><span class="post-toc-number">4.</span> <span class="post-toc-text">默认包括5种规则链:</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4个规则表之间的应用顺序"><span class="post-toc-number">5.</span> <span class="post-toc-text">4个规则表之间的应用顺序</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#iptables命令"><span class="post-toc-number">6.</span> <span class="post-toc-text">iptables命令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#初始化防火墙步骤"><span class="post-toc-number">7.</span> <span class="post-toc-text">初始化防火墙步骤</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试：禁止10-0-0-10访问我本地10-0-0-8的80端口"><span class="post-toc-number">8.</span> <span class="post-toc-text">测试：禁止10.0.0.10访问我本地10.0.0.8的80端口</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#删除规则"><span class="post-toc-number">9.</span> <span class="post-toc-text">删除规则</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#修改现有规则"><span class="post-toc-number">10.</span> <span class="post-toc-text">修改现有规则</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试-除了10-1-0-0-24网段可以连接10-0-0-8服务器22端口，其他网段都禁止"><span class="post-toc-number">11.</span> <span class="post-toc-text">测试:除了10.1.0.0/24网段可以连接10.0.0.8服务器22端口，其他网段都禁止</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#匹配多个端口"><span class="post-toc-number">12.</span> <span class="post-toc-text">匹配多个端口</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#匹配多个IP或IP段"><span class="post-toc-number">13.</span> <span class="post-toc-text">匹配多个IP或IP段</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#禁止Ping"><span class="post-toc-number">14.</span> <span class="post-toc-text">禁止Ping</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#状态机制配置"><span class="post-toc-number">15.</span> <span class="post-toc-text">状态机制配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#iptables对网络数据传输进行限速"><span class="post-toc-number">16.</span> <span class="post-toc-text">iptables对网络数据传输进行限速</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#iptables安全配置"><span class="post-toc-number">17.</span> <span class="post-toc-text">iptables安全配置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#防火墙规则永久保存"><span class="post-toc-number">17.1.</span> <span class="post-toc-text">防火墙规则永久保存</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#iptables线上配置规范"><span class="post-toc-number">18.</span> <span class="post-toc-text">iptables线上配置规范</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SNAT共享上网"><span class="post-toc-number">18.1.</span> <span class="post-toc-text">SNAT共享上网</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#DNAT端口映射"><span class="post-toc-number">19.</span> <span class="post-toc-text">DNAT端口映射</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#映射多个外网IP上网"><span class="post-toc-number">20.</span> <span class="post-toc-text">映射多个外网IP上网</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#iptables自定义链"><span class="post-toc-number">21.</span> <span class="post-toc-text">iptables自定义链</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#iptables优化"><span class="post-toc-number">22.</span> <span class="post-toc-text">iptables优化</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-iptables网络防火墙"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">iptables网络防火墙</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-10 09:36:25" datetime="2018-02-10T01:36:25.000Z"  itemprop="datePublished">2018-02-10</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>官网：http://www.netfilter.org/
+iptables由Netfilter内核态组件实现防火墙功能, 包过滤功能强大，使用灵活
+不适用于大并发场景，适用于并发量相对较少(500左右并发)的访问场景
+</code></pre><a id="more"></a>
+<pre><code>iptables -V   #查看iptables版本
+
+iptables主要工作在OSI七层的3层(IP), 也支持2层(但基本不需要对2层控制)
+iptables也可以支持7层控制(重新编译内核或通过iptables+squid结合来实现)
+还可以使用iptables+Quagga(开源)实现OSPF和BGP的功能
+</code></pre><h4 id="概念理解"><a href="#概念理解" class="headerlink" title="概念理解"></a>概念理解</h4><p>添加iptables规则时需要指定规则所属的链和链所属的表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Netfilter</th>
+<th style="text-align:center">表(tables)</th>
+<th style="text-align:center">链(chains)</th>
+<th style="text-align:center">规则(policy)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">一栋楼</td>
+<td style="text-align:center">楼里的房子</td>
+<td style="text-align:center">房子里的柜子</td>
+<td style="text-align:center">柜子里的衣服,摆放规则</td>
+</tr>
+</tbody>
+</table>
+<h4 id="iptables数据包处理流程"><a href="#iptables数据包处理流程" class="headerlink" title="iptables数据包处理流程"></a>iptables数据包处理流程</h4><pre><code>- 按顺序依次检查，匹配即停止（LOG策略例外）
+- 若找不到相匹配的规则，则按该链的默认策略处理
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/iptables%E8%A7%84%E5%88%99%E9%93%BE%E5%8C%B9%E9%85%8D%E6%B5%81%E7%A8%8B.png" alt="iptables规则链" title="">
+                </div>
+                <div class="image-caption">iptables规则链</div>
+            </figure>
+<pre><code>根据规则链的划分原则，不同的链处理时机是比较固定的，因此规则链之间的应用顺序取决于数据包的流向，具体表现如下。
+
+-- 入站数据流向：
+来自外部的数据包到达防火墙后，首先被PREROUTING链处理（是否修改数据包地址等），然后进行路由选择（判断该数据包发往何处）；如果数据包地址是防火墙本机（入internet用户访问网关的web服务端口），那么内核将其传递给（filter表的）INPUT链进行处理（决定是否允许通过等），通过以后再给系统上层的应用（入httpd）进行响应。
+
+-- 转发数据流向：
+来自外部的数据包到达防火墙后，首先被PREROUTING链处理（是否修改数据包地址等），然后进行路由选择；如果数据包的目标地址是其他外部地址（如局域网用户通过网关访问QQ服务器），则内核将其传送给FORWARD链进行处理（允许转发或者拦截，丢弃），最后交给POSTROUTING链（是否修改数据包地址等）进行处理。
+
+-- 出站数据流向：
+防火墙本机向外部地址发送的数据包（如在防火墙主机中测试公网DNS服务时），首先被OUTPUT链处理，然后进行路由选择，再交给POSTROUTING链（是否修改数据包地址等）进行处理
+</code></pre><h4 id="防火墙4个表-tables-5个链-chains"><a href="#防火墙4个表-tables-5个链-chains" class="headerlink" title="防火墙4个表(tables)5个链(chains)"></a>防火墙4个表(tables)5个链(chains)</h4><p>默认包括4个规则表：</p>
+<pre><code>raw表：确定是否对该数据包进行状态跟踪；对应iptable_raw，表内包含两个链：OUTPUT、PREROUTING
+
+mangle表：为数据包的TOS（服务类型）、TTL（生命周期）值，或者为数据包设置Mark标记，以实现流量整形、策略路由等高级应用。其对应iptable_mangle，表内包含五个链：PREROUTING、POSTROUTING、INPUT、OUTPUT、FORWARD
+
+nat表：修改数据包中的源、目标IP地址或端口；其对应的模块为iptable_nat，表内包括三个链：PREROUTING、POSTROUTING、OUTPUT
+
+filter表：确定是否放行该数据包（过滤）；其对应的内核模块为iptable_filter，表内包含三个链：INPUT、FORWARD、OUTPUT
+</code></pre><h4 id="默认包括5种规则链"><a href="#默认包括5种规则链" class="headerlink" title="默认包括5种规则链:"></a>默认包括5种规则链:</h4><pre><code>INPUT：处理入站数据包
+OUTPUT：处理出站数据包
+FORWARD：处理转发数据包
+POSTROUTING链：在进行路由选择后处理数据包（对数据链进行源地址修改转换）
+PREROUTING链：在进行路由选择前处理数据包（做目标地址转换）
+
+注：INPUT、OUTPUT链主要用在“主机型防火墙”中，即主要针对服务器本机进行保护的防火墙,比如服务器；而FORWARD、PREROUTING、POSTROUTING链多用在“网络型防火墙”中,比如RouterOS路由器等。
+</code></pre><h4 id="4个规则表之间的应用顺序"><a href="#4个规则表之间的应用顺序" class="headerlink" title="4个规则表之间的应用顺序"></a>4个规则表之间的应用顺序</h4><pre><code>raw表 --&gt; mangle表 --&gt;nat表 --&gt;filter表
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/iptables%E8%A7%84%E5%88%99%E8%A1%A8.png" alt="iptables规则表" title="">
+                </div>
+                <div class="image-caption">iptables规则表</div>
+            </figure>
+<h4 id="iptables命令"><a href="#iptables命令" class="headerlink" title="iptables命令"></a>iptables命令</h4><pre><code>iptables -L          查看现有iptables规则
+iptables -nL         以数字的形式显示iptables规则
+iptables -nL -t nat  指定查看哪张表的配置,默认是查看filter表, -t 即tables
+iptables -nL --line-number  给iptables规则显示行号
+iptables -F          清除/初始化默认iptables规则(注:默认删除的是filter表的规则)
+iptables -F -t nat   清除/初始化指定表的规则
+iptables -nL (服务停止情况下执行此命令会清空其默认规则)
+</code></pre><pre><code>iptables -t filter -A INPUT -p tcp --dport 22 -j ACCEPT
+-t filter 指定表
+-A 指定表中的链chains
+剩余的部分就是具体的规则
+-p 指定协议
+--dport 指定访问这台服务器的目标端口
+--sport 指定访问这台服务器的源端口
+-s 指定访问本机的源IP地址
+-j ACCEPT允许/DROP丢弃/REJECT拒绝(丢弃比拒绝从安全思想来说更安全)
+
+iptables -nL --line-number -v   #查询数据包匹配计数
+iptables -Z   清除数据包匹配计数
+iptables -X   删除防火墙所有自定义链
+</code></pre><h4 id="初始化防火墙步骤"><a href="#初始化防火墙步骤" class="headerlink" title="初始化防火墙步骤"></a>初始化防火墙步骤</h4><pre><code>/etc/sysconfig/iptables   #初始化保存配置文件
+
+初始化操作配置
+iptables -F        清除所有规则，不会处理默认的规则
+iptables -X        清除用户自定义的链
+iptables -Z        清除链的计数器清零（数据包计数器与数据包字节计数器）
+iptables -nL -v  显示计数器信息
+
+iptables -A INPUT -s 10.0.0.0/24 -i eth1 -p tcp --dport 22 -j ACCEPT  先把自己允许(别限制太细)
+iptables -A INPUT -i lo -j ACCEPT  允许本地环回接口
+iptables -P INPUT DROP    配置默认拒绝
+</code></pre><h4 id="测试：禁止10-0-0-10访问我本地10-0-0-8的80端口"><a href="#测试：禁止10-0-0-10访问我本地10-0-0-8的80端口" class="headerlink" title="测试：禁止10.0.0.10访问我本地10.0.0.8的80端口"></a>测试：禁止10.0.0.10访问我本地10.0.0.8的80端口</h4><pre><code>iptables -t filter -A INPUT -i eth0 -p tcp --dport 80 -d 10.0.0.8 -s 10.0.0.10 -j DROP
+-A 添加
+-i 指定从哪个端口进来
+-d 指定本地(目标)IP地址
+-s 指定源IP地址(可以是单个ip,也可以是整个地址段10.0.0.0/24)
+</code></pre><pre><code>#模拟禁用整个地址段(也包括目标IP地址),此时目标服务器也无法ssh连接了
+iptables -t filter -A INPUT -p tcp --dport 22 -d 10.0.0.0/24 -s 10.0.0.10 -j DROP
+
+#解决方法：物理机插入一条策略
+iptables -t filter -I INPUT -p tcp --dport 22 -s 10.0.0.8 -j ACCEPT
+-I 插入(插入后会优先执行此规则)
+
+注：如果使用-A参数添加后，仍然无法ssh连接目标服务器,因为默认执行了第一条策略
+</code></pre><h4 id="删除规则"><a href="#删除规则" class="headerlink" title="删除规则"></a>删除规则</h4><pre><code>iptables -nL --line-number
+iptable -D INPUT 2
+</code></pre><h4 id="修改现有规则"><a href="#修改现有规则" class="headerlink" title="修改现有规则"></a>修改现有规则</h4><pre><code>iptables -nL --line-number
+iptables -R INPUT 2 -s 10.0.0.253 -p tcp --dport 80 -j ACCEPT
+
+-R 链名称 规则号
+</code></pre><h4 id="测试-除了10-1-0-0-24网段可以连接10-0-0-8服务器22端口，其他网段都禁止"><a href="#测试-除了10-1-0-0-24网段可以连接10-0-0-8服务器22端口，其他网段都禁止" class="headerlink" title="测试:除了10.1.0.0/24网段可以连接10.0.0.8服务器22端口，其他网段都禁止"></a>测试:除了10.1.0.0/24网段可以连接10.0.0.8服务器22端口，其他网段都禁止</h4><pre><code>前提：filter表需要默认允许,否则该方法会被拒
+方法：
+iptables -t filter -A INPUT ！ -s 10.1.0.0/24 -d 10.0.0.8 -p tcp --dport 22 -j REJECT
+</code></pre><h4 id="匹配多个端口"><a href="#匹配多个端口" class="headerlink" title="匹配多个端口"></a>匹配多个端口</h4><pre><code>【匹配连续多个端口】
+禁止访问本地10000-20000端口
+iptables -t filter -A INPUT -p tcp  --dport 10000:20000 -j DROP
+
+【匹配不连续端口，需要使用multiport模块】
+禁止任何访问目标服务器的22和80端口
+iptables -t filter -A INPUT -p tcp -m multiport --dport 22,80 -j DROP
+</code></pre><h4 id="匹配多个IP或IP段"><a href="#匹配多个IP或IP段" class="headerlink" title="匹配多个IP或IP段"></a>匹配多个IP或IP段</h4><pre><code>屏蔽多个IP地址或多个地址段
+iptables -t filter -A INPUT -s 1.1.1.1,1.0.0.1,192.168.10.0/24 -j DROP
+</code></pre><h4 id="禁止Ping"><a href="#禁止Ping" class="headerlink" title="禁止Ping"></a>禁止Ping</h4><p>资料参考: [Ping回显类型](<a href="http://www.cnitblog.com/yang55xiaoguang/articles/59581.ht" target="_blank" rel="noopener">http://www.cnitblog.com/yang55xiaoguang/articles/59581.ht</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ping%E5%8F%8C%E5%90%91.png" alt="Ping双向" title="">
+                </div>
+                <div class="image-caption">Ping双向</div>
+            </figure>
+<pre><code>主要关注以下类型
+类型:8    Echo request——回显请求（Ping请求）
+类型:0    Echo Reply——回显应答（Ping应答）
+
+禁止ping策略原则: iptables服务器是ping命令的发起者或是接受者
+
+作为发起者时：
+input链：  禁止icmp-type 0  
+          iptables -A INPUT -i eth0 -p icmp --icmp-type 0 -j DROP
+output链： 禁止icmp-type 8  
+          iptables -A OUTPUT -o eth0 -p icmp --icmp-type 8 -j DROP
+
+作为接受者时：
+input链：  禁止icmp-type 8  
+          iptables -A INPUT -i eth0 -p icmp --icmp-type 8 -j DROP
+output链： 禁止icmp-type 0  
+          iptables -A OUTPUT -o eth0 -p icmp --icmp-type 0 -j DROP
+
+简化配置：
+iptables -A INPUT -i eth0 -p icmp -m icmp --icmp-type any -j DROP
+注:使用-m 调用icmp模块
+</code></pre><!-- more -->
+<h4 id="状态机制配置"><a href="#状态机制配置" class="headerlink" title="状态机制配置"></a>状态机制配置</h4><pre><code>New状态机制的包：说明这是三次握手第一次发出的SYN包
+
+ESTABLISHED状态机制的包: 一方数据发送(SYN)另一方正常应答，双向保持连接(SYN/ACK)，此时状态就是ESTABLISHED的状态了
+
+RELATED(有关系的)状态机制的包：一个新的连接想要是RELATED状态,首先要有一个ESTABLISHED状态一直存活。有了RELATED状态,ICMP/FTP传输才能穿过防火墙正常工作。
+
+INVALID(无效的)：说明数据包不能被识别属于哪个连接或没有任何状态。一般我们会DROP掉这个状态数据包,因为防火墙认为这是不安全的状态
+</code></pre><p>配置</p>
+<pre><code>防火墙服务配置在FTP服务器上时，需要配置以下策略
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+</code></pre><h4 id="iptables对网络数据传输进行限速"><a href="#iptables对网络数据传输进行限速" class="headerlink" title="iptables对网络数据传输进行限速"></a>iptables对网络数据传输进行限速</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/iptables%E9%99%90%E9%80%9F%E4%BB%A4%E7%89%8C%E6%A1%B6.png" alt="iptables令牌桶" title="">
+                </div>
+                <div class="image-caption">iptables令牌桶</div>
+            </figure>
+<pre><code>原理图如上，它是基于逻辑上的令牌桶实现
+</code></pre><p>配置</p>
+<pre><code>iptables -A INPUT -s 10.0.0.253 -p icmp --icmp-type 8 -m limit --limit 6/min --limit-burst 5 -j ACCEPT
+iptables -A INPUT -s 10.0.0.253 -p icmp --icmp-type 8 -j DROP
+上面两条命令意思为：即,先允许5个ping包通过,然后ping继承第2条drop规则(超时)，然后每10秒再次给予一个令牌(可以再ping 一个包)，如果一分钟内令牌没被使用(没ping),令牌依然存在,此时可以再ping 5个包，然后再等待10秒再获取一个令牌
+
+参数：
+--limit n/{second/minute/hour}: 
+解释：指定时间内的请求速率”n”为速率，后面为时间分别为：秒 分 时
+
+--limit-burst [n]
+解释：在同一时间内允许通过的请求”n”为数字(单位包比特)，不指定默认为5
+
+注：生产环境需要对数据包进行计算,如限速5M等于多少包比特
+</code></pre><h4 id="iptables安全配置"><a href="#iptables安全配置" class="headerlink" title="iptables安全配置"></a>iptables安全配置</h4><p>基本配置</p>
+<pre><code>/etc/sysconfig/iptables   #初始化保存配置文件
+
+初始化操作配置
+iptables -F        清除所有规则，不会处理默认的规则
+iptables -X        清除用户自定义的链
+iptables -Z        清除链的计数器清零（数据包计数器与数据包字节计数器）
+iptables -nL -v  显示计数器信息
+
+iptables -A INPUT -s 10.0.0.0/24 -i eth1 -p tcp --dport 22 -j ACCEPT  先把自己允许(别限制太细)
+iptables -A INPUT -i lo -j ACCEPT  允许自己ping自己
+iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT  允许内网访问进来
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT   允许安全状态机制
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT  允许安全状态机制
+iptables -P INPUT DROP    进来的数据包配置默认拒绝
+iptables -P FORWARD DROP  进来的FORWARD配置默认拒绝
+iptables -P OUTPUT ACCEPT 出去的数据包配置默认允许
+</code></pre><p>业务配置</p>
+<pre><code>iptables -A INPUT -p tcp -m multiport --dport 80,443 -j ACCEPT   #开放80和443 Web端口
+iptables -A INPUT -p icmp -m icmp --icmp-type any -j DROP      #公网禁止Ping
+iptables -A INPUT -s 172.16.1.0/24 -j ACCEPT    # 允许访问的原地址网段
+</code></pre><h5 id="防火墙规则永久保存"><a href="#防火墙规则永久保存" class="headerlink" title="防火墙规则永久保存"></a>防火墙规则永久保存</h5><pre><code>方法1：/etc/init.d/iptables save 永久保存
+</code></pre><pre><code>方法2： iptables-save  #查看当前规则
+iptables-save &gt; /etc/sysconfig/iptables  #保存规则
+</code></pre><pre><code>方法3： 放到脚本中,然后crontab定时加载一次。或者开启自加载
+</code></pre><p>此时再重启iptables服务配置就不会丢失了</p>
+<h4 id="iptables线上配置规范"><a href="#iptables线上配置规范" class="headerlink" title="iptables线上配置规范"></a>iptables线上配置规范</h4><pre><code>在测试环境测试OK后，再在线上机器配置
+
+注：iptables -A INPUT ......iptables开头的命令配置完毕后是即时生效的
+    而vim /etc/sysconfig/iptables配置文件中修改后需要重启才能生效
+</code></pre><h5 id="SNAT共享上网"><a href="#SNAT共享上网" class="headerlink" title="SNAT共享上网"></a>SNAT共享上网</h5><pre><code>环境说明：
+(iptables)主机1: 
+eth0:IP:10.0.0.8(公网IP)   eth1:IP:172.16.1.50
+
+主机2: eth1 - IP:172.16.1.51
+</code></pre><p>以下配置均在防火墙上配置</p>
+<pre><code>#iptables上开启内核转发
+vim /etc/sysctl.conf
+net.ipv4.ip_forward = 1
+sysctl -p
+</code></pre><pre><code>iptables配置内网172.16.1.51主机NAT
+iptables -t nat -A POSTROUTING -s 172.16.1.51 -o eth0 -j SNAT --to-source 10.0.0.8
+注：这里10.0.0.8是iptables上的公网IP
+</code></pre><pre><code>最后，在172.16.1.51服务器上配置网关为172.16.1.50或配置如下路由
+ip route 0.0.0.0 0.0.0.0 172.15.1.50
+</code></pre><p>故障排查</p>
+<pre><code>内网机ping外网测试,如果Ping不通,则按照包转发流程排查
+
+iptables -nL -v
+iptables -A FORWARD -o eth0 -s 172.16.1.0/24 -j ACCEPT  #对172.16.1.0/24网段出口转发
+iptables -A FORWARD -i eth1 -d 172.16.1.0/24 -j ACCEPT  #对172.16.1.0/24网段启用进来转发
+
+注：如果配置了默认FORWARD策略为DROP，则需要配置以上两条FORWARD规则
+
+注：172.16.1.51是局域网IP地址(非iptables主机)
+    -o 表示出去的网口
+    -i 表示进来的网口
+    -s 指定源地址
+    -d 指定目的地址
+</code></pre><p>如果没有固定外网IP地址,可以使用以下NAT伪装命令</p>
+<pre><code>iptables -t nat -A POSTROUTING -s  172.16.1.0/24 -o eth0 -j MASQUERADE
+</code></pre><h4 id="DNAT端口映射"><a href="#DNAT端口映射" class="headerlink" title="DNAT端口映射"></a>DNAT端口映射</h4><pre><code>访问我本机的10.0.0.8(公网IP)的9000端口，映射到172.16.1.51的22端口
+iptables -t nat -A PREROUTING -d 10.0.0.8 -p tcp --dport 9000 -i eth0 -j DNAT --to-destination 172.16.1.51:22
+</code></pre><p>####DNAT一对一映射</p>
+<pre><code>iptables项目案例3：IP一对一映射  172.16.1.10 == 10.0.0.8(公网)
+
+iptables  -t nat -I PREROUTING -d 10.0.0.8 -j DNAT --to-destination 172.16.1.10
+iptables  -t nat -I POSTROUTING -s 172.16.1.51 -o eth0 -j SNAT --to-source 10.0.0.8
+</code></pre><h4 id="映射多个外网IP上网"><a href="#映射多个外网IP上网" class="headerlink" title="映射多个外网IP上网"></a>映射多个外网IP上网</h4><pre><code>方法1：
+   iptables -t nat -A POSTROUTING -s 10.0.1.0/255.255.240.0 -o eth0 -j SNAT --to-source 124.42.60.11-124.42.60.16
+三层交换机或路由器，划分VLAN。
+
+
+方法2：
+iptables -t nat -A POSTROUTING -s 10.0.1.0/22 -o eth0 -j SNAT --to-source 124.42.60.11
+iptables -t nat -A POSTROUTING -s 10.0.2.0/22 -o eth0 -j SNAT --to-source 124.42.60.12
+扩大子网，增加广播风暴。
+</code></pre><h4 id="iptables自定义链"><a href="#iptables自定义链" class="headerlink" title="iptables自定义链"></a>iptables自定义链</h4><pre><code>与shell变量定义类似，目的是方便使用
+
+RETURN意思是当此策略不匹配时，继续执行下面的一条命令
+</code></pre><pre><code>#说明:创建名字为syn-flood自定义链
+iptables -N syn-flood  
+
+#定义自定义链的值(syn并发超过200个就每秒限制5000个包,不匹配就执行下一条规则)
+iptables -A syn-flood -m limit -limit 5000/s -limit-burst 200 -j RETURN   
+iptables -A syn-flood -j DROP 
+
+#应用名字为syn-flood的规则
+iptables -A INPUT -i eth0 -syn -j syn-flood
+</code></pre><p>自定义链测试</p>
+<pre><code>需求：对多个网段数据包进行丢弃
+iptable -A INPUT -s 10.0.0.0/24 -p tcp --dport 22 -j DROP
+iptable -A INPUT -s 11.0.0.0/24 -p tcp --dport 22 -j DROP
+iptable -A INPUT -s 12.0.0.0/24 -p tcp --dport 22 -j DROP
+iptable -A INPUT -s 13.0.0.0/24 -p tcp --dport 22 -j DROP
+
+上面太繁琐，使用自定义链配置如下：
+iptable -N IPNET
+iptable -A IPNET -p tcp --dport 22 -j DROP
+
+调用自定义链
+iptable -A INPUT -s 10.0.0.0/24 -j IPNET
+iptable -A INPUT -s 11.0.0.0/24 -j IPNET
+iptable -A INPUT -s 12.0.0.0/24 -j IPNET
+iptable -A INPUT -s 13.0.0.0/24 -j IPNET
+
+如果后期需要变更的时候，只需要修改自定义链的配置即可，举例如下：
+iptable -R IPNET 1 -p tcp -m mutilport --dport 22,23 -j DROP
+</code></pre><h4 id="iptables优化"><a href="#iptables优化" class="headerlink" title="iptables优化"></a>iptables优化</h4><pre><code>系统防火墙与网络内核优化标准参数
+有关iptables的内核优化
+调整内核参数文件/etc/sysctl.conf
+
+以下是我的生产环境的某个服务器的配置：
+
+------------解决time-wait过多-------------
+net.ipv4.tcp_fin_timeout = 2
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_keepalive_time = 600
+net.ipv4.tcp_max_tw_buckets = 36000
+----------------------------------
+net.ipv4.ip_local_port_range = 4000  65000
+net.ipv4.tcp_max_syn_backlog = 16384
+net.ipv4.route.gc_timeout = 100
+net.ipv4.tcp_syn_retries = 1
+net.ipv4.tcp_synack_retries = 1
+----------------------------------
+#dmesg里面显示 ip_conntrack: table full, dropping packet.的错误提示，什么原因？如何解决？
+#iptables优化
+net.nf_conntrack_max = 25000000
+net.netfilter.nf_conntrack_max = 25000000
+net.netfilter.nf_conntrack_tcp_timeout_established = 180
+net.netfilter.nf_conntrack_tcp_timeout_time_wait = 120
+net.netfilter.nf_conntrack_tcp_timeout_close_wait = 60
+net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 120
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-08T07:41:11.532Z" itemprop="dateUpdated">2018-04-08 15:41:11</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/02/10/iptables网络防火墙/" target="_blank" rel="external">https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iptables/">iptables</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/防火墙/">防火墙</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/&title=《iptables网络防火墙》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/&title=《iptables网络防火墙》 — Gary Wu&source=官网：http://www.netfilter.org/
+iptables由Netfilter内核态组件实现防火墙功能, 包过滤功能强大，使用灵活
+不适用..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《iptables网络防火墙》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/11/jumpserver连接登陆时间隔天的问题/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">jumpserver连接登陆时间隔天的问题</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/09/zabbix自定义key监控mysql主从/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">zabbix自定义key监控mysql主从</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/&title=《iptables网络防火墙》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/&title=《iptables网络防火墙》 — Gary Wu&source=官网：http://www.netfilter.org/
+iptables由Netfilter内核态组件实现防火墙功能, 包过滤功能强大，使用灵活
+不适用..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《iptables网络防火墙》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/02/10/iptables网络防火墙/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

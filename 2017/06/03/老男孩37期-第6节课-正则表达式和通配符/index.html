@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>老男孩37期-第6节课-正则表达式和通配符 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,shell,egrep,sed,awk,正则表达式">
+    <meta name="description" content="上节课回顾-命令补充回顾 ls -li与ls -lhi的区别   ls -lrt">
+<meta name="keywords" content="Linux基础,shell,egrep,sed,awk,正则表达式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="老男孩37期-第6节课-正则表达式和通配符">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="上节课回顾-命令补充回顾 ls -li与ls -lhi的区别   ls -lrt">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-06-09T03:32:34.208Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="老男孩37期-第6节课-正则表达式和通配符">
+<meta name="twitter:description" content="上节课回顾-命令补充回顾 ls -li与ls -lhi的区别   ls -lrt">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">老男孩37期-第6节课-正则表达式和通配符</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">老男孩37期-第6节课-正则表达式和通配符</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-03T11:11:52.000Z" itemprop="datePublished" class="page-time">
+  2017-06-03
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#上节课回顾-命令补充回顾"><span class="post-toc-number">1.</span> <span class="post-toc-text">上节课回顾-命令补充回顾</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#特殊符号"><span class="post-toc-number"></span> <span class="post-toc-text">特殊符号</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#通配符"><span class="post-toc-number">1.</span> <span class="post-toc-text">通配符</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#（星号示例）"><span class="post-toc-number">2.</span> <span class="post-toc-text">* （星号示例）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#（花括号示例）"><span class="post-toc-number">3.</span> <span class="post-toc-text">{} （花括号示例）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#示例：创建-stu01-txt-到stu05-txt"><span class="post-toc-number">3.0.1.</span> <span class="post-toc-text">示例：创建 stu01.txt 到stu05.txt</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#使用花括号进行备份"><span class="post-toc-number">3.0.2.</span> <span class="post-toc-text">使用花括号进行备份</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#单引号、双引号与不加引号区别"><span class="post-toc-number">3.0.3.</span> <span class="post-toc-text">单引号、双引号与不加引号区别</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基本正则表达式"><span class="post-toc-number"></span> <span class="post-toc-text">基本正则表达式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#正则别名定义-准备-环境"><span class="post-toc-number">0.0.1.</span> <span class="post-toc-text">正则别名定义  -  准备-环境</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#正则表达式分为2种"><span class="post-toc-number">0.0.2.</span> <span class="post-toc-text">正则表达式分为2种</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#基本正则表达式-环境准备"><span class="post-toc-number">0.0.3.</span> <span class="post-toc-text">基本正则表达式-环境准备</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#基本正则表达式-1"><span class="post-toc-number">0.0.4.</span> <span class="post-toc-text">基本正则表达式</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展正则表达式"><span class="post-toc-number"></span> <span class="post-toc-text">扩展正则表达式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试题"><span class="post-toc-number"></span> <span class="post-toc-text">测试题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#利用sed取出eth0的IP地址？"><span class="post-toc-number">1.</span> <span class="post-toc-text">利用sed取出eth0的IP地址？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则方法1-掐头去尾法-："><span class="post-toc-number">2.</span> <span class="post-toc-text">正则方法1(掐头去尾法)：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则方法2"><span class="post-toc-number">3.</span> <span class="post-toc-text">正则方法2</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则方法3"><span class="post-toc-number">4.</span> <span class="post-toc-text">正则方法3</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#利用反向引用，取出IP地址"><span class="post-toc-number">4.0.1.</span> <span class="post-toc-text">利用反向引用，取出IP地址</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#利用反向引用，取Bcast地址"><span class="post-toc-number">4.0.2.</span> <span class="post-toc-text">利用反向引用，取Bcast地址</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则方法4"><span class="post-toc-number">5.</span> <span class="post-toc-text">正则方法4</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#方法5"><span class="post-toc-number">6.</span> <span class="post-toc-text">方法5:</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扩展1：sed文件内容替换"><span class="post-toc-number"></span> <span class="post-toc-text">扩展1：sed文件内容替换</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扩展2：使用正则提取-etc-hosts权限"><span class="post-toc-number"></span> <span class="post-toc-text">扩展2：使用正则提取/etc/hosts权限</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扩展3：取消某个文件的空行"><span class="post-toc-number"></span> <span class="post-toc-text">扩展3：取消某个文件的空行</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扩展4：取出文本前两列"><span class="post-toc-number"></span> <span class="post-toc-text">扩展4：取出文本前两列</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#date时间显示"><span class="post-toc-number"></span> <span class="post-toc-text">date时间显示</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#显示三天前日期"><span class="post-toc-number"></span> <span class="post-toc-text">显示三天前日期</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#sed-正则"><span class="post-toc-number"></span> <span class="post-toc-text">sed 正则</span></a>
+        </nav>
+    </aside>
+
+
+<article id="post-老男孩37期-第6节课-正则表达式和通配符"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">老男孩37期-第6节课-正则表达式和通配符</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-03 19:11:52" datetime="2017-06-03T11:11:52.000Z"  itemprop="datePublished">2017-06-03</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="上节课回顾-命令补充回顾"><a href="#上节课回顾-命令补充回顾" class="headerlink" title="上节课回顾-命令补充回顾"></a>上节课回顾-命令补充回顾</h4><pre><code> ls -li与ls -lhi的区别
+
+ ls -lrt
+</code></pre><a id="more"></a>
+<h2 id="特殊符号"><a href="#特殊符号" class="headerlink" title="特殊符号"></a>特殊符号</h2><h4 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h4><pre><code> 简单理解为键盘上除了字母和数字之外的特殊符号，称为通配符
+
+*      匹配任意文本/字符串，例：*.txt 、*.log等
+{}     用于生成序列。花括号里面以逗号分隔，且不能有空格  
+$      取变量的值
+··    （Esc键下边）反引号 
+|      管道
+;      用于分隔，比如：ls -l ;pwd (前面执行失败，后面依然执行)
+&amp;&amp;     用于分隔，比如：ls -l &amp;&amp; pwd(前面执行成功，才会执行后面的命令)
+</code></pre><h4 id="（星号示例）"><a href="#（星号示例）" class="headerlink" title="* （星号示例）"></a>* （星号示例）</h4><pre><code>ls -l  *.log  *.txt   查找后缀为log和txt的文件
+
+ls -l stu*   查找以stu开头的文件
+
+cat  stu*    查看stu开头文件的内容
+
+ls -l  stu*.txt    查看stu开头并且以txt结尾
+</code></pre><h4 id="（花括号示例）"><a href="#（花括号示例）" class="headerlink" title="{} （花括号示例）"></a>{} （花括号示例）</h4><pre><code>[root@oldboy202 20170118]# echo {1..5}
+1 2 3 4 5
+
+[root@oldboy202 20170118]# echo {5..1}
+5 4 3 2 1
+
+[root@oldboy202 20170118]# echo {1..5} {a..z}
+1 2 3 4 5 a b c d e f g h i j k l m n o p q r s t u v w x y z
+
+[root@oldboy202 20170118]# echo A{B,C,D}
+AB AC AD
+
+[root@oldboy202 20170118]# echo 2{2,3,4}
+22 23 24
+
+[root@oldboy202 20170118]#  echo {1,3,5}
+1 3 5
+
+echo stu{0..5}     工作中常用
+</code></pre><h6 id="示例：创建-stu01-txt-到stu05-txt"><a href="#示例：创建-stu01-txt-到stu05-txt" class="headerlink" title="示例：创建 stu01.txt 到stu05.txt"></a>示例：创建 stu01.txt 到stu05.txt</h6><pre><code>[root@oldboy202 ~]#  touch stu{01..5}.txt
+[root@oldboy202 ~]# ls stu*.txt
+stu01.txt  stu02.txt  stu03.txt  stu04.txt  stu05.txt
+</code></pre><h6 id="使用花括号进行备份"><a href="#使用花括号进行备份" class="headerlink" title="使用花括号进行备份"></a>使用花括号进行备份</h6><pre><code>公式：  echo A{B,C}    意思是结果粘在一起
+        AB  AC
+
+        echo A{,C}  
+        A  AC
+
+备份
+cp oldboy.txt{,.bak}  
+这条命令就等于执行  cp  oldboy.txt  oldboy.txt.bak
+</code></pre><h6 id="单引号、双引号与不加引号区别"><a href="#单引号、双引号与不加引号区别" class="headerlink" title="单引号、双引号与不加引号区别"></a>单引号、双引号与不加引号区别</h6><pre><code>单引号：吃啥吐啥
+[root@oldboy202 ~]# echo &#39;$(which mkdir) {a..z}&#39;
+$(which mkdir) {a..z}
+
+双引号：不支持通配符
+[root@oldboy202 ~]# echo &quot;$(which mkdir) {a..z}&quot;
+/bin/mkdir {a..z}
+
+不加引号：
+[root@oldboy202 ~]# echo  $(which mkdir) {a..z}
+/bin/mkdir a b c d e f g h i j k l m n o p q r s t u v w x y z
+</code></pre><p>​<br>​    </p>
+<h2 id="基本正则表达式"><a href="#基本正则表达式" class="headerlink" title="基本正则表达式"></a>基本正则表达式</h2><pre><code>  为处理大量文本/字符串而定义的一套规则和方法，以行为单位处理
+
+  正则表达式- regular expression（RE）
+
+  正则表达式与通配符区别:
+  正则表达式是在文件中查找内容，而通配符一般是查找匹配文件
+
+
+  查找内容的时候，匹配的内容显示颜色
+  grep  --color=auto 3306 /etc/services
+</code></pre><h6 id="正则别名定义-准备-环境"><a href="#正则别名定义-准备-环境" class="headerlink" title="正则别名定义  -  准备-环境"></a>正则别名定义  -  准备-环境</h6><pre><code>alias egrep=&#39;egrep --color=auto&#39;
+alias grep=&#39;grep --color=auto&#39; 
+cat &gt;&gt;/etc/profile&lt;&lt;EOF
+alias egrep=&#39;egrep --color=auto&#39;
+alias grep=&#39;grep --color=auto&#39;
+EOF
+source  /etc/profile 
+</code></pre><h6 id="正则表达式分为2种"><a href="#正则表达式分为2种" class="headerlink" title="正则表达式分为2种"></a>正则表达式分为2种</h6><pre><code>1    基本正则表达式（BRE，basic regular expression）
+2    高级功能:扩展正则表达式（ERE，extended  regular expression）
+</code></pre><h6 id="基本正则表达式-环境准备"><a href="#基本正则表达式-环境准备" class="headerlink" title="基本正则表达式-环境准备"></a>基本正则表达式-环境准备</h6><p>cat oldboy.txt</p>
+<pre><code>I am oldboy teacher!
+I teach linux.
+
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+my qq num is 49000448.
+
+not 4900000448.
+my god ,i am not oldbey,but OLDBOY!
+</code></pre><h6 id="基本正则表达式-1"><a href="#基本正则表达式-1" class="headerlink" title="基本正则表达式"></a>基本正则表达式</h6><pre><code>^ 尖角号    找以什么开头的行
+示例：grep &quot;^my&quot; oldboy.txt   //查找以my开头的行
+
+$     找以什么结尾的行
+示例： grep &quot;m$&quot; oldboy.txt 
+
+^$    表示找空行，这一行什么都没有（不是空格）
+示例： grep -n &quot;^$&quot; oldboy.txt 
+       3:
+       8:
+注：-n  参数意思是添加行号
+</code></pre><p>PS：cat -A oldboy.txt   查看文件空行，空格以$显示</p>
+<pre><code>. (点)  这个正则表达式，一次可以找到任意1个字符
+</code></pre><p>PS： grep -o “.” oldboy.txt   显示grep  1次找到了什么内容<br>通常与 grep -o “.*” oldboy.txt  一般这么使用，查看找到的所有内容 </p>
+<pre><code>示例1：如果我忘了中间是什么字符，如何匹配查找？
+[root@oldboy202 ~]# grep &quot;oldb.y&quot; oldboy.txt 
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+
+示例2：查找以小数点 “.” 结尾的行
+[root@oldboy202 ~]# grep &quot;\.$&quot; oldboy.txt 
+I teach linux.
+my qq num is 49000448.
+not 4900000448.
+因为.在三剑客有特殊含义，所以需要转义，需要用到\ 
+</code></pre><p>​    </p>
+<!-- more-->
+<pre><code>\ 撬棍，转义使用
+
+示例3：查找以“//” 开头的行
+[root@oldboy202 ~]# egrep &quot;\/\/&quot; oldboy.txt 
+ my blog is http://oldboy.blog.51cto.com
+ our site is http://www.etiantian.org
+</code></pre><!-- more -->
+<p>​<br>​<br>    0<em>   表示数字0连续出现了0次或多次<br>    0</em>   另外一个意思表示连续出现0次的时候，什么都没有,代表空<br>    示例：grep “0*” oldboy.txt   等同于 grep “” oldboy.txt</p>
+<pre><code>0* 表示连续出现多次的时候，就会把 000  00000都取出来。
+
+grep -o &quot;0*&quot; oldboy.txt   //查看grep如何去查找连续
+000
+00000
+
+正则表达式的连续是指从0作为起始，1次以上（含1次）即视为多次
+</code></pre><!-- more-->
+<pre><code>.*   匹配文本*前面任意字符的所有内容
+示例1：
+grep  -on &quot;.*&quot; oldboy.txt
+
+示例2：
+grep  &quot;^.*o&quot; oldboy.txt  查找以任1个字符开头且包含o的行
+表示连续或重复的时候，正则会匹配的更多
+
+示例：
+[root@oldboy202 ~]# grep -no &quot;^.*e&quot; oldboy.txt 
+1:I am oldboy teache
+2:I te
+4:I like badminton ball ,billiard ball and chinese che
+6:our site is http://www.e
+10:my god ,i am not oldbe
+
+[root@oldboy202 ~]# grep  &quot;^.*e&quot; oldboy.txt 
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+
+[root@oldboy202 ~]# egrep &quot;.*g.*$&quot; oldboy.txt 
+my blog is http://oldboy.blog.51cto.com
+our sigte is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+
+^.*  从头匹配所有，直到指定字符结束
+示例：
+[root@oldboy202 ~]# grep &quot;^.*b&quot; oldboy.txt 
+I am oldboy teacher!
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+
+
+[abc]  匹配字符集合，正则将其视为一个整体，匹配A或匹配B或匹配C
+[A-Z]匹配大小写字母
+[a-z]
+[0-9]匹配数字
+示例：
+grep  &quot;[b]&quot; oldboy.txt
+grep -no &quot;[abc]&quot; oldboy.txt
+
+grep &quot;[A-Z]&quot; oldboy.txt
+grep &quot;[1-9a-zA-Z]&quot; oldboy.txt
+
+示例：
+找以大写字母开头的行
+grep &quot;^[A-Z]&quot;  oldboy.txt
+找以小写字母结尾的行
+grep &quot;[a-z]$&quot; oldboy.txt
+</code></pre><!-- more-->
+<pre><code>练习：
+找以m或n或o开头的 并且以m或g结尾的行？
+
+方法1：
+[root@oldboy202 ~]# grep &quot;^[mno]&quot; oldboy.txt |grep &quot;[mg]$&quot;
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+
+方法2：
+[root@oldboy202 ~]# grep &quot;^[mno].*[mg]$&quot; oldboy.txt 
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+
+
+[^abc] 匹配不包含^后面的字符，其他字符都要
+grep &quot;[^abc]&quot; oldboy.txt
+
+练习：找出除了m或n开头的行
+[root@oldboy202 ~]# grep &quot;^[^mn]&quot; oldboy.txt 
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+our site is http://www.etiantian.org
+</code></pre><p>扩展1: 查找模糊字符串</p>
+<pre><code>[root@oldboy202 ~]# grep &quot;old.*y&quot; oldboy.txt 
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+</code></pre><p>扩展2：grep -v 与[^abc]区别</p>
+<pre><code>grep -v 排除掉某行
+[^abc] 排除掉a或b或c
+示例：grep -v &quot;[mn]&quot; oldboy.txt
+</code></pre><h2 id="扩展正则表达式"><a href="#扩展正则表达式" class="headerlink" title="扩展正则表达式"></a>扩展正则表达式</h2><pre><code> 命令：egrep 或grep -E
+
+ +（加号）  前一个字符连续出现了1个或多个
+ 注：正则里面加号1次就认为是多次
+
+ 示例：
+ [root@oldboy202 ~]# egrep &quot;0+&quot; oldboy.txt 
+  my qq num is 49000448.
+  not 4900000448.
+
+ 查看egrep是如何查找的？
+ [root@oldboy202 ~]# egrep -o &quot;0+&quot; oldboy.txt 
+ 000
+ 00000
+
+ 示例：查找连续小写字母取出来(注：取的是连续的字符)
+ [root@oldboy202 ~]# egrep &quot;[a-z]+&quot; oldboy.txt 
+ I am oldboy teacher!
+ I teach linux.
+
+
+|   管道在正则里面意思是“或者”
+
+示例1：egrep &quot;3306|1521&quot; /etc/services
+
+示例2：找出my或者oldboy取出来
+[root@oldboy202 ~]# egrep &quot;my|oldboy&quot; oldboy.txt 
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+
+示例3：找出dumpe2fs /dev/sda1结果中的inode size和inode count
+dumpe2fs /dev/sda1 |egrep -i &quot;inode size|innode count&quot;
+
+
+()  小括号，正则里面表示一个整体
+
+示例1：取出oldboy和oldbey
+[root@oldboy202 ~]# egrep &quot;oldb(o|e)y&quot; oldboy.txt 
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+
+示例2：找出good和glad
+[root@oldboy202 ~]# egrep &quot;g(oo|la)d&quot; a.log 
+good
+glad
+
+
+?  问号，重复前面的字符0次或1次
+示例：
+[root@oldboy202 ~]# egrep &quot;go?d&quot; a.log 
+gd    
+god
+
+a{n,m} 重复前面的字符n到m次
+a{n,} 重复前面最少n次
+a{,m} 重复前面最多n次
+
+示例1：
+[root@oldboy202 ~]# egrep -o &quot;0{1,3}&quot; oldboy.txt 
+000
+000
+00
+
+示例2：
+[root@oldboy202 ~]# egrep  &quot;0{3,4}&quot; oldboy.txt 
+my qq num is 49000448.
+not 4900000448.
+
+查看其匹配工作情况
+[root@oldboy202 ~]# egrep  -o &quot;0{3,4}&quot; oldboy.txt 
+000
+0000
+</code></pre><p>​<br>    egrep 和 sed -r 支持扩展正则<br>    awk直接支持扩展正则</p>
+<p>转义字符（了解）</p>
+<pre><code>\b  
+\n
+</code></pre><h2 id="测试题"><a href="#测试题" class="headerlink" title="测试题"></a>测试题</h2><h4 id="利用sed取出eth0的IP地址？"><a href="#利用sed取出eth0的IP地址？" class="headerlink" title="利用sed取出eth0的IP地址？"></a>利用sed取出eth0的IP地址？</h4><pre><code>第一步：定位
+第二步：取内容
+
+ifconfig eth0|sed -n &#39;2p&#39;
+ifconfig eth0 |grep &quot;inet addr&quot;
+</code></pre><h4 id="正则方法1-掐头去尾法-："><a href="#正则方法1-掐头去尾法-：" class="headerlink" title="正则方法1(掐头去尾法)："></a>正则方法1(掐头去尾法)：</h4><pre><code>取IP地址
+[root@oldboy202 ~]# ifconfig eth0|sed -n &#39;2p&#39; |sed &#39;s#^.*addr:##g&#39;|sed &#39;s#Bc.*$##g&#39;
+10.0.0.202  
+
+取出Bcast地址
+[root@oldboy202 ~]# ifconfig eth0|sed -n &#39;2p&#39; |sed &#39;s#^.*ast:##g&#39; |sed &#39;s#Mask.*$##g&#39;
+10.0.0.255  
+</code></pre><h4 id="正则方法2"><a href="#正则方法2" class="headerlink" title="正则方法2"></a>正则方法2</h4><pre><code> 取IP
+ [root@oldboy202 ~]# ifconfig eth0 |sed -n &#39;2p&#39; |sed -r &#39;s#^.*dr:|Bc.*$##g&#39;
+ 10.0.0.202 
+
+取Bcast地址
+[root@oldboy202 ~]# ifconfig eth0|sed -n &#39;2p&#39; |sed -r &#39;s#^.*ast:|Mask.*$##g&#39;
+10.0.0.255  
+
+注：sed -r 使用扩展正则
+    |    表示或者
+</code></pre><h4 id="正则方法3"><a href="#正则方法3" class="headerlink" title="正则方法3"></a>正则方法3</h4><pre><code> 反向引用-预备知识：保留谁就括谁
+ [root@oldboy202 ~]# echo 123456 |sed -r &#39;s#..(..)..#\1#g&#39;
+ 34 
+ [root@oldboyedu37-nb 20170118]# echo 123456|sed -r &#39;s#.(.).(.)..#\1 \2#g&#39;
+ 2 4
+ [root@oldboyedu37-nb 20170118]# echo 123456|sed -r &#39;s#.(.).(.)..#\2 \1 \2 \2 \2 #g&#39;
+ 4 2 4 4 4 
+ [root@oldboy202 ~]# echo 123456|sed -r &#39;s#.(...).#\1#g&#39;
+ 2346
+ 注：
+ 1.前面有多少个字符，就需要写几个点
+ 2.后面的\1是指前面括号里边的内容
+</code></pre><h6 id="利用反向引用，取出IP地址"><a href="#利用反向引用，取出IP地址" class="headerlink" title="利用反向引用，取出IP地址"></a>利用反向引用，取出IP地址</h6><pre><code> [root@oldboy202 ~]# ifconfig eth0 |sed -n &#39;2p&#39; |sed -r &#39;s#^.*dr:(.*)  Bc.*$#\1#g&#39;
+ 10.0.0.202
+</code></pre><h6 id="利用反向引用，取Bcast地址"><a href="#利用反向引用，取Bcast地址" class="headerlink" title="利用反向引用，取Bcast地址"></a>利用反向引用，取Bcast地址</h6><pre><code> [root@oldboy202 ~]# ifconfig eth0 |sed -n &#39;2p&#39; |sed -r &#39;s#^.*st:(.*)  Ma.*$#\1#g&#39;
+ 10.0.0.255
+</code></pre><h4 id="正则方法4"><a href="#正则方法4" class="headerlink" title="正则方法4"></a>正则方法4</h4><pre><code> 对某一行进行字符串替换
+
+ 格式：sed -n &#39;5#原内容#新内容#p&#39;   filename
+
+ 示例：替换oldboy.txt中第5行的oldboy为oldgirl
+ sed -n &#39;5s#oldboy#oldgirl#gp&#39;  oldboy.txt
+
+
+ifconfig eth0|sed -nr &#39;2s#^.*dr:(.*)  Bc.*$#\1#gp&#39;
+10.0.0.200
+</code></pre><h4 id="方法5"><a href="#方法5" class="headerlink" title="方法5:"></a>方法5:</h4><pre><code>[root@oldboyedu37-nb 20170118]# ifconfig eth0 |grep &quot;Bcast&quot; |egrep -o &quot;[0-9.]+&quot;  
+</code></pre><p>​    </p>
+<h3 id="扩展1：sed文件内容替换"><a href="#扩展1：sed文件内容替换" class="headerlink" title="扩展1：sed文件内容替换"></a>扩展1：sed文件内容替换</h3><pre><code>sed -i.bak &#39;s#oldboy#oldgirl#g&#39; oldboy.txt
+
+参数：-i.bak 表示修改文件的时候，先保存为oldboy.txt.bak
+
+注：sed 使用-i参数并且标记完修改之前先备份的时候，如果要使用正则表达式，需要把sed -r参数放到前面，这样：
+
+sed -ri.bak &#39;s#old(b)oy#oldgirl\1#g&#39; oldboy.txt
+修改oldoy为oldgirl,同时把b保留下来
+修改结果：
+my blog is http://oldgirlb.blog.51cto.com
+</code></pre><h3 id="扩展2：使用正则提取-etc-hosts权限"><a href="#扩展2：使用正则提取-etc-hosts权限" class="headerlink" title="扩展2：使用正则提取/etc/hosts权限"></a>扩展2：使用正则提取/etc/hosts权限</h3><pre><code> 方法1：     
+ [root@oldboyedu37-nb 20170118]# stat /etc/hosts|sed -n &#39;4p&#39;|sed &#39;s#^.*(0##g&#39; |sed &#39;s#/.*$##g&#39;
+ 644
+
+ 正则方法2：
+ [root@oldboy202 ~]# stat /etc/hosts | sed -n &#39;4p&#39; |sed -r &#39;s#^.* \(0(.*)\/.*$#\1#g&#39;
+ 644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0
+
+ [root@oldboy202 ~]# stat /etc/hosts | sed -n &#39;4p&#39; |sed -r &#39;s#^.* \(0(.*)\/-.*$#\1#g&#39;
+ 644
+
+ 方法3：
+ [root@oldboy202 ~]# stat /etc/hosts|sed -nr &#39;4s#^.*\(0(.*)/-.*$#\1#gp&#39; 
+ 644
+
+ 方法4: 
+ [root@oldboy202 ~]# stat /etc/hosts |grep &quot;Uid&quot; |egrep -o &quot;[0-9]{4}&quot;
+ 0644
+</code></pre><h3 id="扩展3：取消某个文件的空行"><a href="#扩展3：取消某个文件的空行" class="headerlink" title="扩展3：取消某个文件的空行"></a>扩展3：取消某个文件的空行</h3><pre><code>方法1：
+[root@oldboy202 ~]# egrep -v &quot;^$&quot; oldboy.txt 
+
+方法2：
+[root@oldboy202 ~]# sed &#39;/^$/d&#39; oldboy.txt
+
+方法3：
+[root@oldboy202 ~]# awk &#39;!/^$/&#39; oldboy.txt
+I am oldgirlb teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+
+方法4：
+[root@oldboy202 ~]# grep &#39;^.&#39; oldboy.txt
+
+方法5:
+[root@oldboy202 ~]# grep &quot;.$&quot; oldboy.txt
+</code></pre><h3 id="扩展4：取出文本前两列"><a href="#扩展4：取出文本前两列" class="headerlink" title="扩展4：取出文本前两列"></a>扩展4：取出文本前两列</h3><pre><code> [root@oldboy202 ~]# cat ett.txt |egrep &quot;ol+dbo+y&quot; 
+ oldboy
+ olldboooy
+
+ [root@oldboy202 ~]# cat ett.txt |egrep &quot;^o&quot;
+ oldboy
+ olldboooy
+
+ [root@oldboy202 ~]# cat ett.txt |awk &#39;/ol+dbo+y/&#39;
+ oldboy
+ olldboooy
+</code></pre><h3 id="date时间显示"><a href="#date时间显示" class="headerlink" title="date时间显示"></a>date时间显示</h3><pre><code>date
++ 以某种格式显示日期
+date +%F      年月日
+date +%F_%T   年月日时分秒
+date %w       星期几,0表示周日
+</code></pre><h3 id="显示三天前日期"><a href="#显示三天前日期" class="headerlink" title="显示三天前日期"></a>显示三天前日期</h3><pre><code>date -d &quot;3day&quot;   显示3天后时间
+</code></pre><p>​<br>    date -d “-3day”  显示3天前时间<br>    date -d “-3hour” 显示3小时前时间<br>    date -d  “-3year” 显示3年之前时间</p>
+<pre><code>工作中常用方法:
+备份的时候需要给文件名，命名。
+date +%F -d &quot;-1day&quot;
+</code></pre><h3 id="sed-正则"><a href="#sed-正则" class="headerlink" title="sed 正则"></a>sed 正则</h3><pre><code>## 查找以f或m结尾的行
+[root@server1 oldboy]# sed -n &#39;/f$\|m$/p&#39; oldboy2.txt 
+my blog is http://oldboy.blog.51cto.com
+oldboy f
+
+## 查找除了以f或m结尾的行
+[root@server1 oldboy]# sed -n &#39;/f$\|m$/!p&#39; oldboy2.txt 
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+our site is http://www.etiantian.org
+my qq num is 49000448.
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-06-09T03:32:34.208Z" itemprop="dateUpdated">2017-06-09 11:32:34</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/awk/">awk</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/egrep/">egrep</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sed/">sed</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/正则表达式/">正则表达式</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&title=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&title=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&source=上节课回顾-命令补充回顾 ls -li与ls -lhi的区别
+
+ ls -lrt
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/05/RouterOS多线NAT问题处理/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">RouterOS多线NAT问题处理</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/01/mysql备份脚本-rsync上传/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">mysql备份脚本-rsync上传</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&title=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&title=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&source=上节课回顾-命令补充回顾 ls -li与ls -lhi的区别
+
+ ls -lrt
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

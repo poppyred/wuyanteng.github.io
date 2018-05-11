@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Hexo搭建GitHub Blog | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,GitHub">
+    <meta name="description" content="环境准备1.安装Git （略）2.安装node.js 下载地址：https://nodejs.org/zh-cn/download/    根据平台，下载对应版本默认安装">
+<meta name="keywords" content="高级运维,GitHub">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo搭建GitHub Blog">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="环境准备1.安装Git （略）2.安装node.js 下载地址：https://nodejs.org/zh-cn/download/    根据平台，下载对应版本默认安装">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-05-27T09:28:37.418Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo搭建GitHub Blog">
+<meta name="twitter:description" content="环境准备1.安装Git （略）2.安装node.js 下载地址：https://nodejs.org/zh-cn/download/    根据平台，下载对应版本默认安装">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hexo搭建GitHub Blog</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hexo搭建GitHub Blog</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-24T12:20:16.000Z" itemprop="datePublished" class="page-time">
+  2017-05-24
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#环境准备"><span class="post-toc-number">1.</span> <span class="post-toc-text">环境准备</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-安装Git-（略）"><span class="post-toc-number"></span> <span class="post-toc-text">1.安装Git （略）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-安装node-js"><span class="post-toc-number"></span> <span class="post-toc-text">2.安装node.js</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-配置GitHub-SSH-Keys"><span class="post-toc-number"></span> <span class="post-toc-text">3. 配置GitHub SSH Keys</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-安装Hexo"><span class="post-toc-number"></span> <span class="post-toc-text">5. 安装Hexo</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6-Hexo关联GitHub"><span class="post-toc-number"></span> <span class="post-toc-text">6.Hexo关联GitHub</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文章新建、编辑、保存，静态化，本地预览，上传"><span class="post-toc-number"></span> <span class="post-toc-text">文章新建、编辑、保存，静态化，本地预览，上传</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常用命令"><span class="post-toc-number"></span> <span class="post-toc-text">常用命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#报错总结"><span class="post-toc-number"></span> <span class="post-toc-text">报错总结</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#主题推荐"><span class="post-toc-number">1.</span> <span class="post-toc-text">主题推荐</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Hexo搭建GitHub Blog"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hexo搭建GitHub Blog</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-24 20:20:16" datetime="2017-05-24T12:20:16.000Z"  itemprop="datePublished">2017-05-24</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><h2 id="1-安装Git-（略）"><a href="#1-安装Git-（略）" class="headerlink" title="1.安装Git （略）"></a>1.安装Git （略）</h2><h2 id="2-安装node-js"><a href="#2-安装node-js" class="headerlink" title="2.安装node.js"></a>2.安装node.js</h2><pre><code> 下载地址：https://nodejs.org/zh-cn/download/  
+ 根据平台，下载对应版本默认安装
+</code></pre><a id="more"></a>
+<h2 id="3-配置GitHub-SSH-Keys"><a href="#3-配置GitHub-SSH-Keys" class="headerlink" title="3. 配置GitHub SSH Keys"></a>3. 配置GitHub SSH Keys</h2><pre><code>首先启动一个Git Bash窗口（非Windows用户直接打开终端）
+
+执行：
+
+cd ~/.ssh
+
+ssh-keygen -t rsa -C &quot;your_email@youremail.com&quot;
+
+直接回车，不要修改默认路径；然后根据提示输入两次密码，密码要一致
+
+证书默认保存在C:\Users\当前登录用户名\.ssh目录下
+
+
+
+GitHub提交公钥：
+
+找到.ssh文件夹，用文本编辑器打开“id_rsa.pub”文件，复制内容到剪贴板。
+
+打开 https://github.com/settings/ssh ，点击 Add SSH Key 按钮，粘贴进去保存即可。
+
+
+
+测试登陆SSH
+
+运行git bash
+
+ssh -T git@github.com
+</code></pre><h2 id="5-安装Hexo"><a href="#5-安装Hexo" class="headerlink" title="5. 安装Hexo"></a>5. 安装Hexo</h2><pre><code>Node和Git都安装好后,首先创建一个文件夹,如Hexo。用户存放hexo的配置文件,然后进入Hexo文件夹安装Hexo。
+
+执行如下命令安装Hexo：
+
+sudo npm install -g hexo
+
+初始化然后，执行init命令初始化hexo,命令：
+
+hexo init
+
+好啦，至此，全部安装工作已经完成！blog就是你的博客根目录，所有的操作都在里面进行。
+</code></pre><h2 id="6-Hexo关联GitHub"><a href="#6-Hexo关联GitHub" class="headerlink" title="6.Hexo关联GitHub"></a>6.Hexo关联GitHub</h2><pre><code>建立Repository仓库，仓库格式:[username.github.io]固定写法
+
+现在我们需要_config.yml文件，来建立关联，命令：
+
+vim _config.yml
+</code></pre><p>翻到最下面，改成我这样子的</p>
+<pre><code>deploy:
+
+   type: git
+
+   repo: [SSH地址]
+
+   branch: master
+</code></pre><p>注：上面的格式有个坑，即type:和git之间有个英文的空格，该文件就是这种格式，否则文章上传报错</p>
+<pre><code>然后执行命令：
+
+npm install hexo-deployer-git --save
+</code></pre><h2 id="文章新建、编辑、保存，静态化，本地预览，上传"><a href="#文章新建、编辑、保存，静态化，本地预览，上传" class="headerlink" title="文章新建、编辑、保存，静态化，本地预览，上传"></a>文章新建、编辑、保存，静态化，本地预览，上传</h2><pre><code>hexo new&quot;postName&quot; #新建文章
+
+hexo generate（hexo g也可以）   //生成静态页面
+
+hexo server     //本地启动预览
+
+预览地址： http://localhost:4000
+
+所有的文章修改都可以使用以上两个命令进行预览，确认无问题后，使用下面的命令上传到github blog中
+
+
+
+执行配置命令：
+
+hexo deploy
+
+然后再浏览器中输入https://wuyanteng.github.io/就行了，我的github的账户叫wuyanteng,把这个改成你github的账户名就行了
+</code></pre><h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><pre><code>hexo new&quot;postName&quot; #新建文章
+
+hexo new page&quot;pageName&quot; #新建页面
+
+hexo generate  #生成静态页面至public目录
+
+hexo help # 查看帮助
+
+hexo version #查看Hexo的版本
+</code></pre><h2 id="报错总结"><a href="#报错总结" class="headerlink" title="报错总结"></a>报错总结</h2><pre><code>本地代码上传不成功，执行hexo -d无反应
+
+ 清空D:/Hexo
+ 右键D:/Hexo，打开git bash
+ npm install hexo --save
+ npm init
+ hexo g   生成静态页面
+ hexo s   本地启动，并在浏览器预览
+
+ vim _config.yml
+
+ 翻到最下面，改成我这样子的
+
+ deploy:
+
+    type: git
+
+    repo: [ssh地址]
+
+    branch: master
+</code></pre><p>注：上面的格式有个坑，即type:和git之间有个英文的空格，下面两个也是</p>
+<pre><code>然后执行命令：
+
+npm install hexo-deployer-git --save
+
+hexo deploy  再次上传到github
+</code></pre><h4 id="主题推荐"><a href="#主题推荐" class="headerlink" title="主题推荐"></a>主题推荐</h4><pre><code> 主题：[Hexo主题](https://hexo.io/themes/)
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-05-27T09:28:37.418Z" itemprop="dateUpdated">2017-05-27 17:28:37</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/05/24/Hexo搭建GitHub Blog/" target="_blank" rel="external">https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/&title=《Hexo搭建GitHub Blog》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/&title=《Hexo搭建GitHub Blog》 — Gary Wu&source=环境准备1.安装Git （略）2.安装node.js 下载地址：https://nodejs.org/zh-cn/download/  
+ 根据平台，下载..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hexo搭建GitHub Blog》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/05/26/生活/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">生活</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/08/Linux数据恢复工具extundelete/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Linux数据恢复工具extundelete</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/&title=《Hexo搭建GitHub Blog》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/&title=《Hexo搭建GitHub Blog》 — Gary Wu&source=环境准备1.安装Git （略）2.安装node.js 下载地址：https://nodejs.org/zh-cn/download/  
+ 根据平台，下载..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hexo搭建GitHub Blog》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/05/24/Hexo搭建GitHub Blog/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

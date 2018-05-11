@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>部署Gitlab+maven+jenkins持续集成环境-进阶1 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Gitlab,持续集成,持续交付,java,jdk,maven,jenkins,自动构建">
+    <meta name="description" content="为什么要持续集成？  持续集成，简称CI。持续集成指的是，频繁的（一天多次）将代码集成到主干  好处：极大程度降低 “代码合并冲突” 几率 开发上传自己的代码到Gitlab, Gitlab发消息给Jenkins，随后Jenkins从仓库拉取代码，最后全自动部署到测试服务器进行相关测试，并将测试结果通知运维和开发，这种自动测试的方法叫做持续交付。  持续部署是持续交付的下一步，指的是代码通过评审以">
+<meta name="keywords" content="高级运维,Gitlab,持续集成,持续交付,java,jdk,maven,jenkins,自动构建">
+<meta property="og:type" content="article">
+<meta property="og:title" content="部署Gitlab+maven+jenkins持续集成环境-进阶1">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="为什么要持续集成？  持续集成，简称CI。持续集成指的是，频繁的（一天多次）将代码集成到主干  好处：极大程度降低 “代码合并冲突” 几率 开发上传自己的代码到Gitlab, Gitlab发消息给Jenkins，随后Jenkins从仓库拉取代码，最后全自动部署到测试服务器进行相关测试，并将测试结果通知运维和开发，这种自动测试的方法叫做持续交付。  持续部署是持续交付的下一步，指的是代码通过评审以">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-16T11:38:15.095Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="部署Gitlab+maven+jenkins持续集成环境-进阶1">
+<meta name="twitter:description" content="为什么要持续集成？  持续集成，简称CI。持续集成指的是，频繁的（一天多次）将代码集成到主干  好处：极大程度降低 “代码合并冲突” 几率 开发上传自己的代码到Gitlab, Gitlab发消息给Jenkins，随后Jenkins从仓库拉取代码，最后全自动部署到测试服务器进行相关测试，并将测试结果通知运维和开发，这种自动测试的方法叫做持续交付。  持续部署是持续交付的下一步，指的是代码通过评审以">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">部署Gitlab+maven+jenkins持续集成环境-进阶1</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">部署Gitlab+maven+jenkins持续集成环境-进阶1</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-05T02:50:10.000Z" itemprop="datePublished" class="page-time">
+  2017-12-05
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">配置部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#关于生产环境实践"><span class="post-toc-number">2.</span> <span class="post-toc-text">关于生产环境实践</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-部署Gitlab-maven-jenkins持续集成环境-进阶1"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">部署Gitlab+maven+jenkins持续集成环境-进阶1</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-05 10:50:10" datetime="2017-12-05T02:50:10.000Z"  itemprop="datePublished">2017-12-05</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>为什么要持续集成？</p>
+</blockquote>
+<pre><code>持续集成，简称CI。持续集成指的是，频繁的（一天多次）将代码集成到主干
+
+好处：极大程度降低 “代码合并冲突” 几率
+</code></pre><pre><code>开发上传自己的代码到Gitlab, Gitlab发消息给Jenkins，随后Jenkins从仓库拉取代码，最后全自动部署到测试服务器进行相关测试，并将测试结果通知运维和开发，这种自动测试的方法叫做持续交付。
+
+持续部署是持续交付的下一步，指的是代码通过评审以后，自动部署到生产环境
+</code></pre><pre><code>行话：CI/CD 指的是持续集成/持续交付/持续部署
+</code></pre><a id="more"></a>
+<blockquote>
+<p>化整为零</p>
+</blockquote>
+<pre><code>1.这套组合可以分成源码管理、编译构建、远程部署
+2.源码管理常见的有gitlab、SVN
+3.编译构建是针对编译型语言的。此处针对Java语言使用Maven、针对IOS则是使用其他编译工具。
+4.远程部署由jenkins提供。
+</code></pre><h4 id="配置部署"><a href="#配置部署" class="headerlink" title="配置部署"></a>配置部署</h4><blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>node1 10.0.10.21    角色：Jenkins Master、Maven、Git、JDK
+node1 10.0.10.22    角色：Gitlab、Jenkins slave
+</code></pre><blockquote>
+<p>Node1-21配置</p>
+</blockquote>
+<ul>
+<li>Jenkins</li>
+</ul>
+<p>​       参考：<a href="https://wuyanteng.github.io/2017/12/04/Jenkins%E5%AE%89%E8%A3%85%E5%88%9D%E5%A7%8B%E5%8C%96/#more">Jenkins安装-Docker</a></p>
+<pre><code>rpm方式安装
+
+# yum安装jdk
+echo &quot;192.168.21.200 mirrors.aliyun.com&quot; &gt;&gt;/etc/hosts
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+yum clean all
+yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel
+# 安装rpm包
+rpm -ivh jenkins-2.73.1-1.1.noarch.rpm
+# 启动
+/etc/init.d/jenkins start
+</code></pre><pre><code>rpm -ql jenkins
+Jenkins家目录：/var/lib/jenkins
+Web站点目录：/var/cache/jenkins
+</code></pre><ul>
+<li>Maven安装</li>
+</ul>
+<pre><code>Maven负责java语言的编译和打包。换个角度来说，Maven相当于Java中的make命令。
+官方地址：http://maven.apache.org/
+</code></pre><p>安装JDK</p>
+<pre><code>yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel
+</code></pre><p>安装Maven</p>
+<pre><code>(1) 获取安装包
+wget https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.3.9/apache-maven-3.3.9-bin.tar.gz
+
+(2) 解压
+tar -zxvf apache-maven-3.3.9-bin.tar.gz -C /usr/local/ 
+ln -s /usr/local/apache-maven-3.3.9 /usr/local/maven
+
+(3) 定义变量
+vim /etc/profile.d/maven.sh
+  export M2_HOME=/usr/local/maven
+  export MAVEN_HOME=/usr/local/maven
+  PATH=$M2_HOME/bin:$PATH
+[root@node2 ~]# source /etc/profile.d/maven.sh
+
+(4) 查看版本
+mvn -v
+</code></pre><ul>
+<li>编译安装git</li>
+</ul>
+<pre><code>wget https://www.kernel.org/pub/software/scm/git/git-2.12.0.tar.gz
+
+注意：为了能让jenkins能正常从gitlab中拉取源码，需要编译1.9以上的版本。
+</code></pre><p>安装编译环境</p>
+<pre><code>yum groupinstall &quot;Development tools&quot;
+yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker openssh-clients
+除了正常的编译环境之外，编译git的时候还要额外安装各种devel包。否则会构建失败。
+</code></pre><p>编译安装</p>
+<pre><code>tar -zxvf git-2.12.0.tar.gz &amp;&amp; cd git-2.12.0
+make prefix=/usr/local/git all 
+make prefix=/usr/local/git install 
+echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/bashrc
+source /etc/bashrc
+git --version
+</code></pre><blockquote>
+<p>配置Jenkins        </p>
+</blockquote>
+<p>指定Maven、Git和JDK的安装路径</p>
+<pre><code>Jenkins Web  -- 系统管理 -- Global Tool Configuration
+</code></pre><blockquote>
+<p>Jenkins优化</p>
+</blockquote>
+<ul>
+<li>增加执行者数量</li>
+</ul>
+<pre><code>系统管理--系统设置 -- 修改执行者数量 -- 保存
+</code></pre><ul>
+<li>配置Jenkins邮箱设置</li>
+</ul>
+<pre><code>系统管理--系统设置 -- 修改系统管理员邮箱地址 -- 保存
+系统管理--系统设置 -- 系统管理员邮件地址(写上17610397690@163.com) -- 保存
+系统管理--系统设置 -- 邮件通知 -- 填写如下信息：
+SMTP设置： smtp.163.com
+使用SMTP认证： 勾选
+用户名: 17610397690@163.com
+密码：填写163上面的授权码
+通过发送测试邮件配置：勾选并填写收件箱地址：17610397690@163.com   -- 点击测试发送 -- 最后保存即可
+</code></pre><blockquote>
+<p>配置Jenkins连接Gitlab</p>
+</blockquote>
+<pre><code>(1)新建 -- 输入item name(比如：garywu) -- 选择构建一个自由风格的软件项目 -- OK保存
+(2)进入jenkins garywu的item -- 点击&quot;源码管理&quot; -- 选择“Git” -- 输入Git地址 (git@192.168.56.16:root/37team.git) -- 输入连接git的私钥 -- 直到不报错。
+</code></pre><pre><code>(3) 构建 -- 选择“Execute shell” -- 输入测试命令“df -h”
+(4) 构建后的操作 -- 选择“E-mail Notification” -- 输入接收邮箱地址即可(推荐163邮箱-17610397690@163.com) -- 保存
+</code></pre><blockquote>
+<p>项目手动构建</p>
+</blockquote>
+<pre><code>主页 -- 点击项目并进入项目 -- 左侧点击“立即构建” -- 构建若出现错误显示红色，可以看到控制台日志来查看具体错误，一般是权限问题。
+
+因为Jenkins是以Jenkins用户来启动的，所以Jenkins用户缺少很多权限，手动在命令行授权即可
+</code></pre><blockquote>
+<p>Gitlab代码提交Jenkins自动构建</p>
+</blockquote>
+<ul>
+<li>配置Gitlab token</li>
+</ul>
+<pre><code>(1)安装插件: GitLab Plugin
+(2)首页 -- credentials -- system -- Global credentials(unrestricted) -- add Credentials -- Kind选择GitLab API Token -- 填写API Token(从Gitlab账号--设置--account中Private Token获取) -- 保存
+(3)系统管理 -- 系统设置 -- Gitlab
+    Connection name：Gitlab
+    Gitlab host URL: http://192.168.56.16
+    Credentials: 选择刚添加的Gitlab API token
+    Test --&gt;当出现success即可
+    最后保存
+</code></pre><ul>
+<li>配置item-生成Jenkins token</li>
+</ul>
+<pre><code>jenkins -- 点击item --构建触发器 -- 勾选&quot;Build when a change is pushed to GitLab. GitLab CI Service URL: http://192.168.56.15:8080/project/oldtboyedu&quot; -- 点击“高级” -- 生成Jenkins token -- 把此界面中的URL和Token复制出来放到文本文件，稍后会用到 -- 最后保存配置
+</code></pre><ul>
+<li>配置Gitlab项目</li>
+</ul>
+<pre><code>进入唯一的37team主页 -- settings  -- Integrations --  URL填写上面保存的URL -- secret Token 粘贴刚才生成的Jenkins token -- 最后点击&quot;Add webhook&quot;  
+
+然后，在此页面就能看到刚添加的一个Webhooks，点击右侧的Test -- 立即打开Jenkins项目中构建页面，可以看到已经自动生成了一个新的构建并自动开始运行了，另外这个构建有个说明: Started by Gitlab push by Administrator
+</code></pre><ul>
+<li>代码提交后自动构建-测试验证</li>
+</ul>
+<pre><code>向Gitlab project项目中添加一个文件，并简单写下描述，然后立即打开Jenkins项目中构建页面，可以看到已经自动生成了一个新的构建并自动开始运行了，至此就实现了自动构建功能
+</code></pre><h4 id="关于生产环境实践"><a href="#关于生产环境实践" class="headerlink" title="关于生产环境实践"></a>关于生产环境实践</h4><blockquote>
+<p>一：分组上线</p>
+</blockquote>
+<pre><code>倘若nginx代理10台后端tomcat，由于启动需要时间，所以务必分组上线
+所谓分组上线就是把后端机分成2组，即AB分组上线
+方法：第A组后端机注释,升级代码。然后恢复A组配置，再注释并升级B组代码。这样操作起来很麻烦且耗时，弄不好容易出错。
+终极方案：
+准备四套配置文件，每套配置文件进行不同定义，如下:
+nginx-A.conf    #上线A组服务器代码
+nginx-B.conf    #上线B组服务器代码
+nginx-new.conf  #全部后端tomcat上线
+nginx-old.conf  #快速回滚
+</code></pre><blockquote>
+<p>二：灰度发布</p>
+</blockquote>
+<pre><code>灰度发布指黑与白之间，能给平衡过渡的一种发布方式。
+
+方案1: 智能DNS调度, 即根据用户使用的LocalDNS来进行DNS解析到对应域名解析服务器。
+方案2：收集用户的IP地址所在地区进行区分。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-12-16T11:38:15.095Z" itemprop="dateUpdated">2017-12-16 19:38:15</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gitlab/">Gitlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jdk/">jdk</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jenkins/">jenkins</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/持续交付/">持续交付</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/持续集成/">持续集成</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自动构建/">自动构建</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/&title=《部署Gitlab+maven+jenkins持续集成环境-进阶1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/&title=《部署Gitlab+maven+jenkins持续集成环境-进阶1》 — Gary Wu&source=
+为什么要持续集成？
+
+持续集成，简称CI。持续集成指的是，频繁的（一天多次）将代码集成到主干
+
+好处：极大程度降低 “代码合并冲突” 几率
+开发上传自己..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《部署Gitlab+maven+jenkins持续集成环境-进阶1》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/09/shell高级编程-进阶3/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">shell高级编程-进阶3</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/05/Gitlab部署CentOS7/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Gitlab部署-CentOS7</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/&title=《部署Gitlab+maven+jenkins持续集成环境-进阶1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/&title=《部署Gitlab+maven+jenkins持续集成环境-进阶1》 — Gary Wu&source=
+为什么要持续集成？
+
+持续集成，简称CI。持续集成指的是，频繁的（一天多次）将代码集成到主干
+
+好处：极大程度降低 “代码合并冲突” 几率
+开发上传自己..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《部署Gitlab+maven+jenkins持续集成环境-进阶1》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

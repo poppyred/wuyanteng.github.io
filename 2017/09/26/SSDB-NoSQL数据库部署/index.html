@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>SSDB-NoSQL数据库部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="NoSQL,redis,负载均衡,ssdb,LevelDB,主从复制">
+    <meta name="description" content="概述  SSDB 是一个 C++ 开发的 NoSQL 数据库, 支持Key-value/Key-hashmap/zset(sorted set)等数据结构，十分适合存储数亿条级别的列表、排序表等集合数据，是redis的替代与增强方案。  SSDB使用Google公司开源的LevelDB引擎作为底层的存储引擎。SSDB 采用 New BSD License 许可协议, 一个非常宽松灵活的协议，支持">
+<meta name="keywords" content="NoSQL,redis,负载均衡,ssdb,LevelDB,主从复制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSDB-NoSQL数据库部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="概述  SSDB 是一个 C++ 开发的 NoSQL 数据库, 支持Key-value/Key-hashmap/zset(sorted set)等数据结构，十分适合存储数亿条级别的列表、排序表等集合数据，是redis的替代与增强方案。  SSDB使用Google公司开源的LevelDB引擎作为底层的存储引擎。SSDB 采用 New BSD License 许可协议, 一个非常宽松灵活的协议，支持">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ssdb_redis.png">
+<meta property="og:updated_time" content="2017-09-26T09:33:16.645Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SSDB-NoSQL数据库部署">
+<meta name="twitter:description" content="概述  SSDB 是一个 C++ 开发的 NoSQL 数据库, 支持Key-value/Key-hashmap/zset(sorted set)等数据结构，十分适合存储数亿条级别的列表、排序表等集合数据，是redis的替代与增强方案。  SSDB使用Google公司开源的LevelDB引擎作为底层的存储引擎。SSDB 采用 New BSD License 许可协议, 一个非常宽松灵活的协议，支持">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ssdb_redis.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">SSDB-NoSQL数据库部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">SSDB-NoSQL数据库部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-26T04:11:30.000Z" itemprop="datePublished" class="page-time">
+  2017-09-26
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#启动和停止"><span class="post-toc-number">2.</span> <span class="post-toc-text">启动和停止</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SSDB启动脚本（随操作系统自启动）"><span class="post-toc-number">3.</span> <span class="post-toc-text">SSDB启动脚本（随操作系统自启动）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#检查ssdb版本"><span class="post-toc-number">4.</span> <span class="post-toc-text">检查ssdb版本</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置"><span class="post-toc-number"></span> <span class="post-toc-text">配置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CentOS7解决“打开文件数max-open-files”配置"><span class="post-toc-number">1.</span> <span class="post-toc-text">CentOS7解决“打开文件数max open files”配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#监听网络端口"><span class="post-toc-number">2.</span> <span class="post-toc-text">监听网络端口</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#只读模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">只读模式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#日志配置与分析"><span class="post-toc-number">4.</span> <span class="post-toc-text">日志配置与分析</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#日志解读"><span class="post-toc-number">5.</span> <span class="post-toc-text">日志解读</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LevelDB-配置"><span class="post-toc-number">6.</span> <span class="post-toc-text">LevelDB 配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#内存占用"><span class="post-toc-number">7.</span> <span class="post-toc-text">内存占用</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#命令行工具ssdb-cli使用"><span class="post-toc-number"></span> <span class="post-toc-text">命令行工具ssdb-cli使用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SSDB命令列表"><span class="post-toc-number">1.</span> <span class="post-toc-text">SSDB命令列表</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#同步和复制的配置与监控"><span class="post-toc-number"></span> <span class="post-toc-text">同步和复制的配置与监控</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#监控同步状态"><span class="post-toc-number">1.</span> <span class="post-toc-text">监控同步状态</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#SSDB备份-导入导出"><span class="post-toc-number"></span> <span class="post-toc-text">SSDB备份(导入导出)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#从redis迁移数据到SSDB"><span class="post-toc-number"></span> <span class="post-toc-text">从redis迁移数据到SSDB</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#将现有的LevelDB数据导入SSDB"><span class="post-toc-number"></span> <span class="post-toc-text">将现有的LevelDB数据导入SSDB</span></a>
+        </nav>
+    </aside>
+
+
+<article id="post-SSDB-NoSQL数据库部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">SSDB-NoSQL数据库部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-26 12:11:30" datetime="2017-09-26T04:11:30.000Z"  itemprop="datePublished">2017-09-26</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>概述</p>
+</blockquote>
+<pre><code>SSDB 是一个 C++ 开发的 NoSQL 数据库, 支持Key-value/Key-hashmap/zset(sorted set)等数据结构，十分适合存储数亿条级别的列表、排序表等集合数据，是redis的替代与增强方案。
+
+SSDB使用Google公司开源的LevelDB引擎作为底层的存储引擎。SSDB 采用 New BSD License 许可协议, 一个非常宽松灵活的协议，支持主从复制, 负载均衡。
+
+SSDB地址：http://ssdb.io/zh_cn/
+</code></pre><a id="more"></a>
+<blockquote>
+<p>SSDB特性</p>
+</blockquote>
+<ul>
+<li>替代 Redis 数据库, Redis 的 100 倍容量</li>
+<li>LevelDB 网络支持, 使用 C/C++ 开发</li>
+<li>Redis API 兼容, 支持 Redis 客户端</li>
+<li>适合存储集合数据, 如 list, hash, zset…</li>
+<li>客户端 API 支持的语言包括: <a href="http://ssdb.io/docs/cpp/" target="_blank" rel="noopener">C++</a>, <a href="http://ssdb.io/docs/zh_cn/php/" target="_blank" rel="noopener">PHP</a>, Python, <a href="http://ssdb.io/docs/java/" target="_blank" rel="noopener">Java</a>, Go</li>
+<li>持久化的队列服务</li>
+<li><strong>主从复制, 负载均衡</strong></li>
+</ul>
+<blockquote>
+<p>SSDB与redis区别</p>
+</blockquote>
+<pre><code>redis数据是全部存储在了内存中，而SSDB绝对优势是将数据写入了硬盘，同时也支持配置部分内存用于缓存热数据。
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ssdb_redis.png" alt="ssdb-redis" title="">
+                </div>
+                <div class="image-caption">ssdb-redis</div>
+            </figure>
+<blockquote>
+<p>SSDB数据类型</p>
+</blockquote>
+<pre><code>KV(Key-value)数据类型KV 数据类型主要用于存储离散的、之间没有关系或者关系被忽略 的大数据, 如图片文件, 大段文本等. 一般 KV 类型都可以被 Hashmap 替代, 但KV会比Hashmap性能高一些.
+
+Hashmap 如果数据需要经常被遍历, 则应该使用 Hashmap 来替代 KV。对于只添加, 不更新和删除的有
+排序需求的数据集合, 可以用 Hashmap 来存储而不需要使用 Zset, 因为 Hashmap 会比Zset 性能高一些.
+
+Zset 是一种根据数据项的权重(score, 整数值)进行排序的集合, Zset 集合中的数据项是唯一,不可重复的. Zset 可以理解为关系数据中只有 ID 主键和整数 score 字段⼀一共两个字段的表.因为 Zset 的排序特性, 所以可用来存储排序列表, 如商品按价格的排序列表, 商品按上架日期的排序列表等等. 每一个排序列表对应一个 Zset 集合.
+Zset 不能用来存储大体积的数据, 因为它是一种&quot;索引&quot;数据类型, 被索引的东西(集合中的数据项)只能是 200 字节以内的字节数组(包括字符串).
+</code></pre><h4 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h4><blockquote>
+<p>编译安装</p>
+</blockquote>
+<pre><code>yum groupinstall &quot;Development tools&quot; -y
+wget --no-check-certificate https://github.com/ideawu/ssdb/archive/master.zip
+unzip master
+cd ssdb-master
+make
+make install PREFIX=/usr/local/ssdb
+</code></pre><p>故障解决：</p>
+<pre><code>如果出现如下错误:
+g++ ...deps/snappy-1.1.0/.libs/libsnappy.a: No such file or directory
+make[1]: *** [all] Error 1
+
+或者
+
+g++ ...deps/jemalloc-3.3.1/lib/libjemalloc.a: No such file or directory
+make[1]: *** [all] Error 1
+
+这是因为 Snappy 或者 Jemalloc 没有编译成功, 这一般是因为你的系统时钟有问题。
+
+解决方案:
+cd deps/snappy-1.1.0
+autoreconf --force --install
+./configure
+make
+
+或者
+
+cd deps/jemalloc-3.3.1
+autoreconf --force --install
+./configure
+make
+</code></pre><h4 id="启动和停止"><a href="#启动和停止" class="headerlink" title="启动和停止"></a>启动和停止</h4><pre><code># 启动主库, 此命令会阻塞住命令行
+./ssdb-server ssdb.conf
+
+# 或者启动为后台进程(不阻塞命令行)
+./ssdb-server -d ssdb.conf
+
+# 停止 ssdb-server
+./ssdb-server ssdb.conf -s stop
+
+# 重启
+./ssdb-server ssdb.conf -s restart
+</code></pre><h4 id="SSDB启动脚本（随操作系统自启动）"><a href="#SSDB启动脚本（随操作系统自启动）" class="headerlink" title="SSDB启动脚本（随操作系统自启动）"></a>SSDB启动脚本（随操作系统自启动）</h4><pre><code>假设你已经安装 SSDB 在默认的 /usr/local/ssdb 目录, 把 tools/ssdb.sh 脚本放到 /etc/init.d 目录下.
+
+注意: 对于 CentOS 用户, 请将 ssdb.sh 重命名为 ssdb.
+</code></pre><pre><code>将 /data/ssdb_data/test/ssdb.conf 修改为你的 SSDB 配置文件的路径. 如果你有多个 SSDB 实例, 那么把它们写在一行, 用空格来分隔, 例如:
+
+# each config file for one instance
+configs=/usr/local/ssdb/ssdb.conf /usr/local/ssdb1/ssdb.conf
+</code></pre><pre><code>chkconfig --add ssdb
+chkconfig ssdb on
+</code></pre><h4 id="检查ssdb版本"><a href="#检查ssdb版本" class="headerlink" title="检查ssdb版本"></a>检查ssdb版本</h4><pre><code>[root@gserver1 ssdb]# /usr/local/ssdb/ssdb-server -v
+ssdb-server 1.9.5
+Copyright (c) 2012-2015 ssdb.io
+</code></pre><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><pre><code>注：SSDB 的配置文件使用一个 TAB 来表示一级缩进, 不要使用空格来缩进, 无论你用1个, 2个, 3个, 4个, 5个, 6个, 7个, 8个或者无数个空格都不行!
+</code></pre><pre><code>重要：一定要记得修改你的 Linux 内核参数, 关于 max open files(最大文件描述符数)的内容, 请参考 [1]. 否则, 你会在 log.txt 看到 Too many open files 类似的错误, 或者在客户端看到 Connection reset by peer 错误. 
+</code></pre><h4 id="CentOS7解决“打开文件数max-open-files”配置"><a href="#CentOS7解决“打开文件数max-open-files”配置" class="headerlink" title="CentOS7解决“打开文件数max open files”配置"></a>CentOS7解决“打开文件数max open files”配置</h4><pre><code>在ssdb.conf中最后加入如下代码
+
+leveldb:
+        max_open_files: 50000
+
+配置完成需要重启系统
+参考：https://www.oldcai.com/archives/1123    
+测试系统打开文件数(工具:c1000k): https://github.com/ideawu/c1000k
+</code></pre><h4 id="监听网络端口"><a href="#监听网络端口" class="headerlink" title="监听网络端口"></a>监听网络端口</h4><pre><code>work_dir = ./var
+pidfile = ./var/ssdb.pid
+
+server:
+    ip: 127.0.0.1   #本地回环网络。无法从其它机器上连接此 SSDB 服务器
+    port: 32121
+
+注：如果你希望从其它机器上连接 SSDB 服务器, 必须把 127.0.0.1 改为 0.0.0.0.
+    同时, 利用配置文件的 deny, allow 指令限制可信的来源 IP 访问.
+
+警告：如果不做网络限制便监听 0.0.0.0 IP 可能导致被任意机器访问到你的数据, 这很可能是一个安全问题! 你可以结合操作系统的 iptables 来限制网络访问.
+</code></pre><h4 id="只读模式"><a href="#只读模式" class="headerlink" title="只读模式"></a>只读模式</h4><pre><code>server:
+    readonly: yes|no
+</code></pre><p>SSDB 可以工作在只读模式下, 在只读模式下, 所有的写操作命令都会被服务端拒绝:</p>
+<pre><code>ssdb 127.0.0.1:8888&gt; set a 2
+client_error: Forbidden Command: set
+(0.000 sec)
+
+默认配置文件不设置此选项, 那表示可读可写.
+</code></pre><h4 id="日志配置与分析"><a href="#日志配置与分析" class="headerlink" title="日志配置与分析"></a>日志配置与分析</h4><pre><code>logger:
+    level: debug     #支持的日志级别有: debug, info, warn, error, fatal
+    output: log.txt  #可直接写相对路径或者绝对路径, 如果相对路径, 则是相对配置文件所在的目录.
+    rotate:
+           size: 1000000000   #设置日志拆分时的大小, 单位为字节数,默认100M大小进行切分
+
+注：logger.rorate.size 日志循环和清理; 
+(1)日志切分后的文件名格式如：log.txt.20150723-230422, 切分后的日志文件不会自动被清理, 你需要自己写     crontab 脚本来清理.
+
+如果你想输出日志到终端屏幕, 编辑 ssdb.conf, 将
+
+logger:
+    output: log.txt
+修改为
+
+logger:
+    output: stdout
+</code></pre><h4 id="日志解读"><a href="#日志解读" class="headerlink" title="日志解读"></a>日志解读</h4><pre><code>一般, 建议你将 logger.level 设置为 debug 级别.
+</code></pre><p><strong>请求处理</strong></p>
+<pre><code>2014-06-18 11:01:40.335 [DEBUG] serv.cpp(395): w:0.393,p:5.356, req: set a 1, resp: ok 1
+</code></pre><ul>
+<li><code>w:0.393</code> 请求的排队时间, 毫秒</li>
+<li><code>p:5.356</code> 请求的处理时间, 毫秒</li>
+<li><code>req:...</code> 请求内容</li>
+<li><code>resp:...</code> 响应内容</li>
+</ul>
+<p><strong>找出慢请求 , 命令是:</strong></p>
+<pre><code>tail -f log.txt | grep resp | grep &#39;[wp]:[1-9][0-9]\{0,\}\.&#39;
+# 或者
+cat log.txt | grep resp | grep &#39;[wp]:[1-9][0-9]\{0,\}\.&#39;
+
+</code></pre><p>这些命令用于找出排队时间, 或者处理时间大于等于 1 毫秒的请求.</p>
+<p><strong>找出大于 10 毫秒的请求:</strong></p>
+<pre><code>cat log.txt | grep resp | grep &#39;[wp]:[1-9][0-9]\{1,\}\.&#39;
+</code></pre><p><strong>找出大于 100 毫秒的请求:</strong></p>
+<pre><code>cat log.txt | grep resp | grep &#39;[wp]:[1-9][0-9]\{2,\}\.&#39;
+</code></pre><p><strong>SSDB 在工作中</strong></p>
+<p>ssdb-server 会每隔 5 分钟输出这样的一条 log</p>
+<pre><code>2014-06-18 11:18:03.600 [INFO ] ssdb-server.cpp(215): ssdb working, links: 0
+2014-06-18 11:23:03.631 [INFO ] ssdb-server.cpp(215): ssdb working, links: 0
+
+</code></pre><ul>
+<li><code>links: 0</code> 当前的连接数</li>
+</ul>
+<h4 id="LevelDB-配置"><a href="#LevelDB-配置" class="headerlink" title="LevelDB 配置"></a>LevelDB 配置</h4><pre><code>leveldb.cache_size 内存缓存大小, 单位 MB
+一般地, 这个数字越大, 性能越好, 你可设置为物理内存的一半. 如果你的机器内存较小, 那就把它改小, 最小值是 16.
+
+leveldb.write_buffer_size 写缓冲区大小, 单位 MB
+如果你的机器内存小, 那就把它改小, 否则改大. 它应该在这个范围内: [4, 128];
+
+leveldb.compaction_speed
+一般情况下, 不用关心. 如果你的硬盘性能非常差, 同时, 你的数据几乎不变动, 也没有什么新数据写入, 可以把它改小(最好大于 50).
+
+leveldb.compression 压缩硬盘上的数据
+最好设置为 yes! 如果是 yes, 一般你能存储 10 倍硬盘空间的数据, 而且性能会更好.
+</code></pre><h4 id="内存占用"><a href="#内存占用" class="headerlink" title="内存占用"></a>内存占用</h4><pre><code>一个 ssdb-server 实例占用的内存瞬时(有可能, 而且即使达到, 也只是持续短时间)最高达到(MB):
+
+cache_size + write_buffer_size * 66 + 32
+这是对于压缩选项没有开启的情况. 如果 compression: yes, 计算公式是:
+
+cache_size + 10 * write_buffer_size * 66 + 32
+你可以调整配置参数, 限制 ssdb-server 的内存占用.
+
+对于一般负载的实例来说, 物理内存的持续占用是:
+
+cache_size + write_buffer_size * 4 + 32
+根据实际经验, 使用默认配置的实例, 会占用约 1GB 的内存. 这个经验你可以参考.
+</code></pre><p>设置内存上限</p>
+<pre><code>很抱歉, SSDB 无法设置内存占用上限. SSDB占用的内存大小, 和下列因素相关:
+
+cache_size 参数配置, 这是最主要的因素.
+客户端连接的数量, 一般来说, 每一个连接要占用 2MB 的内存, 但也和连接的使用繁忙度请求响应的大小等有关.
+文件缓存, 虽然是被 ssdb-server 进程占用, 但是可被操作系统回收的, 可能会占用数十 GB.
+SSDB 的繁忙程度, 服务越繁忙, SSDB 会倾向于使用更多的内存, 以提高响应速度.
+总体来说, cache_size 参数是你可以控制的, 后面的因素你无法控制. 例如, 在一个比较空闲的 SSDB 上, 如果物理内存是 16G, 而你设置 cache_size 是 8000(8G), 那么你通过 top 命令会看到 ssdb-server 进程占用 RES 内存可能在 12G 左右. 如果是一个比较繁忙的实例, RES 可能达到 15G.
+</code></pre><h2 id="命令行工具ssdb-cli使用"><a href="#命令行工具ssdb-cli使用" class="headerlink" title="命令行工具ssdb-cli使用"></a>命令行工具ssdb-cli使用</h2><pre><code>连接到SSDB服务器
+/usr/local/ssdb/ssdb-cli -h 127.0.0.1 -p 8888    本地连接
+/usr/local/ssdb/ssdb-cli -h 192.168.56.101 -p 32121 远程连接
+</code></pre><p>输入 ‘h’, 然后按<code>回车</code>查看帮助信息. 下面是操作的演示:</p>
+<pre><code>ssdb 127.0.0.1:8888&gt; set k 1
+ok
+(0.000 sec)
+ssdb 127.0.0.1:8888&gt; get k
+1
+(0.000 sec)
+ssdb 127.0.0.1:8888&gt; del k
+ok
+(0.000 sec)
+ssdb 127.0.0.1:8888&gt; get k
+error: not_found
+(0.000 sec)
+ssdb 127.0.0.1:8888&gt;
+</code></pre><h4 id="SSDB命令列表"><a href="#SSDB命令列表" class="headerlink" title="SSDB命令列表"></a>SSDB命令列表</h4><p>参考：<a href="http://ssdb.io/docs/zh_cn/commands/index.html" target="_blank" rel="noopener">立即转到-SSDB命令</a></p>
+<h2 id="同步和复制的配置与监控"><a href="#同步和复制的配置与监控" class="headerlink" title="同步和复制的配置与监控"></a>同步和复制的配置与监控</h2><blockquote>
+<p>一主多从</p>
+</blockquote>
+<p>server1 【IP:192.168.56.101】</p>
+<pre><code>server:
+        ip: 0.0.0.0
+        port: 32121
+        deny: all
+        allow: 192.168
+
+replication:
+        binlog: yes
+        sync_speed: -1
+        slaveof:
+                id: svc_1
+                type: mirror
+                host: 192.168.56.101
+                port: 32121
+</code></pre><p>server2</p>
+<pre><code>replication:
+        binlog: yes
+        sync_speed: -1
+        slaveof:      
+                id: svc_2       
+                type: sync
+                host: 192.168.56.101
+                port: 32121
+</code></pre><p>server3</p>
+<pre><code>replication:
+        binlog: yes
+        sync_speed: -1
+        slaveof:      
+                id: svc_3      
+                type: sync
+                host: 192.168.56.101
+                port: 32121
+</code></pre><blockquote>
+<p>多主多从</p>
+</blockquote>
+<p>server1【IP:192.168.56.101】</p>
+<pre><code>server:
+        ip: 0.0.0.0
+        port: 32121
+        deny: all
+        allow: 192.168
+
+replication:
+        binlog: yes
+        sync_speed: -1
+        slaveof:
+                id: svc_1
+                type: mirror
+                host: 192.168.56.101
+                port: 32121
+</code></pre><p>server2</p>
+<pre><code>server:
+        ip: 0.0.0.0
+        port: 32121
+        deny: all
+        allow: 192.168
+
+replication:
+        binlog: yes
+        sync_speed: -1
+        slaveof:
+                id: svc_2
+                type: mirror
+                host: 192.168.56.101
+                port: 32121
+</code></pre><p>server3</p>
+<pre><code>replication:
+        binlog: yes
+        sync_speed: -1
+        slaveof:      
+                id: svc_3      
+                type: sync
+                host: 192.168.56.101
+                port: 32121
+</code></pre><blockquote>
+<p>单台服务器包含n个实例</p>
+</blockquote>
+<p>在一组一共包含 n 个实例的 SSDB 实例群中, 每一个实例必须 slaveof 其余的 n-1 个实例.</p>
+<pre><code>replication:
+    slaveof:
+        id: svc_1
+        # sync|mirror, default is sync
+        type: mirror
+        # use ip for older version
+        #ip: 127.0.0.1
+        # use host since 1.9.2
+        host: localhost
+        port: 8888
+    slaveof:
+        id: svc_2
+        # sync|mirror, default is sync
+        type: mirror
+        # use ip for older version
+        #ip: 127.0.0.1
+        # use host since 1.9.2
+        host: localhost
+        port: 8889
+    # ... more slaveof
+</code></pre><h4 id="监控同步状态"><a href="#监控同步状态" class="headerlink" title="监控同步状态"></a>监控同步状态</h4><pre><code>[root@gserver1 ssdb]# ./ssdb-cli -h 192.168.56.101 -p 32121
+ssdb 192.168.56.101:32121&gt; info
+version
+    1.9.5
+links
+    1
+total_calls
+    3
+dbsize
+    398
+binlogs
+        capacity : 20000000    #capacity: binlog 队列的最大长度
+        min_seq  : 1           #min_seq: 当前队列中的最小 binlog 序号
+        max_seq  : 14          #max_seq: 当前队列中的最大 binlog 序号
+replication
+    client 192.168.56.103:33194   #slaveof|client host:port, 远端 master/slave 的 host:port.
+        type     : sync           #type: 类型, sync|mirror.
+        status   : SYNC           #status: 当前同步状态, DISCONNECTED|INIT|OUT_OF_SYNC|COPY|SYNC.
+        last_seq : 14             #last_seq: 上一条发送或者收到的 binlog 的序号.
+replication
+    client 192.168.56.102:52412
+        type     : mirror
+        status   : SYNC
+        last_seq : 14
+replication
+    client 192.168.56.101:59664
+        type     : mirror
+        status   : SYNC
+        last_seq : 14
+replication
+    slaveof 192.168.56.101:32121
+        id         : svc_1
+        type       : mirror
+        status     : SYNC
+        last_seq   : 14
+        copy_count : 4
+        sync_count : 0
+</code></pre><p>关于status状态</p>
+<pre><code>DISCONNECTED: 与 master 断开了连接, 一般是网络中断或者是配置文件限制了访问.
+INIT: 初始化状态.
+OUT_OF_SYNC: 由于短时间内在 master 有大量写操作, 导致 binlog 队列淘汰, slave 丢失同步点, 只好重新复制全部的数据.
+COPY: 正在复制基准数据的过程中, 新的写操作可能无法及时地同步.
+SYNC: 同步状态是健康的.
+</code></pre><blockquote>
+<p>判断同步状态–是否正常</p>
+</blockquote>
+<pre><code>对于 master, binlogs.max_seq 是指当前实例上的最新一次的写(写/更新/删除)操作的序号, replication.client.last_seq 是指已发送给 slave 的最新一条 binlog 的序号.
+
+所以, 如果你想判断主从同步是否已经同步到位(实时更新), 那么就判断 binlogs.max_seq 和 replication.client.last_seq 是否相等, 同时 status 是 SYNC.
+
+上面的例子中，比对max_seq  : 14 与last_seq : 14 数值即可。
+</code></pre><blockquote>
+<p>info cmd</p>
+</blockquote>
+<pre><code>ssdb 192.168.56.101:32121&gt; info cmd
+version
+    1.9.5
+cmd.zincr
+    calls: 0    time_wait: 0    time_proc: 0
+cmd.cluster_set_kv_status
+    calls: 0    time_wait: 0    time_proc: 0
+cmd.sync140
+    calls: 0    time_wait: 0    time_proc: 0
+cmd.ttl
+    calls: 0    time_wait: 0    time_proc: 0
+cmd.qfix
+    calls: 0    time_wait: 0    time_proc: 0
+cmd.qtrim_front
+
+calls: 该命令总共处理了多少次.
+time_wait: 命令在被处理前等待的总共时间(单位毫秒).
+time_proc: 命令处理总共消耗的时间(单位毫秒).
+</code></pre><blockquote>
+<p>对数据库进行强制收缩</p>
+</blockquote>
+<pre><code>ssdb 192.168.56.101:32121&gt; compact
+ok
+(0.010 sec)
+这个命令强制 SSDB 服务器对数据进行收缩(compaction), 收缩之后, 操作通常会变得更快.但是, compact 的过程可能会拖慢正常服务, 特别是是当数据库比较大时. 所以, 建议在空闲时使用.
+</code></pre><h2 id="SSDB备份-导入导出"><a href="#SSDB备份-导入导出" class="headerlink" title="SSDB备份(导入导出)"></a>SSDB备份(导入导出)</h2><blockquote>
+<p>使用ssdb-cli</p>
+</blockquote>
+<p>导出</p>
+<pre><code>导出整个数据库
+cd /usr/local/ssdb
+./ssdb-cli -h 192.168.56.101 -p 32121
+ssdb 192.168.56.101:32121&gt; export backup.ssdb
+100%
+done.
+
+默认导出路径在/usr/local/ssdb目录下
+</code></pre><pre><code>按照key区间导出数据库（导出/导入）
+
+ssdb 192.168.56.101:32121&gt; export -i 2017.9.26_backup.ssdb
+input KV range[start, end]: 
+  start(inclusive, default none): a
+    end(inclusive, default none): z
+input HASH range: 
+  start(inclusive, default none): 
+    end(inclusive, default none): 
+input ZSET range: 
+  start(inclusive, default none): 
+    end(inclusive, default none): 
+input QUEUE range: 
+  start(inclusive, default none): 
+    end(inclusive, default none): 
+100%
+done.
+
+注：命令 export -i backup.ssdb将导出区间 [a, z] 内的 KV 和 所有的 HASH, ZSET, QUEUE.
+</code></pre><p>导入</p>
+<pre><code>ssdb 192.168.56.101:32121&gt; import backup.ssdb
+或
+ssdb 192.168.56.101:32121&gt; import 2017.9.26_backup.ssdb
+33%
+64%
+79%
+100%
+done.
+
+注意： import 命令会把数据库中的相同 key 给替换.
+</code></pre><blockquote>
+<p>使用ssdb-dump命令</p>
+</blockquote>
+<p>备份导出</p>
+<pre><code>用法：/usr/local/ssdb/ssdb-dump  ip   port   output_folder
+选项：
+ip - ssdb 服务器监听的 IP 地址
+port - ssdb 服务器监听的端口号
+output_folder - 将要创建备份数据的本地目录
+
+注：目录 output_folder 必须不存在, 因为 ssdb-dump 会创建这个目录. 导出之后, 这个目录里将有两个子目录, data 目录里包含着数据, 还有一个空的 meta 目录.
+
+##############################################################################################
+
+[root@gserver1 ssdb]# ./ssdb-dump 192.168.56.101 32121 ./bak
+ssdb-dump - SSDB backup command
+Copyright (c) 2012-2015 ssdb.io
+
+recv begin...
+received 1 entry(s)
+received 4 entry(s)
+recv end
+
+total dumped 4 entry(s)
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+
+compacting data...
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  2        1        0         0        0         0
+
+backup has been made to folder: ./bak
+
+[root@gserver1 ssdb]# cd bak/
+[root@gserver1 bak]# ls -lh
+total 0
+drwxr-xr-x 2 root root 103 Sep 26 05:04 data
+drwxr-xr-x 2 root root   6 Sep 26 05:04 meta
+</code></pre><p>恢复</p>
+<pre><code>将 output_folder 目录拷贝到你的服务器上面, 你可能需要将它改名. 然后修改你的 ssdb.conf 配置文件, 将 work_dir 指向output_folder 目录, 然后重启 ssdb-server.
+</code></pre><h2 id="从redis迁移数据到SSDB"><a href="#从redis迁移数据到SSDB" class="headerlink" title="从redis迁移数据到SSDB"></a>从redis迁移数据到SSDB</h2><pre><code>SSDB源码包中，Tools目录下的“ redis-import.php ” PHP 脚本可以用来将 Redis 服务器上的数据, 拷贝到 SSDB 服务器上.
+
+用法：php redis-import.php redis_host redis_port redis_db ssdb_host ssdb_port
+
+参数:
+redis_host: Redis 运行所在的 IP 或者主机名
+redis_port: Redis 监听的端口
+redis_db: Redis 的 DB 编号
+ssdb_host: SSDB 运行所在的 IP 或者主机名
+ssdb_port: SSDB 监听的端口
+
+注：需确保你的 PHP Redis 模块 https://github.com/nicolasff/phpredis 已经安装.
+</code></pre><h2 id="将现有的LevelDB数据导入SSDB"><a href="#将现有的LevelDB数据导入SSDB" class="headerlink" title="将现有的LevelDB数据导入SSDB"></a>将现有的LevelDB数据导入SSDB</h2><pre><code>SSDB 提供了 leveldb-import 工具来将 LevelDB 的数据导入到 SSDB 数据库中. 该工具的使用非常简单
+
+用法:
+./tools/leveldb-import ip port input_folder
+
+选项:
+ip - SSDB服务器的 IP
+port - SSDB服务器的端口号
+input_folder - 本地LevelDB数据库的目录
+
+示例:
+./tools/leveldb-import 127.0.0.1 8888 ./leveldb/
+
+注：你不能直接复制 LevelDB 的文件到 SSDB 目录, 这种方式是错误的.
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-26T09:33:16.645Z" itemprop="dateUpdated">2017-09-26 17:33:16</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/26/SSDB-NoSQL数据库部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LevelDB/">LevelDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NoSQL/">NoSQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssdb/">ssdb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/主从复制/">主从复制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/负载均衡/">负载均衡</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/&title=《SSDB-NoSQL数据库部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/&title=《SSDB-NoSQL数据库部署》 — Gary Wu&source=
+概述
+
+SSDB 是一个 C++ 开发的 NoSQL 数据库, 支持Key-value/Key-hashmap/zset(sorted set)等数据结..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SSDB-NoSQL数据库部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/28/Nginx配置文件-用法详解/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Nginx配置文件-用法详解</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/24/fstab磁盘自动挂载问题/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">fstab磁盘自动挂载问题</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/&title=《SSDB-NoSQL数据库部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/&title=《SSDB-NoSQL数据库部署》 — Gary Wu&source=
+概述
+
+SSDB 是一个 C++ 开发的 NoSQL 数据库, 支持Key-value/Key-hashmap/zset(sorted set)等数据结..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SSDB-NoSQL数据库部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/26/SSDB-NoSQL数据库部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

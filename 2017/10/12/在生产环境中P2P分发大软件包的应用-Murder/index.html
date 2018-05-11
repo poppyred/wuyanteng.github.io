@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>在生产环境中-P2P分发大软件包的应用-Murder | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Twitter,murder,软件分发,P2P分发">
+    <meta name="description" content="前言为什么要使用 P2P 方式分发软件包?  耗时小，效率高，所以考虑使用 P2P 方式来给大量机器分发大文件。P2P使用的工具为 Twitter 的开源工具 Murder（主要使用它封装好的 BT 下载工具）。">
+<meta name="keywords" content="高级运维,Twitter,murder,软件分发,P2P分发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在生产环境中-P2P分发大软件包的应用-Murder">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="前言为什么要使用 P2P 方式分发软件包?  耗时小，效率高，所以考虑使用 P2P 方式来给大量机器分发大文件。P2P使用的工具为 Twitter 的开源工具 Murder（主要使用它封装好的 BT 下载工具）。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/P2P_murder.png">
+<meta property="og:updated_time" content="2017-10-13T04:02:42.847Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在生产环境中-P2P分发大软件包的应用-Murder">
+<meta name="twitter:description" content="前言为什么要使用 P2P 方式分发软件包?  耗时小，效率高，所以考虑使用 P2P 方式来给大量机器分发大文件。P2P使用的工具为 Twitter 的开源工具 Murder（主要使用它封装好的 BT 下载工具）。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/P2P_murder.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">在生产环境中-P2P分发大软件包的应用-Murder</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">在生产环境中-P2P分发大软件包的应用-Murder</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-12T07:34:28.000Z" itemprop="datePublished" class="page-time">
+  2017-10-12
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实测数据"><span class="post-toc-number">2.</span> <span class="post-toc-text">实测数据</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#架构图"><span class="post-toc-number">3.</span> <span class="post-toc-text">架构图</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署分发环境"><span class="post-toc-number"></span> <span class="post-toc-text">部署分发环境</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试环境"><span class="post-toc-number">1.</span> <span class="post-toc-text">测试环境</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#部署"><span class="post-toc-number"></span> <span class="post-toc-text">部署</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-启动Tracker服务器"><span class="post-toc-number">1.</span> <span class="post-toc-text">1.启动Tracker服务器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-在Seeder服务器上准备好要分发的文件并创建种子"><span class="post-toc-number">2.</span> <span class="post-toc-text">2.在Seeder服务器上准备好要分发的文件并创建种子</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-启动Seeder服务器"><span class="post-toc-number">3.</span> <span class="post-toc-text">3.启动Seeder服务器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-Peer节点执行P2P下载"><span class="post-toc-number">4.</span> <span class="post-toc-text">4.Peer节点执行P2P下载</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5-文件下载完成后，关闭Seeder服务器进程"><span class="post-toc-number">5.</span> <span class="post-toc-text">5.文件下载完成后，关闭Seeder服务器进程</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-在生产环境中P2P分发大软件包的应用-Murder"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">在生产环境中-P2P分发大软件包的应用-Murder</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-12 15:34:28" datetime="2017-10-12T07:34:28.000Z"  itemprop="datePublished">2017-10-12</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><pre><code>为什么要使用 P2P 方式分发软件包?
+
+耗时小，效率高，所以考虑使用 P2P 方式来给大量机器分发大文件。P2P使用的工具为 Twitter 的开源工具 Murder（主要使用它封装好的 BT 下载工具）。
+</code></pre><a id="more"></a>
+<h4 id="实测数据"><a href="#实测数据" class="headerlink" title="实测数据"></a>实测数据</h4><pre><code>分发 80M 文件到 800 台机器，P2P 方式耗时 2 分钟 29 秒，大大提高了大文件的分发速度。
+(PS：Murder 作者说他们 Twitter 当时提升是 75 倍！！我推测可能是它们使用内网的原因，我们这边使用的外网，因为机器在各个不同的机房。)
+
+Murder已经存在线上正式使用案例，可以部署使用。
+GitHub项目：https://github.com/lg/murder
+</code></pre><h4 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/P2P_murder.png" alt="p2p_murder" title="">
+                </div>
+                <div class="image-caption">p2p_murder</div>
+            </figure>
+<h2 id="部署分发环境"><a href="#部署分发环境" class="headerlink" title="部署分发环境"></a>部署分发环境</h2><h4 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h4><pre><code>10.10.10.20  Tracker服务器
+10.10.10.21  Seeder服务器
+10.10.10.22  Peer下载节点1
+........     Peer下载节点n
+</code></pre><h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><blockquote>
+<p>安装Murder [所有节点配置]</p>
+</blockquote>
+<pre><code>下载zip主程序: https://github.com/lg/murder, 解压 -- 文件夹更名为murder -- 重新压缩为murder.zip
+
+软件分发到各个机器上。
+unzip murder.zip
+mv murder /usr/local/
+</code></pre><h4 id="1-启动Tracker服务器"><a href="#1-启动Tracker服务器" class="headerlink" title="1.启动Tracker服务器"></a>1.启动Tracker服务器</h4><pre><code>#启动Tracker服务器，确保服务为启动状态
+python /usr/local/murder/dist/murder_tracker.py &gt; /var/log/murder_tracker.log 2&gt;&amp;1 &amp;
+
+#启动后，会自动开启8998端口
+[root@cm-master ~]# netstat -lntup|grep 8998
+tcp    0      0 0.0.0.0:8998        0.0.0.0:*      LISTEN      29215/python 
+
+#查看P2P传输实时日志输出
+tailf /var/log/murder_tracker.log    
+</code></pre><h4 id="2-在Seeder服务器上准备好要分发的文件并创建种子"><a href="#2-在Seeder服务器上准备好要分发的文件并创建种子" class="headerlink" title="2.在Seeder服务器上准备好要分发的文件并创建种子"></a>2.在Seeder服务器上准备好要分发的文件并创建种子</h4><pre><code>#准备好要分发的文件，并放在/data/upload目录下
+
+#定义临时变量
+deploy_file=/data/upload/CentOS-6.6-x86_64-minimal.iso
+
+#生成种子
+python /usr/local/murder/dist/murder_make_torrent.py ${deploy_file} 10.10.10.20:8998 /root/fenfa.torrent
+
+#将生成的种子/root/fenfa.torrent文件分发到所有的peer目标节点上。
+
+注：格式如下
+python /usr/local/murder/dist/murder_make_torrent.py ${deploy_file} ${TrackerServer-IP}:8998 ${deploy_file}.torrent
+</code></pre><h4 id="3-启动Seeder服务器"><a href="#3-启动Seeder服务器" class="headerlink" title="3.启动Seeder服务器"></a>3.启动Seeder服务器</h4><pre><code>python /usr/local/murder/dist/murder_client.py seed /root/fenfa.torrent ${deploy_file} 127.0.0.1
+
+注：启动的时候需要注意，torrent文件需要与原分发文件保持一致，否则会提示错误。
+</code></pre><h4 id="4-Peer节点执行P2P下载"><a href="#4-Peer节点执行P2P下载" class="headerlink" title="4.Peer节点执行P2P下载"></a>4.Peer节点执行P2P下载</h4><pre><code>#P2P下载
+[root@cm-slave2 download]# time python /usr/local/murder/dist/murder_client.py peer /data/download/fenfa.torrent /data/download/CentOS6.6.iso 10.10.10.22
+
+done and done
+
+real    0m50.206s
+user    0m19.586s
+sys    0m6.981s
+
+
+#查看下载
+[root@cm-slave2 download]# ls -lh CentOS6.6.iso 
+-rw-r--r-- 1 root root 383M Oct 12 16:19 CentOS6.6.iso
+
+可以看到，我的一个383M的文件，在内网通过P2P的方式传送，花费的时间是50s左右，可谓速度之快！！！
+
+
+注：下载格式
+python /usr/local/murder/dist/murder_client.py peer /data/download/deploy.tar.gz.torrent /data/download/deploy.tar.gz ${Peer_IP}
+</code></pre><h4 id="5-文件下载完成后，关闭Seeder服务器进程"><a href="#5-文件下载完成后，关闭Seeder服务器进程" class="headerlink" title="5.文件下载完成后，关闭Seeder服务器进程"></a>5.文件下载完成后，关闭Seeder服务器进程</h4><pre><code>kill Seeder进程PID 避免它一直做种和提升安全性。
+
+以上就是分发软件包的整个流程。可以将上面的操作结合进自己的自动化运维平台。
+</code></pre><blockquote>
+<p>参考：<a href="http://jaminzhang.github.io/p2p/Murder-download-test/" target="_blank" rel="noopener">http://jaminzhang.github.io/p2p/Murder-download-test/</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-10-13T04:02:42.847Z" itemprop="dateUpdated">2017-10-13 12:02:42</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/" target="_blank" rel="external">https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/P2P分发/">P2P分发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Twitter/">Twitter</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/murder/">murder</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/软件分发/">软件分发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/&title=《在生产环境中-P2P分发大软件包的应用-Murder》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/&title=《在生产环境中-P2P分发大软件包的应用-Murder》 — Gary Wu&source=前言为什么要使用 P2P 方式分发软件包?
+
+耗时小，效率高，所以考虑使用 P2P 方式来给大量机器分发大文件。P2P使用的工具为 Twitter 的开源..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《在生产环境中-P2P分发大软件包的应用-Murder》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/14/keepalived精讲/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">keepalived精讲</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/28/Nginx配置文件-用法详解/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Nginx配置文件-用法详解</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/&title=《在生产环境中-P2P分发大软件包的应用-Murder》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/&title=《在生产环境中-P2P分发大软件包的应用-Murder》 — Gary Wu&source=前言为什么要使用 P2P 方式分发软件包?
+
+耗时小，效率高，所以考虑使用 P2P 方式来给大量机器分发大文件。P2P使用的工具为 Twitter 的开源..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《在生产环境中-P2P分发大软件包的应用-Murder》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/10/12/在生产环境中P2P分发大软件包的应用-Murder/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

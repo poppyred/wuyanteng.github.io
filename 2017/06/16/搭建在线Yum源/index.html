@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>搭建在线Yum源-CentOS6 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,CentOS6,Yum源">
+    <meta name="description" content="尽管有很多的免费镜像提供Yum源服务，但还是有必要建立自己的Yum源服务器，主要出于以下几点考虑： 网络速度：访问互联网可能比较慢 节省带宽：如果有大量的服务器，假设自己的yum源可以有效节省互联网带宽 联网限制：对于有些内网服务器，不能连接到互联网">
+<meta name="keywords" content="高级运维,CentOS6,Yum源">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建在线Yum源-CentOS6">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="尽管有很多的免费镜像提供Yum源服务，但还是有必要建立自己的Yum源服务器，主要出于以下几点考虑： 网络速度：访问互联网可能比较慢 节省带宽：如果有大量的服务器，假设自己的yum源可以有效节省互联网带宽 联网限制：对于有些内网服务器，不能连接到互联网">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-06-16T09:13:17.681Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建在线Yum源-CentOS6">
+<meta name="twitter:description" content="尽管有很多的免费镜像提供Yum源服务，但还是有必要建立自己的Yum源服务器，主要出于以下几点考虑： 网络速度：访问互联网可能比较慢 节省带宽：如果有大量的服务器，假设自己的yum源可以有效节省互联网带宽 联网限制：对于有些内网服务器，不能连接到互联网">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">搭建在线Yum源-CentOS6</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">搭建在线Yum源-CentOS6</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-16T06:05:18.000Z" itemprop="datePublished" class="page-time">
+  2017-06-16
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Yum服务端部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">Yum服务端部署</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#编译安装Nginx"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">编译安装Nginx</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置欲同步的网络源"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">配置欲同步的网络源</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#同步网络yum源"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">同步网络yum源</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#网页访问部署完成的yum源"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">网页访问部署完成的yum源</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#客户端配置yum源"><span class="post-toc-number">2.</span> <span class="post-toc-text">客户端配置yum源</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端yum安装软件测试"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">客户端yum安装软件测试</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-搭建在线Yum源"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">搭建在线Yum源-CentOS6</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-16 14:05:18" datetime="2017-06-16T06:05:18.000Z"  itemprop="datePublished">2017-06-16</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>尽管有很多的免费镜像提供Yum源服务，但还是有必要建立自己的Yum源服务器，主要出于以下几点考虑：</p>
+<p>网络速度：访问互联网可能比较慢</p>
+<p>节省带宽：如果有大量的服务器，假设自己的yum源可以有效节省互联网带宽</p>
+<p>联网限制：对于有些内网服务器，不能连接到互联网</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Yum服务端部署"><a href="#Yum服务端部署" class="headerlink" title="Yum服务端部署"></a>Yum服务端部署</h2><h4 id="编译安装Nginx"><a href="#编译安装Nginx" class="headerlink" title="编译安装Nginx"></a>编译安装Nginx</h4><pre><code>1. 获取Nginxs软件包
+   wget http://tengine.taobao.org/download/tengine-2.2.0.tar.gz
+
+2. 解压安装包并进入安装文件夹
+   tar xf tengine-2.2.0.tar.gz  &amp;&amp; cd  tengine-2.2.0
+
+3. 安装编译需要的依赖包
+   yum install gcc openssl-devel pcre-devel zlib-devel -y
+
+4. 编译安装Nginx
+   ./configure &amp;&amp; make &amp;&amp; make install
+
+5. 配置Nginx开机自启动
+   cd /etc/init.d/
+   cat &gt;&gt; nginx &lt;&lt;EOF
+        #!/bin/bash
+        #chkconfig: 2345 70 30
+        #description:                 
+        #processname: nginx
+
+        /usr/local/nginx/sbin/nginx
+
+   chmod +x nginx
+   chkconfig --add nginx
+   chkconfig nginx on
+   chkconfig --list |grep nginx
+
+6. 配置Nginx文件
+   vim /usr/local/nginx/conf/nginx.conf
+
+          location / {
+                root  /rpm;
+                autoindex on;
+                #root   html;
+                #index  index.html index.htm;
+          }
+</code></pre><h4 id="配置欲同步的网络源"><a href="#配置欲同步的网络源" class="headerlink" title="配置欲同步的网络源"></a>配置欲同步的网络源</h4><pre><code>1、备份CentOS 自带yum源
+   mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+
+2、改为国内aliyun yum源
+   wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
+
+注：当然，此处也可以直接使用epel-realease源（推荐原因: 软件更齐全）
+    yum install -y epel-realease
+
+3、删除yum源缓存
+   yum clear all
+
+4、创建yum源缓存
+   yum makecache
+
+5、查看yum源repo列表
+   yum repolist
+</code></pre><h4 id="同步网络yum源"><a href="#同步网络yum源" class="headerlink" title="同步网络yum源"></a>同步网络yum源</h4><pre><code>1. 切换到网站根目录
+    cd /usr/local/nginx/html/    
+    mkdir ./rpm  &amp;&amp; cd ./rpm   进入rpm网站根目录
+
+2. 安装yum工具包
+    yum -y install yum-utils
+
+3. 同步网络yum源
+   reposync -r base
+
+4. 创建yum源的repo配置文件
+   yum install -y createrepo
+   createrepo  base/Packages/
+</code></pre><h4 id="网页访问部署完成的yum源"><a href="#网页访问部署完成的yum源" class="headerlink" title="网页访问部署完成的yum源"></a>网页访问部署完成的yum源</h4><pre><code>/usr/local/nginx/sbin/nginx
+
+http://192.168.1.10      确认网页访问正常
+</code></pre><!-- more -->
+<h2 id="客户端配置yum源"><a href="#客户端配置yum源" class="headerlink" title="客户端配置yum源"></a>客户端配置yum源</h2><pre><code>1. 备份CentOS自带yum源
+    mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+
+2. 拷贝并编辑Base
+    cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+    vim  /etc/yum.repos.d/CentOS-Base.repo
+
+    修改baseurl为以下实际本地yum地址
+    [base]
+    baseurl=http://192.168.1.10/base/Packages/$basearch/
+
+    [expel]
+    baseurl=http://192.168.1.10/epel/$basearch/
+
+    [updates]
+    baseurl=http://192.168.1.10/updates/Packages/$basearch/  
+
+注：上面的base 、expel和updates等需要有对应的目录。
+
+3. 删除yum源缓存
+   yum clean all
+
+4. 创建yum源缓存
+   yum makecache
+
+5. 查看yum源repo列表
+    yum repolist
+</code></pre><h4 id="客户端yum安装软件测试"><a href="#客户端yum安装软件测试" class="headerlink" title="客户端yum安装软件测试"></a>客户端yum安装软件测试</h4><pre><code>yum install -y ntpdate
+</code></pre><p>技术文章：<a href="http://support.huawei.com/enterprise/zh/knowledge/KB1000604976" target="_blank" rel="noopener">参考</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-06-16T09:13:17.681Z" itemprop="dateUpdated">2017-06-16 17:13:17</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/16/搭建在线Yum源/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CentOS6/">CentOS6</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Yum源/">Yum源</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/&title=《搭建在线Yum源-CentOS6》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/&title=《搭建在线Yum源-CentOS6》 — Gary Wu&source=
+尽管有很多的免费镜像提供Yum源服务，但还是有必要建立自己的Yum源服务器，主要出于以下几点考虑：
+网络速度：访问互联网可能比较慢
+节省带宽：如果有大量..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《搭建在线Yum源-CentOS6》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/16/正则表达式egrep-sed-awk-整理总结/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">正则表达式egrep/sed/awk-整理总结</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/15/chkconfig自定义开机脚本-实现/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">chkconfig自定义开机脚本-实现</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/&title=《搭建在线Yum源-CentOS6》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/&title=《搭建在线Yum源-CentOS6》 — Gary Wu&source=
+尽管有很多的免费镜像提供Yum源服务，但还是有必要建立自己的Yum源服务器，主要出于以下几点考虑：
+网络速度：访问互联网可能比较慢
+节省带宽：如果有大量..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《搭建在线Yum源-CentOS6》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/16/搭建在线Yum源/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

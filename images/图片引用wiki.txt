@@ -1,0 +1,7 @@
+1.将文章中需要使用的图片，首先放到D:\Hexo\source\images目录下
+
+2. hexo g
+   hexo d 上传到github
+
+3. 访问https://github.com/wuyanteng/wuyanteng.github.io/tree/master/images, 找到对应图片点击下载，获取图片URL。
+   最后，文章中引用图片

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>问题汇总:openstack可用域availablitiy_zone配置 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,可用域,availablitiy_zone,aggregate host,nova schedule,az">
+    <meta name="description" content="什么是availablitiy_zone(可用域)Availability Zones 通常是对 computes 节点上的资源在小的区域内进行逻辑上的分组和隔离。  例如在同一个数据中心，我们可以将 Availability Zones 规划到不同的机房，或者在同一机房的几个相邻的机架，从而保障如果某个 Availability Zone 的节点发生故障（如供电系统或网络），而不影响其他的 Av">
+<meta name="keywords" content="高级运维,可用域,availablitiy_zone,aggregate host,nova schedule,az">
+<meta property="og:type" content="article">
+<meta property="og:title" content="问题汇总:openstack可用域availablitiy_zone配置">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="什么是availablitiy_zone(可用域)Availability Zones 通常是对 computes 节点上的资源在小的区域内进行逻辑上的分组和隔离。  例如在同一个数据中心，我们可以将 Availability Zones 规划到不同的机房，或者在同一机房的几个相邻的机架，从而保障如果某个 Availability Zone 的节点发生故障（如供电系统或网络），而不影响其他的 Av">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-22T04:17:40.149Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="问题汇总:openstack可用域availablitiy_zone配置">
+<meta name="twitter:description" content="什么是availablitiy_zone(可用域)Availability Zones 通常是对 computes 节点上的资源在小的区域内进行逻辑上的分组和隔离。  例如在同一个数据中心，我们可以将 Availability Zones 规划到不同的机房，或者在同一机房的几个相邻的机架，从而保障如果某个 Availability Zone 的节点发生故障（如供电系统或网络），而不影响其他的 Av">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">问题汇总:openstack可用域availablitiy_zone配置</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">问题汇总:openstack可用域availablitiy_zone配置</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-22T02:40:20.000Z" itemprop="datePublished" class="page-time">
+  2018-03-22
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是availablitiy-zone-可用域"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么是availablitiy_zone(可用域)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是Host-Aggregates-主机聚合"><span class="post-toc-number">2.</span> <span class="post-toc-text">什么是Host Aggregates(主机聚合)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实践"><span class="post-toc-number">3.</span> <span class="post-toc-text">实践</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-创建Host-Aggregates主机聚合-指定可用域"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">1.创建Host Aggregates主机聚合,指定可用域</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2-添加主机"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">2.添加主机</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#3-查询主机与服务所属的availablitiy-zone"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">3. 查询主机与服务所属的availablitiy zone</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#帮助命令"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">帮助命令</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-问题汇总-openstack可用域availablitiy-zone配置"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">问题汇总:openstack可用域availablitiy_zone配置</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-22 10:40:20" datetime="2018-03-22T02:40:20.000Z"  itemprop="datePublished">2018-03-22</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="什么是availablitiy-zone-可用域"><a href="#什么是availablitiy-zone-可用域" class="headerlink" title="什么是availablitiy_zone(可用域)"></a>什么是availablitiy_zone(可用域)</h4><pre><code>Availability Zones 通常是对 computes 节点上的资源在小的区域内进行逻辑上的分组和隔离。
+
+例如在同一个数据中心，我们可以将 Availability Zones 规划到不同的机房，或者在同一机房的几个相邻的机架，从而保障如果某个 Availability Zone 的节点发生故障（如供电系统或网络），而不影响其他的 Availability Zones 上节点运行的虚拟机，通过这种划分来提高 OpenStack 的可用性。目前 OpenStack 默认的安装是把所有的 computes 节点划分到 nova 的 Availability Zone 上，但我们可以通过对 nova.conf 文件的配置来定义不同的 Availability zones。
+</code></pre><a id="more"></a>
+<h4 id="什么是Host-Aggregates-主机聚合"><a href="#什么是Host-Aggregates-主机聚合" class="headerlink" title="什么是Host Aggregates(主机聚合)"></a>什么是Host Aggregates(主机聚合)</h4><pre><code>Host Aggregates 是在 Availability Zones 的基础上更进一步地进行逻辑的分组和隔离。例如我们可以根据不同的 computes 节点的物理硬件配置将具有相同共性的物理资源规划在同一 Host Aggregate 之下，或者根据用户的具体需求将几个 computes 节点规划在具有相同用途的同一 Host Aggregate 之下，通过这样的划分有利于提高 OpenStack 资源的使用效率。Host Aggregates 可以通过 nova client 或 API 来创建和配置。
+</code></pre><pre><code>如何简单理解主机聚合与可用域？
+功能类似于阿里云服务器租用选购时，列出的华北区、华南区等。只不过主机聚合与可用域可以区分的更佳细化
+
+注：az可用域对用户是可见的，而aggregates聚合只对程序可见，由nova-scheduler使用。
+</code></pre><h4 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h4><pre><code>默认情况下,对Nova的服务分为两类: 
+一类使Controller节点的服务进程, 如nova-api, nova-scheduler, nova-conductor等
+另一类使计算节点的进程, 如nova-computer. 
+
+对于第一类服务,默认的zone配置项由internal_service_availability_zone决定, 而nova-computer所属的zone配置项由default_available_zone决定.
+</code></pre><h5 id="1-创建Host-Aggregates主机聚合-指定可用域"><a href="#1-创建Host-Aggregates主机聚合-指定可用域" class="headerlink" title="1.创建Host Aggregates主机聚合,指定可用域"></a>1.创建Host Aggregates主机聚合,指定可用域</h5><pre><code>注: 
+(1)控制节点默认可用域为internal, 而计算节点可用域默认为nova。
+(2)一个nova-compute节点只能在一个az(可用域)内，但是可以存在多个aggregate(主机聚合)中。
+(3)一个计算节点属于多个aggregate,并且具有相同的metadata key，那么这个host的key对应的值为set集合，匹配规则为任一个满足即可。
+(4)在创建主机聚合的时候可以同时定义一个新的可用域,但是在这个主机聚合中想要添加要管理的计算节点主机时,首先要将所需的计算节点从nova可用域中剔除,否则会报409错误。错误如下:
+
+ERROR (Conflict): Cannot add host to aggregate 12. Reason: One or more hosts already in availability zone(s) [u&#39;nova&#39;]. (HTTP 409) (Request-ID: req-81aa55b5-0bb2-47e1-89c2-4d64ac9c9a8c)
+</code></pre><pre><code>创建一个主机聚合名称,同时创建一个可用域az1
+nova aggregate-create aggregate_name az1
+
+查看主机聚合与可用域
+nova aggregate-list
+</code></pre><h5 id="2-添加主机"><a href="#2-添加主机" class="headerlink" title="2.添加主机"></a>2.添加主机</h5><pre><code>把主机添加到对应的主机聚合中
+nova aggregate-add-host aggregate_name computer1
+</code></pre><h5 id="3-查询主机与服务所属的availablitiy-zone"><a href="#3-查询主机与服务所属的availablitiy-zone" class="headerlink" title="3. 查询主机与服务所属的availablitiy zone"></a>3. 查询主机与服务所属的availablitiy zone</h5><pre><code>nova host-list
+nova service-list
+</code></pre><h5 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h5><pre><code>查看可用域状态
+nova availability-zone-list
+</code></pre><pre><code>nova help | grep &#39;aggregate
+
+aggregate-add-host          Add the host to the specified aggregate.
+aggregate-create            Create a new aggregate with the specified
+aggregate-delete            Delete the aggregate.
+aggregate-details           Show details of the specified aggregate.
+aggregate-list              Print a list of all aggregates.
+aggregate-remove-host       Remove the specified host from the specified
+                            aggregate.
+aggregate-set-metadata      Update the metadata associated with the
+                            aggregate.
+aggregate-update            Update the aggregate&#39;s name and optionally
+</code></pre><pre><code>nova help aggregate-create
+
+usage: nova aggregate-create &lt;name&gt; [&lt;availability-zone&gt;]
+Create a new aggregate with the specified details.
+Positional arguments:
+  &lt;name&gt;               Name of aggregate.
+  &lt;availability-zone&gt;  The availability zone of the aggregate (optional).
+</code></pre><p>参考：<a href="https://gist.github.com/zhanghui9700/48144e05afbec1244dec61636ae511c7" target="_blank" rel="noopener">Github</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-22T04:17:40.149Z" itemprop="dateUpdated">2018-03-22 12:17:40</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/" target="_blank" rel="external">https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/aggregate-host/">aggregate host</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/availablitiy-zone/">availablitiy_zone</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/az/">az</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule/">nova schedule</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/可用域/">可用域</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/&title=《问题汇总:openstack可用域availablitiy_zone配置》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/&title=《问题汇总:openstack可用域availablitiy_zone配置》 — Gary Wu&source=什么是availablitiy_zone(可用域)Availability Zones 通常是对 computes 节点上的资源在小的区域内进行逻辑上的分..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《问题汇总:openstack可用域availablitiy_zone配置》 — Gary Wu&url=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/22/mysql从库自动清理relay-log/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">mysql从库自动清理relay_log</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/21/云计算三种服务模式-IaaS和PaaS及SaaS/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">云计算三种服务模式:IaaS和PaaS及SaaS</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/&title=《问题汇总:openstack可用域availablitiy_zone配置》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/&title=《问题汇总:openstack可用域availablitiy_zone配置》 — Gary Wu&source=什么是availablitiy_zone(可用域)Availability Zones 通常是对 computes 节点上的资源在小的区域内进行逻辑上的分..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《问题汇总:openstack可用域availablitiy_zone配置》 — Gary Wu&url=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

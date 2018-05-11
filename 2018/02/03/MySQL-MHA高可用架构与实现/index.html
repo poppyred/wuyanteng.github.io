@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MySQL MHA高可用架构与实现 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,MySQL,Failover,binlog server,异步复制,半同步复制,MHA,VIP">
+    <meta name="description" content="MHA高可用架构  MHA可以解决的问题 1. 监控所有节点状态 2. 自动选择新的主库 3. 对业务透明（通过VIP自动切换到新主库） 4. 尽量保证新的主库与老的主库数据一致,即数据补偿">
+<meta name="keywords" content="高级运维,MySQL,Failover,binlog server,异步复制,半同步复制,MHA,VIP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL MHA高可用架构与实现">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="MHA高可用架构  MHA可以解决的问题 1. 监控所有节点状态 2. 自动选择新的主库 3. 对业务透明（通过VIP自动切换到新主库） 4. 尽量保证新的主库与老的主库数据一致,即数据补偿">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-03T08:51:26.069Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL MHA高可用架构与实现">
+<meta name="twitter:description" content="MHA高可用架构  MHA可以解决的问题 1. 监控所有节点状态 2. 自动选择新的主库 3. 对业务透明（通过VIP自动切换到新主库） 4. 尽量保证新的主库与老的主库数据一致,即数据补偿">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MySQL MHA高可用架构与实现</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MySQL MHA高可用架构与实现</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-03T05:21:10.000Z" itemprop="datePublished" class="page-time">
+  2018-02-03
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MHA搭建过程"><span class="post-toc-number">1.</span> <span class="post-toc-text">MHA搭建过程</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-MySQL-MHA高可用架构与实现"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MySQL MHA高可用架构与实现</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-03 13:21:10" datetime="2018-02-03T05:21:10.000Z"  itemprop="datePublished">2018-02-03</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>MHA高可用架构</p>
+</blockquote>
+<p>MHA可以解决的问题</p>
+<pre><code>1. 监控所有节点状态
+2. 自动选择新的主库
+3. 对业务透明（通过VIP自动切换到新主库）
+4. 尽量保证新的主库与老的主库数据一致,即数据补偿
+</code></pre><a id="more"></a>
+<p>MHA原理</p>
+<pre><code>1. 原版MHA架构要求至少三个节点才能实现
+2. 监控多个节点【心跳、主从复制的状态(show slave status)】
+3. MHA结构是由Manager+node构成。所以三台数据库实例都需要安装MHA node相关软件。生产环境下,Manager需要单独安装在某台额外的服务器上。
+4. 所以节点配置SSH互信(即无密码登陆)
+5. 选主: MHA会默认按照将来配置文件中节点添加顺序作为选主库的依据,由于配置文件是我们自己指定的，所以MHA的选主是乐观的。同时它也会去判断从节点和主节点延迟状况。如何判断？通过show slave status\G结果中的Seconds_Behind_Master参数作为依据，如果延迟较大超出指定范围也不会选择指定顺序中的从库作为新的主库。
+通过人为干预MHA的选主，设定权重，让MHA按照人为配置选择新主，如果有这种干预，还一定要保证从库真的很新。技术：半同步复制或者是使用更高端的硬件设备,如硬盘改为SSD
+
+6. 数据补偿
+主库宕机才会选主
+第一种情况(乐观): 仅是数据库实例宕机了，但服务器运行正常能正常ssh
+&lt;1&gt;保存从库缺失部分的binlog
+&lt;2&gt;重新构建新的主从环境
+   第一阶段的数据补偿
+   2.1:将S2(从库)和S1（新主库）进行对比，获得缺失部分的日志进行恢复到S2从库
+   2.2:S2从库 change master to S1(新主库)，即重新自动变更主从架构
+&lt;3&gt;将S1(新主)和原主库缺失并保存下来的binlog恢复。
+
+第二种情况（悲观）: 原主库, 操作系统都无法ssh
+&lt;1&gt;尝试保存从库缺失部分的binlog,发现无法获取
+&lt;2&gt;重新构建新的主从环境
+   第一阶段的数据补偿
+   2.1:将S2(从库)和S1（新主库）进行对比，获得缺失部分的日志进行恢复到S2从库
+   2.2:S2从库 change master to S1(新主库)，即重新自动变更主从架构
+
+问题: 和原主库的数据差异如何补偿？
+方案:(1)配置半同步复制
+     (2)binlog实时的备份到远程节点(binlog server)
+</code></pre><p>异步复制与半同步复制</p>
+<pre><code>(1)mysql默认是异步复制（即只同步差异部分）
+(2)半同步复制，即主库将数据发送到从库，从库确确实实接受到了数据到relay-log(非缓存中),此时从库给主库进行接收确认。
+</code></pre><!-- more -->
+<hr>
+<h4 id="MHA搭建过程"><a href="#MHA搭建过程" class="headerlink" title="MHA搭建过程"></a>MHA搭建过程</h4><blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>1、准备环境: 准备3台机器，安装好MySQL5.6.36
+10.0.0.51
+10.0.0.52
+10.0.0.53
+</code></pre><pre><code>2、配置文件规划
+[mysqld]
+basedir=/application/mysql
+datadir=/application/mysql/data
+socket=/tmp/mysql.sock
+log-error=/var/log/mysql.log
+log-bin=/data/mysql/mysql-bin
+binlog_format=row
+secure-file-priv=/tmp 
+server-id=51\52\53
+gtid-mode=on
+enforce-gtid-consistency=true
+log-slave-updates=1
+
+说明：
+除了server-id不同，其他都相同
+gtid-mode=on  启用gtid类型，否则就是普通的复制架构
+enforce-gtid-consistency=true  强制GTID的一致性
+log-slave-updates=1      slave更新是否记入日志（5.6必须的）
+</code></pre><pre><code>3、分别初始化数据
+/application/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/application/mysql --datadir=/application/mysql/data/ --user=mysql
+
+启动数据库
+/etc/init.d/mysqld start
+</code></pre><pre><code>4、主节点-创建复制用户(51作为主节点，52、53为从)
+GRANT REPLICATION SLAVE ON *.* TO repl@&#39;10.0.0.%&#39; IDENTIFIED BY &#39;123&#39;;
+</code></pre><pre><code>5、52/53从库开启复制
+change master to master_host=&#39;10.0.0.51&#39;,master_user=&#39;repl&#39;,master_password=&#39;123&#39;,MASTER_AUTO_POSITION=1;
+
+启动slave
+start slave;
+
+验证slave
+mysql&gt; show slave status;
+</code></pre><pre><code>关闭relaylog自动删除
+
+set global relay_log_purge = 0;
+set global relay_log_purge = 0;  临时（建议三个节点都做）
+relay_log_purge = 0       永久，在配置文件，建议在三个节点都做
+set global read_only=1;  临时，为后续读写分离准备，不需要在配置文件生效（在所有从库）
+</code></pre><p>注：MySQL使用GTID的优势</p>
+<pre><code>(1) group commit
+(2) 对每一个事务记录唯一的一串编号uuid：TXID
+(3) failover（故障转移）更加有优势。
+3.1 选主方面
+    classic replication    mseter.info和主中show master status
+    GTID   比较主从的gtid就可以了。
+3.2 数据补偿方面
+    classic, 比较主从master.info 和show  master status。把没有的拿过来运行时，使用gtid比较简单    
+</code></pre><blockquote>
+<p>部署MHA</p>
+</blockquote>
+<ul>
+<li>安装mha node节点</li>
+</ul>
+<pre><code>各节点安装node软件包及依赖
+
+依赖包perl-DBD-MySQL ，并在三个节点都安装node软件
+yum install -y perl-DBD-MySQL
+rpm -ivh mha4mysql-node-0.56-0.el6.noarch.rpm
+</code></pre><p>创建mha管理用户</p>
+<pre><code>主库中创建mha管理用户(从库会自动同步)
+grant all privileges on *.* to mha@&#39;10.0.0.%&#39; identified by &#39;mha&#39;;    
+</code></pre><p>配置软连接</p>
+<pre><code>ln -s /application/mysql/bin/mysqlbinlog /usr/bin/mysqlbinlog
+ln -s /application/mysql/bin/mysql /usr/bin/mysql
+</code></pre><ul>
+<li>部署manger节点(生产环境为独立服务器)</li>
+</ul>
+<pre><code>wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-6.repo
+yum install -y perl-Config-Tiny epel-release perl-Log-Dispatch perl-Parallel-ForkManager perl-Time-HiRes
+
+安装  manager软件
+rpm -ivh mha4mysql-manager-0.56-0.el6.noarch.rpm 
+
+创建必要目录
+mkdir -p /etc/mha
+mkdir -p /var/log/mha/app1  可以管理多套主从复制
+
+创建配置文件 (不需要的配置不要留着，注释没用,切换后会重写)
+vim /etc/mha/app1.cnf    
+
+内容如下：
+[server default]                     
+manager_log=/var/log/mha/app1/manager
+manager_workdir=/var/log/mha/app1
+master_binlog_dir=/data/mysql
+user=mha
+password=mha
+ping_interval=2
+repl_password=123
+repl_user=repl
+ssh_user=root
+
+[server1]
+hostname=10.0.0.51
+port=3306
+
+[server2]
+hostname=10.0.0.52
+port=3306
+
+[server3]
+hostname=10.0.0.53
+port=3306
+</code></pre><p>配置节点SSH互信</p>
+<pre><code>配置互信(所有节点)
+ssh-keygen -t dsa -P &#39;&#39; -f ~/.ssh/id_dsa &gt;/dev/null 2&gt;&amp;1
+ssh-copy-id -i /root/.ssh/id_dsa.pub root@10.0.0.51
+ssh-copy-id -i /root/.ssh/id_dsa.pub root@10.0.0.52
+ssh-copy-id -i /root/.ssh/id_dsa.pub root@10.0.0.53
+
+检测互信
+[root@server3 ~]# masterha_check_ssh  --conf=/etc/mha/app1.cnf 
+</code></pre><pre><code>检查主从状态
+masterha_check_repl --conf=/etc/mha/app1.conf
+</code></pre><p>故障处理</p>
+<pre><code>故障处理:
+[error][/usr/share/perl5/vendor_perl/MHA/ServerManager.pm, ln301] 
+Got MySQL error when connecting 10.0.0.53(10.0.0.53:3306) :1045:Access denied for user &#39;mha&#39;@&#39;server3&#39; 
+(using password: YES), but this is not a MySQL crash. Check MySQL server settings.
+
+解决：
+我们需要在配置文件中加入 
+skip-name-resolve
+</code></pre><p>在manager节点启动mha</p>
+<pre><code>nohup masterha_manager --conf=/etc/mha/app1.cnf --remove_dead_master_conf --ignore_last_failover &lt; /dev/null &gt; /var/log/mha/app1/manager.log 2&gt;&amp;1 &amp;
+
+mha启动验证
+ps -ef |grep manager
+
+检查MHA集群状态：
+masterha_check_status --conf=/etc/mha/app1.cnf 
+app1 (pid:7502) is running(0:PING_OK), master:10.0.0.51
+</code></pre><blockquote>
+<p>MHA故障模拟及修复</p>
+</blockquote>
+<pre><code>1.模拟主库宕机，tailf命令查看mha机器的manager log信息
+   (1)log查看主库宕机,从库选举、切换等等过程
+   (2)再次查看配置文件内容，发现主库信息已经被自动移除
+2.恢复MHA架构
+  (1)修复1主2从复制架构
+     将宕机的原主库启动mysql服务，然后change master to 到新主库，最后start slave
+  (2)修复MHA
+     - 配置文件添加新节点(添加宕机恢复好的原主库)
+     - 检查ssh互信与主从状态，最后启动MHA
+</code></pre><blockquote>
+<p>MHA高级功能</p>
+</blockquote>
+<p>VIP高可用实现</p>
+<pre><code>(1)人为指定一个VIP地址(不能被占用)
+(2)MHA能够切换这个VIP
+(3)MHA ip failover脚本(自己写)
+</code></pre><p>MHA-VIP脚本:master_ip_failover.sh</p>
+<pre><code>#!/usr/bin/env perl
+
+use strict;
+use warnings FATAL =&gt; &#39;all&#39;;
+
+use Getopt::Long;
+
+my (
+    $command,          $ssh_user,        $orig_master_host, $orig_master_ip,
+    $orig_master_port, $new_master_host, $new_master_ip,    $new_master_port
+);
+
+#--------------------- 需要关注的区域-----------------------
+my $vip = &#39;10.0.0.55/24&#39;;
+my $key = &#39;1&#39;;
+my $ssh_start_vip = &quot;/sbin/ifconfig eth1:$key $vip&quot;;
+my $ssh_stop_vip = &quot;/sbin/ifconfig eth1:$key down&quot;;
+#--------------------- 结束关注的区域------------------------
+
+GetOptions(
+    &#39;command=s&#39;          =&gt; \$command,
+    &#39;ssh_user=s&#39;         =&gt; \$ssh_user,
+    &#39;orig_master_host=s&#39; =&gt; \$orig_master_host,
+    &#39;orig_master_ip=s&#39;   =&gt; \$orig_master_ip,
+    &#39;orig_master_port=i&#39; =&gt; \$orig_master_port,
+    &#39;new_master_host=s&#39;  =&gt; \$new_master_host,
+    &#39;new_master_ip=s&#39;    =&gt; \$new_master_ip,
+    &#39;new_master_port=i&#39;  =&gt; \$new_master_port,
+);
+
+exit &amp;main();
+
+sub main {
+
+    print &quot;\n\nIN SCRIPT TEST====$ssh_stop_vip==$ssh_start_vip===\n\n&quot;;
+
+    if ( $command eq &quot;stop&quot; || $command eq &quot;stopssh&quot; ) {
+
+        my $exit_code = 1;
+        eval {
+            print &quot;Disabling the VIP on old master: $orig_master_host \n&quot;;
+            &amp;stop_vip();
+            $exit_code = 0;
+        };
+        if ($@) {
+            warn &quot;Got Error: $@\n&quot;;
+            exit $exit_code;
+        }
+        exit $exit_code;
+    }
+    elsif ( $command eq &quot;start&quot; ) {
+
+        my $exit_code = 10;
+        eval {
+            print &quot;Enabling the VIP - $vip on the new master - $new_master_host \n&quot;;
+            &amp;start_vip();
+            $exit_code = 0;
+        };
+        if ($@) {
+            warn $@;
+            exit $exit_code;
+        }
+        exit $exit_code;
+    }
+    elsif ( $command eq &quot;status&quot; ) {
+        print &quot;Checking the Status of the script.. OK \n&quot;;
+        exit 0;
+    }
+    else {
+        &amp;usage();
+        exit 1;
+    }
+}
+
+sub start_vip() {
+    `ssh $ssh_user\@$new_master_host \&quot; $ssh_start_vip \&quot;`;
+}
+sub stop_vip() {
+     return 0  unless  ($ssh_user);
+    `ssh $ssh_user\@$orig_master_host \&quot; $ssh_stop_vip \&quot;`;
+}
+
+sub usage {
+    print
+    &quot;Usage: master_ip_failover --command=start|stop|stopssh|status --orig_master_host=host --orig_master_ip=ip --orig_master_port=port --new_master_host=host --new_master_ip=ip --new_master_port=port\n&quot;;
+}
+</code></pre><p>VIP实现步骤</p>
+<pre><code>VIP(Manager节点)
+(1)添加一个vip切换脚本(使用的是源码包中的模板)
+vi  /usr/local/bin/master_ip_failover(如上脚本)
+修改如下内容:
+my $vip = &#39;10.0.0.55/24&#39;;
+my $key = &#39;1&#39;;
+my $ssh_start_vip = &quot;/sbin/ifconfig eth0:$key $vip&quot;;
+my $ssh_stop_vip = &quot;/sbin/ifconfig eth0:$key down&quot;;
+
+(2)在配置文件中加入调用定制的脚本
+vi /etc/mha/app1.cnf
+添加：
+master_ip_failover_script=/usr/local/bin/master_ip_failover
+
+(3)重启MHA
+重启mha
+masterha_stop --conf=/etc/mha/app1.cnf
+nohup masterha_manager --conf=/etc/mha/app1.cnf --remove_dead_master_conf --ignore_last_failover &lt; /dev/null &gt; /var/log/mha/app1/manager.log 2&gt;&amp;1 &amp;
+
+(4)(主库)第一次需要手工添加VIP到配置文件指定的网卡别名上(eth0:1)
+ifconfig eth0:1 10.0.0.55/24
+
+
+(5)测试vip漂移
+   关闭master节点,查看新主节点的ip信息
+</code></pre><p>Binlog Server(新配置一个节点)</p>
+<pre><code>（1）准备一台新的mysql实例（53），必须开启GTID
+（2）建立binlog接收目录，不能和主库binlog目录一样
+    mkdir /data/mysql/binlog/ 
+    chown -R mysql.mysql /data/
+
+（3）在app1.cnf中开启binlogserver功能
+    [binlog1]
+    no_master=1
+    hostname=10.0.0.53        ---&gt;db03那台机器
+    master_binlog_dir=/data/mysql/binlog/      ---&gt;我们自定义的binlog保存目录
+
+（4）开启binlog接收（接收主库的binlog）
+    cd  /data/mysql/binlog/
+    mysqlbinlog  -R --host=10.0.0.51 --user=mha --password=mha --raw  --stop-never mysql-bin.000001 &amp;
+
+（5）停止MHA
+    /usr/bin/masterha_stop --conf=/etc/mha/app1.cnf
+
+（6）开启MHA
+nohup masterha_manager --conf=/etc/mha/app1.cnf --remove_dead_master_conf --ignore_last_failover &lt; /dev/null &gt; /var/log/mha/app1/manager.log 2&gt;&amp;1 &amp;
+</code></pre><p>发送邮件</p>
+<pre><code>3.send_report
+(1)准备发邮件的脚本
+
+(2)将准备好的脚本添加到mha配置文件中,让其调用
+    vi /etc/mha/app1.cnf
+    report_script=/usr/local/bin/send
+
+（3）停止MHA
+        /usr/bin/masterha_stop --conf=/etc/mha/app1.cnf
+
+（4）开启MHA
+    nohup masterha_manager --conf=/etc/mha/app1.cnf --remove_dead_master_conf --ignore_last_failover &lt; /dev/null &gt; /var/log/mha/app1/manager.log 2&gt;&amp;1 &amp;
+
+(5) 关闭主库,看警告邮件    
+</code></pre><p>MHA架构不足</p>
+<pre><code>MHA: 浪费机器
+
+读写分离:将读操作落到从节点上去运行,主库只负责写入
+
+mysql中间件实现: atlas(奇虎360开源)
+
+facebook:
+多套MHA集群,分片(分布式系统一类:分布式存储)
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-03T08:51:26.069Z" itemprop="dateUpdated">2018-02-03 16:51:26</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/02/03/MySQL-MHA高可用架构与实现/" target="_blank" rel="external">https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Failover/">Failover</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MHA/">MHA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VIP/">VIP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/binlog-server/">binlog server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/半同步复制/">半同步复制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/异步复制/">异步复制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/&title=《MySQL MHA高可用架构与实现》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/&title=《MySQL MHA高可用架构与实现》 — Gary Wu&source=
+MHA高可用架构
+
+MHA可以解决的问题
+1. 监控所有节点状态
+2. 自动选择新的主库
+3. 对业务透明（通过VIP自动切换到新主库）
+4. 尽量保证..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL MHA高可用架构与实现》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/06/supervisor安装与管理-Gentoo/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">supervisor安装与管理-Gentoo</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/31/MySQL主从管理与维护/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL主从管理与维护</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/&title=《MySQL MHA高可用架构与实现》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/&title=《MySQL MHA高可用架构与实现》 — Gary Wu&source=
+MHA高可用架构
+
+MHA可以解决的问题
+1. 监控所有节点状态
+2. 自动选择新的主库
+3. 对业务透明（通过VIP自动切换到新主库）
+4. 尽量保证..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL MHA高可用架构与实现》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/02/03/MySQL-MHA高可用架构与实现/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

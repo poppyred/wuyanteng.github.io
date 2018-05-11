@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MySQL主从原理与部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,MySQL主从复制,全备还原">
+    <meta name="description" content="什么是mysql主从同步？ 当master(主)库的数据发生变化的时候，变化会实时的同步到slave(从)库。">
+<meta name="keywords" content="高级运维,MySQL主从复制,全备还原">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL主从原理与部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="什么是mysql主从同步？ 当master(主)库的数据发生变化的时候，变化会实时的同步到slave(从)库。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-08T09:46:37.065Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL主从原理与部署">
+<meta name="twitter:description" content="什么是mysql主从同步？ 当master(主)库的数据发生变化的时候，变化会实时的同步到slave(从)库。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MySQL主从原理与部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MySQL主从原理与部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-31T08:18:15.000Z" itemprop="datePublished" class="page-time">
+  2018-01-31
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#主从同步-实现"><span class="post-toc-number">1.</span> <span class="post-toc-text">主从同步-实现</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-MySQL主从原理与部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MySQL主从原理与部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-31 16:18:15" datetime="2018-01-31T08:18:15.000Z"  itemprop="datePublished">2018-01-31</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>什么是mysql主从同步？</p>
+<pre><code>当master(主)库的数据发生变化的时候，变化会实时的同步到slave(从)库。
+</code></pre><a id="more"></a>
+<p>主从同步有什么好处？</p>
+<pre><code>水平扩展数据库的负载能力。
+容错，高可用。
+Failover(失败切换)/High Availability
+数据备份。
+</code></pre><!-- more -->
+<p>主从环境涉及到的文件-梳理</p>
+<pre><code>Master主库:
+binlog文件
+  1.存放在和数据文件不同的位置
+  2.使用ROW格式(行)
+  3.提高binlog写入磁盘的实时性
+    sync_binlog=0/1
+    1:每次事务commit都要刷新到磁盘
+    0:和1对立,不是每次事务完成就写磁盘
+    建议将binlog存放在SSD存储上
+
+
+Slave从库: 
+&lt;1&gt;Relay-log文件
+   作用:保存IO线程接收过来的主库的binlog事件
+   可通过relay-bin去设置relay的保存位置,默认存放在数据目录下
+&lt;2&gt;Master.info文件
+作用：
+(1)连接主库的IP/Port/User/Password(通过change master to命令而来)
+(2)上次请求到哪一个事件了（file名+position号）
+&lt;3&gt;Relay-log.info
+作用：记录已经运行到哪一个relaylog事件的哪个位置了
+
+
+注：(1)主从数据同步需要保证在某个时间点数据是一致的。
+    (2)mysql默认是异步复制（即只同步差异部分）
+    (3)半同步复制，即主库将数据发送到从库，从库确确实实接受到了数据到relay-log(非缓存中),此时从库给主库进行接收确认。
+</code></pre><p>主从工作流程</p>
+<pre><code>由从库发起数据同步请求，拿着master.info中的file和position号去连接主库。主库拿着从库的file名和position号去比对主库自己的bin-log文件, 把最新的一部分文件通过主库的dump线程发送给从库的io线程,从库的io线程把接收的数据记录在relay-log中,从库将relay-log中的文件通过sql线程写入到数据库中，并在relay-log.info文件中记录已经运行到哪一个relaylog事件的哪个位置了
+
+注：从库master.info中记录的是从主库拿过来的bin-log file名和position号。与从库自己的relay-log信息是完全独立的,即file名和position号不一致是正常的。
+</code></pre><p>MySQL架构演变</p>
+<pre><code>&lt;1&gt;安全角度
+主库执行drop database oldboy ---&gt;从库也很快运行，属于逻辑损坏，而延时从库同步可以很好解决这个问题。即将从库SQL线程阻塞,主从之间日志传送正常执行，但是SQL线程不立即执行
+
+&lt;2&gt;性能角度
+所有读写请求都会落到主库进行负载,可以使用读写分离技术，让从库分担主库压力。
+
+&lt;3&gt;快速Failover
+</code></pre><hr>
+<h4 id="主从同步-实现"><a href="#主从同步-实现" class="headerlink" title="主从同步-实现"></a>主从同步-实现</h4><pre><code>假设server主库已经运行了很长时间，并且数据很重要，如何做从？
+
+注意:做主从之前，需要确保主从之间的MySQL版本信息一致，否则可能会出现缺少plugin而无法启动的情况
+</code></pre><p>主库my.cnf</p>
+<pre><code>cat /etc/my.cnf
+
+[client]
+port            = 3306
+socket          = /data/B/mysql/mysql.sock
+
+[mysqld]
+user = mysql
+port = 3306
+socket  = /data/B/mysql/mysql.sock
+basedir = /usr/local/mysql
+datadir = /data/B/mysql/data
+log-bin = /data/B/mysql/mysql-bin
+server-id = 5     #主从mysql id号不同
+skip_name_resolve
+</code></pre><p>从库my.cnf</p>
+<pre><code>cat /etc/my.cnf
+
+[client]
+port            = 3306
+socket          = /data/B/mysql/mysql.sock
+
+[mysqld]
+user = mysql
+port = 3306
+socket  = /data/B/mysql/mysql.sock
+basedir = /usr/local/mysql
+datadir = /data/B/mysql/data
+log-bin = /data/B/mysql/mysql-bin    #在从库启用binlog(按需配置)
+server-id = 10     #主从mysql id号不同
+skip_name_resolve  #跳过本地解析
+</code></pre><!-- more -->
+<blockquote>
+<p>主库操作</p>
+</blockquote>
+<ul>
+<li>查看主库当前binlog文件和position号码(稍后从库需要)</li>
+</ul>
+<pre><code>mysql&gt; show master status; 
+
++------------------+------------+
+| File             | Position   | 
++------------------+------------+
+| mysql-bin.003374 | 1016625221 |  
++------------------+------------+
+</code></pre><ul>
+<li>主库备份</li>
+</ul>
+<pre><code>数据量≤50GB,建议使用mysqldump ;数据量＞50GB建议使用xtrabackup
+</code></pre><pre><code>xtrabackup全备并压缩-参考：
+/usr/bin/innobackupex --defaults-file=/etc/my.cnf --user=root --password=123  --stream=xbstream /data/A/backup/mysql/allbackup |gzip - &gt; /data/A/backup/mysql/allbackup/NewAll31.xbstream.gz
+</code></pre><ul>
+<li>主库创建复制用户</li>
+</ul>
+<pre><code> grant replication slave on *.* to repl@&#39;10.0.0.%&#39; identified by &#39;123&#39;;
+</code></pre><!-- more -->
+<blockquote>
+<p>从库操作</p>
+</blockquote>
+<ul>
+<li>从库恢复全量数据</li>
+</ul>
+<pre><code>/etc/init.d/mysqld stop   #停库 
+cd /data/B/mysql/ &amp;&amp; cp -R data data_bak 
+cd data &amp;&amp; rm -rf ./*     #清空数据
+
+gzip -d NewAll31.xbstream.gz &amp;&amp; xbstream -xC NewAll31.xbstream
+
+全量数据整合
+innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log /data/B/mysql_tmp/NewAll31
+
+全量数据恢复
+innobackupex --defaults-file=/etc/my.cnf --user=root --copy-back /data/B/mysql_tmp/NewAll31
+
+变更文件属主属组
+chown -R mysql.mysql /data/B/mysql/data   
+
+启动库
+/etc/init.d/mysqld start          
+</code></pre><ul>
+<li>CHANGE MASTER TO</li>
+</ul>
+<pre><code>进入mysql并执行如下指令
+CHANGE MASTER TO
+  MASTER_HOST=&#39;10.0.0.20&#39;,
+  MASTER_USER=&#39;repl&#39;,
+  MASTER_PASSWORD=&#39;123&#39;,
+  MASTER_PORT=3306,
+  MASTER_LOG_FILE=&#39;mysql-bin.003374&#39;,
+  MASTER_LOG_POS=1016625221;
+
+注：上面两行的意思是从库将从这个binlog和这个POS号开始进行数据同步 
+</code></pre><ul>
+<li>启动slave并验证</li>
+</ul>
+<pre><code>接着在数据库执行
+start slave；
+show slave status\G
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-08T09:46:37.065Z" itemprop="dateUpdated">2018-02-08 17:46:37</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/31/MySQL主从原理与部署/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL主从复制/">MySQL主从复制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/全备还原/">全备还原</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/&title=《MySQL主从原理与部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/&title=《MySQL主从原理与部署》 — Gary Wu&source=什么是mysql主从同步？
+当master(主)库的数据发生变化的时候，变化会实时的同步到slave(从)库。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL主从原理与部署》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/31/MySQL主从管理与维护/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">MySQL主从管理与维护</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/30/Dell远控卡iDRAC6固件升级/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Dell远控卡iDRAC6固件升级</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/&title=《MySQL主从原理与部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/&title=《MySQL主从原理与部署》 — Gary Wu&source=什么是mysql主从同步？
+当master(主)库的数据发生变化的时候，变化会实时的同步到slave(从)库。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL主从原理与部署》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/31/MySQL主从原理与部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

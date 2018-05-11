@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>saltstack进阶学习2 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,saltstack,salt命令格式,salt执行模块,salt状态模块,YAML格式规范,cmd.run,top.sls,require,watch,sls">
+    <meta name="description" content="salt执行模块 运行shell命令  saltstack 支持在master上向client 远程执行命令，并显示命令执行的结果  命令格式：         salt &amp;#39;&amp;lt;操作目标&amp;gt;&amp;#39;  &amp;lt;方法&amp;gt;  [参数]  #cmd.run可以执行所有shell命令 salt \* cmd.run &amp;#39;w&amp;#39;     在所有主机上执行w命令(注*号需要转">
+<meta name="keywords" content="高级运维,saltstack,salt命令格式,salt执行模块,salt状态模块,YAML格式规范,cmd.run,top.sls,require,watch,sls">
+<meta property="og:type" content="article">
+<meta property="og:title" content="saltstack进阶学习2">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="salt执行模块 运行shell命令  saltstack 支持在master上向client 远程执行命令，并显示命令执行的结果  命令格式：         salt &amp;#39;&amp;lt;操作目标&amp;gt;&amp;#39;  &amp;lt;方法&amp;gt;  [参数]  #cmd.run可以执行所有shell命令 salt \* cmd.run &amp;#39;w&amp;#39;     在所有主机上执行w命令(注*号需要转">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-20T12:56:03.837Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="saltstack进阶学习2">
+<meta name="twitter:description" content="salt执行模块 运行shell命令  saltstack 支持在master上向client 远程执行命令，并显示命令执行的结果  命令格式：         salt &amp;#39;&amp;lt;操作目标&amp;gt;&amp;#39;  &amp;lt;方法&amp;gt;  [参数]  #cmd.run可以执行所有shell命令 salt \* cmd.run &amp;#39;w&amp;#39;     在所有主机上执行w命令(注*号需要转">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">saltstack进阶学习2</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">saltstack进阶学习2</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-18T03:55:10.000Z" itemprop="datePublished" class="page-time">
+  2017-10-18
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#salt执行模块"><span class="post-toc-number">1.</span> <span class="post-toc-text">salt执行模块</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#状态模块"><span class="post-toc-number"></span> <span class="post-toc-text">状态模块</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#环境"><span class="post-toc-number">1.</span> <span class="post-toc-text">环境</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#state模块-介绍"><span class="post-toc-number">2.</span> <span class="post-toc-text">state模块-介绍</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实例："><span class="post-toc-number">3.</span> <span class="post-toc-text">实例：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#top-sls"><span class="post-toc-number">4.</span> <span class="post-toc-text">top.sls</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#向文件追加内容"><span class="post-toc-number">5.</span> <span class="post-toc-text">向文件追加内容</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#state的逻辑关系列表及示例"><span class="post-toc-number">6.</span> <span class="post-toc-text">state的逻辑关系列表及示例</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-saltstack进阶学习2"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">saltstack进阶学习2</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-18 11:55:10" datetime="2017-10-18T03:55:10.000Z"  itemprop="datePublished">2017-10-18</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="salt执行模块"><a href="#salt执行模块" class="headerlink" title="salt执行模块"></a>salt执行模块</h4><blockquote>
+<p>运行shell命令</p>
+</blockquote>
+<pre><code>saltstack 支持在master上向client 远程执行命令，并显示命令执行的结果
+
+命令格式：
+        salt &#39;&lt;操作目标&gt;&#39;  &lt;方法&gt;  [参数]
+
+#cmd.run可以执行所有shell命令
+salt \* cmd.run &#39;w&#39;     在所有主机上执行w命令(注*号需要转义)
+</code></pre><a id="more"></a>
+<p>示例：</p>
+<pre><code>[root@CentOS-20 ~]# salt  \*  cmd.run  &quot;df -h&quot;
+CentOS-22:
+    Filesystem      Size  Used Avail Use% Mounted on
+    /dev/sda3        16G  1.6G   14G  11% /
+    tmpfs           931M   12K  931M   1% /dev/shm
+    /dev/sda1       190M   51M  129M  29% /boot
+CentOS6-21:
+    Filesystem      Size  Used Avail Use% Mounted on
+    /dev/sda3        16G  1.6G   14G  11% /
+    tmpfs           931M   12K  931M   1% /dev/shm
+    /dev/sda1       190M   51M  129M  29% /boot
+CentOS-20:
+    Filesystem      Size  Used Avail Use% Mounted on
+    /dev/sda3        16G  1.5G   14G  11% /
+    tmpfs           931M   16K  931M   1% /dev/shm
+    /dev/sda1       190M   51M  129M  29% /boot
+</code></pre><!-- more -->
+<h2 id="状态模块"><a href="#状态模块" class="headerlink" title="状态模块"></a>状态模块</h2><pre><code>SaltStack使用现有的序列化系统来渲染sls数据。而这个现有的序列化系统就是YAML，而严格的YAML格式往往使现在正在学习SaltStack的同学屡屡掉坑。
+</code></pre><blockquote>
+<p>YAML语法-参考</p>
+</blockquote>
+<p><a href="http://siliotto.blog.51cto.com/8887165/1598101/" target="_blank" rel="noopener">YAML语法规范</a></p>
+<blockquote>
+<p>YAML文件格式-注意点</p>
+</blockquote>
+<pre><code>1.务必使用空格缩进，第二个层级比第一个层级多2个空格,2、4、6、8以此类推。
+2. 每个层级使用冒号(:)表示结束
+3. 横杠(-)表示同层级列表
+</code></pre><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><pre><code>系统:CentOS6
+192.168.56.20      角色：salt-master/salt-minion
+192.168.56.21      角色：salt-minion
+192.168.56.22      角色：salt-minion
+</code></pre><blockquote>
+<p>salt-master主配置文件-修改</p>
+</blockquote>
+<pre><code>搜索“file_roots”快速定位到对应位置，添加如下：
+
+file_roots:
+  base:                #默认环境
+    - /var/salt/base
+  dev:
+    - /var/salt/dev    #开发环境
+  test:
+    - /var/salt/test   #测试环境
+  prod:
+    - /var/salt/prod   #生产环境
+
+作用：告诉salt-master去哪里查找状态模块文件,这里规划使用4个目录
+
+创建目录：mkdir -p /var/salt/{base,dev,test,prod}
+重启：/etc/init.d/salt-master restart
+查看salt-master日志：tailf /var/log/salt/master
+</code></pre><!-- more -->
+<blockquote>
+<p>软件安装—通过salt安装apache</p>
+</blockquote>
+<pre><code>cd /var/salt/base     #进入salt状态模块目录
+cat  apache.sls          #这里以安装apache为例，创建状态模块文件，后缀为.sls
+
+apache-install:       #声明一个ID（整个salt架构里唯一）
+  pkg.installed:      #pkg为状态模块；installed是方法
+    - name: httpd     #该行表示installed的参数
+
+apache-service:       #声明一个ID（整个salt架构里唯一）
+  service.running:    #service为状态模块；running是方法 
+    - name: httpd     #该行表示running的参数
+    - enable: True    #该行表示running的参数
+
+如上所示：所谓状态模块，首先检测apache是否已经安装，如果已经安装则跳过，否则将安装；后者为检测服务状态是否已经运行，运行则跳过否则将服务启动并添加为开机启动。   
+
+
+启动运行模块：
+salt \* state.sls apache          #在所有minion节点安装apache
+注：执行状态文件的时候，状态文件一定不能添加.sls后缀,否则会出现错误
+
+
+此时手动在192.168.56.22上面停止apache服务，再次在master上使用salt推送，观察输出结果
+[root@CentOS-22 ~]# /etc/init.d/httpd stop
+salt \* state.sls apache 
+
+192.168.56.22的节点的执行结果是：
+首先判断是否已经安装apache,发现有则跳过；再次判断httpd服务是否启动，发现没有启动，则只进行启动服务。
+</code></pre><pre><code>知识点-扩展：
+如上面我们执行salt命令：salt \* state.sls apache  
+
+如果apache.sls状态模块文件不在当前目录，而在其他目录，如何在当前目录执行salt命令呢？
+cd  /var/salt/base  #确保在当前目录
+mkdir  web -p       #在当前目录创建web子目录
+mv apache.sls web/  #剪切到web子目录下
+salt \* state.sls web.apache   #执行salt命令(注：最后是&quot;目录.状态文件&quot;)
+</code></pre><pre><code>上面使用了state.sls 远程执行命令, state是模块，sls是state模块的一个方法
+
+[root@stack-master ~]# salt \* state.sls web.apache
+</code></pre><!-- more -->
+<blockquote>
+<p>推送文件—编写批量更改dns的sls状态文件</p>
+</blockquote>
+<pre><code>(1)首先定义好resolv.conf配置文件并放到/var/salt/base/files/目录下
+
+(2)创建dns.sls配置文件
+[root@CentOS-20 base]# cd  /var/salt/base
+[root@CentOS-20 base]# cat dns.sls 
+dns-config:
+  file.managed:
+    - name: /etc/resolv.conf       #文件目标存放目录
+    - source: salt://files/resolv.conf  
+    - user: root                   #修改属主
+    - group: root                  #修改属组
+    - mode: 644                    #修改权限
+
+注：
+其中“salt://files/resolv.conf”指文件本地存放目录,而&quot;salt://&quot;表示master配置文件中指定的开发环境根路径
+
+(3)执行
+   [root@CentOS-20 base]# cd  /var/salt/base 
+   salt \* state.sls dns                      #执行dns状态模块文件
+   [root@CentOS-22 ~]# cat /etc/resolv.conf   #检查
+   # Generated by NetworkManager
+   nameserver 114.114.114.114
+   nameserver 223.5.5.5
+   nameserver 8.8.8.8
+</code></pre><!-- more -->
+<h4 id="state模块-介绍"><a href="#state模块-介绍" class="headerlink" title="state模块-介绍"></a>state模块-介绍</h4><pre><code>state模块是saltstack配置管理的核心内容，需要熟练掌握如下几个组件以及常用的方法，以后会常用。
+</code></pre><ul>
+<li><strong>file - 管理文件状态</strong></li>
+</ul>
+<pre><code>常用方法：
+file.managed：保证&quot;文件&quot;存在并且为对应的状态，不一样就根据source指定文件进行修改。
+file.recurse: 保证&quot;目录&quot;存在并且为对应状态，否则change。
+file.absent：确保&quot;文件不存在&quot;，如果存在就删除。
+
+具体参考：https://docs.saltstack.com/en/latest/ref/states/all/salt.states.file.html#module-salt.states.file
+
+</code></pre><pre><code>递归管理整个目录--举例：
+
+[root@linux-node1 web]# pwd
+/var/salt/base/
+
+
+[root@linux-node1 web]# cat lamp.sls 
+apache-conf:
+  file.recurse:
+    - name: /etc/httpd/conf.d
+    - source: salt://files/apache-conf.d
+
+mkdir /var/salt/files/apache-conf.d
+[root@linux-node1 ~]# cd /var/salt/files/apache-conf.d/
+[root@linux-node1 apache-conf.d]# cp -a /etc/httpd/conf.d/* .
+
+执行：salt \* state.sls lamp
+</code></pre><pre><code>举例：
+
+apache-conf:
+  file.managed:
+    - name: /etc/http/conf/http.conf
+    - source: salt://apache/http.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
+    - defaults:
+        custom_var: &quot;default value&quot;
+        other_var: 123
+{% if grains['os'] == 'Ubuntu' %}
+    - context:
+        custom_var: "override"
+{% endif %}
+</code></pre><pre><code>/etc/foo.conf:
+  file.managed:
+    - source:
+      - salt://foo.conf.{{ grains['fqdn'] }}
+      - salt://foo.conf.fallback
+    - user: foo
+    - group: users
+    - mode: 644
+    - backup: minion
+</code></pre><ul>
+<li><strong>pkg - 管理软件包状态</strong></li>
+</ul>
+<pre><code>常用方法：
+pkg.installed： 确保软件包已经安装，如果没有安装就安装。
+pkg.remove： 确保软件包已卸载，如果还是安装的，就卸载。
+pkg.purge： 除remove外，还会删除其配置文件。
+pkg.latest：  确保软件包是最近版本，如果不是就升级。
+
+更多参考：https://docs.saltstack.com/en/latest/ref/states/all/salt.states.pkg.html#module-salt.states.pkg
+</code></pre><pre><code>举例：
+
+apache-install:
+  pkg.installed:
+    - name: httpd
+
+apache-service:
+  service.running:
+    - name: httpd
+    - enable: True
+</code></pre><pre><code>举例：
+
+[root@linux-node1 web]# pwd
+/srv/salt/base/web
+[root@linux-node1 web]# 
+[root@linux-node1 web]# cat lamp.sls 
+apache-conf:
+  file.recurse:
+    - name: /etc/httpd/conf.d
+    - source: salt://web/files/apache-conf.d
+
+mkdir /srv/salt/base/web/files/apache-conf.d
+[root@linux-node1 ~]# cd /srv/salt/base/web/files/apache-conf.d/
+[root@linux-node1 apache-conf.d]# cp -a /etc/httpd/conf.d/* .
+
+执行：salt \* state.highstate 
+</code></pre><ul>
+<li><strong>service - 管理服务状态</strong></li>
+</ul>
+<pre><code>常用方法：
+service.running: 确保服务处理运行状态，如果没有运行就启动。
+service.dead： 确保服务没有在运行，如果运行就停止。
+service.enabled： 设置服务保持开机启动。False或True
+service.disabled： 设置服务不开机启动。
+</code></pre><pre><code>举例：
+
+redis:
+  service.running:
+    - enable: True
+    - reload: True
+    - watch:
+      - pkg: redis
+</code></pre><ul>
+<li><strong>cmd 远程执行命令</strong></li>
+</ul>
+<pre><code>saltstack 支持在master上向client 远程执行命令，并显示命令执行的结果
+
+命令格式：salt &#39;&lt;操作目标&gt;&#39;  &lt;方法&gt;  [参数]
+</code></pre><pre><code>示例：使用cmd.run远程执行命令, cmd是模块，run是cmd模块的一个方法
+
+[root@stack-master ~]# salt &#39;*&#39;  cmd.run  &quot;free -m&quot;
+</code></pre><ul>
+<li>针对“操作目标” 进行进行过滤</li>
+</ul>
+<pre><code>有时候需要针对远程minion主机进行过滤，如何进行精确匹配呢？
+</code></pre><pre><code>普通匹配：
+
+匹配所有 &#39;*&#39;
+匹配单个  &#39;minion_id&#39;       #minion_id即为Python通过IP地址获取到的主机名称
+</code></pre><pre><code>(1)正则匹配：
+   使用-E ，--pcre 进行正则匹配
+   例如：[root@stack-master ~]# salt -E &#39;^CentOS*&#39; cmd.run &quot;uptime&quot;
+
+(2)IP匹配：
+   -S，--ipcidr,根据被控主机的IP地址或IP子网进行匹配
+   [root@stack-master ~]# salt -S 192.168.56.0/24  cmd.run &quot;free -m&quot;
+
+(3)列表匹配
+   -L，--list,以主机id名列表的形式进行过滤，格式与Python的列表相似，即不同主机id 名称使用逗号分隔
+   [root@stack-master ~]# salt -L &#39;stack-node01,stack-node02&#39;  cmd.run &quot;free -m&quot;
+</code></pre><h4 id="实例："><a href="#实例：" class="headerlink" title="实例："></a>实例：</h4><pre><code>要求：给网站web添加认证
+</code></pre><pre><code>(1)准备并配置httpd.conf文件, 并放在/var/salt/base/files目录下
+
+&lt;Directory &quot;/var/www/html/admin&quot;&gt; 
+    AllowOverride All
+    Order allow,deny
+    Allow from All  
+    AuthUserFile  /etc/httpd/conf/htpasswd_file
+    AuthName &quot;hehe&quot;                                
+    AuthType Basic
+    Require user admin
+&lt;/Directory&gt;
+</code></pre><pre><code>(2)编辑配置状态文件
+
+vim  apache_auth_config.sls
+
+apache-auth:
+  pkg.installed:
+    - name: httpd-tools
+
+  cmd.run:
+    - name: htpasswd -bc /etc/httpd/conf/htpasswd_file admin admin
+    - unless: test -f /etc/httpd/conf/htpasswd_file
+    - require:               
+      - pkg: apache-auth      #使用require来声明执行顺序：如果apache-auth执行失败，则不执行cmd.run
+</code></pre><pre><code>(3) 执行
+salt \* state.sls apache_auth_config
+</code></pre><h4 id="top-sls"><a href="#top-sls" class="headerlink" title="top.sls"></a>top.sls</h4><blockquote>
+<p>也许你已经发现了，上面我们去执行状态模块文件的方式都是逐一去执行的。那么能否将所有状态模块文件一块执行呢？答案是肯定的</p>
+</blockquote>
+<pre><code>top.sls 是配置管理的入口文件，一切都是从这里开始，在master 主机上，默认存放在/srv/salt/目录,而我已将其定义在了/var/salt目录。
+</code></pre><blockquote>
+<p>top.sls 文件格式</p>
+</blockquote>
+<pre><code>#可以通过正则进行匹配
+base:
+  &#39;*&#39;:
+    - webserver
+
+#可以通过分组名进行匹配，必须要有 - match: nodegroup
+base:
+  group1:
+    - match: nodegroup
+    - webserver
+
+#也可以通过grain模块匹配，必须要有- match: grain
+base:
+  &#39;os:Fedora&#39;:
+    - match: grain
+    - webserver  
+</code></pre><ul>
+<li>编辑top.sls</li>
+</ul>
+<pre><code>cd  /var/salt/base
+[root@CentOS-20 base]# cat top.sls      #编辑top.sls
+base:
+  &#39;*&#39;:
+    - apache
+    - dns
+
+注：我上面的top.sls内容配置需要与apache.sls和dns.sls在同一目录    
+</code></pre><pre><code>测试
+salt &#39;*&#39; state.highstate
+salt &#39;*&#39; state.highstate top
+salt &#39;*&#39; state.highstate -v test=True      #测试执行
+
+使用命令调用top.sls文件执行即可
+注：这里必须使用highstate（高水平的state）
+</code></pre><!-- more -->
+<h4 id="向文件追加内容"><a href="#向文件追加内容" class="headerlink" title="向文件追加内容"></a>向文件追加内容</h4><pre><code>cd /var/salt/base
+
+[root@CentOS-20 base]# cat  append.sls   #创建追加文件
+/etc/profile:
+  file.append:
+    - text:          #注意:这里是text，不是test不是test不是test！
+      - &quot;#aaa&quot;
+
+#执行命令
+salt \* state.sls append   
+
+#minion检查结果
+[root@CentOS6-21 ~]# tail /etc/profile    
+alias grep=&#39;grep --color=auto&#39;
+alias ll=&#39;ls -l --color=auto --time-style=long-iso&#39;
+#aaa
+
+</code></pre><!-- more -->
+<h4 id="state的逻辑关系列表及示例"><a href="#state的逻辑关系列表及示例" class="headerlink" title="state的逻辑关系列表及示例"></a>state的逻辑关系列表及示例</h4><pre><code>match:   配模某个模块，比如 match: grain match: nodegroup
+
+require：依赖某个state，在运行此state前，先运行依赖的state，依赖可以有多个
+watch：  在某个state变化时运行此模块
+order：  优先级比require和watch低，有order指定的state比没有order指定的优先级高
+</code></pre><blockquote>
+<p>state的逻辑关系</p>
+</blockquote>
+<ul>
+<li><p>require:  </p>
+<p>依赖某个state，在运行此state前，先运行依赖的state，依赖可以有多个</p>
+</li>
+</ul>
+<pre><code>httpd: # maps to &quot;name&quot;
+  pkg:
+    - installed
+
+  file: 
+    - managed: 
+    - name: /etc/httpd/conf/httpd.conf
+    - source: salt://httpd/httpd.conf
+    - require:       #若pkg执行失败则不执行file
+      - pkg: httpd   
+</code></pre><ul>
+<li><p>watch: </p>
+<p>在某个state变化时运行此模块，watch除具备require功能外，还增了关注状态的功能</p>
+</li>
+</ul>
+<pre><code>redis:
+  pkg:
+    - latest
+
+  file.managed:
+    - name: /etc/redis.conf
+    - source: salt://redis/redis.conf
+    - require:
+      - pkg: redis
+
+  service.running:
+    - enable: True
+    - watch:
+      - file: /etc/redis.conf
+      - pkg: redis
+</code></pre><ul>
+<li><p>order</p>
+<p>优先级比require和watch低，有order指定的state比没有order指定的优先级高</p>
+</li>
+</ul>
+<pre><code>vim:
+  pkg.installed:
+    - order: 1
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-10-20T12:56:03.837Z" itemprop="dateUpdated">2017-10-20 20:56:03</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/10/18/saltstack进阶学习2/" target="_blank" rel="external">https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/YAML格式规范/">YAML格式规范</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cmd-run/">cmd.run</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/require/">require</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/saltstack/">saltstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/salt命令格式/">salt命令格式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/salt执行模块/">salt执行模块</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/salt状态模块/">salt状态模块</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sls/">sls</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/top-sls/">top.sls</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/watch/">watch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/&title=《saltstack进阶学习2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/&title=《saltstack进阶学习2》 — Gary Wu&source=salt执行模块
+运行shell命令
+
+saltstack 支持在master上向client 远程执行命令，并显示命令执行的结果
+
+命令格式：
+    ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《saltstack进阶学习2》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/19/saltstack-jinja2模板-进阶3/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">saltstack-jinja2模板-进阶3</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/17/CentOS7-安装及破解confluence/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">CentOS7 安装及破解confluence</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/&title=《saltstack进阶学习2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/&title=《saltstack进阶学习2》 — Gary Wu&source=salt执行模块
+运行shell命令
+
+saltstack 支持在master上向client 远程执行命令，并显示命令执行的结果
+
+命令格式：
+    ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《saltstack进阶学习2》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/10/18/saltstack进阶学习2/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

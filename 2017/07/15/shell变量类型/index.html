@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>shell变量类型 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="shell">
+    <meta name="description" content="初识ShellShell中的变量类型shell中的变量有两种类型：  (1) 系统变量（环境变量） (2) 用户自定义的变量，即由用户创建和维护的变量">
+<meta name="keywords" content="shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell变量类型">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/07/15/shell变量类型/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="初识ShellShell中的变量类型shell中的变量有两种类型：  (1) 系统变量（环境变量） (2) 用户自定义的变量，即由用户创建和维护的变量">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-15T01:34:53.054Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="shell变量类型">
+<meta name="twitter:description" content="初识ShellShell中的变量类型shell中的变量有两种类型：  (1) 系统变量（环境变量） (2) 用户自定义的变量，即由用户创建和维护的变量">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">shell变量类型</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">shell变量类型</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-15T01:27:12.000Z" itemprop="datePublished" class="page-time">
+  2017-07-15
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#初识Shell"><span class="post-toc-number">1.</span> <span class="post-toc-text">初识Shell</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Shell中的变量类型"><span class="post-toc-number"></span> <span class="post-toc-text">Shell中的变量类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#常用的系统变量"><span class="post-toc-number"></span> <span class="post-toc-text">常用的系统变量</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#定义变量与赋值"><span class="post-toc-number">0.1.</span> <span class="post-toc-text">定义变量与赋值</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#变量的命名规则"><span class="post-toc-number">0.2.</span> <span class="post-toc-text">变量的命名规则</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#echo和printf打印变量的值"><span class="post-toc-number">0.3.</span> <span class="post-toc-text">echo和printf打印变量的值</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#使用echo打印一些奇怪的环境变量"><span class="post-toc-number">0.4.</span> <span class="post-toc-text">使用echo打印一些奇怪的环境变量</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-shell变量类型"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">shell变量类型</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-15 09:27:12" datetime="2017-07-15T01:27:12.000Z"  itemprop="datePublished">2017-07-15</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h5 id="初识Shell"><a href="#初识Shell" class="headerlink" title="初识Shell"></a>初识Shell</h5><h4 id="Shell中的变量类型"><a href="#Shell中的变量类型" class="headerlink" title="Shell中的变量类型"></a>Shell中的变量类型</h4><pre><code>shell中的变量有两种类型：
+
+(1) 系统变量（环境变量）
+(2) 用户自定义的变量，即由用户创建和维护的变量
+</code></pre><a id="more"></a>
+<h4 id="常用的系统变量"><a href="#常用的系统变量" class="headerlink" title="常用的系统变量"></a>常用的系统变量</h4><pre><code>BASH_VERSION         Bash版本
+DISPLAY              设置X display名字
+EDITOR               设置默认的文本编辑器
+HISTFILE             保存命令历史的文件名
+HISTFILESIZE         命令历史文件所包含的最大行数
+HISTSIZE             记录在命令历史中的命令数
+HOME                 当前用户的主目录
+HOSTNAME             计算机主机名
+IFS                  定义shell的内部字段分隔符，一般是空格符、制表符和换行符
+PATH                 搜索命令的路径
+PS1                  你的提示符设定
+PWD                  当前工作目录
+SHELL                登陆shell的路径
+USER                 登陆的用户
+LANG                 系统编码
+TERM                 设置你的登陆终端的类型
+TMOUT                用于设置shell内建命令read的默认超时时间，单位:秒
+注：在交互式shell中，此变量的值作为发出命令后等待用户输入的秒数，如果没有用户输入将会自动退出。
+</code></pre><p>查看shell所有的系统变量</p>
+<pre><code>env
+或
+printenv
+</code></pre><h6 id="定义变量与赋值"><a href="#定义变量与赋值" class="headerlink" title="定义变量与赋值"></a>定义变量与赋值</h6><pre><code>格式： varName=varValue
+   变量名 变量操作符 赋予的值
+varName即是变量名，varValue是赋予varName的值。如果没有给出varValue,则变量varName被赋予一个空字符串。
+
+注：在赋值操作符“=”的周围，不要有任何字符，否则将会得到command not found的错误。
+</code></pre><pre><code>可以把任意字符集合赋值给一个变量，比如讲字符串garywu赋值给username
+$ username=garywu
+或
+$ username=&quot;garywu&quot;
+</code></pre><pre><code>将一个数值赋值给变量
+$ var=1
+$ var=$var+1
+$ echo $var
+1+1
+注：结果不是我们预想中的数字2，这是因为shell的默认赋值是字符串赋值。
+在Bash中，如果要将算术表达式的数值赋值给一个变量，可以使用let命令，如：
+$ let var=2+1
+$ echo $var
+3
+</code></pre><pre><code>将一个变量的值直接赋值给另一个变量
+$ a=3
+$ b=$a
+$ echo $b
+3
+</code></pre><pre><code>把命令的执行结果赋予给变量
+$ var=`pwd`    此处是反引号（Esc下边的按键）
+$ echo $var
+/home/garywu
+
+或者也可以使用$(...)来实现相同的功能
+$ var=$(pwd)
+$ echo $var
+/home/garywu
+</code></pre><pre><code>将Bash的内置命令read读入的没人赋值给变量
+$ echo -n &quot;Please enter your password:&quot; ;read var
+Please enter your password:123456  
+$ echo $var
+123456
+
+注：echo -n &quot;Please enter your password:&quot;  不换行输出/打印内容,紧接着从标准输入读入内容，这里我们输入123456回车。执行成功后，read命令将读入的内容赋值给var,即在输出的结果中看到，var的值是123456
+</code></pre><h6 id="变量的命名规则"><a href="#变量的命名规则" class="headerlink" title="变量的命名规则"></a>变量的命名规则</h6><pre><code>变量名必须以字母或下划线字符“_” 开头，后面跟字母、数字或&quot;_&quot; .第一个字符不能为数字
+
+有效的shell变量示例
+USERNAME
+LD_LIBRARY_PATH
+_var
+var1
+
+无效的如下：
+?var=123
+user*name=garywu1
+
+变量名对大小写字母非常敏感，定义不同，取值就不同，比如：
+$ var=123
+$ Var=1
+
+$ echo $var
+123
+$ echo $Var
+1
+</code></pre><h6 id="echo和printf打印变量的值"><a href="#echo和printf打印变量的值" class="headerlink" title="echo和printf打印变量的值"></a>echo和printf打印变量的值</h6><pre><code>除了echo打印变量的值之外，还可以使用printf命令，例如：
+$ var=123
+$ printf &quot;%s\n&quot; $var
+123
+</code></pre><pre><code>printf命令语法格式：printf &lt;FORMAT&gt; &lt;ARGUMENTS&gt;
+即，printf根据&lt;FORAT&gt;中指定的格式,打印&lt;ARGUMENTS&gt;的内容。
+
+英文翻译：
+format 格式/版式
+arguments 论据/原型
+</code></pre><pre><code>echo 使用-e参数来支持转义字符，比如：
+$ var=10
+$ echo &quot;The number is $var&quot;
+The number is 10
+
+$ echo -e &quot;Username: $USER\tHome directory: $HOME\n&quot;
+Username: root    Home directory: /root
+</code></pre><pre><code>有时，需要使用${}语法来避免一些歧义
+$ LOGDIR=/var/log/
+$ echo &quot;The log file is $LOGDIRmessages&quot;
+The log file is 
+上面的结果显然不是我们想要的，这是因为Bash将尝试查找一个叫做LOGDIRmessages变量，而不是$DIRLOG,为了避免这种歧义就需要用到${}语法，如下
+$ echo &quot;The log file is ${LOGDIR}messages&quot;
+The log file is /var/log/messages
+</code></pre><h6 id="使用echo打印一些奇怪的环境变量"><a href="#使用echo打印一些奇怪的环境变量" class="headerlink" title="使用echo打印一些奇怪的环境变量"></a>使用echo打印一些奇怪的环境变量</h6><pre><code>$ var=&quot;&#39;(]\\{}\$\&quot;&quot;
+$ echo $var
+&#39;(]\{}$&quot;               
+$ echo &quot;$var&quot;       这里，使用双引号与使用单引号打印的值没有区别
+&#39;(]\{}$&quot;
+
+$ IFS=&#39;\&#39;       IFS是Bash的内部变量，此变量定义shell的内部字段分隔符
+$ echo $var     不加双引号的时候，打印的值中反斜杠“\”被转换成了空格
+&#39;(] {}$&quot;
+$ echo &quot;$var&quot;
+&#39;(]\{}$&quot;
+
+[root@oldboy202 ~]# IFS=&#39;\&#39;    
+
+[root@oldboy202 ~]# var2=&quot;\\\\\&quot;&quot;
+[root@oldboy202 ~]# echo $var2
+  &quot;
+[root@oldboy202 ~]# echo &quot;$var2&quot;
+\\&quot;
+[root@oldboy202 ~]# 
+[root@oldboy202 ~]# var3=&quot;\\\\&quot;
+[root@oldboy202 ~]# echo $var3
+
+[root@oldboy202 ~]# echo &quot;$var3&quot;
+\\
+总结，当定义了IFS=&#39;\&#39;变量后，echo取值的时候，不加双引号，所有的反斜杠“\”都被替换成了空格
+echo取值的时候，加上双引号，只会剩余2个反斜杠不被空格替换。
+
+[root@oldboy202 ~]# echo &quot;$(echo &#39;&quot;&#39;)&quot;
+&quot;
+相当于echo &#39;&quot;&#39;
+
+[root@oldboy202 ~]# var4=&quot;Two words&quot;
+[root@oldboy202 ~]# echo &quot;\$var4=&quot;$var4&quot;&quot;
+$var4=Two words
+[root@oldboy202 ~]# echo &quot;$var4=&quot;$var4&quot;&quot;
+Two words=Two words
+</code></pre><p>export语句的使用</p>
+<pre><code>shell理论：
+当用户登录系统后，系统将启动一个登录shell。在这个shell中，可以声明一些变量，也可以创建并运行shell脚本程序。运行脚本时，系统将创建一个子shell,当此shell脚本运行完毕时，这个子shell将终止，环境将返回到执行该脚本之前的shell.默认情况下，所有用户定义的变量只在当前shell内有效，他们不能被后续的shell引用。如果需要后续shell引用，需要使用下面export命令将变量进行输出。
+</code></pre><pre><code>Bash的内置命令export会将指定给它的变量或函数自动输出到后续命令的执行环境。语法如下：
+export [-fnp] [变量或函数名称]=[变量设置值]
+-f 选项表示export一个函数；
+-n 选项表示将export属性从指定变量或函数上移除
+-p 选项打印当前shell所有输出的变量，与单独执行export命令结果相同。
+
+小实例来了解其用途：
+[root@oldboy202 ~]# JAVA_HOME=/usr/local/jdk   定义一个java目录变量，赋值为/usr/local/jdk
+[root@oldboy202 ~]# echo $JAVA_HOME              
+/usr/local/jdk
+[root@oldboy202 ~]# bash                       启动一个子shell
+[root@oldboy202 ~]# echo $JAVA_HOME            echo打印该变量，为空！为空！为空
+
+[root@oldboy202 ~]# 
+
+为空是因为变量JAVA_HOME没有被输出到新的子shell.
+[root@oldboy202 ~]# exit                 退出子shell
+exit
+[root@oldboy202 ~]# export JAVA_HOME     使用export让JAVA_HOME变量可以被子shell引用
+[root@oldboy202 ~]# bash
+[root@oldboy202 ~]# echo $JAVA_HOME      启动个子shell，再次打印变量，结果就有了
+/usr/local/jdk
+[root@oldboy202 ~]# 
+[root@oldboy202 ~]# 
+</code></pre><pre><code>删除变量
+Bash下使用unset命令来删除相应的变量或函数。unsettle命令会把变量从当前shell和后续命令的环境中删除。
+语法： unset [-fv] [变量或函数名称]
+-f 表示删除一个已定义的函数
+-v 表示删除一个变量
+[root@oldboy202 ~]# JAVA_HOME=/usr/local/jdk 
+[root@oldboy202 ~]# unset JAVA_HOME
+[root@oldboy202 ~]# echo $JAVA_HOME
+
+使用unset命令不能删除一个只读的变量，否则将会出现类似如下的错误：
+[root@oldboy202 ~]# readonly JAVA_HOME=/usr/local/jdk
+[root@oldboy202 ~]# echo $JAVA_HOME
+/usr/local/jdk
+[root@oldboy202 ~]# unset JAVA_HOME
+-bash: unset: JAVA_HOME: cannot unset: readonly variable
+</code></pre><pre><code>实例：检查变量是否存在
+[root@oldboy202 ~]# JAVA_HOME=/usr/local/jdk       定义一个变量
+[root@oldboy202 ~]# echo ${JAVA_HOME? Error: The variable is not defined}
+/usr/local/jdk
+[root@oldboy202 ~]# 
+[root@oldboy202 ~]# 
+[root@oldboy202 ~]# unset JAVA_HOME              删除变量
+[root@oldboy202 ~]# echo ${JAVA_HOME? Error: The variable is not defined}
+-bash: JAVA_HOME:  Error: The variable is not defined
+该语句的含义是如果变量varNAME已定义且不为空，此语句相当于$varNAME;如果变量varName的值为空，则此语句的值也为空；如果varName是未定义的，则此语句将返回一个错误，并显示问号定义的错误信息。
+[root@oldboy202 ~]# 
+[root@oldboy202 ~]# echo ${JAVA_HOME:? Error: The variable is not defined}
+-bash: JAVA_HOME:  Error: The variable is not defined
+此语句与上一条语句唯一的区别是，如果变量varName的值是空，此语句也将返回一个错误。
+
+另一种更常用的检查变量是否存在的方法，即使用if语句判断变量是否存在，后面详细讲解。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-15T01:34:53.054Z" itemprop="dateUpdated">2017-07-15 09:34:53</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/07/15/shell变量类型/" target="_blank" rel="external">https://wuyanteng.github.io/2017/07/15/shell变量类型/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/15/shell变量类型/&title=《shell变量类型》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/15/shell变量类型/&title=《shell变量类型》 — Gary Wu&source=初识ShellShell中的变量类型shell中的变量有两种类型：
+
+(1) 系统变量（环境变量）
+(2) 用户自定义的变量，即由用户创建和维护的变量
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/15/shell变量类型/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shell变量类型》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/15/shell变量类型/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/15/shell变量类型/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/15/老男孩-day12-shell编程/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">老男孩-day12-shell</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/11/Ansible常用模块/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Ansible常用模块</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/15/shell变量类型/&title=《shell变量类型》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/15/shell变量类型/&title=《shell变量类型》 — Gary Wu&source=初识ShellShell中的变量类型shell中的变量有两种类型：
+
+(1) 系统变量（环境变量）
+(2) 用户自定义的变量，即由用户创建和维护的变量
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/15/shell变量类型/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shell变量类型》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/15/shell变量类型/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/15/shell变量类型/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/07/15/shell变量类型/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

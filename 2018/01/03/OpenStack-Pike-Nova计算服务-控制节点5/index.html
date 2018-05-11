@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OpenStack_Pike-Nova计算服务-控制节点5 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,OpenStack,Nova">
+    <meta name="description" content="控制节点和计算节点概念  控制节点是用来控制虚拟机的，计算节点是专门来运行虚拟机的">
+<meta name="keywords" content="高级运维,OpenStack,Nova">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenStack_Pike-Nova计算服务-控制节点5">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="控制节点和计算节点概念  控制节点是用来控制虚拟机的，计算节点是专门来运行虚拟机的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-12T09:01:59.291Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenStack_Pike-Nova计算服务-控制节点5">
+<meta name="twitter:description" content="控制节点和计算节点概念  控制节点是用来控制虚拟机的，计算节点是专门来运行虚拟机的">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OpenStack_Pike-Nova计算服务-控制节点5</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OpenStack_Pike-Nova计算服务-控制节点5</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-03T12:31:45.000Z" itemprop="datePublished" class="page-time">
+  2018-01-03
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#同步数据库"><span class="post-toc-number">1.</span> <span class="post-toc-text">同步数据库</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-OpenStack-Pike-Nova计算服务-控制节点5"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OpenStack_Pike-Nova计算服务-控制节点5</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-03 20:31:45" datetime="2018-01-03T12:31:45.000Z"  itemprop="datePublished">2018-01-03</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>控制节点和计算节点概念</p>
+</blockquote>
+<pre><code>控制节点是用来控制虚拟机的，计算节点是专门来运行虚拟机的
+</code></pre><a id="more"></a>
+<blockquote>
+<p>Nova计算服务-分类</p>
+</blockquote>
+<ul>
+<li>Nova API: 负责接收和响应外部请求。支持OpenStack API和EC2 API</li>
+</ul>
+<pre><code>Nova API 对外提供REST API,即HTTP接口。其接收到的请求通过消息队列(RabbitMQ)转发给其他的服务组件。
+</code></pre><ul>
+<li>Nova Cert: 负责EC2身份认证</li>
+</ul>
+<pre><code>当OpenStack与EC2做结合的时候需要使用，所以一般用不上
+</code></pre><ul>
+<li>Nova Scheduler: 用于云主机调度</li>
+</ul>
+<pre><code>Nova Scheduler模块作用：决策虚拟机创建在哪个主机（计算节点）上。
+决策一个虚拟机应该调度到某物理节点，需要分两个步骤：
+(1) 过滤(Fliter)   (2)计算权值（Weight）
+</code></pre><pre><code>Filter Scheduler首先得到所有（未经过过滤）的主机列表，然后根据过滤属性(或条件)，选择符合条件的计算节点主机。比如：创建2个CPU/8G内存/100G硬盘的虚拟主机，筛选哪些计算节点有这个资源，就需要进行过滤，即Filter
+
+经过主机过滤后，需要对主机进行权值计算，根据策略选择相应的某一台主机。比如：权值计算方式是哪台计算节点的虚拟机最少，就往哪台计算节点机器上分配。
+</code></pre><pre><code>当创建虚拟机失败的时候，有时候会提示“找不到有效的主机”，这个其实是Nova Scheduler服务返回的错误。有可能是网络问题或镜像问题。所以要清楚是哪个服务找不到有效主机
+</code></pre><ul>
+<li>Conductor: 计算节点访问数据的中间件</li>
+</ul>
+<pre><code>作用：为了防止所有服务都连接到数据库，它认为数据不安全。其他服务要访问数据库必须先经过我这个Conductor服务
+</code></pre><ul>
+<li>Consoleauth: 用于控制台的授权验证</li>
+<li>Novncproxy: VNC代理</li>
+</ul>
+<!-- more -->
+<hr>
+<hr>
+<blockquote>
+<p>控制节点nova部署</p>
+</blockquote>
+<p>配置数据库</p>
+<pre><code>注：在openstack Pike版本中，Nova需要三个数据库。一个是nova,另外两个是nova_api和nova_cell0 (注:这里是英文的cell 0) 都需要创建并赋权。
+</code></pre><pre><code>create database nova;
+grant all on nova.* to nova@localhost identified by &quot;nova&quot;;
+grant all on nova.* to nova@&#39;%&#39; identified by &quot;nova&quot;;
+
+create database nova_api;
+grant all on nova_api.* to nova@localhost identified by &quot;nova&quot;;
+grant all on nova_api.* to nova@&#39;%&#39; identified by &quot;nova&quot;;
+
+create database nova_cell0;
+grant all on nova_cell0.* to nova@localhost identified by &quot;nova&quot;;
+grant all on nova_cell0.* to nova@&#39;%&#39; identified by &quot;nova&quot;;
+flush privileges;
+
+验证
+mysql -unova -pnova -e &quot;show databases;&quot;
+</code></pre><p>配置nova用户并加入到service项目中</p>
+<pre><code>source /scripts/admin-openrc
+</code></pre><p>创建nova用户(密码:nova)</p>
+<pre><code>openstack user create --domain default --password-prompt nova
+</code></pre><p>将用户同时加入到admin角色和service项目中</p>
+<pre><code>openstack role add --project service --user nova admin
+</code></pre><p>创建一个名字为nova,类型为compute的服务</p>
+<pre><code>openstack service create --name nova --description &quot;OpenStack Compute&quot; compute
+</code></pre><pre><code>注册三个API endpoint（nova监听的端口为8774/目前的版本为V2.1）
+
+openstack endpoint create --region RegionOne compute public http://192.168.56.11:8774/v2.1
+openstack endpoint create --region RegionOne compute internal http://192.168.56.11:8774/v2.1
+openstack endpoint create --region RegionOne compute admin http://192.168.56.11:8774/v2.1
+</code></pre><p>创建placement用户(密码：placement)</p>
+<pre><code>openstack user create --domain default --password-prompt placement
+</code></pre><p>将placement加入到admin角色和service服务中</p>
+<pre><code>openstack role add --project service --user placement admin
+</code></pre><p>创建placement服务</p>
+<pre><code>openstack service create --name placement --description &quot;Placement API&quot; placement
+</code></pre><pre><code>注册三个Placement API endpoint（placement监听的端口为8778）
+
+openstack endpoint create --region RegionOne placement public http://192.168.56.11:8778
+openstack endpoint create --region RegionOne placement internal http://192.168.56.11:8778
+openstack endpoint create --region RegionOne placement admin http://192.168.56.11:8778
+</code></pre><p>验证</p>
+<pre><code>openstack service list
+openstack endpoint list
+</code></pre><!-- more -->
+<blockquote>
+<p>安装配置控制节点nova</p>
+</blockquote>
+<pre><code>#安装控制节点所需组件
+
+yum install -y openstack-nova-api openstack-nova-conductor \
+  openstack-nova-console openstack-nova-novncproxy \
+  openstack-nova-scheduler openstack-nova-placement-api 
+</code></pre><p>开启compute和metadata的API</p>
+<pre><code>vim /etc/nova/nova.conf
+
+[DEFAULT]
+enabled_apis = osapi_compute,metadata
+</code></pre><p>配置nova连接到数据库</p>
+<pre><code>vim /etc/nova/nova.conf
+
+[api_database]
+connection = mysql+pymysql://nova:nova@192.168.56.11/nova_api
+
+[database]
+connection = mysql+pymysql://nova:nova@192.168.56.11/nova
+</code></pre><p>配置RabbitMQ</p>
+<pre><code>vim /etc/nova/nova.conf
+
+[DEFAULT]
+transport_url = rabbit://openstack:openstack@192.168.56.11    #配置文件的3128行
+
+注：这里调用RabbitMQ集群主节点地址信息
+</code></pre><p>告诉nova使用keystone进行身份认证</p>
+<pre><code>vim /etc/nova/nova.conf
+
+[api]
+auth_strategy = keystone
+
+[keystone_authtoken]
+auth_uri = http://192.168.56.11:5000
+auth_url = http://192.168.56.11:35357
+memcached_servers = 192.168.56.11:11211
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+project_name = service
+username = nova
+password = nova
+</code></pre><blockquote>
+<p>Nova其他一些配置</p>
+</blockquote>
+<p>配置控制节点的管理IP地址</p>
+<pre><code>[DEFAULT]
+my_ip = 192.168.56.11
+</code></pre><p>关闭Nova防火墙-后边使用neutron防火墙</p>
+<pre><code>[DEFAULT]
+use_neutron = true
+firewall_driver = nova.virt.firewall.NoopFirewallDriver  #关闭Nova的防火墙
+
+默认情况下Computer使用内部防火墙驱动程序，因此需要把Nova的防火墙给关闭
+
+另外，这个防火墙关闭配置可以在这个路径下查找配置字段:
+vim /usr/lib/python2.7/site-packages/nova/virt/firewall.py
+搜索：“NoopFireDriver”就能找到该字段
+</code></pre><p>将vnc代理配置为控制节点的管理接口IP地址</p>
+<pre><code>[vnc]
+enabled = true
+vncserver_listen = 192.168.56.11  #vncserver的监听地址
+vncserver_proxyclient_address = 192.168.56.11
+</code></pre><p>配置glance</p>
+<pre><code>[glance]
+api_servers = http://192.168.56.11:9292
+</code></pre><p>配置锁路径</p>
+<pre><code>[oslo_concurrency]
+lock_path = /var/lib/nova/tmp
+</code></pre><p>配置Placement API</p>
+<pre><code>[placement]
+os_region_name = RegionOne
+project_domain_name = Default
+project_name = service
+auth_type = password
+user_domain_name = Default
+auth_url = http://192.168.56.11:35357/v3
+username = placement
+password = placement
+</code></pre><ul>
+<li>官方bug解决</li>
+</ul>
+<pre><code>vim  /etc/httpd/conf.d/00-nova-placement-api.conf   
+
+#在&lt;VirtualHost&gt;......&lt;/VirtualHost&gt;字段内添加如下代码：
+
+&lt;Directory /usr/bin&gt;
+   &lt;IfVersion &gt;= 2.4&gt;
+      Require all granted
+   &lt;/IfVersion&gt;
+   &lt;IfVersion &lt; 2.4&gt;
+      Order allow,deny
+      Allow from all
+   &lt;/IfVersion&gt;
+&lt;/Directory&gt;
+
+重启服务
+systemctl restart httpd
+</code></pre><!-- more -->
+<hr>
+<h4 id="同步数据库"><a href="#同步数据库" class="headerlink" title="同步数据库"></a>同步数据库</h4><pre><code>同步nova-api
+su -s /bin/sh -c &quot;nova-manage api_db sync&quot; nova
+
+注册cell0数据库
+su -s /bin/sh -c &quot;nova-manage cell_v2 map_cell0&quot; nova
+
+创建cell1单元格
+su -s /bin/sh -c &quot;nova-manage cell_v2 create_cell --name=cell1 --verbose&quot; nova
+05ed8bb9-85e5-438a-9ec0-f704df940581
+
+同步nova数据库
+su -s /bin/sh -c &quot;nova-manage db sync&quot; nova
+</code></pre><p>验证数据库同步</p>
+<pre><code>mysql -unova -pnova -e &quot;use nova_cell0;show tables;&quot;
+mysql -unova -pnova -e &quot;use nova_api;show tables;&quot;
+mysql -unova -pnova -e &quot;use nova;show tables;&quot;
+</code></pre><p>验证nova cell0和cell1注册情况</p>
+<pre><code>nova-manage cell_v2 list_cells
++-------+--------------------------------------+
+| Name  | UUID                                 |
++-------+--------------------------------------+
+| cell1 | 109e1d4b-536a-40d0-83c6-5f121b82b650 |
+| cell0 | 00000000-0000-0000-0000-000000000000 |
++-------+--------------------------------------+
+</code></pre><!-- more -->
+<p>启动</p>
+<pre><code>systemctl enable openstack-nova-api.service \
+openstack-nova-consoleauth.service openstack-nova-scheduler.service \
+openstack-nova-conductor.service openstack-nova-novncproxy.service
+
+systemctl start openstack-nova-api.service \
+openstack-nova-consoleauth.service openstack-nova-scheduler.service \
+openstack-nova-conductor.service openstack-nova-novncproxy.service
+</code></pre><p>最后验证nova是否可用</p>
+<pre><code>[root@controler ~]# openstack host list
++-------------------------+-------------+----------+
+| Host Name               | Service     | Zone     |
++-------------------------+-------------+----------+
+| controler.openstack.com | consoleauth | internal |
+| controler.openstack.com | conductor   | internal |
+| controler.openstack.com | scheduler   | internal |
++-------------------------+-------------+----------+
+</code></pre><p>错误解决思路</p>
+<pre><code>查看日志： /var/log/nova/nova-*.log
+</code></pre><pre><code>[root@localhost nova]# netstat -lntup 
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address     Foreign Address     State       PID/Program name     
+tcp        0      0 0.0.0.0:8774       0.0.0.0:*          LISTEN      11507/python2       
+tcp        0      0 0.0.0.0:8775       0.0.0.0:*          LISTEN      11507/python2         
+
+注：
+Nova-API 监听端口：8774; 
+metadate 监听端口：8775；
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-12T09:01:59.291Z" itemprop="dateUpdated">2018-01-12 17:01:59</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nova/">Nova</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenStack/">OpenStack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/&title=《OpenStack_Pike-Nova计算服务-控制节点5》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/&title=《OpenStack_Pike-Nova计算服务-控制节点5》 — Gary Wu&source=
+控制节点和计算节点概念
+
+控制节点是用来控制虚拟机的，计算节点是专门来运行虚拟机的
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack_Pike-Nova计算服务-控制节点5》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/04/ESXI虚拟机开启CPU虚拟化/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ESXI虚拟机开启CPU虚拟化</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/03/OpenStack-Pike-Glance镜像服务4/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OpenStack_Pike-Glance镜像服务4</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/&title=《OpenStack_Pike-Nova计算服务-控制节点5》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/&title=《OpenStack_Pike-Nova计算服务-控制节点5》 — Gary Wu&source=
+控制节点和计算节点概念
+
+控制节点是用来控制虚拟机的，计算节点是专门来运行虚拟机的
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack_Pike-Nova计算服务-控制节点5》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Nova计算服务-控制节点5/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

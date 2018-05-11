@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>RabbitMQ原理与单机部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,RabbitMQ,openssl,Erlang,消息队列,RabbitMQ集群部署">
+    <meta name="description" content="RabbitMQ能做什么  RabbitMQ是一个消息代理 - 一个消息系统的媒介。它可以为你的应用提供一个通用的消息发送和接收平台，并且保证消息在传输过程中的安全。  消息系统允许软件、应用相互连接和扩展．这些应用可以相互链接起来组成一个更大的应用，或者将用户设备和数据进行连接．消息系统通过将消息的发送和接收分离来实现应用程序的异步和解偶。">
+<meta name="keywords" content="高级运维,RabbitMQ,openssl,Erlang,消息队列,RabbitMQ集群部署">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ原理与单机部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="RabbitMQ能做什么  RabbitMQ是一个消息代理 - 一个消息系统的媒介。它可以为你的应用提供一个通用的消息发送和接收平台，并且保证消息在传输过程中的安全。  消息系统允许软件、应用相互连接和扩展．这些应用可以相互链接起来组成一个更大的应用，或者将用户设备和数据进行连接．消息系统通过将消息的发送和接收分离来实现应用程序的异步和解偶。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-19T03:27:01.848Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RabbitMQ原理与单机部署">
+<meta name="twitter:description" content="RabbitMQ能做什么  RabbitMQ是一个消息代理 - 一个消息系统的媒介。它可以为你的应用提供一个通用的消息发送和接收平台，并且保证消息在传输过程中的安全。  消息系统允许软件、应用相互连接和扩展．这些应用可以相互链接起来组成一个更大的应用，或者将用户设备和数据进行连接．消息系统通过将消息的发送和接收分离来实现应用程序的异步和解偶。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">RabbitMQ原理与单机部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">RabbitMQ原理与单机部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-04T09:20:34.000Z" itemprop="datePublished" class="page-time">
+  2018-01-04
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-RabbitMQ原理与单机部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">RabbitMQ原理与单机部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-04 17:20:34" datetime="2018-01-04T09:20:34.000Z"  itemprop="datePublished">2018-01-04</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>RabbitMQ能做什么</p>
+</blockquote>
+<pre><code>RabbitMQ是一个消息代理 - 一个消息系统的媒介。它可以为你的应用提供一个通用的消息发送和接收平台，并且保证消息在传输过程中的安全。
+
+消息系统允许软件、应用相互连接和扩展．这些应用可以相互链接起来组成一个更大的应用，或者将用户设备和数据进行连接．消息系统通过将消息的发送和接收分离来实现应用程序的异步和解偶。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>技术亮点</p>
+</blockquote>
+<pre><code>可靠性
+RabbitMQ提供了多种技术可以让你在性能和可靠性之间进行权衡。这些技术包括持久性机制、投递确认、发布者证实和高可用性机制。
+
+灵活的路由
+消息在到达队列前是通过交换机进行路由的。RabbitMQ为典型的路由逻辑提供了多种内置交换机类型。如果你有更复杂的路由需求，可以将这些交换机组合起来使用，你甚至可以实现自己的交换机类型，并且当做RabbitMQ的插件来使用。
+
+集群
+在相同局域网中的多个RabbitMQ服务器可以聚合在一起，作为一个独立的逻辑代理来使用。
+
+联合
+对于服务器来说，它比集群需要更多的松散和非可靠链接。为此RabbitMQ提供了联合模型。
+
+高可用的队列
+在同一个集群里，队列可以被镜像到多个机器中，以确保当其中某些硬件出现故障后，你的消息仍然安全。
+
+多协议
+RabbitMQ 支持多种消息协议的消息传递。
+
+广泛的客户端
+只要是你能想到的编程语言几乎都有与其相适配的RabbitMQ客户端。
+
+可视化管理工具
+RabbitMQ附带了一个易于使用的可视化管理工具，它可以帮助你监控消息代理的每一个环节。
+
+追踪
+如果你的消息系统有异常行为，RabbitMQ还提供了追踪的支持，让你能够发现问题所在。
+
+插件系统
+RabbitMQ附带了各种各样的插件来对自己进行扩展。你甚至也可以写自己的插件来使用。
+</code></pre><!-- more -->
+<hr>
+<p>注：官方列举了哪些版本的RabbitMQ兼容固定版本的Erlang。所以为了避免出现兼容性问题，强烈建议下载对应版本。参考：<a href="http://www.rabbitmq.com/which-erlang.html" target="_blank" rel="noopener">RabbitMQ Erlang Version Requirements</a></p>
+<blockquote>
+<p>单机部署RabbitMQ</p>
+</blockquote>
+<pre><code>RabbitMQ是使用Erlang语言编写的一个高可靠消息队列。所以在安装之前，需要下载最新版本的Erlang。
+</code></pre><ul>
+<li>编译安装Erlang</li>
+</ul>
+<hr>
+<p>配置Erlang支持SSL</p>
+<pre><code>编译升级openssl
+wget https://www.openssl.org/source/openssl-1.1.0g.tar.gz
+tar zxvf openssl-1.1.0g.tar.gz
+yum groupinstall &quot;Development tools&quot;
+cd openssl-1.1.0g
+./config --prefix=/usr/local/openssl
+编译安装
+make &amp;&amp; make install
+</code></pre><p>编译报错-解决</p>
+<pre><code>编译安装openssl报错：
+POD document had syntax errors at /usr/bin/pod2man line 69. make: *** [install_docs]
+
+解决方法：
+rm -f /usr/bin/pod2man 
+
+重新编译
+</code></pre><p>增加openssl的lib目录到系统里并生效</p>
+<pre><code>echo &#39;/usr/local/openssl/lib&#39; &gt;&gt; /etc/ld.so.conf.d/server.conf
+ldconfig
+</code></pre><pre><code>配置环境变量
+cat &gt;&gt;/etc/profile&lt;&lt;EOF
+export PATH=$PATH:/usr/local/openssl/bin
+EOF
+
+source /etc/profile
+</code></pre><p>软链</p>
+<pre><code>mv /usr/bin/openssl /usr/bin/openssl.bak
+ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
+</code></pre><p>验证</p>
+<pre><code>[root@localhost ~]# openssl version
+OpenSSL 1.1.0g  2 Nov 2017
+</code></pre><!-- more -->
+<ul>
+<li>Erlang下载：<a href="http://www.erlang.org/downloads" target="_blank" rel="noopener">http://www.erlang.org/downloads</a></li>
+</ul>
+<pre><code>wget http://erlang.org/download/otp_src_20.2.tar.gz
+tar -zxvf  otp_src_20.2.tar.gz
+cd  otp_src_20.2
+yum install -y ncurses-devel
+./configure --with-ssl=/usr/local/openssl --prefix=/usr/local/erlang
+make &amp;&amp; make install
+</code></pre><p>解决编译错误</p>
+<pre><code>********************************************************************
+**********************  APPLICATIONS DISABLED  **********************
+*********************************************************************
+
+jinterface     : No Java compiler found
+odbc           : ODBC library - link check failed
+
+
+这里只需关注“ APPLICATIONS DISABLED 部分”,其他两部分是INFO信息不影响编译。
+
+(1)&quot;jinterface: No Java compiler found&quot; 添加参数“--without-javac”
+
+(2)odbc:ODBC library - link check failed    #没有,那就安装
+   yum install -y unixODBC-devel  
+</code></pre><p>重新编译Erlang</p>
+<pre><code>重新编译Erlang
+./configure --with-ssl=/usr/local/openssl  --prefix=/usr/local/erlang  --without-javac
+
+-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;
+正常配置完成后会显示如下
+
+*********************************************************************
+**********************  APPLICATIONS DISABLED  **********************
+*********************************************************************
+
+jinterface     : Java compiler disabled by user
+-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;
+
+编译安装
+make &amp;&amp; make install
+</code></pre><p>配置环境变量</p>
+<pre><code>cat &gt;&gt;/etc/profile&lt;&lt;EOF
+export PATH=$PATH:/usr/local/erlang/bin
+EOF
+
+让环境变量生效
+source /etc/profile
+</code></pre><p>测试Erlang</p>
+<pre><code>Eshell V5.10.3  (abort with ^G)
+1&gt; crypto:start().
+ok
+2&gt;
+
+Erlang退出信号： halt().
+</code></pre><!-- more -->
+<ul>
+<li>安装simpleJson</li>
+</ul>
+<hr>
+<p>下载地址：<a href="https://pypi.python.org/pypi/simplejson/" target="_blank" rel="noopener">https://pypi.python.org/pypi/simplejson/</a> </p>
+<pre><code>tar  -zxvf simplejson-3.13.2.tar.gz
+cd simplejson-3.13.2
+python setup.py install
+</code></pre><!-- more -->
+<ul>
+<li>部署RabbitMQ</li>
+</ul>
+<hr>
+<p>下载地址：<a href="http://www.rabbitmq.com/releases/rabbitmq-server/" target="_blank" rel="noopener">http://www.rabbitmq.com/releases/rabbitmq-server/</a> </p>
+<pre><code>推荐用：rabbitmq-server-generic-unix-..*.tar.xz版本
+wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.7.2/rabbitmq-server-generic-unix-3.7.2.tar.xz
+
+xz -d rabbitmq-server-generic-unix-3.7.2.tar.xz
+tar -xvf rabbitmq-server-generic-unix-3.7.2.tar
+mv rabbitmq_server-3.7.2 /usr/local/
+ln -s /usr/local/rabbitmq_server-3.7.2 /usr/local/rabbitmq    #配置文件软链
+</code></pre><p>配置rabbitmq的环境变量</p>
+<pre><code>cat &gt;&gt;/etc/profile &lt;&lt;EOF
+export PATH=$PATH:/usr/local/rabbitmq/sbin
+EOF
+
+环境变量生效
+source /etc/profile
+</code></pre><p>正常启动RabbitMQ</p>
+<pre><code>rabbitmq-server -datached  #启动rabbitmq
+
+启动报错: ERROR: epmd error for host controler: address (cannot connect to host/port)
+故障解决： 查看当前hostname，假设是controller，然后修改/etc/hosts文件，添加一行如下：
+vim /etc/hosts
+
+127.0.0.1  controller
+</code></pre><pre><code>启动验证
+rabbitmqctl status   #查看启动状态
+ps -ef |grep rabbitmq  #查看进程
+
+RabbitMQ端口:5672
+</code></pre><p>日志软链</p>
+<pre><code>ln -s /usr/local/rabbitmq/var/log/rabbitmq /var/log/rabbitmq  #日志目录软链
+</code></pre><blockquote>
+<p>管理命令详解</p>
+</blockquote>
+<p>参考: <a href="http://www.ywnds.com/?p=4738" target="_blank" rel="noopener">RabbitMQ管理命令详解</a></p>
+<blockquote>
+<p>配置网页插件</p>
+</blockquote>
+<pre><code>mkdir -p /etc/rabbitmq   #防报错
+rabbitmq-plugins enable rabbitmq_management   #启用网页管理插件,网页管理端口:15672
+
+访问http://localhost:15672即可, 默认用户guest 密码guest
+</code></pre><blockquote>
+<p>远程访问配置</p>
+</blockquote>
+<pre><code>默认网页是不允许访问的，需要增加一个用户修改一下权限，代码如下：
+
+添加用户openstack
+rabbitmqctl add_user openstack password
+
+添加权限
+rabbitmqctl set_permissions -p &quot;/&quot; openstack &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;
+
+修改用户角色
+rabbitmqctl set_user_tags openstack administrator
+
+然后就可以远程访问了，然后可直接配置用户权限等信息。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-19T03:27:01.848Z" itemprop="dateUpdated">2018-01-19 11:27:01</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/04/RabbitMQ原理与单机部署/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Erlang/">Erlang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ集群部署/">RabbitMQ集群部署</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openssl/">openssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/&title=《RabbitMQ原理与单机部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/&title=《RabbitMQ原理与单机部署》 — Gary Wu&source=
+RabbitMQ能做什么
+
+RabbitMQ是一个消息代理 - 一个消息系统的媒介。它可以为你的应用提供一个通用的消息发送和接收平台，并且保证消息在传输..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《RabbitMQ原理与单机部署》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/05/RabbitMQ集群部署/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">RabbitMQ集群部署</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/04/ESXI虚拟机开启CPU虚拟化/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">ESXI虚拟机开启CPU虚拟化</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/&title=《RabbitMQ原理与单机部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/&title=《RabbitMQ原理与单机部署》 — Gary Wu&source=
+RabbitMQ能做什么
+
+RabbitMQ是一个消息代理 - 一个消息系统的媒介。它可以为你的应用提供一个通用的消息发送和接收平台，并且保证消息在传输..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《RabbitMQ原理与单机部署》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/04/RabbitMQ原理与单机部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

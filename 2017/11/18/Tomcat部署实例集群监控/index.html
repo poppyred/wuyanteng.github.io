@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Tomcat部署实例集群监控 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Tomcat,Tomcat多实例,Tomcat集群,java war打包解压,Tomcat反向代理集群,部署Jpress博客站点,Tomcat zabbix监控,Tomcat降权启动,Tomcat普通用户启动,jstack,jps,Tomcat优化,Tomcat安全优化,Tomcat性能优化,JVM调优">
+    <meta name="description" content="Tomcat              Tomcat部署">
+<meta name="keywords" content="高级运维,Tomcat,Tomcat多实例,Tomcat集群,java war打包解压,Tomcat反向代理集群,部署Jpress博客站点,Tomcat zabbix监控,Tomcat降权启动,Tomcat普通用户启动,jstack,jps,Tomcat优化,Tomcat安全优化,Tomcat性能优化,JVM调优">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat部署实例集群监控">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Tomcat              Tomcat部署">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tomcat.jpg">
+<meta property="og:updated_time" content="2017-11-18T10:41:21.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat部署实例集群监控">
+<meta name="twitter:description" content="Tomcat              Tomcat部署">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tomcat.jpg">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Tomcat部署实例集群监控</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Tomcat部署实例集群监控</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-18T05:07:43.000Z" itemprop="datePublished" class="page-time">
+  2017-11-18
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Tomcat部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">Tomcat部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Tomcat-用户管理"><span class="post-toc-number">2.</span> <span class="post-toc-text">Tomcat 用户管理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Tomcat-主配置文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">Tomcat 主配置文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Web站点部署"><span class="post-toc-number">4.</span> <span class="post-toc-text">Web站点部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PS：Linux下打包压缩war和解压war包"><span class="post-toc-number">5.</span> <span class="post-toc-text">PS：Linux下打包压缩war和解压war包</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Tomcat多实例"><span class="post-toc-number">6.</span> <span class="post-toc-text">Tomcat多实例</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Tomcat反向代理集群"><span class="post-toc-number">7.</span> <span class="post-toc-text">Tomcat反向代理集群</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#war包部署Jpress站点"><span class="post-toc-number">8.</span> <span class="post-toc-text">war包部署Jpress站点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Tomcat监控"><span class="post-toc-number">9.</span> <span class="post-toc-text">Tomcat监控</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#使用zabbix监控Tomcat"><span class="post-toc-number">10.</span> <span class="post-toc-text">使用zabbix监控Tomcat</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Tomcat安全优化"><span class="post-toc-number">11.</span> <span class="post-toc-text">Tomcat安全优化</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#JVM调优"><span class="post-toc-number">12.</span> <span class="post-toc-text">JVM调优</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Tomcat部署实例集群监控"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Tomcat部署实例集群监控</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-18 13:07:43" datetime="2017-11-18T05:07:43.000Z"  itemprop="datePublished">2017-11-18</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tomcat.jpg" alt="Tomcat" title="">
+                </div>
+                <div class="image-caption">Tomcat</div>
+            </figure>
+<h4 id="Tomcat部署"><a href="#Tomcat部署" class="headerlink" title="Tomcat部署"></a>Tomcat部署</h4><a id="more"></a>
+<pre><code>只要是java相关的应用必装JDK
+</code></pre><blockquote>
+<p>安装JDK</p>
+</blockquote>
+<pre><code>tar xf jdk-8u60-linux-x64.tar.gz -C /application/
+
+ln -s /application/jdk1.8.0_60 /application/jdk
+
+sed -i.ori &#39;$a export JAVA_HOME=/application/jdk\nexport PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH\nexport CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$JAVA_HOME/lib/tools.jar&#39; /etc/profile
+注：$a表示在最后一行追加内容
+
+source /etc/profile
+java -version
+</code></pre><blockquote>
+<p>安装Tomcat</p>
+</blockquote>
+<pre><code>tar xf apache-tomcat-8.0.27.tar.gz -C /application/
+ln -s /application/apache-tomcat-8.0.27 /application/tomcat
+echo &#39;export TOMCAT_HOME=/application/tomcat&#39;&gt;&gt;/etc/profile
+source /etc/profile
+chown -R root.root /application/jdk/ /application/tomcat/
+
+#查看安装版本
+ /application/tomcat/bin/version.sh 
+</code></pre><blockquote>
+<p>启动</p>
+</blockquote>
+<pre><code>#→启动程序/application/tomcat/bin/startup.sh 
+
+#→关闭程序/application/tomcat/bin/shutdown.sh 
+
+cd /application/tomcat/logs/
+tailf catalina.out
+
+#查看tomcat端口
+[root@zabbix-proxy ~]# netstat -lntup|grep java
+tcp6       0      0 :::8080                 :::*                    LISTEN      38339/java          
+tcp6       0      0 :::8009                 :::*                    LISTEN      38339/java 
+</code></pre><blockquote>
+<p>Tomcat日志文件</p>
+</blockquote>
+<pre><code>cd /application/tomcat/logs
+catalina.out        tomcat实时日志,启动信息/报错信息均会在此文件体现
+
+注: 如果catalina.out文件过大，直接清空内容。注意不能删除文件，因为程序正在使用，删除依然会继续占用系统空间，除非重启Tomcat，仅仅为了清理日志文件而重启Tomcat，这样做得不偿失。
+
+&gt;/application/tomcat/logs/catalina.out
+</code></pre><blockquote>
+<p>Tomcat服务启动时间慢并加快访问速度？</p>
+</blockquote>
+<pre><code>回翻日志文件可以看到如下行：
+14-Nov-2017 05:53:00.512 INFO [localhost-startStop-1] org.apache.catalina.util.SessionIdGeneratorBase.createSecureRandom Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [27,970] milliseconds.
+
+启动时间都花费在了session ID createSecureRandom上面，这个与系统的随机数有关。
+
+通过命令查看随机数的值
+cat /proc/sys/kernel/random/entropy_avail 
+注：每次使用命令“cat /dev/random”的时候就会消耗它的值。
+
+解决方案: 安装rng-tools这个软件让其值变大
+yum -y install rng-tools 
+systemctl start rngd.service
+cat /proc/sys/kernel/random/entropy_avail
+此时可以看到值为:2989, 容量槽值就变大了，此时再重启Tomcat，速度就非常快了
+</code></pre><h4 id="Tomcat-用户管理"><a href="#Tomcat-用户管理" class="headerlink" title="Tomcat 用户管理"></a>Tomcat 用户管理</h4><pre><code>vim /application/tomcat/conf/tomcat-users.xml
+在倒数第二行添加(添加用户)
+&lt;role rolename=&quot;manager-gui&quot;/&gt;
+&lt;role rolename=&quot;admin-gui&quot;/&gt;
+&lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;manager-gui,admin-gui&quot;/&gt;
+
+
+重启
+/application/tomcat/bin/shutdown.sh
+/application/tomcat/bin/startup.sh
+
+web访问:(注：生产环境这个web管理平台禁用！禁用！禁用！)
+http://192.168.56.13:8080
+</code></pre><blockquote>
+<p>安全</p>
+</blockquote>
+<pre><code>[root@zabbix-proxy ~]# cd /application/tomcat/webapps/   #Tomcat根目录
+[root@zabbix-proxy webapps]# ls
+docs  examples  host-manager  manager  ROOT
+
+生产环境不启用webapps的话，最直接的方法是把这些目录删除即可。然后通过web站点部署中的“自定义站点目录”实现web网站目录的访问
+</code></pre><h4 id="Tomcat-主配置文件"><a href="#Tomcat-主配置文件" class="headerlink" title="Tomcat 主配置文件"></a>Tomcat 主配置文件</h4><pre><code>文件： /application/tomcat/conf/server.xml
+
+注：Tomcat启动会启动3个端口
+8080(web访问)、8005(shutdown Tomcat)和8009
+注：8009端口是(http与Tomcat通信)环境下使用，现在很少用了，可以在server.xml中禁用来停止运行
+</code></pre><p>测试8005端口来关闭Tomcat</p>
+<pre><code>向Tomcat给8005端口发送一个“SHUTDOWN”信号即可停止Tomcat服务
+echo SHUTDOWN|nc 127.0.0.1 8005
+netstat -lntup |grep java   #可以看到Tomcat端口已经停止运行
+</code></pre><blockquote>
+<p>配置文件详解</p>
+</blockquote>
+<p>参考: <a href="http://blog.oldboyedu.com/java-tomcat/" target="_blank" rel="noopener">老男孩Tomcat</a></p>
+<p>参考CSDN详细说明：<a href="http://blog.csdn.net/yuanxuegui2008/article/details/6056754" target="_blank" rel="noopener">server.xml</a></p>
+<!-- more-->
+<h4 id="Web站点部署"><a href="#Web站点部署" class="headerlink" title="Web站点部署"></a>Web站点部署</h4><pre><code>上线的代码有两种方式，第一种方式是直接将程序目录放在webapps目录下面。
+第二种方式是使用开发工具将程序打包成war包，然后上传到webapps目录下面。
+</code></pre><blockquote>
+<p>使用war包部署web站点</p>
+</blockquote>
+<pre><code>[root@tomcat webapps]# pwd
+/application/tomcat/webapps
+[root@tomcat webapps]# rz     #→上传开发提供的memtest.war
+[root@tomcat webapps]# ls
+docs  examples  host-manager  manager  memtest  memtest.war  ROOT
+</code></pre><pre><code>web访问：http://192.168.56.13:8080/memtest/meminfo.jsp
+</code></pre><blockquote>
+<p>自定义默认站点目录</p>
+</blockquote>
+<pre><code>#修改服务器配置文件
+vim server.xml    #在&lt;Host&gt;&lt;/Host&gt;字段内定义虚拟主机
+
+新增如下内容:
+&lt;Context path=&quot;&quot; docBase=&quot;/application/tomcat/webapps/memtest&quot; debug=&quot;0&quot; reloadable=&quot;false&quot; crossContext=&quot;true&quot;/&gt;
+&lt;Context path=&quot;37team&quot; docBase=&quot;/application/tomcat/webapps/memtest&quot; debug=&quot;0&quot; reloadable=&quot;false&quot; crossContext=&quot;true&quot;/&gt;
+
+上面两行的意思是，匹配&quot;空&quot;字段和“37team”字段，一旦匹配后，就指向实际站点目录/application/tomcat/webapps/memtest中。
+</code></pre><pre><code>重启Tomcat
+/application/tomcat/bin/shutdown.sh
+/application/tomcat/bin/startup.sh
+</code></pre><pre><code>web访问如下页面-均可以显示网页内容：
+http://192.168.56.13:8080/memtest.jsp
+http://192.168.56.13:8080/37team/meminfo.jsp
+</code></pre><h4 id="PS：Linux下打包压缩war和解压war包"><a href="#PS：Linux下打包压缩war和解压war包" class="headerlink" title="PS：Linux下打包压缩war和解压war包"></a>PS：Linux下打包压缩war和解压war包</h4><pre><code>因为种种原因需要把java程序达成war包。需要用jar命令，前提是要安装dk。
+</code></pre><p>示例：</p>
+<pre><code>把当前目录下的所有文件打包成game.war
+
+命令: jar -cvfM0 game.war ./
+
+
+-c   创建war包
+-v   显示过程信息
+-f    
+-M
+-0   这个是阿拉伯数字，只打包不压缩的意思
+
+
+解压game.war
+jar -xvf game.war   #解压到当前目录
+</code></pre><h4 id="Tomcat多实例"><a href="#Tomcat多实例" class="headerlink" title="Tomcat多实例"></a>Tomcat多实例</h4><pre><code>(1)Tomcat是单进程的，单个进程不建议部署多个站点，因为其性能是有限的，建议一个进程只部署一个站点。
+(2)只会使用一个CPU核心。但如果服务器配置较高，比如:8核。这样只运行一个Tomcat实例实在浪费，所以可以通过多实例，来让服务器资源不浪费。
+</code></pre><pre><code>#复制Tomcat文件
+tar -zxvf apache-tomcat-8.0.27.tar.gz 
+cp -a apache-tomcat-8.0.27 tomcat8_1
+cp -a apache-tomcat-8.0.27 tomcat8_2
+</code></pre><pre><code>#规避多实例端口冲突所以需要修改端口 
+1. 关闭 8005  --&gt;并修改  第1个实例改为：8011     第2个实例改为:8022
+2. 关闭 8080  --&gt;并修改  第1个实例改为：8081     第2个实例改为:8082
+
+sed -i &#39;s#8005#8011#;s#8080#8081#&#39; tomcat8_1/conf/server.xml 
+sed -i &#39;s#8005#8012#;s#8080#8082#&#39; tomcat8_2/conf/server.xml 
+diff tomcat8_{1,2}/conf/server.xml  
+
+
+#压缩备份实例,便于日后使用并分发
+tar zcf muti_tomcat.tar.gz ./tomcat8_1 ./tomcat8_2
+
+#拷贝修改后的示例复制到/application/
+cp -a tomcat8_1 tomcat8_2 /application/
+</code></pre><pre><code>#启动多实例
+/application/tomcat8_1/bin/startup.sh 
+/application/tomcat8_2/bin/startup.sh 
+
+
+#查看端口和进程启动情况
+[root@zabbix-proxy ~]# netstat -lntup|grep java
+tcp6       0      0 127.0.0.1:8011       39534/java          
+tcp6       0      0 127.0.0.1:8012       39534/java
+
+[root@zabbix-proxy ~]# ps -ef |grep java
+
+Web访问：
+http://192.168.56.13:8081/
+http://192.168.56.13:8082/
+</code></pre><h4 id="Tomcat反向代理集群"><a href="#Tomcat反向代理集群" class="headerlink" title="Tomcat反向代理集群"></a>Tomcat反向代理集群</h4><pre><code>用nginx代理后端的Tomcat多实例来实现负载均衡。
+</code></pre><pre><code>#安装nginx
+yum install -y nginx
+systemctl start nginx
+
+nginx测试：http://192.168.56.13/
+</code></pre><p>配置nginx upsteam</p>
+<pre><code>vim /etc/nginx/nginx.conf
+</code></pre><pre><code> #添加upstream模块并配置location
+
+ upstream web_pools {
+        server 192.168.56.13:8081;
+        server 192.168.56.13:8082;
+        }
+
+    server {
+        listen       80;
+        server_name  localhost;
+
+        location / {
+            index  index.jsp index.html index.htm;  
+            proxy_pass http://web_pools;
+        }
+
+注： 因为页面是jsp，需要加index.jsp        
+</code></pre><pre><code>nginx -t
+systemctl restart nginx
+
+Web访问: http://192.168.56.13/
+
+为便于看出效果追加内容：
+echo 8081 &gt;&gt;/application/tomcat8_1/webapps/ROOT/index.jsp 
+echo 8082 &gt;&gt;/application/tomcat8_2/webapps/ROOT/index.jsp 
+
+再次访问-查看代理效果：
+Web访问: http://192.168.56.13/
+</code></pre><h4 id="war包部署Jpress站点"><a href="#war包部署Jpress站点" class="headerlink" title="war包部署Jpress站点"></a>war包部署Jpress站点</h4><pre><code>jpress 类似WordPress，是一个博客系统。
+conflunce（部署至少需要2G内存）
+Jira
+</code></pre><blockquote>
+<p>安装MariaDB</p>
+</blockquote>
+<pre><code>yum -y install mariadb-server
+systemctl start mariadb
+systemctl status mariadb
+
+# mysql_secure_installation 命令初始化。
+mysql_secure_installation
+
+cd /application/tomcat8_1/webapps
+war包上传到该目录
+
+Web安装: http://192.168.56.13:8081/jpress/install
+
+#重启服务
+/application/tomcat8_1/bin/shutdown.sh 
+/application/tomcat8_1/bin/startup.sh 
+
+http://192.168.56.13:8081/jpress/   #前端访问
+http://192.168.56.13:8081/jpress/admin/login  #后台管理
+</code></pre><h4 id="Tomcat监控"><a href="#Tomcat监控" class="headerlink" title="Tomcat监控"></a>Tomcat监控</h4><blockquote>
+<p>jps命令</p>
+</blockquote>
+<pre><code>jps命令用来输出java的状况信息，如：进程的PID值
+
+#快速获取Java进程的pid，不用ps和grep
+jps -lvm  
+
+jps -lvm  与ps -ef|grep java结果相同
+</code></pre><blockquote>
+<p>jstack命令</p>
+</blockquote>
+<pre><code>jstack命令主要用来查看某个java进程内的线程堆栈信息。
+
+一旦发现Tomcat有严重异常，需要直接上脚本运行，查看结果
+Tomcat Java脚本下载：https://github.com/wuyanteng/wuyanteng.github.io/tree/master/script
+</code></pre><pre><code>脚本输出结果可以看到哪些java进程占用多少资源？把结果与java开发分享一同解决问题。
+
+比如:Tomcat运行特别卡，就使用这个查看即可。
+[root@zabbix-proxy ~]# sh show-busy-java-threads.sh 
+</code></pre><h4 id="使用zabbix监控Tomcat"><a href="#使用zabbix监控Tomcat" class="headerlink" title="使用zabbix监控Tomcat"></a>使用zabbix监控Tomcat</h4><pre><code>第一步：配置Tomcat远程管理
+第二步：zabbix server安装zabbix-java-gateway
+</code></pre><pre><code>1. 配置Tomcat远程管理
+添加hosts解析
+vim /etc/hosts     #必须添加hosts解析，否则启动失败
+192.168.56.13  tomcat13
+
+2.开启JMX远程监控
+ vim /application/tomcat/bin/catalina.sh 
+
+添加如下内容:
+CATALINA_OPTS=&quot;$CATALINA_OPTS
+-Dcom.sun.management.jmxremote 
+-Dcom.sun.management.jmxremote.port=12345  
+-Dcom.sun.management.jmxremote.ssl=false          #远程ssl验证为false
+-Dcom.sun.management.jmxremote.authenticate=false #关闭权限认证
+-Djava.rmi.server.hostname=192.168.56.13          #填写Tomcat IP地址
+
+3.重启Tomcat
+netstat -tunlp|grep 12345
+
+################################
+如果端口起不来，看日志
+tail /application/tomcat/logs/catalina.out
+</code></pre><pre><code>4. zabbix-server上安装启动zabbix-java-gateway
+yum install -y java java-devel zabbix-java-gateway
+vim /etc/zabbix/zabbix_java_gateway.conf    #java配置文件
+JavaGateway=192.168.56.13                   #gateway地址
+StartJavaPollers=5                          #预启动进程轮训个数 
+
+/etc/init.d/zabbix-java-gateway start
+netstat -tunlp|grep java
+</code></pre><pre><code>5. 配置zabbix server支持java监控
+
+#新增如下配置
+sed -i -e &#39;217a JavaGateway=127.0.0.1&#39; -e &#39;225a JavaGatewayPort=10052&#39;  -e &#39;235a StartJavaPollers=5&#39; /etc/zabbix/zabbix_server.conf
+
+#重启zabbix server
+</code></pre><pre><code>6. zabbix web配置
+   配置 -- 主机 -- 添加主机 -- JMX接口: 192.168.56.13 端口:12345
+   模板：选择Template JMX Generic和Template JMX Tomcat
+</code></pre><h4 id="Tomcat安全优化"><a href="#Tomcat安全优化" class="headerlink" title="Tomcat安全优化"></a>Tomcat安全优化</h4><blockquote>
+<p>安全优化</p>
+</blockquote>
+<pre><code>(1)端口保护: 即修改默认配置文件端口
+(2)注释ajp连接端口8009, server.xml中搜索注释
+(3)删除webapps目录下的默认目录，只保留ROOT空目录即可。
+(4)降权启动：使用非root启动tomcat （nginx或tomcat等都支持以普通用户登录）
+</code></pre><p>Tomcat降权启动</p>
+<pre><code>useradd tomcat
+cp -a /application/tomcat8_1 /home/tomcat/
+chown -R tomcat.tomcat /home/tomcat/
+su -c &#39;/home/tomcat/tomcat8_1/bin/startup.sh&#39; tomcat
+ps -ef |grep java      #可以看到启动的用户已经改成了tomcat
+</code></pre><blockquote>
+<p>性能优化</p>
+</blockquote>
+<pre><code>Tomcat非常耗内存,并非Tomcat软件本身内存消耗大，而是运行的代码导致内存消耗大
+优化方法：
+1. 加大内存
+2. 减少内存消耗量:开发写的代码只是不停消耗内存,但是从来进行释放
+   垃圾回收机制:定期扫描内存使用情况，找到未被使用的内存,然后回收。
+       特点：周期性,回收机制也会占用一定的内存使用量,同时每次回收垃圾都会使业务停止
+注：网上的教程基本都是 JVM优化主要从垃圾回收策略开始阐述的
+3. 简单粗暴法：定期重启Tomcat（如：定时凌晨重启Tomcat）
+</code></pre><p>Tomcat默认消耗1/4系统内存，可以通过修改配置文件将阈值调到适当值。</p>
+<h4 id="JVM调优"><a href="#JVM调优" class="headerlink" title="JVM调优"></a>JVM调优</h4><pre><code>vim /home/tomcat/tomcat8_1/bin/catalina.sh 
+添加如下内容:
+JAVA_OPTS=&quot;-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms2048m -Xmx3072m -XX:NewSize=512m -XX:MaxNewSize=2048m -XX:PermSize=512m -XX:MaxPermSize=512m&quot;
+</code></pre><pre><code>server:一定要作为第一个参数，在多个CPU时性能佳
+-Xms：初始堆内存Heap大小，使用的最小内存,cpu性能高时此值应设的大一些
+-Xmx：初始堆内存heap最大值，使用的最大内存
+上面两个值是分配JVM的最小和最大内存，取决于硬件物理内存的大小，建议均设为物理内存的一半。
+-XX:PermSize:设定内存的永久保存区域
+-XX:MaxPermSize:设定最大内存的永久保存区域
+-XX:MaxNewSize:
+-Xss 15120 这使得JBoss每增加一个线程（thread)就会立即消耗15M内存，而最佳值应该是128K,默认值好像是512k.
++XX:AggressiveHeap 会使得 Xms没有意义。这个参数让jvm忽略Xmx参数,疯狂地吃完一个G物理内存,再吃尽一个G的swap。
+-Xss：每个线程的Stack大小
+-verbose:gc 现实垃圾收集信息
+-Xloggc:gc.log 指定垃圾收集日志文件
+-Xmn：young generation的heap大小，一般设置为Xmx的3、4分之一
+-XX:+UseParNewGC ：缩短minor收集的时间
+-XX:+UseConcMarkSweepGC ：缩短major收集的时间
+</code></pre><pre><code>最后重启Tomcat服务!
+</code></pre><p>参考：<a href="http://www.zyops.com/java-tomcat" target="_blank" rel="noopener">张耀的博客</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-18T10:41:21.951Z" itemprop="dateUpdated">2017-11-18 18:41:21</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/18/Tomcat部署实例集群监控/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM调优/">JVM调优</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat-zabbix监控/">Tomcat zabbix监控</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat优化/">Tomcat优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat反向代理集群/">Tomcat反向代理集群</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat多实例/">Tomcat多实例</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat安全优化/">Tomcat安全优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat性能优化/">Tomcat性能优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat普通用户启动/">Tomcat普通用户启动</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat降权启动/">Tomcat降权启动</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat集群/">Tomcat集群</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java-war打包解压/">java war打包解压</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jps/">jps</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jstack/">jstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/部署Jpress博客站点/">部署Jpress博客站点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/&title=《Tomcat部署实例集群监控》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/&title=《Tomcat部署实例集群监控》 — Gary Wu&source=
+                
+                    
+                    
+                
+..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Tomcat部署实例集群监控》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/20/Apache-Kafka原理详解-进阶1/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Apache Kafka原理详解-进阶1</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/16/分布式消息队列RocketMQ部署-进阶2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">分布式消息队列RocketMQ部署-进阶2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/&title=《Tomcat部署实例集群监控》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/&title=《Tomcat部署实例集群监控》 — Gary Wu&source=
+                
+                    
+                    
+                
+..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Tomcat部署实例集群监控》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/18/Tomcat部署实例集群监控/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

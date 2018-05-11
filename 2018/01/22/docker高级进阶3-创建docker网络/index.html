@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>docker高级进阶3-创建docker网络 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,docker">
+    <meta name="description" content="查看docker网络模式 [root@linux-node1 ~]# docker network ls NETWORK ID          NAME                DRIVER              SCOPE 2764e6841f4b        bridge              bridge              local 71a2bf3def0a">
+<meta name="keywords" content="高级运维,docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker高级进阶3-创建docker网络">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="查看docker网络模式 [root@linux-node1 ~]# docker network ls NETWORK ID          NAME                DRIVER              SCOPE 2764e6841f4b        bridge              bridge              local 71a2bf3def0a">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-22T13:46:27.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="docker高级进阶3-创建docker网络">
+<meta name="twitter:description" content="查看docker网络模式 [root@linux-node1 ~]# docker network ls NETWORK ID          NAME                DRIVER              SCOPE 2764e6841f4b        bridge              bridge              local 71a2bf3def0a">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">docker高级进阶3-创建docker网络</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">docker高级进阶3-创建docker网络</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-22T13:25:48.000Z" itemprop="datePublished" class="page-time">
+  2018-01-22
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-docker高级进阶3-创建docker网络"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">docker高级进阶3-创建docker网络</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-22 21:25:48" datetime="2018-01-22T13:25:48.000Z"  itemprop="datePublished">2018-01-22</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>查看docker网络模式</p>
+<pre><code>[root@linux-node1 ~]# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+2764e6841f4b        bridge              bridge              local
+71a2bf3def0a        host                host                local
+18de574e6899        none                null                local
+</code></pre><a id="more"></a>
+<p>指定容器的网络模式</p>
+<pre><code>docker run -it --net=host nginx
+</code></pre><p>创建docker网络</p>
+<pre><code>创建名为“my_net”的docker网络,驱动:桥接
+[root@linux-node1 ~]# docker network create --driver bridge my_net
+ae86a1c4fe95d544d7ca80b7996bfe0b88fda070919ca77644d0fe18cdb1b3ff
+
+注：默认网络不能指定IP地址
+
+运行容器并指定网络
+[root@linux-node1 ~]# docker run -it --rm --network=my_net busybox
+/ # 
+/ # ip a
+35: eth0@if36: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue 
+    link/ether 02:42:ac:12:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.2/16 brd 172.18.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+/ # 
+</code></pre><blockquote>
+<p>同一宿主机不同网段docker互访</p>
+</blockquote>
+<pre><code>创建my_net2并手动指定一个子网
+[root@linux-node1 ~]# docker network create --driver bridge --subnet 172.22.16.0/24 --gateway=172.22.16.1 my_net2
+2c0275289202761452d0066a94e06c31f615cb5a0f8d82284c880ddb40ec54e5
+</code></pre><pre><code>运行默认网络的容器
+docker run -it --rm --name gary1 busybox
+
+再运行一个my_net2的自定义网络地址的容器
+docker run -it --rm --network=my_net2 --ip 172.22.16.99 --name gary2 busybox
+
+把gary1 connect到gary2的网络里面
+docker network connect my_net2 gary1
+
+这样就可以在上面两个容器内互相ping了
+ping gary1
+ping gary2
+</code></pre><blockquote>
+<p>跨宿主机的容器间网络互通</p>
+</blockquote>
+<pre><code>* 配置跨宿主机进行容器网络互通
+环境：3台虚拟机作为宿主机
+
+虚机3启动progrium/consul容器
+[root@linux-node3 ~]# docker run -d -p 8500:8500 --name consul progrium/consul -server -bootstrap
+28fc3dda5acba36694fe50f8c5ccc7d40167ae76c65e3f608e5600a39b8e04e5
+Web浏览器访问8500端口:  http://192.168.56.13:8500/ui/#/dc1/services
+--------------------------------------------------------------------------
+
+虚拟机2确认参数
+[root@linux-node2 ~]# dockerd --help |grep cluster
+      --cluster-advertise string                Address or interface
+      --cluster-store string                    URL of the distributed
+      --cluster-store-opt map                   Set cluster store
+
+------------------------------------------------------------------------
+虚拟机1配置-确保有如下配置：
+vim /usr/lib/systemd/system/docker.service
+ExecStart=/usr/bin/dockerd -H tcp://192.168.56.11 -H unix:///var/run/docker.sock
+
+虚拟机2配置-确保有如下配置：
+vim /usr/lib/systemd/system/docker.service
+ExecStart=/usr/bin/dockerd -H tcp://192.168.56.12 -H unix:///var/run/docker.sock
+
+
+虚拟机1进行如下配置-添加2行内容，如下(注意分号)：
+[root@linux-node1 ~]# cat /etc/docker/daemon.json
+{&quot;registry-mirrors&quot;: [&quot;http://hub-mirror.c.163.com&quot;],
+ &quot;cluster-store&quot;:&quot;consul://192.168.56.13:8500&quot;,
+  &quot;cluster-advertise&quot;:&quot;192.168.56.11:2375&quot;
+}
+
+重启服务：
+[root@linux-node1 ~]# systemctl daemon-reload
+[root@linux-node1 ~]# systemctl restart docker
+
+----------------------------------------------------
+虚拟机2进行如下配置-添加2行内容，如下(注意分号)：
+[root@linux-node1 ~]# cat /etc/docker/daemon.json
+{&quot;registry-mirrors&quot;: [&quot;http://hub-mirror.c.163.com&quot;],
+ &quot;cluster-store&quot;:&quot;consul://192.168.56.13:8500&quot;,
+  &quot;cluster-advertise&quot;:&quot;192.168.56.12:2375&quot;
+}
+[root@linux-node2 ~]# systemctl daemon-reload
+[root@linux-node2 ~]# sudo systemctl restart docker
+
+-----------------------------------------------------
+最后浏览器访问：http://192.168.56.13:8500/ 
+依次点击“Key/Value” -- &quot;docker&quot; -- &quot;nodes&quot;,如果出现两个NODES则说明配置成功
+DOCKER/NODES/ +
+192.168.56.11:2375
+192.168.56.12:2375
+
+-----------------------------------------------------------------
+在node1上创建全局的ov_net1网络
+@linux-node1 ~]# docker network create -d overlay ov_net1
+fa66fe2c974f5e9cd799ad30fe6e0d56f69ec462925bb83647444a59b9fdd0ab
+[root@linux-node1 ~]# docker network ls
+
+node2上
+[root@linux-node2 ~]# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+1aeed90ae0a2        bridge              bridge              local
+a0d332ffa04f        host                host                local
+43748157f0ff        none                null                local
+fa66fe2c974f        ov_net1             overlay             global
+
+node1节点运行容器测试
+[root@linux-node1 ~]# docker run -it --rm --network ov_net1 busybox
+/ # 
+/ # 
+/ # ip a
+52: eth0@if53: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1450 qdisc noqueue 
+    link/ether 02:42:0a:00:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.2/24 brd 10.0.0.255 scope global eth0
+
+
+node2节点配置
+[root@linux-node2 ~]# docker run -it --rm --network ov_net1 busybox
+/ # 
+/ # 
+/ # ip a
+6: eth0@if7: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1450 qdisc noqueue 
+    link/ether 02:42:0a:00:00:03 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.3/24 brd 10.0.0.255 scope global eth0
+
+node1  ping node2 可以通信
+/ # ping 10.0.0.3
+PING 10.0.0.3 (10.0.0.3): 56 data bytes
+64 bytes from 10.0.0.3: seq=0 ttl=64 time=2.752 ms
+/ # ping qq.com
+PING qq.com (61.135.157.156): 56 data bytes
+64 bytes from 61.135.157.156: seq=0 ttl=127 time=9.764 ms
+
+
+然后在node1和node2的宿主机上查看网络
+[root@linux-node1 ~]# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+fa1ccee83f54        docker_gwbridge     bridge              local
+fa66fe2c974f        ov_net1             overlay             global
+可以看到会多出一个docker_gwbridge,这个docker_gwbridge来确保跨机器docker不同容器之间进行通信
+
+此时两个宿主机也可以ping正常访问外网，那么查看下docker容器的路由，这是因为这个路由走的是默认网络
+/ # ip route list
+default via 172.19.0.1 dev eth1 
+10.0.0.0/24 dev eth0 scope link  src 10.0.0.2 
+172.19.0.0/16 dev eth1 scope link  src 172.19.0.2 
+可以看到默认网关是172.19.0.1，所以刚刚创建的ov_net1网络和docker_gwbridge只负责跨宿主机之间的docker容器通信，只有这一个作用。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-22T13:46:27.405Z" itemprop="dateUpdated">2018-01-22 21:46:27</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/22/docker高级进阶3-创建docker网络/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/&title=《docker高级进阶3-创建docker网络》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/&title=《docker高级进阶3-创建docker网络》 — Gary Wu&source=查看docker网络模式
+[root@linux-node1 ~]# docker network ls
+NETWORK ID          NAME..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《docker高级进阶3-创建docker网络》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/22/docker进阶4-ELK日志收集/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">docker进阶4-ELK日志收集</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/22/docker高级进阶2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">docker高级进阶2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/&title=《docker高级进阶3-创建docker网络》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/&title=《docker高级进阶3-创建docker网络》 — Gary Wu&source=查看docker网络模式
+[root@linux-node1 ~]# docker network ls
+NETWORK ID          NAME..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《docker高级进阶3-创建docker网络》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/22/docker高级进阶3-创建docker网络/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

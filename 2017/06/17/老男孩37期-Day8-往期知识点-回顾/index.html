@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>老男孩37期-Day8-往期知识点-回顾 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,知识点回顾">
+    <meta name="description" content="检测网站访问速度Chrome浏览器按F12 -- Network--刷新网页就可以看到网页加载完成时间、状态码、页面大小等信息。 查看进程ps -ef 查看进程 ps -ef |grep sshd   守护进程，比如sshd、crond等">
+<meta name="keywords" content="Linux基础,知识点回顾">
+<meta property="og:type" content="article">
+<meta property="og:title" content="老男孩37期-Day8-往期知识点-回顾">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="检测网站访问速度Chrome浏览器按F12 -- Network--刷新网页就可以看到网页加载完成时间、状态码、页面大小等信息。 查看进程ps -ef 查看进程 ps -ef |grep sshd   守护进程，比如sshd、crond等">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-06-21T09:24:04.795Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="老男孩37期-Day8-往期知识点-回顾">
+<meta name="twitter:description" content="检测网站访问速度Chrome浏览器按F12 -- Network--刷新网页就可以看到网页加载完成时间、状态码、页面大小等信息。 查看进程ps -ef 查看进程 ps -ef |grep sshd   守护进程，比如sshd、crond等">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">老男孩37期-Day8-往期知识点-回顾</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">老男孩37期-Day8-往期知识点-回顾</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-17T01:31:40.000Z" itemprop="datePublished" class="page-time">
+  2017-06-17
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#检测网站访问速度"><span class="post-toc-number">1.</span> <span class="post-toc-text">检测网站访问速度</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#查看进程"><span class="post-toc-number">2.</span> <span class="post-toc-text">查看进程</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装包组"><span class="post-toc-number"></span> <span class="post-toc-text">安装包组</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#如何检查22端口是否畅通？"><span class="post-toc-number">1.</span> <span class="post-toc-text">如何检查22端口是否畅通？</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#vi-vim快捷方式"><span class="post-toc-number">2.</span> <span class="post-toc-text">vi/vim快捷方式</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#history"><span class="post-toc-number">3.</span> <span class="post-toc-text">history</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#sed"><span class="post-toc-number">4.</span> <span class="post-toc-text">sed</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#取IP地址-跟大牛学命令"><span class="post-toc-number"></span> <span class="post-toc-text">取IP地址(跟大牛学命令)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#压缩"><span class="post-toc-number">1.</span> <span class="post-toc-text">压缩</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#重要文件md5检查"><span class="post-toc-number">2.</span> <span class="post-toc-text">重要文件md5检查</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#测试题"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试题</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#总结"><span class="post-toc-number">4.</span> <span class="post-toc-text">总结</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-老男孩37期-Day8-往期知识点-回顾"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">老男孩37期-Day8-往期知识点-回顾</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-17 09:31:40" datetime="2017-06-17T01:31:40.000Z"  itemprop="datePublished">2017-06-17</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h5 id="检测网站访问速度"><a href="#检测网站访问速度" class="headerlink" title="检测网站访问速度"></a>检测网站访问速度</h5><pre><code>Chrome浏览器按F12 -- Network--刷新网页就可以看到网页加载完成时间、状态码、页面大小等信息。
+</code></pre><h5 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h5><pre><code class="shell">ps -ef 查看进程
+ps -ef |grep sshd   守护进程，比如sshd、crond等
+</code></pre>
+<a id="more"></a>
+<h4 id="安装包组"><a href="#安装包组" class="headerlink" title="安装包组"></a>安装包组</h4><pre><code class="shell">yum grouplist  查看已安装包组或未安装包组
+
+yum groupinstall &quot;包组名&quot;
+</code></pre>
+<h5 id="如何检查22端口是否畅通？"><a href="#如何检查22端口是否畅通？" class="headerlink" title="如何检查22端口是否畅通？"></a>如何检查22端口是否畅通？</h5><pre><code class="shell">1. telnet 10.0.0.200 22
+    工具安装：yum install -y telnet
+2. 方法1：ss -lntup |grep 22  
+   方法2：netstat -lntup |grep 22
+   方法3：lsof -i:22
+3. nmap -p 22 10.0.0.200
+   工具安装：yum install -y nmap
+</code></pre>
+<pre><code>nmap知识扩展：
+nmap -p 22 10.0.0.0/24   扫描并显示整个局域网开启22端口的机器
+</code></pre><pre><code class="shell">[root@oldboyedu36-nb ~]#cat oldboy.txt 
+oldboyedu.com
+要求：把oldboyedu.com改为com.oldboyedu ?
+
+[root@oldboyedu36-nb ~]# sed -r &#39;s#(^.*)\.(.*$)#\2.\1#g&#39; oldboy.txt
+com.oldboyedu
+
+[root@oldboyedu36-nb ~]# sed  -ri.bak &#39;s#(^.*)\.(.*$)#\2.\1#g&#39; oldboy.txt
+// 替换之前先进行备份
+
+ -i 参数用于备份，该参数一定要放在-r参数后面，比如：-ri.bak
+</code></pre>
+<h5 id="vi-vim快捷方式"><a href="#vi-vim快捷方式" class="headerlink" title="vi/vim快捷方式"></a>vi/vim快捷方式</h5><pre><code class="shell">复制当前这一行的内容: yy 
+
+粘贴:p
+
+剪切(删除): dd
+
+撤销:u
+
+vimtutor  //vim帮助文档
+</code></pre>
+<h5 id="history"><a href="#history" class="headerlink" title="history"></a>history</h5><pre><code class="shell">history  查看历史命令
+history |tail   查看最近10个命令
+!ping    使用最近一次包含ping字符的命令
+</code></pre>
+<h5 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h5><pre><code class="shell">sed -n &#39;/你要找的内容（正则）/p&#39; oldboy.txt    //sed查找内容
+
+查找-示例1：
+sed -n &#39;/^oldboy/p&#39; oldboy.txt        -n和p 意思是临时显示内容（没有实际修改）
+
+删除某行-示例：
+sed &#39;/你要找的内容/d&#39;  oldboy.txt       d表示删除
+
+替换-示例：
+sed -n &#39;/3306/s#3306#3389#gp&#39; services     //3306端口改为3389
+
+sed -n &#39;/3306/p&#39; services |sed &#39;s#3306#3389#g&#39;   //3306端口改为3389。
+
+s和g组合表示全局替换（s替换，g表示全局）
+注：-n禁止与-i一起使用，否则会造成源文件内容被清空
+
+sed -i &#39;/3306/s#3306#3389#gp&#39; services     //正式写入文件
+sed -n &#39;/3389/p&#39; services   //查看修改结果
+</code></pre>
+<h4 id="取IP地址-跟大牛学命令"><a href="#取IP地址-跟大牛学命令" class="headerlink" title="取IP地址(跟大牛学命令)"></a>取IP地址(跟大牛学命令)</h4><pre><code class="shell">awk取IP地址思路：
+ifconfig eth0 |awk -F &#39;[ :]+&#39; &#39;{print}&#39;   打印所有
+ifconfig eth0 |awk -F &#39;[ :]+&#39; &#39;/inet addr/{print}&#39; 打印inet addr的行
+ifconfig eth0 |awk -F &#39;[ :]+&#39; &#39;/inet addr/{print $4}&#39;  取IP列
+
+sed取IP
+ifconfig eth0 |sed -rn &#39;s###gp&#39;   sed查找替换打印-标准格式
+ifconfig eth0 |sed -rn &#39;s#^.*inet addr:(.*) Bcast:.*#\1#gp&#39;
+</code></pre>
+<h5 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h5><pre><code class="shell">tar zcf /tmp/etc-2017-06-21.tar.gz /etc/ 
+tar tf etc-2017-06-21.tar.gz   不压缩直接查看压缩文件
+
+zip压缩解压
+zip  services.zip /etc/services   zip压缩
+unzip services.zip                unzip解压
+</code></pre>
+<h5 id="重要文件md5检查"><a href="#重要文件md5检查" class="headerlink" title="重要文件md5检查"></a>重要文件md5检查</h5><pre><code class="shell">[root@oldboy202 ~]# md5sum oldboy.txt 
+ccd2a6bf2dd40cd57997121d46db06a7  oldboy.txt
+[root@oldboy202 ~]# md5sum oldboy.txt &gt; check.sum
+[root@oldboy202 ~]# md5sum -c check.sum 
+oldboy.txt: OK
+[root@oldboy202 ~]# echo haha &gt;&gt; oldboy.txt    改变内容，测试检查.
+[root@oldboy202 ~]# md5sum -c check.sum 
+oldboy.txt: FAILED
+md5sum: WARNING: 1 of 1 computed checksum did NOT match
+</code></pre>
+<h5 id="测试题"><a href="#测试题" class="headerlink" title="测试题"></a>测试题</h5><pre><code class="shell">1. 查找出/tmp目录下面修改时间是7天以前，大小在50k到2M之间，并以.log结尾的文件把这些文件复制到/data目录
+方法一：
+find /tmp/ -type f -mtime +7 -size +50k -size -2M -name &quot;*.log&quot;|xargs -i cp {} /data
+默认xargs不支持花括号，加速-i参数就可以用{}花括号了。
+
+方法二：
+find /tmp/ -type f -mtime +7 -size +50k -size -2M -name &quot;*.log&quot; -exec cp {} /tmp \;
+{}表示find命令找到的文件。
+
+-mtime +7表示7天之前，7表示第7天，-7表示最近7天
+
+方法三:
+find /tmp/ -type f -mtime +7 -size +50k -size -2M -name &quot;*.log&quot;|xargs  cp -t /data
+
+方法四：
+cp $( find /oldboy/ -type f -name &quot;*.log&quot; -size +1M) /tmp/b
+
+查找/oldboy目录下所有7天以前的，以log结尾的，并且大于1M的文件，把这些文件移动到/tmp下.
+find /oldboy  -type f -size +1M -name &quot;*.log&quot; -mtime +7 | xargs -i mv {} /tmp/
+
+2. 查找出/tmp目录下面修改时间是7天以前，大小在50k到2M之间，并以.log结尾的文件
+   find /tmp/ -type f -mtime +7 -size +50k -size -2M -name &quot;*.log&quot; 
+   这是个非常常用的参数-size根据文件大小查找文件
+   -size +50k 表示 大于50k的文件
+   -size -2M 表示  小于2M的文件
+   在find命令中，默认就表示并且 -size +50k 并且 -size -2M 
+
+
+3. 在上题的基础上，使用命令调换passwd文件里root位置和/bin/bash位置，即第一列和最后一列位置调换
+方法1：
+[root@oldboy202 ~]# head passwd |sed -r &#39;s#(^.*)(:x.*:)(.*)#\3\2\1#g&#39;
+/bin/bash:x:0:0:root:/root:root
+/sbin/nologin:x:1:1:bin:/bin:bin
+/sbin/nologin:x:2:2:daemon:/sbin:daemon
+/sbin/nologin:x:3:4:adm:/var/adm:adm
+
+方法3：
+awk -F &#39;:&#39; &#39;{OFS=&quot;:&quot;;print}&#39; /etc/passwd  固定格式
+awk -F &#39;:&#39;&#39;{OFS=&quot;:&quot;;tmp=$1;$1=$7;$7=tmp;print}&#39; /etc/passwd    
+第一个冒号：是输入分割
+第二个冒号：表示OFS输出分割字符
+tmp可以理解为一个空箱子，先把$1的苹果装箱子，然后把$1的苹果放到$7香蕉的位置,最后$7的香蕉装箱子放到前面位置。
+
+
+4. 输出test.txt文件内容时，不包含trainning字符串的命令
+   [root@oldboy202 ~]# cat test.txt 
+   trainning
+   fanbingbing
+   lidao
+   方法1：
+   [root@oldboy202 ~]# grep &quot;^[^trainning]&quot; test.txt 
+   fanbingbing
+   lidao
+   方法2：
+   [root@oldboy202 ~]# egrep -v &quot;^trainning&quot; test.txt
+   fanbingbing
+   lidao
+   方法3：
+   [root@oldboy202 ~]# awk &#39;!/trainning/&#39; test.txt     在awk中!表示取反
+   fanbingbing
+   lidao
+
+
+5. 取出文件ett.txt]()的第30到40行的内容。
+   环境创建：seq 20 120 &gt; ett.txt
+
+     [root@oldboy202 ~]# sed -n &#39;30,40p&#39; ett.txt
+     [root@oldboy202 ~]# awk &#39;NR==30,NR==40&#39; ett2.txt 
+     [root@oldboy202 ~]# grep -n &quot;.&quot; ett2.txt |grep -A10 &quot;^30&quot;
+     [root@oldboy202 ~]# awk &#39;NR&gt;=30 &amp;&amp; NR&lt;=40&#39; ett.txt
+
+6. 如何把/data目录下所有包含oldboy的目录（可能目录的目录的目录里还有oldboy目录） 目录都打包出来。要求:解压打包后的目录结构不能改变。
+   find /data/ -type d -name &quot;oldboy&quot; |xargs tar zcf data.tar.gz
+   tar zcf data.tar.gz  ${find /data/ -type d -name &quot;oldboy&quot;}
+
+   find /data/ -type d -name &quot;oldboy&quot; -exec tar zcf data.tar.gz {} \;
+   注：-exec find命令找到一个文件就给后面的命令处理一次，而压缩名字一直没变，所以多次压缩结果均会被覆盖，最后压缩包里面只有1个最新被压缩的目录
+
+
+   tar xf data.tar.gz  不解压直接看压缩包内容
+
+7. 把/etc/目录打包压缩放在/tmp目录下面，并给压缩包加上一个时间，etc-2017-06-17.tar.gz
+   tar zcf /tmp/etc-$(date +%F).tar.gz  /etc/
+
+8. 将题上题中的 oldboy.txt 文件内容通过命令过滤只输出如下内容：
+   inet addr:10.0.0.202  Bcast:10.0.0.255  Mask:255.255.255.0
+   输出为
+   10.0.0.8 10.0.0.255 255.255.255.0
+
+   awk -F &quot;[ :]&quot; &#39;{print $3,$5,$7}&#39; oldboy.txt      
+   awk -F &quot;[^0-9.]+&quot; &quot;{print $2,$3,$4}&quot; oldboy.txt
+   sed -r &#39;s#[^0-9.]+# #g&#39; /data/oldboy/oldboy.txt 
+   //除了数字和点以外的字符都替换为空格
+
+9. 查找出/data目录下所有以.txt结尾的文件并且把文件中的trainning修改为oldboy. （不少于2种方法） 
+
+    find /data -type f -name &quot;*.txt&quot;
+    find /data -type f -name &quot;*.txt&quot; |xargs sed &#39;s#trainning#oldboy#g&#39;
+    sed &#39;s#trainning#oldboy#g&#39; $(find /data -type f -name &quot;*.txt&quot; )
+    find /data -type f -name &quot;*.txt&quot; -exec sed &#39;s#tranning#oldboy#g&#39; {} \;
+</code></pre>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><pre><code class="shell">总结：
+find
+-maxdepth 最大的深度 最深的目录层数 
+-type 类型 d | f 
+-name 名字 &quot;*.log&quot;
+-size 大小 
+      +10k
+      -10k
+      k M G
+-mtime 修改时间 +7 7天以前 
+
+
+
+sed 取行 查找替换 删除文件内容
+sed &#39;找谁干啥&#39;
+找谁
+1.固定的行号 
+2p 
+2,10p
+干啥
+#sed里面的命令 
+#p---print      显示出来 需要和-n 配合 
+#s---substitute 替换 s#oldboy#oldgirl#g  (global 全局) s和g放在一起表示全局替换
+#d---delete     删除某行 （grep -v )
+
+awk
+-F 指定每一列的分隔符  菜刀
+ NR行号 
+ &#39;/找谁/&#39;
+ &#39;NR==2&#39;
+ &#39;NR==2,NR==10&#39;
+</code></pre>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-06-21T09:24:04.795Z" itemprop="dateUpdated">2017-06-21 17:24:04</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/17/老男孩37期-Day8-往期知识点-回顾/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/知识点回顾/">知识点回顾</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/&title=《老男孩37期-Day8-往期知识点-回顾》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/&title=《老男孩37期-Day8-往期知识点-回顾》 — Gary Wu&source=检测网站访问速度Chrome浏览器按F12 -- Network--刷新网页就可以看到网页加载完成时间、状态码、页面大小等信息。
+查看进程ps -ef 查..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩37期-Day8-往期知识点-回顾》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/21/Shadowsocks-翻墙利器/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Shadowsocks-翻墙利器</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/16/正则表达式egrep-sed-awk-整理总结/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">正则表达式egrep/sed/awk-整理总结</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/&title=《老男孩37期-Day8-往期知识点-回顾》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/&title=《老男孩37期-Day8-往期知识点-回顾》 — Gary Wu&source=检测网站访问速度Chrome浏览器按F12 -- Network--刷新网页就可以看到网页加载完成时间、状态码、页面大小等信息。
+查看进程ps -ef 查..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩37期-Day8-往期知识点-回顾》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/17/老男孩37期-Day8-往期知识点-回顾/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

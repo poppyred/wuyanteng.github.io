@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>cacti接入微信告警功能 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,cacti,微信,微信告警">
+    <meta name="description" content="cacti接入微信告警功能">
+<meta name="keywords" content="高级运维,cacti,微信,微信告警">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cacti接入微信告警功能">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="cacti接入微信告警功能">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-20T11:22:08.608Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cacti接入微信告警功能">
+<meta name="twitter:description" content="cacti接入微信告警功能">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">cacti接入微信告警功能</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">cacti接入微信告警功能</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-20T08:04:56.000Z" itemprop="datePublished" class="page-time">
+  2018-04-20
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#插件安装"><span class="post-toc-number">1.</span> <span class="post-toc-text">插件安装</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置微信告警代码"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置微信告警代码</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置触发消息脚本"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置触发消息脚本</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#测试微信脚本是否可用"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试微信脚本是否可用</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置告警阈值并测试微信收取"><span class="post-toc-number">5.</span> <span class="post-toc-text">配置告警阈值并测试微信收取</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#故障处理-流量图不能显示"><span class="post-toc-number">6.</span> <span class="post-toc-text">故障处理:流量图不能显示</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-cacti接入微信告警功能"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">cacti接入微信告警功能</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-20 16:04:56" datetime="2018-04-20T08:04:56.000Z"  itemprop="datePublished">2018-04-20</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>cacti接入微信告警功能
+</code></pre><a id="more"></a>
+<h5 id="插件安装"><a href="#插件安装" class="headerlink" title="插件安装"></a>插件安装</h5><pre><code>需要cacti安装thold与settings插件并启用插件
+</code></pre><p>参考：<a href="https://wuyanteng.github.io/2017/04/13/cacti%E9%85%8D%E7%BD%AE%E9%82%AE%E4%BB%B6%E5%91%8A%E8%AD%A6/">插件安装</a></p>
+<h5 id="配置微信告警代码"><a href="#配置微信告警代码" class="headerlink" title="配置微信告警代码"></a>配置微信告警代码</h5><pre><code>vi /var/www/cacti/plugins/thold/thold_functions.php
+</code></pre><pre><code> $message = str_replace(&#39;&lt;GRAPH&gt;&#39;, &quot;&lt;br&gt;&lt;img src=&#39;&quot; . $val[&#39;file&#39;] . &quot;&#39;&gt;&lt;br&gt;Could not open!&lt;br&gt;&quot; . $val[&#39;file&#39;], $message);
+          }
+     }
+}
+
+########## 在这个位置添加如下代码 ###############
+$msg_wx = strip_tags(str_replace(&#39;&lt;br&gt;&#39;, &quot;\n&quot;, $message));
+$msg_wx = trim($msg_wx);
+$msg_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $msg_wx);
+$sub_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $subject);
+$file_title  = &#39;/tmp/wechat.txt&#39;;
+$file_message  = &#39;/tmp/wechat_message.txt&#39;;
+if($f  = file_put_contents($file_title, $sub_wx))   
+if($f  = file_put_contents($file_message,  $msg_wx))
+shell_exec(&quot;/etc/wechat.sh&quot;);
+
+########## 代码添加-结束 #######################
+
+$text = array(&#39;text&#39; =&gt; &#39;&#39;, &#39;html&#39; =&gt; &#39;&#39;);
+   if ($filename == &#39;&#39;) {
+        $message = str_replace(&#39;&lt;br&gt;&#39;,  &quot;\n&quot;, $message);
+        $message = str_replace(&#39;&lt;BR&gt;&#39;,  &quot;\n&quot;, $message);
+        $message = str_replace(&#39;&lt;/BR&gt;&#39;, &quot;\n&quot;, $message);
+</code></pre><pre><code>上面添加代码注释：
+
+//删除message中的html标签,并将&lt;br&gt;替换为换行符\n
+$msg_wx = strip_tags(str_replace(&#39;&lt;br&gt;&#39;, &quot;\n&quot;, $message));    
+
+//整理msg_wx字符串
+$msg_wx = trim($msg_wx); 
+
+//转换编码为utf-8，防止乱码
+ $msg_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $msg_wx);
+
+//转换编码为utf-8，防止乱码
+$sub_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $subject);  
+
+//要写入文件的文件名（可以是任意文件名），如果文件不存在，将会创建一个
+$file_title  = &#39;/tmp/wechat.txt&#39;;       
+
+//要写入文件的文件名（可以是任意文件名），如果文件不存在，将会创建一个
+$file_message  = &#39;/tmp/wechat_message.txt&#39;;  
+
+//将subject参数的值保存到file_title中
+if($f  = file_put_contents($file_title, $sub_wx))   
+
+//将msg_wx参数的值保存到file_message中
+if($f  = file_put_contents($file_message,  $msg_wx))
+
+//运行wechat.sh文件，进行微信报警操作。
+shell_exec(&quot;/etc/wechat.sh&quot;);                       
+</code></pre><h5 id="配置触发消息脚本"><a href="#配置触发消息脚本" class="headerlink" title="配置触发消息脚本"></a>配置触发消息脚本</h5><pre><code># vi /etc/wechat.sh
+
+#微信企业号的CropID
+CropID=&#39;xxxxxxxxxxxx&#39;
+#企业号应用Secret
+Secret=&#39;xxxxxxxxxxxxxxxxxxxxxx&#39;
+GURL=&quot;https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$CropID&amp;corpsecret=$Secret&quot;
+Gtoken=$(/usr/bin/curl -s -G $GURL |  awk -F &quot;[\&quot;:,]&quot; &#39;{print $15}&#39;)
+PURL=&quot;https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=$Gtoken&quot;
+function body() {
+#Appid 填写企业号中建立的报警APP的ID
+local int AppID=1
+#此处填写报警接收用户，全部报警可留空
+local UserID=&quot;@all&quot;
+local PartyID=&quot;@all&quot;
+local TagID=&quot;@all&quot;
+Ent=$&#39;\n&#39;
+#应cactifans群内要求，添加Cacti微信报警日期参数
+Date=$(date &#39;+%Y年%m月%d日 %H:%M:%S\n\n&#39;)
+#读取/tmp/wechat.txt文件中内容到变量Tit
+Tit=$(cat /tmp/wechat.txt)
+#拼接msg主体文件,包含日期,主题,报警内容.并删除报警内容中的&#39;%&#39;号.
+Msg=$Date$Tit$Ent$(cat /tmp/wechat_message.txt|sed &#39;s/%//g&#39;)
+#获取wechat_message.txt中的url行内容
+Url=$(grep  &quot;http&quot; /tmp/wechat_message.txt|sed  &#39;s/URL: //g&#39;)
+Pic_tmp=$(grep  &quot;http&quot; /tmp/wechat_message.txt|sed  &#39;s/URL: //g&#39;|sed &#39;s/\/graph.php/\/graph_image.php/g&#39;)
+
+#在此修改图片大小，防止图像显示不全,并判断图片文件是否存在。防止宕机出现图片报警
+if [ ! -n &quot;$Pic_tmp&quot; ] ;then
+    Pic=&quot;&quot;
+else
+    Pic=$Pic_tmp$&#39;&amp;graph_height=215&amp;graph_width=424&#39;
+fi
+printf &#39;{\n&#39;
+printf &#39;\t&quot;touser&quot;: &quot;&#39;&quot;$UserID&quot;\&quot;&quot;,\n&quot;
+printf &#39;\t&quot;toparty&quot;: &quot;&#39;&quot;$PartyID&quot;\&quot;&quot;,\n&quot;
+printf &#39;\t&quot;totag&quot;: &quot;&#39;&quot;$TagID&quot;\&quot;&quot;,\n&quot;
+printf &#39;\t&quot;msgtype&quot;: &quot;news&quot;,\n&#39;
+printf &#39;\t&quot;agentid&quot;: &quot;&#39;&quot; $AppID &quot;\&quot;&quot;,\n&quot;
+printf &#39;\t&quot;news&quot;: {\n&#39;
+printf &#39;\t&quot;articles&quot;: [\n&#39;
+printf &#39;{\n&#39;
+printf &#39;\t\t&quot;title&quot;: &quot;&#39;&quot;$Tit&quot;\&quot;,&quot;\n&quot;
+printf &#39;\t\t&quot;description&quot;: &quot;&#39;&quot;$Msg&quot;\&quot;,&quot;\n&quot;
+printf &#39;\t\t&quot;url&quot;: &quot;&#39;&quot;$Url&quot;\&quot;,&quot;\n&quot;
+printf &#39;\t\t&quot;picurl&quot;: &quot;&#39;&quot;$Pic&quot;\&quot;,&quot;\n&quot;
+printf &#39;\t}\n&#39;
+printf &#39;\t]\n&#39;
+printf &#39;\t}\n&#39;
+printf &#39;}\n&#39;
+}
+curl -l -H &quot;Content-type: application/json&quot; -X POST -d &quot;$(body )&quot; $PURL
+</code></pre><h5 id="测试微信脚本是否可用"><a href="#测试微信脚本是否可用" class="headerlink" title="测试微信脚本是否可用"></a>测试微信脚本是否可用</h5><pre><code>在/tmp/wechat.txt和/tmp/wechat_message.txt中随便填写一些内容，然后运行微信脚本
+
+echo &quot;主题123&quot; &gt; /tmp/wechat.txt
+echo &quot;主体内容-测试456&quot; &gt; /tmp/wechat_message.txt
+sh  /etc/wechat.sh
+chmod +x /etc/wechat.sh
+
+注:测试完成后,需要删除/tmp/wechat* 文件，否则会出现权限问题导致数据无法写入
+</code></pre><h5 id="配置告警阈值并测试微信收取"><a href="#配置告警阈值并测试微信收取" class="headerlink" title="配置告警阈值并测试微信收取"></a>配置告警阈值并测试微信收取</h5><pre><code>略
+</code></pre><h5 id="故障处理-流量图不能显示"><a href="#故障处理-流量图不能显示" class="headerlink" title="故障处理:流量图不能显示"></a>故障处理:流量图不能显示</h5><pre><code>注意：如果流量告警中无法显示流量图，可以做如下修改
+
+#取消cacti的图像验证配置
+# vi /var/www/cacti/graph_image.php
+
+#include(&quot;./include/auth.php&quot;);         #添加注释
+include_once(&quot;./lib/rrd.php&quot;);
+include(&quot;./include/global.php&quot;);        #添加这一行
+</code></pre><p>参考: <a href="http://blog.51cto.com/icenycmh/1940443" target="_blank" rel="noopener">51CTO</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-20T11:22:08.608Z" itemprop="dateUpdated">2018-04-20 19:22:08</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/04/20/cacti接入微信告警功能/" target="_blank" rel="external">https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cacti/">cacti</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/微信/">微信</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/微信告警/">微信告警</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/&title=《cacti接入微信告警功能》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/&title=《cacti接入微信告警功能》 — Gary Wu&source=cacti接入微信告警功能
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cacti接入微信告警功能》 — Gary Wu&url=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/23/hadoop常用命令/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">hadoop常用命令</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/20/查看占用内存或CPU最多的进程/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">查看占用内存或CPU最多的进程</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/&title=《cacti接入微信告警功能》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/&title=《cacti接入微信告警功能》 — Gary Wu&source=cacti接入微信告警功能
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cacti接入微信告警功能》 — Gary Wu&url=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

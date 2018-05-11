@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>haproxy_nginx高可用负载均衡 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,nginx,负载均衡,keepalived,haproxy,lvs">
+    <meta name="description" content="目录：  实验环境 Nginx预安装配置 haproxy原理、编译安装与配置">
+<meta name="keywords" content="高级运维,nginx,负载均衡,keepalived,haproxy,lvs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="haproxy_nginx高可用负载均衡">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="目录：  实验环境 Nginx预安装配置 haproxy原理、编译安装与配置">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ha%E6%8B%93%E6%89%91%E5%9B%BE.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/haproxy_web.png">
+<meta property="og:updated_time" content="2017-09-23T06:38:42.518Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="haproxy_nginx高可用负载均衡">
+<meta name="twitter:description" content="目录：  实验环境 Nginx预安装配置 haproxy原理、编译安装与配置">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ha%E6%8B%93%E6%89%91%E5%9B%BE.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">haproxy_nginx高可用负载均衡</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">haproxy_nginx高可用负载均衡</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-04T12:55:17.000Z" itemprop="datePublished" class="page-time">
+  2017-09-04
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实验环境"><span class="post-toc-number">1.</span> <span class="post-toc-text">实验环境</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Nginx-服务器配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">Nginx 服务器配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#haproxy-原理"><span class="post-toc-number">3.</span> <span class="post-toc-text">haproxy 原理</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-keepalived-haproxy-nginx高可用负载均衡"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">haproxy_nginx高可用负载均衡</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-04 20:55:17" datetime="2017-09-04T12:55:17.000Z"  itemprop="datePublished">2017-09-04</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>目录：</p>
+<ol>
+<li>实验环境</li>
+<li>Nginx预安装配置</li>
+<li>haproxy原理、编译安装与配置</li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><pre><code>操作系统：CentOS7
+服务器：4台
+关闭firewalld和selinux
+</code></pre><p>拓扑如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ha%E6%8B%93%E6%89%91%E5%9B%BE.png" alt="拓扑" title="">
+                </div>
+                <div class="image-caption">拓扑</div>
+            </figure>
+<h4 id="Nginx-服务器配置"><a href="#Nginx-服务器配置" class="headerlink" title="Nginx 服务器配置"></a>Nginx 服务器配置</h4><p>[未特殊说明默认]在nginx1与nginx2同时配置</p>
+<pre><code>1. 安装阿里云基本源
+   http://mirrors.aliyun.com/help/centos
+
+2. 安装nginx
+    yum install -y nginx
+
+3. 修改80端口为8080
+   vim /etc/nginx/nginx.conf
+   listen       8080 default_server;
+
+4. 启动nginx
+   systemctl enable nginx
+   systemctl start nginx
+
+5. 简单配置用于区分nginx1与nginx2
+   Nginx1上配置：
+   echo &quot;nginx1&quot; &gt; /usr/share/nginx/html/index.html
+
+    Nginx2上配置：
+    echo &quot;nginx2&quot; &gt; /usr/share/nginx/html/index.html
+
+6. 访问测试
+</code></pre><h4 id="haproxy-原理"><a href="#haproxy-原理" class="headerlink" title="haproxy 原理"></a>haproxy 原理</h4><blockquote>
+<p>haproxy是什么？</p>
+</blockquote>
+<pre><code>HAProxy是一个免费的负载均衡软件，HAProxy提供了L4(TCP)和L7(HTTP)两种负载均衡能力，具备丰富的功能。
+</code></pre><blockquote>
+<p>haproxy的核心功能</p>
+</blockquote>
+<pre><code>1. 负载均衡：L4和L7两种模式，支持RR/静态RR/LC/IP Hash/URI Hash/URL_PARAM Hash/HTTP_HEADER Hash等丰富的负载均衡算法
+
+2. 健康检查：支持TCP和HTTP两种健康检查模式
+
+3. 会话保持：对于未实现会话共享的应用集群，可通过Insert Cookie/Rewrite Cookie/Prefix Cookie，以及上述的多种Hash方式实现会话保持
+
+4. SSL：HAProxy可以解析HTTPS协议，并能够将请求解密为HTTP后向后端传输
+HTTP请求重写与重定向
+
+5. 监控与统计：HAProxy提供了基于Web的统计信息页面，展现健康状态和流量数据。基于此功能，使用者可以开发监控程序来监控HAProxy的状态
+</code></pre><blockquote>
+<p>Haproxy主要工作模式</p>
+</blockquote>
+<pre><code>1.tcp模式:该模式下，在客户端和服务器之间将建立一个全双工的连接，且不会对7层的报文做任何处理的简单模式。此模式默认，通常用于SSL、SSH、SMTP应用。
+
+2.http模式（一般使用）：该模式下，客户端请求在转发给后端服务器之前会被深度分析，所有不与RFC格式兼容的请求都会被拒绝。
+</code></pre><blockquote>
+<p>Haproxy 8种负载均衡方法</p>
+</blockquote>
+<pre><code>① roundrobin : 基于权重轮循。动态算法：支持权重的运行时调整，支持慢启动；仅支持最大4095个后端活动主机 
+② static-rr : 基于权重轮循。静态算法：不支持权重的运行时调整及慢启动；但后端主机数量无限制
+③ source : 基于请求源IP的算法。对请求的源IP进行hash运算，然后将结果与后端服务器的权重总数想除后转发至某台匹配服务器。使同一IP客户端请求始终被转发到某特定的后端服务器。
+④ leastconn : 最小连接。（适合数据库负载均衡，不适合会话短的环境） 
+⑤ uri : 对部分或整体URI进行hash运算，再与服务器的总权重想除，最后转发到匹配后端。
+⑥ uri_param : 根据URL路径中参数进行转发，保证在后端服务器数量不变的情况下，同一用户请求分发到同一机器。
+⑦ hdr(&lt;name&gt;) : 根据http头转发，如果不存在http头。则使用简单轮循。
+</code></pre><blockquote>
+<p>编译安装haproxy</p>
+</blockquote>
+<p>官方下载地址：<a href="https://www.haproxy.org/download/1.7/src/" target="_blank" rel="noopener">https://www.haproxy.org/download/1.7/src/</a></p>
+<pre><code>在两台haproxy上操作：
+yum groupinstall -y &quot;Development tools&quot;
+wget https://www.haproxy.org/download/1.7/src/haproxy-1.7.7.tar.gz
+tar -zxvf haproxy-1.7.7.tar.gz
+cd haproxy-1.7.7
+make TARGET=linux2628  ARCH=X86_64 PREFIX=/usr/local/haproxy
+make install PREFIX=/usr/local/haproxy
+</code></pre><pre><code>注意：TARGET=Linux2628，TARGET则根据当前操作系统内核版本指定；
+     ARCH=X86_64  系统位数;
+     PREFIX=/usr/local/haproxy 指定安装路径;
+
+- linux22     for Linux 2.2
+- linux24     for Linux 2.4 and above (default)
+- linux24e    for Linux 2.4 with support for a working epoll (&gt; 0.21)
+- linux26     for Linux 2.6 and above
+- linux2628   for Linux 2.6.28, 3.x, and above (enables splice and tproxy)
+</code></pre><blockquote>
+<p>配置haproxy</p>
+</blockquote>
+<pre><code>创建管理用户
+useradd -s /sbin/nologin -M haproxy
+
+创建haproxy配置文件
+mkdir /etc/haproxy -p
+</code></pre><blockquote>
+<p>创建haproxy.cfg配置文件</p>
+</blockquote>
+<p>vim /etc/haproxy/haproxy.cfg</p>
+<pre><code>Haproxy配置文件-区域介绍
+
+global  全局配置段
+    进程及安全配置相关的参数
+    性能调整相关参数
+    Debug相关参数
+（proxies 代理配置段）
+    default 默认配置 （fronttend backend listen 三个的默认参数）
+    frontend  前端 定义一系列监听套字节，接收客户端请求
+    backend  后端 定义一系列后端服务器，请求转发
+    listen 前后端直接关联
+</code></pre><blockquote>
+<p>配置文件详解</p>
+</blockquote>
+<pre><code>global
+    chroot /usr/local/haproxy   #工作目录chroot
+    log 127.0.0.1 local3 info
+    #全局日志配置，使用127.0.0.1的rsyslog服务中local3日志设备，等级info
+    maxconn 4096  #每个进程最大并发数
+    nbproc 1   #后台进程数量
+    user nobody
+    group nobody
+    daemon    #后台程序模式工作
+    pidfile /usr/local/haproxy/haproxy.pid    #HAProxy pid文件存储目录
+    #tune.bufsize 16384  #设置buffer(B)
+</code></pre><pre><code>defaults
+    mode http  #默认的模式mode {tcp|http|health}; tcp是4层,http是7层,health只会返回OK
+    retries 3  #连接后端服务器重试次数，超出后标为不可用
+    timeout connect 10S  #连接服务器最长等待时间（ms）
+    timeout client 20s   #连接客户端发送数据最长等待时间。
+    timeout server 30s   #服务器回复客户端最长等待时间。
+    timeout check 5s     #对后端服务器的检测超时时间。 
+
+
+listen stats   #定义haproxy web
+   mode http
+   bind 0.0.0.0:8888
+   stats enable
+   stats uri     /haproxy-status 
+   stats auth    haproxy:saltstack     #配置haproxy web登陆的账户密码
+</code></pre><pre><code>frontend http_80_in  #定义前端虚拟节点名称
+
+    bind *:80 
+    # bind [&lt;address&gt;:&lt;port_range&gt;] interface &lt;interface&gt; 监听socket套字节定义
+    mode http
+    option httplog    #启用日志记录HTTP请求。
+    option forwardfor #启用后后端服务器可以获得客户端IP
+    option http-keep-alive #开启长连接
+    option httpclose  #客户端和服务器完成一次连接请求后，HAProxy主动关闭TCP链接（优化选项）
+    log global        #使用全局日志配置
+    default_backend webserver  #指定后端服务池（需要与backend定义webserver一致）
+</code></pre><pre><code>backend webserver  #定义后端服务池
+    mode http
+    option redispatch 
+    #用于cookie保持环境。如后端服务器故障，客户端cookie不会刷新，用此来把用户请求强制定向到正常服务器
+    option abortonclose   #负载均衡很高时，自动结束当前队列处理时间长的连接
+    balance roundrobin    #负载均衡算法。
+    cookie SERVERID       #允许向cookie插入SERVERID.下面server可以使用cookie定义   
+    option httpchk GET /index.php #启用HTTP服务状态检测功能
+    #option httpchk &lt;method&gt;  &lt;url&gt; &lt;vesion&gt;
+    #mothod: OPTION、GET、HEAD (其中HEAD仅检测是否返回状态码200 更快，更简单)
+
+
+    server web1 192.168.1.186:80 cookie server1 weight 6 check inter 2000 rise 2 fall 3
+    server web2 192.168.1.188:80 cookie server2 weight 6 check inter 2000 rise 2 fall 3
+
+说明：#server &lt;name&gt; &lt;address&gt;[:port] [param*]
+     #[param*]为后端设定参数
+     #cookie server1 指定后端服务器设置cookie值，目的实现持久连接，指定的cookie值在请求时会被检查，第一次此cookie值将挑选后端服务器将一直被沿用。
+     #weight num权重
+     #check启用后端执行健康检测
+     #inter num 健康状态检测时间间隔
+     #rise num 从故障状态转换至正常需成功检测次数
+     #fall num 从正常转换故障需失败次数
+     #backup 设置后端真实服务器备份服务器，仅在所有真实服务器不可用启用
+</code></pre><pre><code>ACL权限
+
+#3、4层匹配 dst,src 目的IP和源IP（写入frontend中）
+#禁止192.168.0.0/24网段用户访问 
+acl bad src 192.168.0.0/24
+block if bad 
+
+#七层匹配 req.hdr([&lt;&gt;name[,&lt;occ&gt;])
+#用户访问www.server2.com时(报头正则匹配)，代理转发给server2 -i是不区分大小写
+acl www hdr_reg(host) -i ^(www.server2.com)$
+use_backend server2 if www
+
+#acl其他设置
+acl url_static path_end .git .png .css .js （URL请求结尾）
+acl host_www hdr_beg(host) -i www
+acl host_static hdr_beg(host) -i img. video. download. ftp. (域名开头)
+</code></pre><p><strong>日志配置</strong></p>
+<pre><code>vim /etc/rsyslog.d/haproxy.conf
+
+$ModLoad imudp 
+$UDPServerRun 514
+local3.*    /var/log/haproxy
+
+systemctl restart rsyslog
+注：需要重启haproxy服务
+</code></pre><blockquote>
+<p>配置文件参考：</p>
+</blockquote>
+<pre><code>global
+    chroot /usr/local/haproxy
+    log 127.0.0.1 local3 info
+    maxconn 100000
+    nbproc 1
+    user haproxy
+    group haproxy
+    daemon
+    pidfile /usr/local/haproxy/haproxy.pid
+
+defaults
+    mode http
+    maxconn 100000
+    option http-keep-alive
+    retries 3
+    timeout connect 10s
+    timeout client 20s
+    timeout server 30s
+    timeout check 5s
+
+listen stats
+   mode http
+   bind 0.0.0.0:8888
+   stats enable
+   stats uri     /haproxy-status 
+   stats auth    haproxy:saltstack
+
+
+frontend http_80_in
+    bind 10.10.10.25:80 
+    mode http
+    option httplog
+    option forwardfor
+    #option httpclose
+    log global
+    default_backend webserver
+
+
+backend webserver
+    mode http
+    option redispatch 
+    option abortonclose
+    balance roundrobin 
+    cookie SERVERID  
+    option httpchk HEAD / HTTP/1.0
+    server nginx1 10.10.10.23:8080 cookie nginx1 weight 6 check inter 2000 rise 2 fall 3
+    server nginx2 10.10.10.24:8080 cookie nginx2 weight 6 check inter 2000 rise 2 fall 3
+    #server nginx2 10.10.10.30:8080 cookie site.test.com  backup
+</code></pre><blockquote>
+<p>启动haproxy</p>
+</blockquote>
+<pre><code>#启动
+/usr/local/haproxy/sbin/haproxy -f /etc/haproxy/haproxy.cfg   
+
+#检查
+ps -ef |grep haproxy
+lsof -i:80
+
+#访问测试
+http://10.10.10.25
+http://10.10.10.26
+http://10.0.10.25:8888/haproxy-status
+http://10.0.10.26:8888/haproxy-status
+
+#hatop工具可以查看haproxy工作状态，界面类似top
+</code></pre><p><strong>haproxy_web</strong></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/haproxy_web.png" alt="haproxy_web" title="">
+                </div>
+                <div class="image-caption">haproxy_web</div>
+            </figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-23T06:38:42.518Z" itemprop="dateUpdated">2017-09-23 14:38:42</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/haproxy/">haproxy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/keepalived/">keepalived</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lvs/">lvs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/负载均衡/">负载均衡</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/&title=《haproxy_nginx高可用负载均衡》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/&title=《haproxy_nginx高可用负载均衡》 — Gary Wu&source=
+目录：
+
+实验环境
+Nginx预安装配置
+haproxy原理、编译安装与配置
+
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《haproxy_nginx高可用负载均衡》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/07/cacti插件-weathermap安装与使用/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">cacti插件-weathermap安装与使用</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/03/PHP分布式Redis实现session/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">PHP分布式Redis实现session</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/&title=《haproxy_nginx高可用负载均衡》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/&title=《haproxy_nginx高可用负载均衡》 — Gary Wu&source=
+目录：
+
+实验环境
+Nginx预安装配置
+haproxy原理、编译安装与配置
+
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《haproxy_nginx高可用负载均衡》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

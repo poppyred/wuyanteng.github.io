@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>深入理解OpenStack-手动制作qcow2镜像 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Glance,openstack,qcow2,制作镜像">
+    <meta name="description" content="手动制作镜像官方虽提供qcow2系统镜像，但对于有需求的企业来说，还是定制镜像比较靠谱，下面就手动定制一个镜像">
+<meta name="keywords" content="Glance,openstack,qcow2,制作镜像">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解OpenStack-手动制作qcow2镜像">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="手动制作镜像官方虽提供qcow2系统镜像，但对于有需求的企业来说，还是定制镜像比较靠谱，下面就手动定制一个镜像">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-18T08:49:45.026Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解OpenStack-手动制作qcow2镜像">
+<meta name="twitter:description" content="手动制作镜像官方虽提供qcow2系统镜像，但对于有需求的企业来说，还是定制镜像比较靠谱，下面就手动定制一个镜像">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">深入理解OpenStack-手动制作qcow2镜像</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">深入理解OpenStack-手动制作qcow2镜像</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-18T08:34:31.000Z" itemprop="datePublished" class="page-time">
+  2018-01-18
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#手动制作镜像"><span class="post-toc-number">1.</span> <span class="post-toc-text">手动制作镜像</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-深入理解OpenStack-手动制作qcow2镜像"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">深入理解OpenStack-手动制作qcow2镜像</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-18 16:34:31" datetime="2018-01-18T08:34:31.000Z"  itemprop="datePublished">2018-01-18</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="手动制作镜像"><a href="#手动制作镜像" class="headerlink" title="手动制作镜像"></a>手动制作镜像</h4><pre><code>官方虽提供qcow2系统镜像，但对于有需求的企业来说，还是定制镜像比较靠谱，下面就手动定制一个镜像
+</code></pre><a id="more"></a>
+<ul>
+<li>给虚拟机创建一个网络</li>
+</ul>
+<pre><code>手动创建镜像需要确保libvirt运行有default网络，这个网络可以给虚拟机提供上网服务。
+
+查看当前是否启用default网络
+[root@compute ~]# virsh net-list
+ Name                 State      Autostart     Persistent
+----------------------------------------------------------
+ default              active     yes           yes
+
+
+ 注：如果没有启用，使用以下命令启用default
+ virsh net-start default
+</code></pre><ul>
+<li>创建虚拟机</li>
+</ul>
+<pre><code>(1)创建一个目录mkdir -p /data   
+   上传iso镜像到/data目录
+
+(2)创建一个10G的磁盘文件给虚拟机使用
+   qemu-img create -f qcow2 /data/centos.qcow2 10G
+
+(3)安装
+virt-install --virt-type kvm --name centos7.4_x86_64 --ram 1024 \
+--disk /data/centos.qcow2,format=qcow2 \
+--network network=default \
+--graphics vnc,listen=0.0.0.0 --noautoconsole \
+--os-type=linux \
+--location=/data/CentOS-7-x86_64-Minimal-1611.iso
+</code></pre><ul>
+<li>使用TightVNC Viewer客户端连接虚拟机</li>
+</ul>
+<pre><code>要想连接虚拟机就需要执行一条命令来查看刚才新建虚拟机的端口信息
+[root@compute ~]# netstat -lntup |grep kvm
+tcp        0      0 0.0.0.0:5900            0.0.0.0:*               LISTEN      90011/qemu-kvm   
+tcp        0      0 0.0.0.0:5901            0.0.0.0:*               LISTEN      41365/qemu-kvm 
+
+可以看到，当前运行有两台虚拟机，我刚刚创建的虚拟机端口是5901。
+</code></pre><pre><code>运行TightVNC Viewer客户端，Remote Host输入：192.168.56.12:5901 进行连接。连接成功后，就看到操作系统的引导界面了，这时候可以对虚拟机进行系统安装了。也可以根据企业需求进行个性化安装。
+
+安装结束后，点击reboot
+
+注：只有配置了KVM虚拟机，libvirt就会生成一个与操作系统对应的xml文件，其记录了kvm虚拟机的状态。路径如下：/etc/libvirt/qemu/CentOS-6.6-x86_64.xml  
+注：此文件只能通过“virsh edit”命令修改
+</code></pre><ul>
+<li>启动KVM虚拟机</li>
+</ul>
+<pre><code>列出所有虚拟机
+[root@compute ~]# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ 7     instance-00000003              running
+ 12    centos7.4_x86_64               shut off
+
+
+启动虚拟机
+[root@compute ~]# virsh  start  centos7.4_x86_64
+[root@compute ~]# virsh list --all
+
+当此虚拟机再次启动后，再使用TightVNC Viewer客户端，Remote Host输入：192.168.56.12:5901 进行连接。
+
+此时可以在此系统中编辑已经提前准备并测试好的系统初始化脚本，并让脚本开机后运行，测试无误后将此虚拟机关机。（此步骤是把开机初始化脚本给封装到镜像中）
+
+在这个虚拟机系统中运行shutdown -h now 即可
+</code></pre><!-- more -->
+<ul>
+<li>关于系统优化脚本-脚本参考</li>
+</ul>
+<pre><code>#!/bin/bash
+
+set_key(){
+  if [ ! -d /root/.ssh ]; then
+    mkdir -p /root/.ssh
+    chmod 700 /root/.ssh
+  fi
+# Fetch public key using HTTP
+  ATTEMPTS=30
+  FAILED=0
+  while [ ! -f /root/.ssh/authorized_keys ]; do
+    curl -f http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key &gt; /tmp/metadata-key 2&gt;/dev/null
+    if [ &quot;$?&quot; -eq 0 ]; then
+      cat /tmp/metadata-key &gt;&gt; /root/.ssh/authorized_keys
+      chmod 0600 /root/.ssh/authorized_keys
+      restorecon /root/.ssh/authorized_keys
+      rm -f /tmp/metadata-key
+      echo &quot;Successfully retrieved public key from instance metadata&quot;
+      echo &quot;*****************&quot;
+      echo &quot;AUTHORIZED KEYS&quot;
+      echo &quot;*****************&quot;
+      cat /root/.ssh/authorized_keys
+      echo &quot;*****************&quot;
+  else
+      FAILED=`expr $FAILED + 1`
+      if [ $FAILED -ge $ATTEMPTS ];then
+       echo &quot;Failed&quot;
+       break
+      fi
+      sleep 5
+  fi
+done
+}
+
+set_hostname(){
+  echo &quot;hehe&quot;
+  SET_HOSTNAME=$(curl -s http://169.254.169.254/2009-04-04/meta-data/hostname | awk -F &#39;.&#39; &#39;{print $1}&#39;)
+   VM_HOSTNAME=&quot;$SET_HOSTNAME&quot;.example.com
+   hostnamectl set-hostname $VM_HOSTNAME
+}
+
+set_static_ip(){
+  echo &quot;hehe&quot;
+   /bin/cp /tmp/ifcfg-eth0-example /etc/sysconfig/network-scripts/ifcfg-eth0
+   VM_IPADDR=$(curl -s http://169.254.169.254/2009-04-04/meta-data/local-ipv4)
+   sed -i &quot;s/9.9.9.9/$VM_IPADDR/g&quot; /etc/sysconfig/network-scripts/ifcfg-eth0
+}
+
+main(){
+    set_key;
+    set_hostname;
+    set_static_ip;
+    rm -f /tmp/get_metadata.sh
+    /bin/cp /tmp/rc.local /etc/rc.d/rc.local
+}
+main
+</code></pre><!-- more -->
+<blockquote>
+<p>将制作好的/data/centos.qcow2镜像文件上传到Glance</p>
+</blockquote>
+<pre><code>注：在控制节点进行镜像上传
+
+(1)source变量
+source  /scripts/admin-openrc
+
+(2)镜像上传
+openstack image create &quot;CentOS7.4_x86_64&quot; --file /data/centos.qcow2  \
+--disk-format qcow2  --public
+
+(3)openstack dashboard中创建虚拟机,并验证脚本执行情况
+</code></pre><!-- more -->
+<p>附录：virsh命令-使用</p>
+<pre><code>virsh --help
+
+
+virt-clone -o centos7_mini -n centos7_mini15 --auto-clone  #克隆mini，新克隆的为mini15
+-o           #原始机名字，必须为关闭或暂停状态
+-n           #新客户机的名称
+--auto-clone #从原始客户机配置中自动生成克隆名称和存储路径
+--replace    #不检查命名冲突，覆盖任何使用相同名称的客户机
+-f           #可以指定克隆后的主机镜像放在指定目录下
+
+virsh autostart xxx  #让子机随宿主机开机自动启动
+virsh autostart --disable xxx  #解除自动启动
+
+virt-install  #建立kvm虚拟机
+virsh list  #查看正在运行的KVM虚拟机
+virsh list --all  #查看所有KVM虚拟机
+virsh start name   #启动KVM虚拟机
+virsh shutdown name #正常关闭KVM虚拟机
+virsh destroy name  #强制关闭KVM虚拟机(类似于直接断电)
+virsh suspend name  #挂起KVM虚拟机
+virsh resume name  #恢复挂起的KVM虚拟机
+virsh dumpxml name  #查看KVM虚拟机配置文件，可以把输出的内容定义到xml里，用来克隆迁移用。
+virsh edit name  #编辑KVM虚拟机的xml配置文件
+virsh define /etc/libvirt/qemu/name.xml  #定义注册虚拟机，需要先查看xml文件对应的镜像，img等路径是否存在或修改指定路径
+virsh undefine name  #彻底删除KVM虚拟机,不可逆,如果想找回来,需要备份/etc/libvirt/qemu的xml文件
+</code></pre><!-- more -->
+<p>注：gentoo使用livecd安装的过程中，关于安装文件如何上传到livecd的问题，解决方案如下：</p>
+<pre><code>kvm安装安装启动livecd，然后通过桥接联网将文件上传，再执行脚本安装和初始化。最后将qcow2文件上传到glance。最后通过openstack dashboard来使用qcow2镜像安装gentoo
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-18T08:49:45.026Z" itemprop="dateUpdated">2018-01-18 16:49:45</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Glance/">Glance</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openstack/">openstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qcow2/">qcow2</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/制作镜像/">制作镜像</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/&title=《深入理解OpenStack-手动制作qcow2镜像》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/&title=《深入理解OpenStack-手动制作qcow2镜像》 — Gary Wu&source=手动制作镜像官方虽提供qcow2系统镜像，但对于有需求的企业来说，还是定制镜像比较靠谱，下面就手动定制一个镜像
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解OpenStack-手动制作qcow2镜像》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/18/深入理解OpenStack-高级优化/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">深入理解OpenStack-高级优化</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/16/nginx生产环境-案例2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nginx生产环境-案例2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/&title=《深入理解OpenStack-手动制作qcow2镜像》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/&title=《深入理解OpenStack-手动制作qcow2镜像》 — Gary Wu&source=手动制作镜像官方虽提供qcow2系统镜像，但对于有需求的企业来说，还是定制镜像比较靠谱，下面就手动定制一个镜像
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解OpenStack-手动制作qcow2镜像》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

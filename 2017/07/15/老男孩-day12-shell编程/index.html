@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>老男孩-day12-shell | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,shell">
+    <meta name="description" content="什么是shell？shell, 即命令解释器.由命令、变量和流程控制语句有机的结合  CentOS默认shell是/bin/bash">
+<meta name="keywords" content="高级运维,shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="老男孩-day12-shell">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="什么是shell？shell, 即命令解释器.由命令、变量和流程控制语句有机的结合  CentOS默认shell是/bin/bash">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-24T13:45:42.362Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="老男孩-day12-shell">
+<meta name="twitter:description" content="什么是shell？shell, 即命令解释器.由命令、变量和流程控制语句有机的结合  CentOS默认shell是/bin/bash">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">老男孩-day12-shell</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">老男孩-day12-shell</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-15T01:41:43.000Z" itemprop="datePublished" class="page-time">
+  2017-07-15
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是shell？"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么是shell？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#特殊变量"><span class="post-toc-number">2.</span> <span class="post-toc-text">特殊变量</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#写个atm程序"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">写个atm程序</span></a></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#文件类型-判断"><span class="post-toc-number"></span> <span class="post-toc-text">文件类型-判断</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#按照文件类型进行判断"><span class="post-toc-number"></span> <span class="post-toc-text">按照文件类型进行判断</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#判断整数"><span class="post-toc-number">0.0.1.</span> <span class="post-toc-text">判断整数</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#Bash中的“-”与“-”的区别"><span class="post-toc-number">0.0.2.</span> <span class="post-toc-text">Bash中的“[[]]”与“[]”的区别</span></a></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#if语句"><span class="post-toc-number"></span> <span class="post-toc-text">if语句</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#case语句"><span class="post-toc-number"></span> <span class="post-toc-text">case语句</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#for循环语句"><span class="post-toc-number">1.</span> <span class="post-toc-text">for循环语句</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#while语句（又称死循环）"><span class="post-toc-number">2.</span> <span class="post-toc-text">while语句（又称死循环）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#技巧：sh-x-参数会把脚本的执行过程也会显示出来，如："><span class="post-toc-number">2.1.</span> <span class="post-toc-text">技巧：sh -x 参数会把脚本的执行过程也会显示出来，如：</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-老男孩-day12-shell编程"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">老男孩-day12-shell</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-15 09:41:43" datetime="2017-07-15T01:41:43.000Z"  itemprop="datePublished">2017-07-15</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="什么是shell？"><a href="#什么是shell？" class="headerlink" title="什么是shell？"></a>什么是shell？</h4><pre><code>shell, 即命令解释器.由命令、变量和流程控制语句有机的结合
+
+CentOS默认shell是/bin/bash
+</code></pre><a id="more"></a>
+<pre><code>echo &quot;df -h&quot;
+echo &quot;df -h&quot; |bash
+把字符交给bash去执行，然后返回结果。
+</code></pre><p>脚本统一目录：mkdir -p /server/scripts</p>
+<pre><code>$ vim oldboyedu.sh
+# 第一部分
+#!/bin/bash     必须写在首行，当然也可以写为#!/bin/sh(CentOS下/bin/sh是bash的软链)
+# description:  注释。除第一行外，跟在#后面的就可以叫做注释（建议英文注释）
+
+# 第二部分-变量段
+例：
+dir=/usr/var
+
+# 第三部分-命令段
+cd  $dir
+</code></pre><pre><code>脚本添加版权信息
+cd /root 在当前宿主目录下创建.vimrc文件
+vim .vimrc  编辑此文件，添加如下信息保存
+autocmd BufNewFile *.py,*.cc,*.sh,*.java exec &quot;:call SetTitle()&quot;
+
+func SetTitle()  
+    if expand(&quot;%:e&quot;) == &#39;sh&#39;  
+        call setline(1,&quot;#!/bin/bash&quot;)
+        call setline(2, &quot;##############################################################&quot;)  
+        call setline(3, &quot;# File Name: &quot;.expand(&quot;%&quot;))
+        call setline(4, &quot;# Version: V1.0&quot;)
+        call setline(5, &quot;# Author: garywu&quot;)
+        call setline(6, &quot;# Blog: https://wuyanteng.github.io&quot;)
+        call setline(7, &quot;# Created Time : &quot;.strftime(&quot;%F %T&quot;))
+        call setline(8, &quot;# Description:&quot;)
+        call setline(9, &quot;##############################################################&quot;)
+        call setline(10, &quot;&quot;)
+    endif  
+endfunc
+
+vim新建以.sh结尾的文件后，以上脚本内容会自动添加到文本中。
+</code></pre><pre><code>执行脚本
+sh oldboyedu.sh 或 bash oldboyedu.sh
+chmod +x oldboyedu.sh &amp;&amp; ./oldboyedu.sh
+</code></pre><p>定义全局变量</p>
+<pre><code>export OLDBOY=1    注：变量建议大写
+使用export定义全局变量，该变量可以在env里面找到。
+真正永久修改全局变量,需要将该命令添加到/etc/profile中，然后source /etc/profile
+env |grep OLDBOY 查看变量
+</code></pre><p>取消全局变量</p>
+<pre><code>unset OLDBOY   取消全局变量
+同时需要取消/etc/profile或/etc/profile.d目录中取消
+</code></pre><p>变量定义要求</p>
+<pre><code>变量以字母开头，可以存在下划线。但不包括特殊字符
+规范的变量名写法：见名知意
+</code></pre><p>单引号与双引号区别</p>
+<pre><code>单引号：所见即所得
+双引号：解析变量
+</code></pre><h4 id="特殊变量"><a href="#特殊变量" class="headerlink" title="特殊变量"></a>特殊变量</h4><pre><code>位置变量
+$0    获取当前执行的shell脚本文件名
+
+$n    捕获第n个参数值并将其输出；参数以空格隔开，当n为0时，表示脚本文件名。如果n&gt;9需要使用花括号括起来，比如：${10}或${11}等。
+
+$#    主要用来判断传入参数的总个数
+</code></pre><pre><code>位置变量-测试环境
+vim oldboy.sh
+
+echo $0
+echo &quot;第一个参数&quot; $1
+echo &quot;第二个参数&quot; $2
+echo &quot;第三个参数&quot; $3
+echo &quot;总数量&quot; $#
+
+测试
+sh oldboy.sh one two three four
+</code></pre><pre><code>进程状态变量
+$?    返回值如果是0，说明上一条命令执行成功，如果是非0，则说明上一条命令执行失败。
+      使用场景，可以判断上一条命令是否执行成功。
+比如：
+[root@oldboy202 scripts]# ls -l
+total 8
+-rw-r--r--. 1 root root 279 Jul  5 05:01 1.sh
+-rwxr-xr-x. 1 root root 413 Jul  5 06:31 oldboyedu.sh
+[root@oldboy202 scripts]# echo $?
+0
+#返回值0表示执行成功
+
+[root@oldboy202 scripts]# ls /var/www/123
+ls: cannot access /var/www/123: No such file or directory
+[root@oldboy202 scripts]# echo $?
+2
+非0返回值表示执行失败
+</code></pre><p>变量的定义</p>
+<pre><code>1. 直接赋值  例：Dir=/var/log
+2. 传参-变量
+3. read读入-交互式变量
+read -t5 -p &quot;请输入你的姓名:&quot; name     -p设置提示语句；-t5配置输入等待截止时间，单位:秒
+read -s -p &quot;请输入你的密码:&quot; pass      -s 隐藏密码
+</code></pre><h6 id="写个atm程序"><a href="#写个atm程序" class="headerlink" title="写个atm程序"></a>写个atm程序</h6><pre><code>要求：让你输入你的银行卡账号和密码，然后在屏幕上打印你的输入结果。
+#!/bin/bash
+read  -p &quot;请输入你的银行卡卡号：&quot; account
+read  -s -p &quot;请输入你的银行卡密码：&quot; pass
+echo     #此echo命令是换行的意思
+echo &quot;你的卡号为：&quot; $account
+echo “你的密码为：” $pass
+</code></pre><h3 id="文件类型-判断"><a href="#文件类型-判断" class="headerlink" title="文件类型-判断"></a>文件类型-判断</h3><pre><code>示例：
+[ -f /etc/hosts ] &amp;&amp; cp /etc/hosts /tmp || echo &quot;error: 文件不存在&quot;
+[ -f /etc/host ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;
+
+[ -f /etc/host ]  -f前面和host后面语法要求有空格
+
+语法：
+-f 判断文件是否存在
+   例如：[ -f /etc/host ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;
+
+-d 判断目录
+   例如: [ -d /etc/host ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;
+
+-r 判断当前用户是否有读取权限
+   例如：[ -r /etc/shadow ] &amp;&amp; echo &quot;有可读权限&quot; || echo &quot;无可读权限&quot;
+
+-w 判断当前用户是否有写入权限
+-x 判断当前用户是否有可执行权限
+-e 判断目录或文件是否存在
+-z 字符串长度为0则为真，否则不成立.【注：空格也不行】
+   例如: [ -z &quot;&quot; ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot; 表达式成立
+-n 字符串长度不为0则为真，否则不成立
+   例如：[ -n &quot; &quot; ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;
+</code></pre><pre><code>“字符串1” = “字符串2”  若字符串1等于字符串2则为真，可以使用“==”代替“=”
+“字符串1” != “字符串2”   若字符串1不等于字符串2则为真，但不能使用“!==&quot;代替&quot;!=”
+
+字符串判断-示例
+[root@oldboyedu37-nb scripts]# name=oldboy
+[root@oldboyedu37-nb scripts]# [ &quot;$name&quot; == &quot;oldboy&quot; ] &amp;&amp; echo &quot;表达式成立&quot;|| echo &quot;表达式不成立&quot;
+表达式成立
+[root@oldboyedu37-nb scripts]# [ &quot;$name&quot; == &quot;oldgirl&quot; ] &amp;&amp; echo &quot;表达式成立&quot;|| echo &quot;表达式不成立&quot;
+表达式不成立
+[root@oldboyedu37-nb scripts]# [ &quot;$name&quot; != &quot;oldgirl&quot; ] &amp;&amp; echo &quot;表达式成立&quot;|| echo &quot;表达式不成立&quot;
+表达式成立
+</code></pre><h2 id="按照文件类型进行判断"><a href="#按照文件类型进行判断" class="headerlink" title="按照文件类型进行判断"></a>按照文件类型进行判断</h2><table>
+<thead>
+<tr>
+<th>测试选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b 文件</td>
+<td>判断该文件是否存在，并且是否为块设备文件（是块设备文件为真）</td>
+</tr>
+<tr>
+<td>-c 文件</td>
+<td>判断该文件是否存在，并且是否为字符设备文件（是字符设备文件为真）</td>
+</tr>
+<tr>
+<td>-d 文件</td>
+<td>判断该文件是否存在，并且是否为目录（是目录为真）</td>
+</tr>
+<tr>
+<td>-e 文件</td>
+<td>判断该文件是否存在（存在为真）</td>
+</tr>
+<tr>
+<td>-f 文件</td>
+<td>判断该文件是否存在，并且是否为普通文件（是普通文件为真）</td>
+</tr>
+<tr>
+<td>-L 文件</td>
+<td>判断该文件是否存在，并且是否为符号链接文件（是符号链接文件为真）</td>
+</tr>
+<tr>
+<td>-p 文件</td>
+<td>判断该文件是否存在，并且是否为管道文件（是管道文件为真）</td>
+</tr>
+<tr>
+<td>-s 文件</td>
+<td>判断该文件是否存在，并且是否为非空（非空为真）</td>
+</tr>
+<tr>
+<td>-S 文件</td>
+<td>判断该文件是否存在，并且是否为套接字文件（是套接字文件为真）</td>
+</tr>
+</tbody>
+</table>
+<h6 id="判断整数"><a href="#判断整数" class="headerlink" title="判断整数"></a>判断整数</h6><pre><code>-eq     等于equal   
+-ne     不等于 not equal
+-gt     大于 greater than
+-lt     小于less than
+-ge     大于等于greater equal
+-le     小于等于less equal
+
+示例：
+[root@oldboyedu37-nb scripts]# [ 1 -ne 2 ] &amp;&amp; echo &quot;表达式成立&quot;|| echo &quot;表达式不成立&quot;
+表达式成立
+[root@oldboyedu37-nb scripts]# [ 1 -gt 2 ] &amp;&amp; echo &quot;表达式成立&quot;|| echo &quot;表达式不成立&quot;
+表达式不成立
+[root@oldboyedu37-nb scripts]# [ 1 -lt 2 ] &amp;&amp; echo &quot;表达式成立&quot;|| echo &quot;表达式不成立&quot;
+表达式成立
+[root@oldboyedu37-nb scripts]# [ 1 -le 2 ] &amp;&amp; echo &quot;表达式成立&quot;|| echo &quot;表达式不成立&quot;
+表达式成立
+[root@oldboyedu37-nb scripts]# [ 3 -ge 2 ] &amp;&amp; echo &quot;表达式成立&quot;|| echo &quot;表达式不成立&quot;
+表达式成立
+
+注：1&lt;=2 是成立的
+[ 1 -lt 2 ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;
+表达式成立
+
+案例-测试
+#!/bin/bash
+[ $# -eq 2 ] &amp;&amp; echo &quot;参数正确&quot; || echo &quot;请只输入两个参数&quot;
+#Dir=/var/log
+#cd $Dir
+# echo $0
+# echo &quot;第一个参数&quot; $1
+# echo &quot;第二个参数&quot; $2
+#echo &quot;第三个参数&quot; $3
+#echo &quot;总数量&quot; $#
+</code></pre><h6 id="Bash中的“-”与“-”的区别"><a href="#Bash中的“-”与“-”的区别" class="headerlink" title="Bash中的“[[]]”与“[]”的区别"></a>Bash中的“[[]]”与“[]”的区别</h6><pre><code>&quot;[[]]&quot; 是“[]”的提高版本，但“[[]]”仅在Bash、Zsh和Korn Shell中可用，而“[]”几乎可以在任一种shell下使用。不过，像我们老版本的Gentoo都支持bash，所以还是建议使用双中括号的，了解以下区别即可。
+
+具体不同点-示例：
+[[ a &gt; b ]] || echo &quot;false&quot;
+[ a \&gt; b ] || echo &quot;false&quot;
+
+[[ az &lt; za ]] &amp;&amp; echo &quot;az &lt; za&quot;
+[  az \&lt; za ] &amp;&amp; echo &quot;az &lt; za&quot;
+
+也可以理解为，单括号内特殊字符有特殊含义，需要使用转义符(\)进行转义才行。
+</code></pre><h3 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h3><pre><code>--单分支条件语句: 一个条件一个结果，可以使用单分支if语句
+
+--双分支条件语句:  一个条件两个结果，可以使用双分支if语句
+
+--多分支条件语句： 多个条件多个结果，可以使用多分支if语句
+</code></pre><p>传参方式-if语句判断-实例1：</p>
+<pre><code>#!/bin/bash
+
+num1=$1
+num2=$2
+[[ $# -ne 2 ]] &amp;&amp; echo &quot;请输入2个数字&quot; &amp;&amp; exit
+if [[ $num1 &gt; $num2 ]]
+   then
+       echo &quot;$num1&gt;$num2&quot;
+elif [[ $num1 &lt; $num2 ]]
+   then
+       echo &quot;$num1&lt;$num2&quot;
+else
+       echo &quot;$num1=$num2&quot;
+fi
+
+执行：sh if.sh 0 1 
+
+注1：如果command与then写在同一行，command命令与then之间需要使用英文 “;” 隔开
+     if语句结构一定要以fi结尾
+#########################################################################################
+注2：上面使用2个中括号是因为可以避免部分代码歧义，使shell更优雅。我们可以参考下面这个示例来了解歧义
+a=;b=3;
+if [ a -gt $b ]; then echo &quot;true&quot;;fi
+
+-bash: [: -gt: unary operator expected  //报错
+而改为if [[ a &gt; 3 ]]; then echo &quot;true&quot;;fi  //不再报错
+究其原因，是因为如果变量a值为空，那么就成了 [ -gt 3 ] ，显然 [ 和 $b 不相等并且缺少了 [ 符号，所以报了这样的错误。当然不总是出错，如果变量a值不为空，程序就正常了，所以就是这点歧义。
+</code></pre><p>读入赋值方式-if语句判断-实例2：</p>
+<pre><code>#!/bin/bash
+
+read  -sp  &quot;请输入密码：&quot;  pass     
+
+if test &quot;$pass&quot; == &quot;garywu&quot; ;then
+   echo -e &quot;\n恭喜，认证成功&quot;
+exit 0
+fi
+
+exit 1
+
+注：
+(1)test命令用于做各种测试，并当测试成功或失败时设置它的退出状态码为0（表示真）或1（表示假）
+(2)echo -e命令开启了对特殊字符的支持，本例中\n是换行符
+(3)使用read读取输入的密码（使用-s选项意思是输入的内容不会打印在终端，实现隐藏密码的目的）
+(4)使用test命令比对两个字符串，如果$pass的密码为garywu则验证通过，打印“恭喜，认证成功”，并返回退出状态码0；如果$pass的内容不是garywu，则跳出if结构，退出并返回退出状态码1
+
+##############################################
+执行结果：
+[root@cm-master scripts]# sh if_read.sh 
+请输入密码：
+恭喜，认证成功.
+[root@cm-master scripts]# echo $?
+0
+</code></pre><p>读入赋值方式-if语句判断-实例2-if判断优化版：</p>
+<pre><code class="shell">[root@root scripts]# vim checkpasswd.sh
+#!/bin/bash
+
+read -sp &quot;请输入密码：&quot; pass
+
+if [[ &quot;$pass&quot; = &quot;garywu&quot; ]];then
+  echo -e &quot;\n恭喜，密码认证通过！&quot;
+
+  exit 0
+else
+   echo -e &quot;\nError:密码认证失败，请重试&quot;
+  exit 1
+
+fi
+
+###########################################
+执行结果：
+[root@root scripts]# sh checkpasswd.sh 
+请输入密码：
+恭喜，密码认证通过！
+[root@root scripts]# echo $?
+0
+
+[root@root scripts]# sh checkpasswd.sh 
+请输入密码：
+Error:密码认证失败，请重试
+[root@root scripts]# echo $?
+1
+</code></pre>
+<p>嵌套的if/else语句-实例</p>
+<pre><code>定义整型变量命令: declare -i
+
+例如，希望得到45+20 的整数运算结果：
+$ M=45+20  
+$ echo $M  
+45+20 
+执行M=45+20 之后，M 的值为字符串45+20 ， 而不是希望得到的65 。执行M=$(45+20)，或let M=45+20 才能得到65。如果事先声明变量是整型数，就不必使用$((…))或者let
+$ declare -i K  
+$ K=45+20  
+$ echo $K  
+65 
+</code></pre><pre><code class="shell">[root@root scripts]# vim qiantao.sh
+#!/bin/bash
+
+declare -i count        #定义一个整型变量count
+read -p &quot;请键入一个数字：&quot; count      #把输入的数字给变量count
+
+if [[ $count &gt; 100 ]];then       
+   echo &quot;$count &gt; 100&quot;
+
+
+else
+    if [[ $count &lt; 100 ]];then
+    echo &quot;$count &lt; 100&quot;
+
+    else
+      echo &quot;$count = 100&quot;
+
+    fi
+fi
+#######################################
+执行结果：
+[root@root scripts]# sh qiantao.sh 
+请键入一个数字：10
+10 &lt; 100
+[root@root scripts]# sh qiantao.sh 
+请键入一个数字：100
+100 = 100
+[root@root scripts]# sh qiantao.sh 
+请键入一个数字：1000
+1000 &gt; 100
+</code></pre>
+<p>多条件、多级的if/else语句-实例</p>
+<pre><code>#!/bin/bash
+
+
+if [[ $# -eq 0 ]];then
+   echo &quot;$0: You must give/supply one integers.&quot;
+   exit 1
+fi
+
+if [[ $1 -gt 10 ]];then
+   echo &quot;$1&gt;10&quot;
+
+elif [[ $1 -lt 10 ]];then
+   echo &quot;$1&lt;10&quot;
+
+elif [[ $1 -eq 10 ]];then
+   echo &quot;$1=10&quot;
+
+else
+    echo &quot;Opps! $1 is not number,give number.&quot;
+
+fi
+
+首先判断脚本运行后，如果没指定参数则退出并返回错误码1；如果指定的参数大于0，则打印 $1&gt;0 ;如果指定的参数小于0，则打印$1&lt;0 ;如果指定的参数等于0，则打印$1=0;如果条件都不满足，打印“Opps! $1 is not number,give number.”
+</code></pre><h3 id="case语句"><a href="#case语句" class="headerlink" title="case语句"></a>case语句</h3><pre><code>[root@oldboy202 scripts]# vim case.sh
+应用场景：系统启动脚本
+
+case $1 in
+     start)
+     echo &quot;程序正在启动...&quot;
+     ;;
+
+     down|stop)
+     echo &quot;程序正在停止...&quot;
+     ;;
+
+     restart)
+     echo &quot;程序正在重新启动...&quot;
+     ;;
+
+     status)
+     echo &quot;程序状态为...&quot;
+     ;;
+
+     *)
+     echo &quot;USAGE:sh $0 [start|stop(down)|restart|status]&quot;
+esac
+
+注：*) 相当于其他语言中的default； 
+    | 分割多个模式，相当于“或者”
+
+执行：
+[root@oldboy202 scripts]# sh case.sh 
+USAGE:sh case.sh [start|stop(down)|restart|status]
+[root@oldboy202 scripts]# 
+[root@oldboy202 scripts]# 
+[root@oldboy202 scripts]# sh case.sh down
+程序正在停止...
+[root@oldboy202 scripts]# sh case.sh stop
+程序正在停止...
+[root@oldboy202 scripts]# 
+[root@oldboy202 scripts]# sh case.sh start
+程序正在启动...
+</code></pre><h4 id="for循环语句"><a href="#for循环语句" class="headerlink" title="for循环语句"></a>for循环语句</h4><pre><code>cd /tmp
+[[ $? != 0 ]] &amp;&amp; exit      #判断上一条命令返回值若不等于0，则退出。
+
+for i in {1..100}          # 把1..100赋值给i变量
+    do
+      touch s$i
+
+done
+</code></pre><pre><code>for i in {1..10};do echo &quot;这是&quot;$i;done    
+</code></pre><p>案例-测试</p>
+<pre><code>要求：
+①找到已经开启服务   chkconfig --list|grep 3:on
+②需要开机自启的服务  crond sshd network rsyslog sysstat
+③for循环执行  chkconfig 服务名 off
+
+[root@oldboy202 scripts]#vim services.sh
+#/bin/bash
+services=`chkconfig --list|grep 3:on |egrep -v &quot;crond|sshd|network|rsyslog|sysstat&quot; |awk &#39;{print $1}&#39;`          #把服务名称通过筛选然后定义一个变量；最后需要反引号进行括起来
+
+for i in $services     #把服务名称列表变量赋值给i变量
+do 
+  chkconfig $i off     #调用i变量
+done
+
+注：变量中如果包含单引号和双引号，那么此变量需要使用反引号括起来，否则会报错。
+</code></pre><p>for循环练习1：批量创建10个用户，设置并显示用户随机密码</p>
+<pre><code>vim useradd.sh
+#/bin/bash
+
+for i in {1..5}           #定义序列并将其赋值给变量i
+  do
+    useradd gary$i        #创建用户
+    pass=`echo $RANDOM|md5sum|cut -c 1-8`   #生成随机密码，并将此赋值给变量pass
+    echo $pass |passwd --stdin gary$i       #为用户设置随机密码
+    echo $pass                              #显示用户随机密码
+done
+
+#################################################################
+执行结果：
+[root@oldboy202 scripts]# sh useradd.sh 
+useradd: user &#39;gary1&#39; already exists
+Changing password for user gary1.
+passwd: all authentication tokens updated successfully.
+47608eed
+useradd: user &#39;gary2&#39; already exists
+Changing password for user gary2.
+passwd: all authentication tokens updated successfully.
+5c50971b
+useradd: user &#39;gary3&#39; already exists
+Changing password for user gary3.
+passwd: all authentication tokens updated successfully.
+2997217d
+useradd: user &#39;gary4&#39; already exists
+Changing password for user gary4.
+passwd: all authentication tokens updated successfully.
+eefdc4c3
+
+注：echo $RANDOM|md5sum|cut -c 1-8可以生成5位随机数字，然后使用md5sum加密，最后通过cut命令获取8位字符
+</code></pre><p>for循环练习2：打印操作系统名称</p>
+<pre><code>#!/bin/bash
+
+for linux in Redhat CentOS Gentoo Suse Fedora
+  do
+    echo &quot;The os is: $linux&quot;  
+
+  done
+
+############################################## 
+执行结果：
+[root@oldboy202 ~]# sh linux.sh 
+The os is: Redhat
+The os is: CentOS
+The os is: Gentoo
+The os is: Suse
+The os is: Fedora
+</code></pre><p>for循环案例3：如果文件存在，则打印此文件，否则打印一个错误信息。</p>
+<pre><code>vim file_check.conf
+#!/bin/bash
+
+filenames=&quot;/etc/yp.conf /etc/passwd /etc/shadow /etc/gary.conf&quot;
+for file in $filenames
+  do
+    [[ -f $file ]] &amp;&amp; echo &quot;$file&quot; || echo &quot;Error: $file file not find&quot;     
+
+done
+
+########################################
+执行结果
+[root@oldboy202 ~]# sh file_check.sh 
+Error: /etc/yp.conf file not find
+/etc/passwd
+/etc/shadow
+Error: /etc/gary.conf file not find
+</code></pre><p>for 循环案例4：使用命令替换的for循环实例</p>
+<pre><code>[root@oldboy202 ~]# vim change.sh
+#!/bin/bash
+
+echo &quot;Printing file list in /tmp dirctory:&quot;
+for file in `ls /tmp/*`            #把命令结果赋值给file变量;注意命令外是反引号
+  do
+  echo $file                       #调用file变量
+
+done
+
+###########################################
+执行结果：
+[root@oldboy202 ~]# sh change.sh 
+Printing file list in /tmp dirctory:
+ls /tmp/etc-services-2017-07-05_18.tar.gz /tmp/oldboy.txt /tmp/swap_1000M /tmp/tar.log
+</code></pre><p>案例5：for语句倒计时脚本-生成序列</p>
+<pre><code>预备知识：
+seq 1 10   seq命令用于生成序列
+seq -w 10 -1 1  生成倒序数字（每次减一）；-w命令自动使用0补全；
+echo -n 意思是不换行
+echo -e参数是支持特殊字符
+/b 退一格
+##########################################################
+[root@oldboy202 scripts]# vim daojishi.sh
+#/bin/bash
+for i in `seq -w 10 -1 1`
+  do
+   echo -ne &quot;\b\b$i&quot;   #此处需要使用双引号括起来，单引号会报错，因为单引号所见即所得
+   sleep 1
+done
+</code></pre><h4 id="while语句（又称死循环）"><a href="#while语句（又称死循环）" class="headerlink" title="while语句（又称死循环）"></a>while语句（又称死循环）</h4><pre><code>善于执行守护进程，以及我们希望循环不退出持续执行。
+小于1分钟的任务都可以使用while死循环，比如下面的例子，5秒打印一次hello world!
+[root@oldboy202 scripts]# vim dead.sh
+while true     
+  do
+  echo &quot;hello world!&quot;
+  sleep 1
+done
+
+其中, true表示条件永远成立
+</code></pre><h5 id="技巧：sh-x-参数会把脚本的执行过程也会显示出来，如："><a href="#技巧：sh-x-参数会把脚本的执行过程也会显示出来，如：" class="headerlink" title="技巧：sh -x 参数会把脚本的执行过程也会显示出来，如："></a>技巧：sh -x 参数会把脚本的执行过程也会显示出来，如：</h5><pre><code>[root@oldboy202 scripts]# sh -x start.sh 
+++ chkconfig --list
+++ awk &#39;{print $1}&#39;
+++ grep 3:on
+++ egrep -v &#39;crond|sshd|network|rsyslog|sysstat&#39;
++ services=
+</code></pre><p>注：windows换行符是\r\n ,而linux换行符是\n。这样的话，win机器上编写的脚本上传到Linux执行后会报错。</p>
+<p>解决方法1：yum install -y dos2unix &amp;&amp; dos2unix win.sh</p>
+<p>解决方法2：将nodepad++转换为Unix格式</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-24T13:45:42.362Z" itemprop="dateUpdated">2017-07-24 21:45:42</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/07/15/老男孩-day12-shell编程/" target="_blank" rel="external">https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/&title=《老男孩-day12-shell》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/&title=《老男孩-day12-shell》 — Gary Wu&source=什么是shell？shell, 即命令解释器.由命令、变量和流程控制语句有机的结合
+
+CentOS默认shell是/bin/bash
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-day12-shell》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/19/shell if语句-条件执行/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">shell if语句-条件执行</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/15/shell变量类型/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">shell变量类型</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/&title=《老男孩-day12-shell》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/&title=《老男孩-day12-shell》 — Gary Wu&source=什么是shell？shell, 即命令解释器.由命令、变量和流程控制语句有机的结合
+
+CentOS默认shell是/bin/bash
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-day12-shell》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/07/15/老男孩-day12-shell编程/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

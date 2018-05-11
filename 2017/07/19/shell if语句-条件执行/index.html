@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>shell if语句-条件执行 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,shell">
+    <meta name="description" content="逻辑与（&amp;amp;&amp;amp;）只有当前一个命令执行成功时，才会执行后一个命令 逻辑或（||）只有当前一个命令执行失败时，才会执行后一个命令">
+<meta name="keywords" content="高级运维,shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell if语句-条件执行">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="逻辑与（&amp;amp;&amp;amp;）只有当前一个命令执行成功时，才会执行后一个命令 逻辑或（||）只有当前一个命令执行失败时，才会执行后一个命令">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-24T12:21:04.014Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="shell if语句-条件执行">
+<meta name="twitter:description" content="逻辑与（&amp;amp;&amp;amp;）只有当前一个命令执行成功时，才会执行后一个命令 逻辑或（||）只有当前一个命令执行失败时，才会执行后一个命令">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">shell if语句-条件执行</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">shell if语句-条件执行</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-19T13:46:06.000Z" itemprop="datePublished" class="page-time">
+  2017-07-19
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#实例：逻辑与（-amp-amp-）"><span class="post-toc-number">1.</span> <span class="post-toc-text">实例：逻辑与（&amp;&amp;）</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#实例：逻辑或（-）"><span class="post-toc-number">2.</span> <span class="post-toc-text">实例：逻辑或（||）</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#实例：逻辑非（-）"><span class="post-toc-number">3.</span> <span class="post-toc-text">实例：逻辑非（!）</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-shell if语句-条件执行"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">shell if语句-条件执行</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-19 21:46:06" datetime="2017-07-19T13:46:06.000Z"  itemprop="datePublished">2017-07-19</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>逻辑与（&amp;&amp;）只有当前一个命令执行成功时，才会执行后一个命令</p>
+<p>逻辑或（||）只有当前一个命令执行失败时，才会执行后一个命令</p>
+</blockquote>
+<a id="more"></a>
+<h6 id="实例：逻辑与（-amp-amp-）"><a href="#实例：逻辑与（-amp-amp-）" class="headerlink" title="实例：逻辑与（&amp;&amp;）"></a>实例：逻辑与（&amp;&amp;）</h6><p>也可以使用“逻辑与”操作符&amp;&amp;，将if语句中多个test命令连接在一起, 比如下面的例子</p>
+<pre><code>if [ -n $var ] &amp;&amp; [ -e $var ];then 
+   echo &quot;\$var is not null and a file named $var exists.&quot;
+fi
+
+或者
+
+if [[ -n $var &amp;&amp; -e $var ]];then
+   echo &quot;\$var is not null and a file named $var exists.&quot;
+fi   
+
+含义：判断只有当if条件中的变量$var值的长度不为0并且变量$var存在时，才会执行if语句中的内容
+</code></pre><p>实例：</p>
+<pre><code>#!/bin/bash
+
+if [[ $# -ne 1 ]];then   #判断如果指定的命令行参数个数不等于1，则输出使用方法并返回退出状态码1
+   echo &quot;Usage: sh $0 Number&quot;
+exit 1
+fi
+
+num=$1    #将第一个命令行参数赋值给变量num
+if [[ $num -ge 90 &amp;&amp; $num -lt 100 ]];then #如果$num大于等于90并且小于100，则打印Excellent!
+   echo &quot;Excellent!&quot;
+
+elif [[ $num -ge 80 &amp;&amp; $num -lt 90 ]];then #如果$num大于等于80并且小于90，则打印Good!
+   echo &quot;Good!&quot;
+
+elif [[ $num -ge 60 &amp;&amp; $num -lt 80 ]];then  #如果$num大于等于60并且小于80，则打印Pass mark!
+   echo &quot;Pass mark!&quot;
+elif [[ $num -lt 60 &amp;&amp; $num -ge 0 ]];then   #如果$num小于60并且大于等于0，则打印Fail!
+   echo &quot;Fail!&quot;
+else
+    echo &quot;Wrong number!&quot;    #如果$num都不满足以上条件，则打印Wrong number!
+fi
+
+注：上述脚本中，使用了“[[]]”代替了“[]”, 这样脚本内容会更佳简化
+##########################################################
+执行结果：
+[root@cm-master scripts]# sh shili.sh 90
+Excellent!
+[root@cm-master scripts]# sh shili.sh 83
+Good!
+[root@cm-master scripts]# sh shili.sh 75
+Pass mark!
+[root@cm-master scripts]# sh shili.sh 64
+Pass mark!
+[root@cm-master scripts]# sh shili.sh 36
+Fail!
+[root@cm-master scripts]# sh shili.sh -1
+Wrong number!
+</code></pre><!-- more -->
+<h6 id="实例：逻辑或（-）"><a href="#实例：逻辑或（-）" class="headerlink" title="实例：逻辑或（||）"></a>实例：逻辑或（||）</h6><blockquote>
+<p>逻辑或“||” 也是一个布尔操作符，语法如下：</p>
+</blockquote>
+<pre><code>command1 || command2
+
+只有当command1返回非0状态时，才运行command2。换句话说就是，只有当command1执行失败，才会执行commond2
+</code></pre><p>实例：</p>
+<pre><code>#!/bin/bash
+
+NOW=`date +%a`
+
+if [[ &quot;$NOW&quot; = &quot;Mon&quot; || &quot;$NOW&quot; = &quot;Tue&quot; ]];then
+   echo &quot;Please run full backup!&quot;
+   exit 0
+
+elif [[ &quot;$NOW&quot; = &quot;Wed&quot; || &quot;$NOW&quot; = &quot;Thu&quot; || &quot;$NOW&quot; = &quot;Fri&quot; ]];then
+   echo &quot;Please run incremental backup!&quot;
+   exit 0
+
+elif [[ &quot;$NOW&quot; = &quot;Sat&quot; || &quot;$NOW&quot; = &quot;Sun&quot; ]];then
+   echo &quot;Don&#39;t need to backup!&quot;
+   exit 0
+
+else
+   echo &quot;Wrong day!&quot;
+   exit 1
+fi
+
+#############################
+执行结果：
+[root@cmm scripts]# sh checkDays.sh 
+Please run full backup!
+
+代码释义：
+如果今天是周一或周二，则打印“Please run full backup!”；如果今天是周三、周四或周五，则打印“Please run incremental backup!”；如果今天是周六或周日，则打印“Don&#39;t need to backup!”；如果条件均不满足，则打印“Wrong day!”
+</code></pre><h6 id="实例：逻辑非（-）"><a href="#实例：逻辑非（-）" class="headerlink" title="实例：逻辑非（!）"></a>实例：逻辑非（!）</h6><blockquote>
+<p>逻辑非（!）同样是布尔操作符。它用于测试表达式是否为真或假。</p>
+</blockquote>
+<p>实例：</p>
+<pre><code>#!/bin/bash
+
+[[ ! -d /opt/scripts ]] &amp;&amp; mkdir -p /opt/scripts || echo &quot;目录已经存在&quot; &amp;&amp; exit 4
+
+检查/opt/scripts目录是否存在，如果不存在，则创建该目录。如果存在，打印“目录已经存在并返回错误退出码4”
+#####################
+[root@cm-master scripts]# sh dir.sh 
+目录已经存在
+[root@cm-master scripts]# echo $?
+4
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-24T12:21:04.014Z" itemprop="dateUpdated">2017-07-24 20:21:04</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/07/19/shell if语句-条件执行/" target="_blank" rel="external">https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/&title=《shell if语句-条件执行》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/&title=《shell if语句-条件执行》 — Gary Wu&source=
+逻辑与（&amp;&amp;）只有当前一个命令执行成功时，才会执行后一个命令
+逻辑或（||）只有当前一个命令执行失败时，才会执行后一个命令
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shell if语句-条件执行》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/24/Shell编程之Bash循环/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Shell编程之Bash循环</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/15/老男孩-day12-shell编程/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">老男孩-day12-shell</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/&title=《shell if语句-条件执行》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/&title=《shell if语句-条件执行》 — Gary Wu&source=
+逻辑与（&amp;&amp;）只有当前一个命令执行成功时，才会执行后一个命令
+逻辑或（||）只有当前一个命令执行失败时，才会执行后一个命令
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shell if语句-条件执行》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/07/19/shell if语句-条件执行/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

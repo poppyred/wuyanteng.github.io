@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>RouterOS多线NAT问题处理 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,RouterOS,NAT,双线">
+    <meta name="description" content="路由拓扑说明公司原有线路是双光纤，一条主线【联通80M】，另一条是辅助线路【鹏博士20M】。联通80M为默认路由，鹏博士20M为策略路由（即指定的部分IP上网才能使用鹏博士流量）。 没有做流量从那条线进来就从哪条线出去的相关规则，NAT配置在了鹏博士光纤上，一切正常，就这样运行了1年。">
+<meta name="keywords" content="高级运维,RouterOS,NAT,双线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RouterOS多线NAT问题处理">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="路由拓扑说明公司原有线路是双光纤，一条主线【联通80M】，另一条是辅助线路【鹏博士20M】。联通80M为默认路由，鹏博士20M为策略路由（即指定的部分IP上网才能使用鹏博士流量）。 没有做流量从那条线进来就从哪条线出去的相关规则，NAT配置在了鹏博士光纤上，一切正常，就这样运行了1年。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-06-06T11:04:20.471Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RouterOS多线NAT问题处理">
+<meta name="twitter:description" content="路由拓扑说明公司原有线路是双光纤，一条主线【联通80M】，另一条是辅助线路【鹏博士20M】。联通80M为默认路由，鹏博士20M为策略路由（即指定的部分IP上网才能使用鹏博士流量）。 没有做流量从那条线进来就从哪条线出去的相关规则，NAT配置在了鹏博士光纤上，一切正常，就这样运行了1年。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">RouterOS多线NAT问题处理</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">RouterOS多线NAT问题处理</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-05T11:21:19.000Z" itemprop="datePublished" class="page-time">
+  2017-06-05
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#路由拓扑说明"><span class="post-toc-number">1.</span> <span class="post-toc-text">路由拓扑说明</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#解决步骤"><span class="post-toc-number">2.</span> <span class="post-toc-text">解决步骤</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置两条线的流量策略路由"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置两条线的流量策略路由</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置NAT端口映射流量走向"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置NAT端口映射流量走向</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#思考"><span class="post-toc-number">5.</span> <span class="post-toc-text">思考</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-RouterOS多线NAT问题处理"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">RouterOS多线NAT问题处理</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-05 19:21:19" datetime="2017-06-05T11:21:19.000Z"  itemprop="datePublished">2017-06-05</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="路由拓扑说明"><a href="#路由拓扑说明" class="headerlink" title="路由拓扑说明"></a>路由拓扑说明</h2><pre><code>公司原有线路是双光纤，一条主线【联通80M】，另一条是辅助线路【鹏博士20M】。联通80M为默认路由，鹏博士20M为策略路由（即指定的部分IP上网才能使用鹏博士流量）。 没有做流量从那条线进来就从哪条线出去的相关规则，NAT配置在了鹏博士光纤上，一切正常，就这样运行了1年。
+</code></pre><a id="more"></a>
+<pre><code>可是今年由于光纤质量原因，联通80M更换为了电信150M光纤，但切换默认路由到电信上面之后，故障发生了...原来绑定在鹏博士线路上的NAT设置全部失效。从外网访问不了我们公司的服务器NAT映射。为了这个问题，我把两家公司的技术全都请来了，都说自家网没有问题...好吧，在和电信技术沟通画拓扑的时候，灵感一现，问题解决了...
+</code></pre><h2 id="解决步骤"><a href="#解决步骤" class="headerlink" title="解决步骤"></a>解决步骤</h2><pre><code>1. 配置两条线的策略路由
+   即，流量从哪儿来，就从哪儿出去
+
+2. 配置NAT流量走向
+   让需要映射的内网服务器IP到公网映射端口的流量，走鹏博士
+</code></pre><h2 id="配置两条线的流量策略路由"><a href="#配置两条线的流量策略路由" class="headerlink" title="配置两条线的流量策略路由"></a>配置两条线的流量策略路由</h2><p>   从哪儿进来就从哪儿出去，即：流量从电信过来就从电信线路接口出去；从鹏博士进来的流量，就从鹏博士线路接口出去</p>
+<p>   说明：Ether3: 电信接口 ; Ether1: 鹏博士接口   </p>
+<pre><code>  /ip firewall mangle
+
+
+  ##电信-进来的流量标记，名称: dianxin_conn
+  chain=input action=mark-connection new-connection-mark=dianxin_conn passthrough=yes in-interface=ether3 log=no 
+  log-prefix=&quot;&quot; 
+
+  ##电信-出去的路由标记, 名称: dianxin_routing
+  chain=output action=mark-routing new-routing-mark=dianxin_markrouting passthrough=yes connection-mark=dianxin_conn 
+  log=no log-prefix=&quot;&quot; 
+
+
+
+  ##鹏博士-进来的流量标记, 名称: pengboshi_conn
+  chain=input action=mark-connection new-connection-mark=pengboshi_conn passthrough=yes connection-state=new 
+  in-interface=ether1 
+
+  ##鹏博士-出去的路由标记, 名称: pengboshi_routing
+  chain=output action=mark-routing new-routing-mark=pengboshi_routing passthrough=yes connection-mark=pengboshi_conn 
+</code></pre><p>  注意：Mangle里面有严格的前后关系，务必把这四条策略，放到mangle列表的最顶端。</p>
+<p>  做完上面的标记后，接下来应用路由策略，流量各走各的,如下：</p>
+<pre><code>/ip route
+
+##电信进出流量
+dst-address=0.0.0.0/0 gateway=电信网关IP routing-mark=dianxin_routing
+
+##鹏博士进出流量
+dst-address=0.0.0.0/0 gateway=鹏博士网关IP routing-mark=pengboshi_routing
+</code></pre><h2 id="配置NAT端口映射流量走向"><a href="#配置NAT端口映射流量走向" class="headerlink" title="配置NAT端口映射流量走向"></a>配置NAT端口映射流量走向</h2><pre><code>##到Ros的端口为TCP22且通过鹏博士接口进来的流量标记一个连接，名字为Gitlab22_conn
+chain=prerouting action=mark-connection new-connection-mark=Gitlab22_conn passthrough=yes protocol=tcp in-interface=ether1 dst-port=22
+
+##192.168.10.10内网服务器IP的22端口到鹏博士线路的流量做一个路由标记，名字为：Gitlab22_routing
+chain=prerouting action=mark-routing new-routing-mark=Gitlab22_routing passthrough=no src-address=192.168.10.10 connection-mark=Gitlab22_conn
+</code></pre><p>注：这里一定要填写内网IP，让这个服务器出Ros的数据被标记出来，由鹏博士线路出去，形成往来数据流向环。否则就会出现无法访问NAT端口映射了，这就是为什么内网服务器只能主线电信访问（默认路由），而辅助线路鹏博士（策略路由）无法访问。上面这两条规则解决了这个问题。</p>
+<pre><code> ## 应用这个NAT策略路由
+ dst-address=0.0.0.0/0 gateway=鹏博士网关IP routing-mark=Gitlab22_routing
+
+ OK，到这里，NAT公网映射两条线都可以从外网进来访问服务器了，当然，你如果有其他NAT映射，也需要重复上面3条命令
+</code></pre><p>文档参考：<a href="https://wenku.baidu.com/view/673b2632b90d6c85ec3ac62b.html?qq-pf-to=pcqq.group" target="_blank" rel="noopener">完美解决Ros多线NAT映射问题</a></p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><pre><code>我们回归问题本身，为什么联通【默认路由主线】和电信通【策略路由辅助线路】，当初没有出现这个问题呢？为什么把主线从联通切换到电信NAT就出现了故障？
+
+笔者分析如下：
+一个大胆的猜测，鹏博士光纤的上层链路与联通链路有关联，当外部访问内网NAT映射时，首先到达且使用联通流量，联通判断该请求目的地是鹏博士公网IP，对此请求进行了转发。而电信这么过来的时候，直接把这个数据包给丢弃了，所以就无法访问。我们无法求证具体原因，但上面的操作绝对是最正确的，尤其是出现在双线或者多线的企业网络环境中。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-06-06T11:04:20.471Z" itemprop="dateUpdated">2017-06-06 19:04:20</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/05/RouterOS多线NAT问题处理/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NAT/">NAT</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RouterOS/">RouterOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/双线/">双线</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/&title=《RouterOS多线NAT问题处理》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/&title=《RouterOS多线NAT问题处理》 — Gary Wu&source=路由拓扑说明公司原有线路是双光纤，一条主线【联通80M】，另一条是辅助线路【鹏博士20M】。联通80M为默认路由，鹏博士20M为策略路由（即指定的部分IP..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《RouterOS多线NAT问题处理》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/07/logrotate日志管家/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">logrotate日志管家</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">老男孩37期-第6节课-正则表达式和通配符</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/&title=《RouterOS多线NAT问题处理》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/&title=《RouterOS多线NAT问题处理》 — Gary Wu&source=路由拓扑说明公司原有线路是双光纤，一条主线【联通80M】，另一条是辅助线路【鹏博士20M】。联通80M为默认路由，鹏博士20M为策略路由（即指定的部分IP..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《RouterOS多线NAT问题处理》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/05/RouterOS多线NAT问题处理/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

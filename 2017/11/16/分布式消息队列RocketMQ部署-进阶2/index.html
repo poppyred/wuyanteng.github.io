@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>分布式消息队列RocketMQ部署-进阶2 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,消息队列,RocketMQ,分布式消息队列,nameserver,brokerserver">
+    <meta name="description" content="RocketMQ原理  参考：分布式消息队列RocketMQ原理-进阶1  分布式部署架构                                                                                               RocketMQ分布式架构">
+<meta name="keywords" content="高级运维,消息队列,RocketMQ,分布式消息队列,nameserver,brokerserver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式消息队列RocketMQ部署-进阶2">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="RocketMQ原理  参考：分布式消息队列RocketMQ原理-进阶1  分布式部署架构                                                                                               RocketMQ分布式架构">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/rocketmq_fenbushi.png">
+<meta property="og:updated_time" content="2017-11-20T13:42:21.084Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式消息队列RocketMQ部署-进阶2">
+<meta name="twitter:description" content="RocketMQ原理  参考：分布式消息队列RocketMQ原理-进阶1  分布式部署架构                                                                                               RocketMQ分布式架构">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/rocketmq_fenbushi.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">分布式消息队列RocketMQ部署-进阶2</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">分布式消息队列RocketMQ部署-进阶2</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-16T11:47:39.000Z" itemprop="datePublished" class="page-time">
+  2017-11-16
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#RocketMQ分布式部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">RocketMQ分布式部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#RocketMQ配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">RocketMQ配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#服务启动"><span class="post-toc-number">3.</span> <span class="post-toc-text">服务启动</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-分布式消息队列RocketMQ部署-进阶2"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">分布式消息队列RocketMQ部署-进阶2</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-16 19:47:39" datetime="2017-11-16T11:47:39.000Z"  itemprop="datePublished">2017-11-16</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>RocketMQ原理</p>
+</blockquote>
+<p>参考：<a href="https://wuyanteng.github.io/2017/11/14/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97RocketMQ%E5%8E%9F%E7%90%86-%E8%BF%9B%E9%98%B61/#more">分布式消息队列RocketMQ原理-进阶1</a></p>
+<blockquote>
+<p>分布式部署架构</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/rocketmq_fenbushi.png" alt="RocketMQ分布式架构" title="">
+                </div>
+                <div class="image-caption">RocketMQ分布式架构</div>
+            </figure>
+<a id="more"></a>
+<h4 id="RocketMQ分布式部署"><a href="#RocketMQ分布式部署" class="headerlink" title="RocketMQ分布式部署"></a>RocketMQ分布式部署</h4><blockquote>
+<p>环境说明</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">IP地址</th>
+<th style="text-align:left">主机名</th>
+<th style="text-align:left">OS</th>
+<th style="text-align:left">角色</th>
+<th style="text-align:left">架构模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">10.0.10.25</td>
+<td style="text-align:left">rocketmq-master1</td>
+<td style="text-align:left">CentOS6</td>
+<td style="text-align:left">nameserver、brokerserver</td>
+<td style="text-align:left">Master1</td>
+</tr>
+<tr>
+<td style="text-align:left">10.0.10.26</td>
+<td style="text-align:left">rocketmq-master2</td>
+<td style="text-align:left">CentOS6</td>
+<td style="text-align:left">nameserver、brokerserver</td>
+<td style="text-align:left">Master2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>hosts信息添加[全节点操作]</p>
+</blockquote>
+<pre><code>#vim /etc/hosts
+
+10.0.10.25 mqnameserver1
+10.0.10.26 mqnameserver2
+10.0.10.25 rocketmq-master1
+10.0.10.26 rocketmq-master2
+</code></pre><blockquote>
+<p>JDK安装[全节点操作]</p>
+</blockquote>
+<pre><code>wget http://mirrors.linuxeye.com/jdk/jdk-7u80-linux-x64.tar.gz
+mkdir -p /usr/local/jdk
+tar -zxvf jdk-7u80-linux-x64.tar.gz -C /usr/local/jdk
+cd /usr/local/jdk/jdk1.7.0_80/ &amp;&amp; mv ./*  ../  
+cd .. &amp;&amp; rm -rf jdk1.7.0_80/
+
+#配置环境变量
+export PATH=$PATH:/usr/local/bin
+export JAVA_HOME=/usr/local/jdk
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+
+export ROCKETMQ_HOME=/usr/local/rocketmq
+export PATH=$PATH::$ROCKETMQ_HOME/bin
+
+#刷新环境变量
+source /etc/profile
+</code></pre><blockquote>
+<p>RocketMQ安装[全节点操作]</p>
+</blockquote>
+<pre><code>RocketMQ Github项目主页：https://github.com/alibaba/RocketMQ/releases
+
+https://github.com/alibaba/rocketmq/releases/download/v3.2.6/alibaba-rocketmq-3.2.6.tar.gz
+
+tar -zxvf v3.5.8.tar.gz -C /usr/local
+ln -s rocketmq-3.5.8 rocketmq
+
+#接下来执行/usr/local/rocketmq/bin目录下的 os.sh脚本
+#echo &#39;deadline&#39; &gt; /sys/block/${DISK}/queue/scheduler
+echo &#39;deadline&#39; &gt; /sys/block/sda/queue/scheduler
+su - root -c &#39;ulimit -n&#39;
+#cat /sys/block/$DISK/queue/scheduler
+cat /sys/block/sda/queue/scheduler
+说明：
+第一：${DISK}获取不到sda，所以变量需要改为sda; 
+第二：ulimit相关设置：admin没有此用户，所以需要改为root
+
+#执行RocketMQ官方提供的优化脚本
+cd /usr/local/rocketmq/bin &amp;&amp; sh os.sh   
+</code></pre><h4 id="RocketMQ配置"><a href="#RocketMQ配置" class="headerlink" title="RocketMQ配置"></a>RocketMQ配置</h4><blockquote>
+<p>Master1服务器配置：</p>
+</blockquote>
+<pre><code>cd /usr/local/rocketmq/conf/2m-noslave/
+mkdir -p /data/rocketmq/store/commitlog  /data/log
+vim broker-a.properties    #注：此处文件名为broker-a.properties
+
+只关注带中文备注的参数即可
+</code></pre><pre><code>brokerClusterName=AdpMqCluster      #定义ClusterName
+brokerName=broker-a                 #定义brokerName
+brokerId=0                         
+namesrvAddr=10.0.10.25:9876;10.0.10.26:9876   #配置nameserver服务器地址，以&quot;;&quot;分割
+defaultTopicQueueNums=4
+autoCreateTopicEnable=true
+autoCreateSubscriptionGroup=true
+listenPort=10911
+deleteWhen=04
+fileReservedTime=120
+mapedFileSizeCommitLog=1073741824
+mapedFileSizeConsumeQueue=50000000
+destroyMapedFileIntervalForcibly=120000
+redeleteHangedFileInterval=120000
+diskMaxUsedSpaceRatio=88
+
+storePathRootDir=/data/rocketmq/store         #定义store根路径
+storePathCommitLog=/data/rocketmq/store/commitlog  #定义commitlog
+
+maxMessageSize=65536
+
+flushCommitLogLeastPages=4
+flushConsumeQueueLeastPages=2
+flushCommitLogThoroughInterval=10000
+flushConsumeQueueThoroughInterval=60000
+
+brokerRole=ASYNC_MASTER
+flushDiskType=ASYNC_FLUSH
+
+checkTransactionMessageEnable=false
+
+sendMessageThreadPoolNums=128
+pullMessageThreadPoolNums=128
+</code></pre><blockquote>
+<p>Master2服务器配置：</p>
+</blockquote>
+<pre><code>cd /usr/local/rocketmq/conf/2m-noslave/
+mkdir -p /data/rocketmq/store/commitlog  /data/log
+vim broker-b.properties    #注：此处文件名为broker-b.properties
+</code></pre><pre><code>brokerClusterName=AdpMqCluster   #定义ClusterName,与Master1配置一样，同属于一个集群
+brokerName=broker-b              #定义brokerName，此处是broker-b
+brokerId=1
+namesrvAddr=10.0.10.25:9876;10.0.10.26:9876  #配置nameserver服务器地址，以&quot;;&quot;分割
+defaultTopicQueueNums=4
+autoCreateTopicEnable=true
+autoCreateSubscriptionGroup=true
+listenPort=10911
+deleteWhen=04
+fileReservedTime=120
+mapedFileSizeCommitLog=1073741824
+mapedFileSizeConsumeQueue=50000000
+destroyMapedFileIntervalForcibly=120000
+redeleteHangedFileInterval=120000
+diskMaxUsedSpaceRatio=88
+
+storePathRootDir=/data/rocketmq/store       #定义store根路径
+storePathCommitLog=/data/rocketmq/store/commitlog   #定义commitlog
+
+maxMessageSize=65536
+
+flushCommitLogLeastPages=4
+flushConsumeQueueLeastPages=2
+flushCommitLogThoroughInterval=10000
+flushConsumeQueueThoroughInterval=60000
+
+brokerRole=ASYNC_MASTER
+flushDiskType=ASYNC_FLUSH
+
+checkTransactionMessageEnable=false
+
+sendMessageThreadPoolNums=128
+pullMessageThreadPoolNums=128
+</code></pre><blockquote>
+<p>runbroker.sh参数调整[全节点操作]</p>
+</blockquote>
+<pre><code>runbroker.sh需要根据内存大小进行适当地调整
+cd /usr/local/rocketmq/bin
+
+JAVA_OPT=&quot;${JAVA_OPT} -server -Xms4g -Xmx4g -Xmn2g -XX:PermSize=128m -XX:MaxPermSize=320m&quot;
+</code></pre><h4 id="服务启动"><a href="#服务启动" class="headerlink" title="服务启动"></a>服务启动</h4><blockquote>
+<p>[全节点操作]</p>
+</blockquote>
+<pre><code>#修改配置文件的日志路径,改为/data目录下
+cd /usr/local/rocketmq/conf &amp;&amp; sed -i  &#39;s#${user.home}#/data#g&#39; *.xml
+</code></pre><blockquote>
+<p>启动NameServer[全节点操作]</p>
+</blockquote>
+<pre><code> cd /usr/local/rocketmq/bin
+ nohup sh mqnamesrv &amp;
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-20T13:42:21.084Z" itemprop="dateUpdated">2017-11-20 21:42:21</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/16/分布式消息队列RocketMQ部署-进阶2/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RocketMQ/">RocketMQ</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/brokerserver/">brokerserver</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nameserver/">nameserver</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式消息队列/">分布式消息队列</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/&title=《分布式消息队列RocketMQ部署-进阶2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/&title=《分布式消息队列RocketMQ部署-进阶2》 — Gary Wu&source=
+RocketMQ原理
+
+参考：分布式消息队列RocketMQ原理-进阶1
+
+分布式部署架构
+
+
+                
+           ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分布式消息队列RocketMQ部署-进阶2》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/18/Tomcat部署实例集群监控/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Tomcat部署实例集群监控</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/16/批量删除1w-文件或目录-Linux/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">批量删除100w+文件或目录-Linux</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/&title=《分布式消息队列RocketMQ部署-进阶2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/&title=《分布式消息队列RocketMQ部署-进阶2》 — Gary Wu&source=
+RocketMQ原理
+
+参考：分布式消息队列RocketMQ原理-进阶1
+
+分布式部署架构
+
+
+                
+           ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分布式消息队列RocketMQ部署-进阶2》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/16/分布式消息队列RocketMQ部署-进阶2/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

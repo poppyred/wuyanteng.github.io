@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OpenStack-Pike-Neutron网络服务-控制节点7 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,OpenStack,Neutron">
+    <meta name="description" content="Neutron网络服务 在Neutron的世界里，网络、子网、端口和路由器与物理网络、子网、端口的概念和功能一样。">
+<meta name="keywords" content="高级运维,OpenStack,Neutron">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenStack-Pike-Neutron网络服务-控制节点7">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Neutron网络服务 在Neutron的世界里，网络、子网、端口和路由器与物理网络、子网、端口的概念和功能一样。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-12T10:34:53.821Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenStack-Pike-Neutron网络服务-控制节点7">
+<meta name="twitter:description" content="Neutron网络服务 在Neutron的世界里，网络、子网、端口和路由器与物理网络、子网、端口的概念和功能一样。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OpenStack-Pike-Neutron网络服务-控制节点7</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OpenStack-Pike-Neutron网络服务-控制节点7</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-09T11:47:35.000Z" itemprop="datePublished" class="page-time">
+  2018-01-09
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-OpenStack-Pike-Neutron网络服务-控制节点7"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OpenStack-Pike-Neutron网络服务-控制节点7</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-09 19:47:35" datetime="2018-01-09T11:47:35.000Z"  itemprop="datePublished">2018-01-09</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Neutron网络服务</p>
+<pre><code>在Neutron的世界里，网络、子网、端口和路由器与物理网络、子网、端口的概念和功能一样。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>配置neutron数据库</p>
+</blockquote>
+<pre><code>create database neutron;
+grant all privileges on neutron.* to &#39;neutron&#39;@&#39;%&#39; identified by &#39;neutron&#39;;
+grant all privileges on neutron.* to &#39;neutron&#39;@&#39;localhost&#39; identified by &#39;neutron&#39;;
+</code></pre><blockquote>
+<p>Neutron控制节点配置</p>
+</blockquote>
+<p>创建Neutron用户</p>
+<pre><code>source /scripts/admin_openrc
+</code></pre><p>添加neutron用户</p>
+<pre><code>openstack user create --domain default --password-prompt neutron
+</code></pre><p>将neutron用户同时加入到admin角色和service项目中</p>
+<pre><code>openstack role add --project service --user neutron admin
+</code></pre><p>创建neutron服务</p>
+<pre><code>openstack service create --name neutron --description &quot;OpenStack Networking&quot; network
+</code></pre><p>创建网络服务API endpoint</p>
+<pre><code>openstack endpoint create --region RegionOne network public http://192.168.56.11:9696
+openstack endpoint create --region RegionOne network internal http://192.168.56.11:9696
+openstack endpoint create --region RegionOne network admin http://192.168.56.11:9696
+</code></pre><!-- more -->
+<blockquote>
+<p>Neutron两种网络方式</p>
+</blockquote>
+<pre><code>Neutron提供两种网络方式： 
+1. 提供者网络  Provider networks
+2. 自服务网络 Self-service networks
+</code></pre><ul>
+<li>注：以下使用Provider networks(桥接)来配置neutron</li>
+</ul>
+<p>控制节点安装</p>
+<pre><code>yum install openstack-neutron openstack-neutron-ml2 openstack-neutron-linuxbridge ebtables
+</code></pre><p>配置</p>
+<pre><code>vim  /etc/neutron/neutron.conf
+</code></pre><pre><code>配置数据库
+[database]
+connection = mysql+pymysql://neutron:neutron@192.168.56.11/neutron
+</code></pre><pre><code>启用二层网络模块 Modular Layer2 (ML2)插件
+注：此处的Layer2即理解为二层(数据链路层)网络
+
+[DEFAULT]
+core_plugin = ml2
+service_plugins =    #值置为空
+</code></pre><pre><code>配置RabbitMQ(填写Rabbitmq集群主节点IP)
+
+[DEFAULT]
+transport_url = rabbit://openstack:openstack@192.168.56.11      #配置文件553行
+</code></pre><pre><code>keystone认证配置
+
+[DEFAULT]
+auth_strategy = keystone
+
+[keystone_authtoken]
+auth_uri = http://192.168.56.11:5000
+auth_url = http://192.168.56.11:35357
+memcached_servers = 192.168.56.11:11211
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+project_name = service
+username = neutron
+password = neutron
+</code></pre><pre><code>配置nova
+
+[DEFAULT]
+notify_nova_on_port_status_changes = true
+notify_nova_on_port_data_changes = true       #参数含义：当网络拓扑有变化时，来通知nova
+
+[nova]
+auth_url = http://192.168.56.11:35357
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+region_name = RegionOne
+project_name = service
+username = nova
+password = nova
+</code></pre><pre><code>配置锁路径
+
+[oslo_concurrency]
+lock_path = /var/lib/neutron/tmp
+</code></pre><!-- more -->
+<p>配置Modular Layer 2 (ML2)插件</p>
+<pre><code>vim /etc/neutron/plugins/ml2/ml2_conf.ini
+</code></pre><pre><code>启用flat和vlan网络
+
+[ml2]
+type_drivers = flat,vlan
+
+关闭自服务网络self-service
+tenant_network_types =       #置为空
+
+启用桥接
+mechanism_drivers = linuxbridge
+
+启用端口安全扩展驱动程序
+extension_drivers = port_security
+</code></pre><pre><code>将提供者虚拟网络配置为扁平网络
+
+[ml2_type_flat]
+flat_networks = provider       
+</code></pre><pre><code>使用ipset来提高安全组规则的效率
+
+[securitygroup]
+enable_ipset = true
+</code></pre><!-- more -->
+<p>配置Linux bridge agent</p>
+<pre><code> vim /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+</code></pre><pre><code>将提供者虚拟网络映射到提供者物理网络接口
+
+[linux_bridge]
+physical_interface_mappings = provider:eth0     #如果你的物理网卡非eth0，这里需要对应修改
+</code></pre><pre><code>关闭VXLAN网络
+
+[vxlan]
+enable_vxlan = false
+</code></pre><pre><code>启用安全组并配置Linux网桥iptables防火墙驱动程序
+
+[securitygroup]
+enable_security_group = true
+firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+</code></pre><!-- more -->
+<hr>
+<p>配置DHCP agent( 此项不配置，与现有网络DHCP冲突)</p>
+<pre><code>vim  /etc/neutron/dhcp_agent.ini
+</code></pre><pre><code>配置Linux网桥接口驱动程序，Dnsmasq DHCP驱动程序，并启用隔离的元数据，以便提供商网络上的实例可以通过网络访问元数据
+
+[DEFAULT]
+interface_driver = linuxbridge
+dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq    
+enable_isolated_metadata = true
+</code></pre><!-- more -->
+<hr>
+<p>配置metadata agent</p>
+<pre><code>vim   /etc/neutron/metadata_agent.ini
+</code></pre><pre><code>配置元数据主机和共享密钥
+
+[DEFAULT]
+nova_metadata_host = 192.168.56.11
+metadata_proxy_shared_secret = openstack     #共享密钥配置为openstack
+</code></pre><!-- more -->
+<p>配置nova文件的neutron配置</p>
+<pre><code>vim  /etc/nova/nova.conf
+</code></pre><pre><code>[neutron]
+url = http://192.168.56.11:9696
+auth_url = http://192.168.56.11:35357
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+region_name = RegionOne
+project_name = service
+username = neutron
+password = neutron
+service_metadata_proxy = true
+metadata_proxy_shared_secret = openstack       #此处输入刚才的openstack共享密钥
+</code></pre><!-- more -->
+<blockquote>
+<p>控制节点完成配置</p>
+</blockquote>
+<p>ML2插件配置文件软链</p>
+<pre><code>ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
+</code></pre><p>同步数据库</p>
+<pre><code>su -s /bin/sh -c &quot;neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head&quot; neutron
+</code></pre><p>重启nova-api服务</p>
+<pre><code>systemctl restart openstack-nova-api.service
+</code></pre><p>开机启动</p>
+<pre><code>systemctl enable neutron-server.service \
+neutron-linuxbridge-agent.service neutron-dhcp-agent.service \
+neutron-metadata-agent.service
+
+systemctl start neutron-server.service \
+neutron-linuxbridge-agent.service neutron-dhcp-agent.service \
+neutron-metadata-agent.service
+</code></pre><!-- more -->
+<hr>
+<blockquote>
+<p>Nutron日志排错</p>
+</blockquote>
+<p>查看端口</p>
+<pre><code> ss -lntup |grep 9696
+</code></pre><p>查看错误日志</p>
+<pre><code>grep &quot;ERROR&quot; /var/log/neutron/*log
+
+注：如果此时刚启动neutron日志就报ERROR，很可能是时间未同步导致。
+    解决方法：
+    1. 清空源neutron错误日志
+    2. 控制节点和计算节点同步时间
+    3.重启neutron
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-12T10:34:53.821Z" itemprop="dateUpdated">2018-01-12 18:34:53</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neutron/">Neutron</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenStack/">OpenStack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/&title=《OpenStack-Pike-Neutron网络服务-控制节点7》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/&title=《OpenStack-Pike-Neutron网络服务-控制节点7》 — Gary Wu&source=Neutron网络服务
+在Neutron的世界里，网络、子网、端口和路由器与物理网络、子网、端口的概念和功能一样。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack-Pike-Neutron网络服务-控制节点7》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/09/OpenStack-Pike-Neutron网络服务-计算节点8/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">OpenStack-Pike-Neutron网络服务-计算节点8</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/08/MySQL数据库用户与权限管理3/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL数据库用户与权限管理3</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/&title=《OpenStack-Pike-Neutron网络服务-控制节点7》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/&title=《OpenStack-Pike-Neutron网络服务-控制节点7》 — Gary Wu&source=Neutron网络服务
+在Neutron的世界里，网络、子网、端口和路由器与物理网络、子网、端口的概念和功能一样。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack-Pike-Neutron网络服务-控制节点7》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/09/OpenStack-Pike-Neutron网络服务-控制节点7/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

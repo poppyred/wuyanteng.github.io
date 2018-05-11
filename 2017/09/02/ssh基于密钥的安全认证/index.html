@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>ssh基于密钥的安全认证 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,ssh,dsa,密钥,认证,免密登陆">
+    <meta name="description" content="ssh密钥登陆实质及过程  ssh服务分发公钥实质执行过程    ①. 管理服务器创建私钥和公钥（密钥对）    ②. 将公钥文件远程传送复制到被管理服务器相应用户~/.ssh/id_dsa.pub下，并修改.ssh目录权限为700    ③. 修改公钥文件文件名称为authorized_keys(默认文件名，可在配置文件修改)，授权权限为600    ④. 利用ssh服务配置文件的配置参数，进">
+<meta name="keywords" content="高级运维,ssh,dsa,密钥,认证,免密登陆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh基于密钥的安全认证">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="ssh密钥登陆实质及过程  ssh服务分发公钥实质执行过程    ①. 管理服务器创建私钥和公钥（密钥对）    ②. 将公钥文件远程传送复制到被管理服务器相应用户~/.ssh/id_dsa.pub下，并修改.ssh目录权限为700    ③. 修改公钥文件文件名称为authorized_keys(默认文件名，可在配置文件修改)，授权权限为600    ④. 利用ssh服务配置文件的配置参数，进">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-09-02T03:58:15.465Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ssh基于密钥的安全认证">
+<meta name="twitter:description" content="ssh密钥登陆实质及过程  ssh服务分发公钥实质执行过程    ①. 管理服务器创建私钥和公钥（密钥对）    ②. 将公钥文件远程传送复制到被管理服务器相应用户~/.ssh/id_dsa.pub下，并修改.ssh目录权限为700    ③. 修改公钥文件文件名称为authorized_keys(默认文件名，可在配置文件修改)，授权权限为600    ④. 利用ssh服务配置文件的配置参数，进">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">ssh基于密钥的安全认证</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">ssh基于密钥的安全认证</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-02T01:56:08.000Z" itemprop="datePublished" class="page-time">
+  2017-09-02
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-ssh基于密钥的安全认证"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">ssh基于密钥的安全认证</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-02 09:56:08" datetime="2017-09-02T01:56:08.000Z"  itemprop="datePublished">2017-09-02</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>ssh密钥登陆实质及过程</p>
+</blockquote>
+<pre><code>ssh服务分发公钥实质执行过程
+   ①. 管理服务器创建私钥和公钥（密钥对）
+   ②. 将公钥文件远程传送复制到被管理服务器相应用户~/.ssh/id_dsa.pub下，并修改.ssh目录权限为700
+   ③. 修改公钥文件文件名称为authorized_keys(默认文件名，可在配置文件修改)，授权权限为600
+   ④. 利用ssh服务配置文件的配置参数，进行识别公钥文件authorized_keys
+   ⑤. 进而实现基于密钥远程登录服务器（免密码登录/非交互方式登录）
+</code></pre><a id="more"></a>
+<blockquote>
+<ol>
+<li>客户端创建密钥对</li>
+</ol>
+</blockquote>
+<pre><code>注： -t 参数指定密钥类型，有dsa、rsa1和rsa,其中rsa是版本2
+
+[root@01 ~]# ssh-keygen -t dsa
+
+Generating public/private dsa key pair.
+Enter file in which to save the key (/root/.ssh/id_dsa):
+Created directory &#39;/root/.ssh&#39;.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/id_dsa.
+Your public key has been saved in /root/.ssh/id_dsa.pub.
+The key fingerprint is:
+25:93:78:e9:01:2d:82:db:cb:0b:34:f7:0c:a9:1b:11 root@web01
+The key&#39;s randomart image is:
++--[ DSA 1024]----+
+|   .  ..         |
+|  E . .o.o       |
+|   + o..B .      |
+|  = =  o =       |
+| . * =  S        |
+|  + o o          |
+|   + .           |
+|  . .            |
+|                 |
++-----------------+
+
+
+#检查密钥文件
+[root@web01 ~]# ll /root/.ssh/
+total 8
+-rw------- 1 root root 736 2017-08-06 15:17 id_dsa
+-rw-r--r-- 1 root root 600 2017-08-06 15:17 id_dsa.pub
+</code></pre><blockquote>
+<ol start="2">
+<li>将id_dsa.pub公钥分发到被管理的服务器</li>
+</ol>
+</blockquote>
+<pre><code>命令格式：ssh-copy-id [-i [identity_file]] [user@]machine
+
+[root@01 ~]# ssh-copy-id -i ~/.ssh/id_dsa.pub root@172.16.1.31
+#输入远端root密码即可正常传输
+
+#远端服务器分发路径：
+[root@backup ~]# ll /root/.ssh/
+total 8
+-rw------- 1 root root 600 2017-08-06 15:29 authorized_keys
+-rw-r--r-- 1 root root 393 2017-08-05 11:03 known_hosts
+
+注：根据man ssh-copy-id命令手册可以了解到，公钥id_dsa.pub传输到远端后，名称自动变成了authorized_keys
+</code></pre><blockquote>
+<ol start="3">
+<li>客户端连接测试</li>
+</ol>
+</blockquote>
+<pre><code>#客户端连接-测试
+[root@web01 ~]# ssh 172.16.1.31
+[root@web01 ~]# ssh 172.16.1.31 &quot;free -m&quot;       #不登陆远程主机直接指向命令，输出信息
+Enter passphrase for key &#39;/root/.ssh/id_dsa&#39;:     #出现这个提示说明已经使用了密钥登陆
+
+例：
+[root@web01 ~]# ssh 172.16.1.41 &quot;uname -a&quot;
+Enter passphrase for key &#39;/root/.ssh/id_dsa&#39;: 
+Linux backup 2.6.32-696.el6.x86_64 #1 SMP Tue Mar 21 19:29:05 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+</code></pre><blockquote>
+<ol start="4">
+<li>当远端服务器改变了SSH端口，推送公钥方法</li>
+</ol>
+</blockquote>
+<pre><code>[root@m01 ~]# ssh-copy-id -i ~/.ssh/id_dsa.pub 172.16.1.31 
+ssh: connect to host 172.16.1.31 
+port 22: Connection refused
+说明：当客户端端口改变时，ssh-copy-id命令默认使用22端口建立远程连接，传输公钥文件
+
+
+解决方法：
+[root@web01 ~]# ssh-copy-id -i ~/.ssh/id_dsa.pub &quot;-p52113 172.16.1.31&quot; 
+Enter passphrase for key &#39;/root/.ssh/id_dsa&#39;: 
+Now try logging into the machine, with &quot;ssh &#39;-p52113 172.16.1.31&#39;&quot;, and check in:
+
+  .ssh/authorized_keys
+
+to make sure we haven&#39;t added extra keys that you weren&#39;t expecting.
+</code></pre><blockquote>
+<ol start="5">
+<li>了解ssh-copy-id命令执行过程</li>
+</ol>
+</blockquote>
+<pre><code>[root@web01 ~]# vim /usr/bin/ssh-copy-id
+
+#选段如下
+ssh $1 &quot;exec sh -c &#39;cd; umask 077; test -d .ssh || mkdir .ssh ; cat &gt;&gt; .ssh/authorized_keys &amp;&amp; (test -x /sbin/restorecon &amp;&amp; /sbin/restorecon .ssh .ssh/authorized_keys &gt;/dev/null 2&gt;&amp;1 || true)&#39;&quot; 
+
+注：该脚本中嵌入了两个shift指令，$1在此处意思是指&quot;-p52113 172.16.1.31&quot; 
+</code></pre><pre><code>shell脚本-shift指令用法
+
+[root@web01 ~]# vim test_shift.sh
+#!/bin/bash
+
+until [ $# -eq 0 ]
+do
+     echo $*
+     shift
+done
+
+[root@web01 ~]# sh test_shift.sh 1 2 3 4 5
+1 2 3 4 5
+2 3 4 5
+3 4 5
+4 5
+5
+
+
+我们可以看到，每执行一次shift命令，就将脚本传参的参数向前推移一位，所以这就可以理解了为什么步骤4中“-p52113 172.16.1.31&quot;这一部分变成了 传参$1 
+</code></pre><blockquote>
+<ol start="6">
+<li>批量分发公钥-脚本-实现免密登陆</li>
+</ol>
+</blockquote>
+<pre><code>需要解决的问题:
+# 01. 创建秘钥对时需要进行交互
+ssh-keygen -t dsa -f /root/.ssh/id_dsa -P &quot;123&quot; &amp;&gt;/dev/null
+#注：
+-t dsa 指定密钥类型
+-f 事先指定密钥文件
+-P 定义密钥密码
+&amp;&gt;/dev/null 将其定向到空，即不输出密钥创建成功信息。
+
+################################################
+# 02. 分发公钥时是需要输入yes/no
+# 03. 分发公钥时需要输入密码信息
+yum install -y sshpass
+sshpass -p123456 ssh-copy-id -i /root/.ssh/id_dsa.pub &quot;-o StrictHostKeyChecking=no root@172.16.1.31&quot;
+
+-o StrictHostKeyChecking=no  不进行交互提示，注意使用双引号括起来
+</code></pre><pre><code>#!/bin/bash
+rm -f /root/.ssh/*
+ssh-keygen -t dsa -f /root/.ssh/id_dsa -P &quot;&quot; &amp;&gt;/dev/null
+
+for ip in 31 41
+    do 
+       sshpass -p123456 ssh-copy-id -i /root/.ssh/id_dsa.pub &quot;-o StrictHostKeyChecking=no root@172.16.1.$ip&quot; &gt;/dev/null 2&gt;&amp;1
+       echo &quot;172.16.1.$ip = OK&quot;
+    done
+</code></pre><pre><code>执行脚本并测试免密登陆：
+[root@web01 ~]# sh piliang.sh 
+172.16.1.31 = OK
+172.16.1.41 = OK
+
+[root@web01 ~]# ssh 172.16.1.31
+Last login: Sun Aug  6 16:57:31 2017 from 192.168.56.1
+[root@nfs01 ~]# 
+[root@nfs01 ~]# logout
+Connection to 172.16.1.31 closed.
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-02T03:58:15.465Z" itemprop="dateUpdated">2017-09-02 11:58:15</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/02/ssh基于密钥的安全认证/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dsa/">dsa</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssh/">ssh</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/免密登陆/">免密登陆</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/密钥/">密钥</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/认证/">认证</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/&title=《ssh基于密钥的安全认证》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/&title=《ssh基于密钥的安全认证》 — Gary Wu&source=
+ssh密钥登陆实质及过程
+
+ssh服务分发公钥实质执行过程
+   ①. 管理服务器创建私钥和公钥（密钥对）
+   ②. 将公钥文件远程传送复制到被管理服..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ssh基于密钥的安全认证》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/02/ansible自动化-实现-较全/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ansible自动化-实现(较全)</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/01/cobbler-ks参数-详解/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">cobbler ks参数-详解</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/&title=《ssh基于密钥的安全认证》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/&title=《ssh基于密钥的安全认证》 — Gary Wu&source=
+ssh密钥登陆实质及过程
+
+ssh服务分发公钥实质执行过程
+   ①. 管理服务器创建私钥和公钥（密钥对）
+   ②. 将公钥文件远程传送复制到被管理服..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ssh基于密钥的安全认证》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/02/ssh基于密钥的安全认证/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

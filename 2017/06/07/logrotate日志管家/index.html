@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>logrotate日志管家 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,log,logrotate,日志,切割">
+    <meta name="description" content="前言服务器日志是任何故障排除过程中非常重要的一部分，但这些日志会随着时间增长。在这种情况下，我们需要手动执行日志清理以回收空间，这是一件繁琐的管理任务。">
+<meta name="keywords" content="高级运维,log,logrotate,日志,切割">
+<meta property="og:type" content="article">
+<meta property="og:title" content="logrotate日志管家">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/07/logrotate日志管家/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="前言服务器日志是任何故障排除过程中非常重要的一部分，但这些日志会随着时间增长。在这种情况下，我们需要手动执行日志清理以回收空间，这是一件繁琐的管理任务。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-11T02:21:51.484Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="logrotate日志管家">
+<meta name="twitter:description" content="前言服务器日志是任何故障排除过程中非常重要的一部分，但这些日志会随着时间增长。在这种情况下，我们需要手动执行日志清理以回收空间，这是一件繁琐的管理任务。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">logrotate日志管家</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">logrotate日志管家</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-07T03:42:21.000Z" itemprop="datePublished" class="page-time">
+  2017-06-07
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#logrotate工作原理"><span class="post-toc-number">2.</span> <span class="post-toc-text">logrotate工作原理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#logrotate安装"><span class="post-toc-number">3.</span> <span class="post-toc-text">logrotate安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#logrotate选项"><span class="post-toc-number">5.</span> <span class="post-toc-text">logrotate选项</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">6.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产环境-举例"><span class="post-toc-number">7.</span> <span class="post-toc-text">生产环境-举例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Logrotate的疑问"><span class="post-toc-number">8.</span> <span class="post-toc-text">Logrotate的疑问</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#日志切割-错误案例"><span class="post-toc-number">8.0.1.</span> <span class="post-toc-text">日志切割-错误案例</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文章参考"><span class="post-toc-number">9.</span> <span class="post-toc-text">文章参考</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-logrotate日志管家"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">logrotate日志管家</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-07 11:42:21" datetime="2017-06-07T03:42:21.000Z"  itemprop="datePublished">2017-06-07</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><pre><code>服务器日志是任何故障排除过程中非常重要的一部分，但这些日志会随着时间增长。在这种情况下，我们需要手动执行日志清理以回收空间，这是一件繁琐的管理任务。
+</code></pre><a id="more"></a>
+<pre><code>而logrotate就是管理这些日志文件的神器，可以对单个日志文件或者某个目录下的文件按时间/大小进行切割，压缩操作；指定日志保存数量；还可以在切割之后运行自定义命令。
+</code></pre><h2 id="logrotate工作原理"><a href="#logrotate工作原理" class="headerlink" title="logrotate工作原理"></a>logrotate工作原理</h2><p>   在接触任何工具之前，必须了解清楚其原理，配置起来才足够优雅。<br>​<br>    系统会按照计划的频率运行logrotate，通常是每天。在大多数的Linux发行版本上，计划每天运行的脚本位于 /etc/cron.daily/logrotate </p>
+<pre><code>当然，也有一些系统的文件位置不同，比如Gentoo，这个脚本是 /etc/cron.daily/logrotate.cron 
+
+当logrotate运行的时候，它会读取自身的配置文件来决定需要分割日志文件的路径，分割日志文件的频率及保留多少个日志存档。
+</code></pre><p>显而易见，Logrotate是基于CRON来运行的，其脚本是「/etc/cron.daily/logrotate」：<br>​    </p>
+<pre><code>#!/bin/sh
+
+/usr/sbin/logrotate /etc/logrotate.conf
+EXITVALUE=$?
+if [ $EXITVALUE != 0 ]; then
+/usr/bin/logger -t logrotate &quot;ALERT exited abnormally with [$EXITVALUE]&quot;
+fi
+exit 0
+</code></pre><h2 id="logrotate安装"><a href="#logrotate安装" class="headerlink" title="logrotate安装"></a>logrotate安装</h2><pre><code>默认主流Linux发行版上都默认安装有logrotate包，如果查看没有，可以自行安装
+
+# logrotate -v
+# yum install -y logrotate crontabs
+</code></pre><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><pre><code>logrotate的主要配置文件是 /etc/logrotate.conf 
+
+这个文件包含logrotate分割日志时所使用的默认的参数。这个文件一般是被注释掉的，所以你可以粗略浏览一下看看大概的设置。
+
+注意当中的一行：
+include /etc/logrotate.d
+</code></pre><p>/etc/logrotate.d</p>
+<p>注：这个目录下的文件数量可能为零，也可能有很多个配置文件，这取决于你安装应用的数量。总体上说，你通过包管理软件安装的应用也会在这个目录下创建一个配置文件。</p>
+<p>​     </p>
+<h2 id="logrotate选项"><a href="#logrotate选项" class="headerlink" title="logrotate选项"></a>logrotate选项</h2><pre><code>monthly:             --&gt;日志文件将按月轮循。其它可用值为‘daily’，‘weekly’或者‘yearly’
+compress             --&gt; 压缩日志文件的所有非当前版本
+dateext              --&gt; 为日志文件打上日期标签
+delaycompress        --&gt; 压缩所有版本，除了当前和下一个最近的
+endscript            --&gt; 标记 prerotate 或 postrotate 脚本的结束
+errors &quot;emailid&quot;     --&gt; 给指定邮箱发送错误通知
+missingok            --&gt; 如果日志文件丢失，不要显示错误
+notifempty           --&gt; 如果日志文件为空，则不轮换日志文件
+olddir &quot;dir&quot;         --&gt; 指定日志文件的旧版本放在 “dir” 中
+postrotate           --&gt; 引入一个在日志被轮换后执行的脚本
+prerotate            --&gt; 引入一个在日志被轮换前执行的脚本
+rotate 5             --&gt; 保留多少个日志。当新的日志产生时删除最老的一个
+sharedscripts        --&gt; 对于整个日志组只运行一次脚本
+size=&#39;logsize&#39;       --&gt; 在日志大小大于 logsize（例如 100K，4M）时轮换
+</code></pre><!-- more-->
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>我们创建一个10MB的日志文件/var/log/log-file,然后在其中填入一个10MB的随机比特流数据。<br>​    </p>
+<pre><code># touch /var/log/log-file
+# head -c 10M &lt; /dev/urandom &gt; /var/log/log-file
+# ls -lhi /var/log/log-file
+</code></pre><p>现在日志文件已经准备好，我们将配置logrotate来轮循切割该日志文件。现在为该文件创建一个配置文件。<br>    vim /etc/logrotate.d/log-file </p>
+<pre><code>/var/log/log-file {
+monthly
+dateext 
+rotate 5
+compress
+delaycompress
+missingok
+notifempty
+create 644 root root
+postrotate
+    /usr/bin/killall -HUP rsyslogd
+endscript
+}
+
+参数可根据上面的释义进行调整
+</code></pre><p>logrotate是通过CRON来运行的，如果你等不及可以使用以下命令进行测试。</p>
+<pre><code>正式执行前最好通过Debug选项来验证一下，这对调试很重要：
+
+logrotate -d -f /etc/logrotate.d/log-file
+
+上面的命令不报错，就可以执行了
+logrotate -f /etc/logrotate.d/log-file
+
+然后我们去看看原理的log-file变化
+ls -lhi /var/log/log-fi*
+69130581 -rw-r--r--. 1 root root   0 Jun  7 15:35 /var/log/log-file
+69130571 -rw-r--r--. 1 root root 10M Jun  7 15:05 /var/log/log-file-20170607
+</code></pre><p>完工</p>
+<h2 id="生产环境-举例"><a href="#生产环境-举例" class="headerlink" title="生产环境-举例"></a>生产环境-举例</h2><p>按天保存一周的Nginx日志压缩文件，配置文件为「/etc/logrotate.d/nginx」</p>
+<pre><code>/usr/local/nginx/logs/*.log {
+daily
+dateext
+compress
+rotate 7
+sharedscripts
+postrotate
+    kill -USR1 `cat /var/run/nginx.pid`
+endscript
+}
+</code></pre><h2 id="Logrotate的疑问"><a href="#Logrotate的疑问" class="headerlink" title="Logrotate的疑问"></a>Logrotate的疑问</h2><p>问题：sharedscripts的作用是什么？</p>
+<pre><code>大家可能注意到了，我在前面Nginx的例子里声明日志文件的时候用了星号通配符，也就是说这里可能涉及多个日志文件，比如：access.log和error.log。说到这里大家或许就明白了，sharedscripts的作用是在所有的日志文件都轮转完毕后统一执行一次脚本。如果没有配置这条指令，那么每个日志文件轮转完毕后都会执行一次脚本。
+</code></pre><p>问题：rotate和maxage的区别是什么？</p>
+<pre><code>它们都是用来控制保存多少日志文件的，区别在于rotate是以个数为单位的，而maxage是以天数为单位的。如果我们是以按天来轮转日志，那么二者的差别就不大了。
+</code></pre><p>问题：为什么生成日志的时间是凌晨四五点？</p>
+<pre><code> 前面我们说过，Logrotate是基于CRON运行的，所以这个时间是由CRON控制的，具体可以查询CRON的配置文件「/etc/crontab」，可以手动改成如23:59等时间执行
+
+ SHELL=/bin/bash
+ PATH=/sbin:/bin:/usr/sbin:/usr/bin
+ MAILTO=root
+ HOME=/
+
+ # run-parts
+ 01 * * * * root run-parts /etc/cron.hourly
+ 59 23 * * * root run-parts /etc/cron.daily
+ 22 4 * * 0 root run-parts /etc/cron.weekly
+ 42 4 1 * * root run-parts /etc/cron.monthly
+
+ 如果使用的是新版CentOS，那么配置文件为：/etc/anacrontab。
+</code></pre><p>问题：如何告诉应用程序重新打开日志文件？</p>
+<pre><code>以Nginx为例，是通过postrotate指令发送USR1信号来通知Nginx重新打开日志文件的。但是其他的应用程序不一定遵循这样的约定，比如说MySQL是通过flush-logs来重新打开日志文件的。更有甚者，有些应用程序就压根没有提供类似的方法，此时如果想重新打开日志文件，就必须重启服务，但为了高可用性，这往往不能接受。还好Logrotate提供了一个名为copytruncate的指令，此方法采用的是先拷贝再清空的方式，整个过程中日志文件的操作句柄没有发生改变，所以不需要通知应用程序重新打开日志文件，但是需要注意的是，在拷贝和清空之间有一个时间差，所以可能会丢失部分日志数据。
+
+MySQL本身在support-files目录已经包含了一个名为mysql-log-rotate的脚本，不过它比较简单，更详细的日志轮转详见[「Rotating MySQL Slow Logs Safely」](https://engineering.groupon.com/2013/mysql/rotating-mysql-slow-logs-safely/)。
+</code></pre><h4 id="日志切割-错误案例"><a href="#日志切割-错误案例" class="headerlink" title="日志切割-错误案例"></a>日志切割-错误案例</h4><pre><code>错误：
+error: skipping &quot;/var/log/nginx/nginx_web.log&quot; because parent directory has insecure permissions (It&#39;s world writable or writable by group which is not &quot;root&quot;) Set &quot;su&quot; directive in config file to tell logrotate which user/group should be used for rotation.
+
+原因：
+cd /var/log/nginx/
+ls -l
+可以看到，所有log日志文件属主属组是nginx-web, 权限都是777，这个777权限是非常危险的。这样的话logrotate就懵逼了，所有人都有权限操作，但logrotate不知道该用哪个用户去执行crontab定时切割指令。所以会报错。
+
+解决方案：
+不优雅的解决方案： vim /etc/logrotate.d/nginx配置文件中，加入su root list ，即指定root用户去执行日志切割。
+
+优雅的解决方案：你需要去思考，为什么之前是没有问题的？参考方案可以是 @艾特所有php研发，对权限问题严谨性进行科普，拒绝此类事件再次发生。除此之外，将/var/log/nginx目录下的文件权限全部改为644.
+</code></pre><h2 id="文章参考"><a href="#文章参考" class="headerlink" title="文章参考"></a>文章参考</h2><ul>
+<li><p><a href="https://huoding.com/2013/04/21/246" target="_blank" rel="noopener">火灯笔记</a></p>
+</li>
+<li><p><a href="https://linux.cn/article-4126-1.html" target="_blank" rel="noopener">Linux中国</a></p>
+</li>
+</ul>
+<p>​     </p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-11T02:21:51.484Z" itemprop="dateUpdated">2017-07-11 10:21:51</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/07/logrotate日志管家/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/07/logrotate日志管家/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/log/">log</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/logrotate/">logrotate</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/切割/">切割</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日志/">日志</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/&title=《logrotate日志管家》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/&title=《logrotate日志管家》 — Gary Wu&source=前言服务器日志是任何故障排除过程中非常重要的一部分，但这些日志会随着时间增长。在这种情况下，我们需要手动执行日志清理以回收空间，这是一件繁琐的管理任务。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《logrotate日志管家》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/07/lsof命令-总结/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">lsof命令-总结</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/05/RouterOS多线NAT问题处理/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">RouterOS多线NAT问题处理</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/&title=《logrotate日志管家》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/&title=《logrotate日志管家》 — Gary Wu&source=前言服务器日志是任何故障排除过程中非常重要的一部分，但这些日志会随着时间增长。在这种情况下，我们需要手动执行日志清理以回收空间，这是一件繁琐的管理任务。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《logrotate日志管家》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/07/logrotate日志管家/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

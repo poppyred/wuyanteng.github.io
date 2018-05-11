@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>redis入门及使用 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,NoSQL,redis,web缓存,非关系型数据库,Redis主从,redis-server,redis-cli,redis持久化,RDB,AOF">
+    <meta name="description" content="NoSQL概述  NoSQL,即Not only SQL的简写。泛指非关系型数据库  常见的NoSQL开源产品有：Redis、Mongodb、Beansdb等  为什么需要NoSQL? (1)High performance - 高并发读写 (2)Huge Storage - 海量数据的高效率存储和访问 (3)High Scalability &amp;amp;&amp;amp; High Availabili">
+<meta name="keywords" content="高级运维,NoSQL,redis,web缓存,非关系型数据库,Redis主从,redis-server,redis-cli,redis持久化,RDB,AOF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis入门及使用">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/11/04/redis入门及使用/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="NoSQL概述  NoSQL,即Not only SQL的简写。泛指非关系型数据库  常见的NoSQL开源产品有：Redis、Mongodb、Beansdb等  为什么需要NoSQL? (1)High performance - 高并发读写 (2)Huge Storage - 海量数据的高效率存储和访问 (3)High Scalability &amp;amp;&amp;amp; High Availabili">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-04T09:44:56.095Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis入门及使用">
+<meta name="twitter:description" content="NoSQL概述  NoSQL,即Not only SQL的简写。泛指非关系型数据库  常见的NoSQL开源产品有：Redis、Mongodb、Beansdb等  为什么需要NoSQL? (1)High performance - 高并发读写 (2)Huge Storage - 海量数据的高效率存储和访问 (3)High Scalability &amp;amp;&amp;amp; High Availabili">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">redis入门及使用</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">redis入门及使用</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-04T03:21:11.000Z" itemprop="datePublished" class="page-time">
+  2017-11-04
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Redis持久化"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis持久化</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-redis入门及使用"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">redis入门及使用</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-04 11:21:11" datetime="2017-11-04T03:21:11.000Z"  itemprop="datePublished">2017-11-04</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>NoSQL概述</p>
+</blockquote>
+<pre><code>NoSQL,即Not only SQL的简写。泛指非关系型数据库
+
+常见的NoSQL开源产品有：Redis、Mongodb、Beansdb等
+
+为什么需要NoSQL?
+(1)High performance - 高并发读写
+(2)Huge Storage - 海量数据的高效率存储和访问
+(3)High Scalability &amp;&amp; High Availability - 高扩展性和高可用性
+</code></pre><a id="more"></a>
+<blockquote>
+<p>什么是redis</p>
+</blockquote>
+<pre><code>需要记住以下几点：
+1. redis是远程的，分为服务端和客户端。一般说redis，是指的redis服务端
+2. redis是基于内存的。所以比较吃内存
+3. redis是非关系型数据库（与mysql关系型数据库不同，它不需要数据定义存储数据字典）
+</code></pre><blockquote>
+<p>redis的应用场景</p>
+</blockquote>
+<pre><code>(1)用作缓存
+(2)用作队列
+(3)用作数据存储，redis有非常完备的硬盘持久化机制，保证了redis数据的完整性与安全性。
+</code></pre><blockquote>
+<p>源码安装Redis服务端和客户端</p>
+</blockquote>
+<pre><code>1. Redis版本-源码下载
+   http://download.redis.io/redis-stable.tar.gz
+2. 预装软件（gcc,tcl）   
+   gcc是编译器，tcl是语言，redis是由tcl来编写的
+</code></pre><pre><code>tar -zxvf redis-stable.tar.gz
+make       #编译生成二进制文件，编译后的文件在当前目录下的src目录下
+make install  #安装
+
+安装后的目录：
+#which redis-server
+/usr/local/bin/redis-server
+</code></pre><pre><code>查看帮助
+[root@Redis redis-stable]# redis-server --help
+Usage: ./redis-server [/path/to/redis.conf] [options]
+       ./redis-server - (read config from stdin)
+       ./redis-server -v or --version
+       ./redis-server -h or --help
+       ./redis-server --test-memory &lt;megabytes&gt;
+
+Examples:
+       ./redis-server (run the server with default conf)
+       ./redis-server /etc/redis/6379.conf
+       ./redis-server --port 7777
+       ./redis-server --port 7777 --slaveof 127.0.0.1 8888
+       ./redis-server /etc/myredis.conf --loglevel verbose
+
+Sentinel mode:
+       ./redis-server /etc/sentinel.conf --sentinel
+</code></pre><pre><code>切换到源码目录，拷贝redis.conf默认配置文件到/etc/redis/目录下
+mkdir /etc/redis -p
+cp /root/redis-stable/redis.conf /etc/redis/
+</code></pre><blockquote>
+<p>配置redis</p>
+</blockquote>
+<p>vim /etc/redis/redis.conf</p>
+<pre><code>daemonize yes      #配置为后台启动
+pidfile /var/run/redis_6379.pid   #配置redis pid路径
+port 6379          #指定redis运行的端口，默认端口6379
+bind 127.0.0.1     #指定redis只接收来自于哪个IP地址的请求，如果不进行设置，那么将处理所有请求
+timeout 0          #设置客户端连接时的超时时间，单位为秒。0表示关闭此设置
+loglevel notice    #指定redis日志记录级别（共4个级别：debug/verbose/notice/warning）
+logfile “/var/log/redis/redis.log”    #指定redis日志输出文件位置
+databases 16       #可用数据库数量，默认值为16，默认数据库为0，数据库范围在0-(databases-1)之间
+
+
+
+#保存数据到磁盘，格式： save &lt;seconds&gt; &lt;changes&gt;
+#指出在多少时间内，有多少次更新操作，就将数据同步到数据文件rdb中。
+save 900 1         #900秒内，至少有1个key被改变
+save 300 10        #300秒内，至少有10个key被改变
+save 60 10000      #60秒内，至少有10000个key被改变
+
+rdbcompression yes  #保存至本地数据库时(持久化到rdb文件)是否压缩数据，默认为yes
+rdbchecksum yes     #数据持久化到rdb文件过程中是否启用校验，默认为yes
+dbfilename dump.rdb  #数据持久化数据库文件名，默认为dump.rdb
+
+#工作目录
+#即数据库镜像备份的文件放置路径
+dir ./
+</code></pre><pre><code>############## redis主从复制 #####################
+
+#设置本机为salve模式时，需要指定master服务的IP地址及端口，在redis启动时，它会自动从master进行数据同步。
+#格式：slaveof &lt;masterip&gt; &lt;masterport&gt;
+
+#当master服务设置了密码保护时(用requirepass指定的密码)
+#slave连接master的密码，格式为：masterauth &lt;master-password&gt;
+
+# 当从库同主库失去连接或者复制正在进行，从库有两种运行方式：
+# 1) 如果slave-serve-stale-data设置为yes(默认设置)，从库会继续响应客户端的请求。
+#    注：响应可能是过时数据
+# 2) 如果slave-serve-stale-data是指为no，出去INFO和SLAVOF命令之外的任何请求都会返回一个
+#    错误&quot;SYNC with master in progress&quot;
+slave-serve-stale-data yes
+
+# 从库会按照一个时间间隔向主库发送PINGs.可以通过repl-ping-slave-period参数来设置这个时间间隔，默认是10秒
+# repl-ping-slave-period 10
+
+# repl-timeout 设置主库批量数据传输时间或者ping回复时间间隔，默认值是60秒
+# 一定要确保repl-timeout大于repl-ping-slave-period
+# repl-timeout 60   
+</code></pre><pre><code>################## 安全 ##########################
+# 设置客户端连接后进行任何其他指定前需要使用的密码。
+# 警告：因为redis速度相当快，所以在一台比较好的服务器下，一个外部的用户可以在一秒钟进行150K次的密码尝试，这意味着你需要指定非常非常强大的密码来防止暴力破解
+# requirepass foobared
+
+
+# 命令重命名.
+# 在一个共享环境下可以重命名相对危险的命令。比如把CONFIG重名为一个不容易猜测的字符。
+# 举例:
+# rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
+# 如果想删除一个命令，直接把它重命名为一个空字符&quot;&quot;即可，如下：
+# rename-command CONFIG &quot;&quot;
+</code></pre><pre><code>################ redis约束 ########################
+
+# 设置同一时间最大客户端连接数，默认无限制，Redis可以同时打开的客户端连接数为Redis进程可以打开的最大文件描述符数。如果设置 maxclients 0，表示不作限制。
+# 当客户端连接数到达限制时，Redis会关闭新的连接并向客户端返回max number of clients reached错误信息
+# maxclients 128
+
+
+# 指定Redis最大内存限制，Redis在启动时会把数据加载到内存中，达到最大内存后，Redis会先尝试清除已到期或即将到期的Key；Redis同时也会移除空的list对象；当此方法处理后，仍然到达最大内存设置，将无法再进行写入操作，但仍然可以进行读取操作
+# 注意：Redis新的vm机制，会把Key存放内存，Value会存放在swap区
+# maxmemory的设置比较适合于把redis当作于类似memcached的缓存来使用，而不适合当做一个真实的DB。
+# 当把Redis当做一个真实的数据库使用的时候，内存使用将是一个很大的开销
+# maxmemory &lt;bytes&gt;
+
+
+# 当内存达到最大值的时候Redis会选择删除哪些数据？有五种方式可供选择 
+# volatile-lru -&gt; 利用LRU算法移除设置过过期时间的key (LRU:最近使用 Least Recently Used )
+# allkeys-lru -&gt; 利用LRU算法移除任何key
+# volatile-random -&gt; 移除设置过过期时间的随机key
+# allkeys-&gt;random -&gt; remove a random key, any key
+# volatile-ttl -&gt; 移除即将过期的key(minor TTL)
+# noeviction -&gt; 不移除任何可以，只是返回一个写错误
+# 
+# 注意：对于上面的策略，如果没有合适的key可以移除，当写的时候Redis会返回一个错误
+#
+#       写命令包括: set setnx setex append
+#       incr decr rpush lpush rpushx lpushx linsert lset rpoplpush sadd
+#       sinter sinterstore sunion sunionstore sdiff sdiffstore zadd zincrby
+#       zunionstore zinterstore hset hsetnx hmset hincrby incrby decrby
+#       getset mset msetnx exec sort
+#
+# 默认是:
+# maxmemory-policy volatile-lru
+
+# LRU 和 minimal TTL 算法都不是精准的算法，而是相对精准的算法(为了节省内存)，所以你可以调整它的准确性，你可以通过maxmemory-samples进行设置
+# 当默认值为5时会产生足够好的结果；当值设置为10的时候最接近真正的LRU，但会消耗更高的CPU使用率；当值为3时，处理速度最快，但是不准确
+# maxmemory-samples 5
+</code></pre><pre><code>################ Redis Slow Log #######################
+# Redis Slow Log 记录实际执行命令所需的时间。执行时间不包括I/O计算,比如连接客户端，返回结果等.
+# 可以通过两个参数设置slow log：
+#一个是告诉Redis什么是执行时间（以微秒为单位），超过此时间命令会获取日志
+# 另一个是slow log 的长度。当一个新命令被记录的时候最早的命令将被从队列中移除
+
+# 下面的时间以微秒表示，因此1000000代表一秒。
+# 注意制定一个负数将关闭慢日志，而设置为0将强制每个命令都会记录
+slowlog-log-slower-than 10000
+
+# 对日志长度没有限制，只是要注意它会消耗内存
+# 可以通过 SLOWLOG RESET 回收被慢日志消耗的内存
+slowlog-max-len 128
+</code></pre><blockquote>
+<p>启动Redis</p>
+</blockquote>
+<pre><code>/usr/local/bin/redis-server /etc/redis/redis.conf   #启动
+
+#查看Redis启动情况
+[root@Redis redis]# ps -ef |grep redis
+root       4793      1  0 22:03 ?        00:00:00 /usr/local/bin/redis-server 127.0.0.1:6379       
+
+[root@Redis redis]# netstat -lntup |grep 6379
+tcp        0      0 127.0.0.1:6379              0.0.0.0:*                   LISTEN      4793/redis-server 1 
+
+#查看redis日志
+tailf /var/log/redis.log
+</code></pre><blockquote>
+<p>Redis客户端使用</p>
+</blockquote>
+<pre><code>格式：redis-cli -h &lt;serverip&gt; -p &lt;serverport&gt;
+
+[root@Redis redis]# redis-cli -h 127.0.0.1 -p 6379
+127.0.0.1:6379&gt; 
+127.0.0.1:6379&gt; 
+127.0.0.1:6379&gt; 
+</code></pre><pre><code>127.0.0.1:6379&gt; 
+127.0.0.1:6379&gt; info
+# Server
+redis_version:4.0.2
+redis_git_sha1:00000000
+redis_git_dirty:0
+redis_build_id:575be6ca75ca2188
+redis_mode:standalone
+os:Linux 2.6.32-696.13.2.el6.x86_64 x86_64
+arch_bits:64
+......
+......
+# CPU
+used_cpu_sys:5.34
+used_cpu_user:3.02
+used_cpu_sys_children:0.00
+used_cpu_user_children:0.00
+
+# Cluster
+cluster_enabled:0
+
+通过info指令可以获取Redis服务器的版本、内存、CPU或Redis集群等信息。
+当然也可以通过 info stats 或 info CPU来获取具体信息,如：
+127.0.0.1:6379&gt; info CPU
+# CPU
+used_cpu_sys:5.72
+used_cpu_user:3.14
+used_cpu_sys_children:0.00
+used_cpu_user_children:0.00
+127.0.0.1:6379&gt; 
+127.0.0.1:6379&gt; 
+
+具体输出的信息释义，参考：
+http://redisdoc.com/server/info.html
+</code></pre><h4 id="Redis持久化"><a href="#Redis持久化" class="headerlink" title="Redis持久化"></a>Redis持久化</h4><blockquote>
+<p>什么是Redis持久化</p>
+</blockquote>
+<pre><code>Redis的高性能是因为所有的数据都存储在了内存当中，而在系统重启后依然能保证数据不丢失，把内存数据存储到硬盘，这个过程就叫做数据持久化操作。
+</code></pre><blockquote>
+<p>Redis持久化方式</p>
+</blockquote>
+<pre><code>(1) RDB持久化
+    在指定的时间间隔内，把内存中的数据集快照写入磁盘。
+(2) AOF持久化
+    以日志的形式记录服务器所处理的每一次操作，redis服务启动的时候会读取该文件来重新构建数据库，来保证数据是完整的。
+(3) 无持久化
+(4) 同时使用RDB和AOF相结合的方式
+</code></pre><blockquote>
+<p>RDB持久化-优劣势</p>
+</blockquote>
+<pre><code>优势：
+RDB持久化方式只会生成一个文件，可以通过定时任务进行数据备份，可以快速恢复数据。
+
+劣势：
+持久化刚开始且未完成之前，若操作系统出现异常，则会导致部分数据丢失。
+</code></pre><p>RDB持久化配置（默认已配置）</p>
+<pre><code>cat /etc/redis/redis.conf
+save 900 1
+save 300 10
+save 60 10000
+
+# The filename where to dump the DB
+dbfilename dump.rdb   
+dir ./
+
+保存的持久化文件在当前目录下，我的路径是/etc/redis/目录下
+</code></pre><blockquote>
+<p>AOF持久化方式-优劣势</p>
+</blockquote>
+<pre><code>AOF持久化机制：每修改同步、每秒同步、不同步
+优势：
+(1)更高的数据安全性。
+(2)AOF持久化方式使用append向aof文件追加的形式做持久化，每次服务启动，redis会从AOF文件中读取命令从而实现恢复服务器状态。
+</code></pre><p>AOF持久化-配置</p>
+<pre><code>appendonly yes
+# The name of the append only file (default: &quot;appendonly.aof&quot;)
+appendfilename &quot;appendonly.aof&quot;      #文件存储路径: &quot;dir ./&quot;,即/etc/redis/目录下
+
+appendfsync always    #每修改同步
+#appendfsync everysec #每秒同步
+# appendfsync no      #不同步
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-04T09:44:56.095Z" itemprop="dateUpdated">2017-11-04 17:44:56</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/04/redis入门及使用/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/04/redis入门及使用/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AOF/">AOF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NoSQL/">NoSQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RDB/">RDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis主从/">Redis主从</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis-cli/">redis-cli</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis-server/">redis-server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis持久化/">redis持久化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web缓存/">web缓存</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/非关系型数据库/">非关系型数据库</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/04/redis入门及使用/&title=《redis入门及使用》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/04/redis入门及使用/&title=《redis入门及使用》 — Gary Wu&source=
+NoSQL概述
+
+NoSQL,即Not only SQL的简写。泛指非关系型数据库
+
+常见的NoSQL开源产品有：Redis、Mongodb、Beans..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/04/redis入门及使用/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《redis入门及使用》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/04/redis入门及使用/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/04/redis入门及使用/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/04/DNS加密代理之shadowDNS/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">DNS加密代理之shadowDNS</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/29/zabbix监控高级-进阶1/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">zabbix监控高级-进阶1</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/04/redis入门及使用/&title=《redis入门及使用》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/04/redis入门及使用/&title=《redis入门及使用》 — Gary Wu&source=
+NoSQL概述
+
+NoSQL,即Not only SQL的简写。泛指非关系型数据库
+
+常见的NoSQL开源产品有：Redis、Mongodb、Beans..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/04/redis入门及使用/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《redis入门及使用》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/04/redis入门及使用/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/04/redis入门及使用/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/04/redis入门及使用/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

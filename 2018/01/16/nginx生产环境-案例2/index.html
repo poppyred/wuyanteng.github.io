@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>nginx生产环境-案例2 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,nginx,upstream,80,443">
+    <meta name="description" content="环境要求：mongo，redis，nginx，PHP7.1，ffmpeg\ffprobe和fastDFS扩展），其中，nginx需要同时启用80和443">
+<meta name="keywords" content="高级运维,nginx,upstream,80,443">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx生产环境-案例2">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="环境要求：mongo，redis，nginx，PHP7.1，ffmpeg\ffprobe和fastDFS扩展），其中，nginx需要同时启用80和443">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Nginx80443.png">
+<meta property="og:updated_time" content="2018-01-16T13:54:39.820Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx生产环境-案例2">
+<meta name="twitter:description" content="环境要求：mongo，redis，nginx，PHP7.1，ffmpeg\ffprobe和fastDFS扩展），其中，nginx需要同时启用80和443">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Nginx80443.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nginx生产环境-案例2</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nginx生产环境-案例2</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-16T12:45:46.000Z" itemprop="datePublished" class="page-time">
+  2018-01-16
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-nginx生产环境-案例2"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nginx生产环境-案例2</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-16 20:45:46" datetime="2018-01-16T12:45:46.000Z"  itemprop="datePublished">2018-01-16</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>环境要求：mongo，redis，nginx，PHP7.1，ffmpeg\ffprobe和fastDFS扩展），其中，nginx需要同时启用80和443
+</code></pre><a id="more"></a>
+<pre><code>对项目进行充分分析并详细沟通后，基本架构如下（本例只聊聊Nginx区域）：
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/Nginx80443.png" alt="Nginx80443" title="">
+                </div>
+                <div class="image-caption">Nginx80443</div>
+            </figure>
+<!-- more -->
+<hr>
+<p>Nginx前端机配置</p>
+<p>vim  /etc/nginx/conf.d/news.qq.com</p>
+<pre><code>upstream qq_com {
+    server 192.168.10.188 max_fails=3 fail_timeout=10s;
+    server 192.168.10.211 max_fails=3 fail_timeout=10s;
+    }
+
+######----------------------------------80配置区域-----------------------------------#####
+server {
+    listen      30.251.241.177:80;
+    server_name news.qq_com;
+    root /var/www/news.qq_com;
+
+    location / {                                                                                         
+        proxy_pass http://qq_com;                                                               
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;   
+        set $chost &quot;info.qq&quot;;   #注：info.qq是后端服务器nginx配置中ServerName名称                                                                
+        proxy_set_header   Host             $chost;  
+        proxy_set_header   X-Forwarded-For  $remote_addr;                                       
+    } 
+    location = /favicon.ico {
+        access_log off;
+        log_not_found off;
+    }
+
+    access_log      /var/log/nginx/news.qq_com.access_log main;
+    error_log       /var/log/nginx/news.qq_com.error_log warn;
+}
+
+######----------------------------------443配置区域-----------------------------------#####
+
+server {
+    listen      30.251.241.177:443;
+    server_name news.qq_com;
+
+    root /var/www/news.qq_com;
+
+    ssl on;
+    ssl_certificate         /etc/ssl/qq_com/qq_com.pem;
+    ssl_certificate_key     /etc/ssl/qq_com/qq_com.key;
+    ssl_session_timeout  5m;
+    ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers  HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM;
+    ssl_prefer_server_ciphers   on;
+
+    location / {                                                                                 
+        proxy_pass http://qq_com;                                                               
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;   
+        set $chost &quot;info.qq&quot;;                                                                   
+        proxy_set_header   Host             $chost;       
+        proxy_set_header   X-Forwarded-For  $remote_addr;                                       
+    } 
+    location = /favicon.ico {
+        access_log off;
+        log_not_found off;
+    }
+
+    access_log      /var/log/nginx/news.qq_com.ssl.access_log main;
+    error_log       /var/log/nginx/news.qq_com.ssl.error_log warn;
+}
+</code></pre><p>Nginx前后端调用流程</p>
+<pre><code>用户请求url:news.qq.com, 通过A记录域名解析，其中一台前端机接收并处理请求，然后nginx调用upstream模块，并把处理交给其中一台后端机处理请求，后端机解析本地nginx的info.qq.conf文件
+</code></pre><p>Nginx后端机配置</p>
+<p>vim /etc/nginx/conf.d/info.qq.conf</p>
+<pre><code>server {
+    listen          192.168.10.188:80;
+    server_name     info.qq;       #注意此处是info.qq,需要与前端机定义保持一致。
+
+    root /var/www/news.qq.com/;
+
+    location / {
+        if (!-f $request_filename) {
+            # 一级目录下
+            rewrite ^/(.*)$ /index.php/$1 last;
+        }  
+    }
+
+    # pathinfo 模式
+    location ~ \index.php(.*) {
+        fastcgi_index  index.php;
+        fastcgi_pass  php7;    #注意这里,往下看
+        include fastcgi.conf;  
+    }
+
+    access_log      /var/log/nginx/news.qq.com.access_log main;
+    error_log       /var/log/nginx/news.qq.com.error_log warn;
+}
+</code></pre><p>此处需要注意下fastcgi调用方式（socket/端口），也可以提前写到配置文件中，此处只进行使用名称即可,前提是这个文件需要在nginx.conf中include</p>
+<p>vim /etc/nginx/conf.d/upstream_fastcgi.conf</p>
+<pre><code>upstream php {
+        server   unix:/var/run/php-fpm.sock weight=100 max_fails=10 fail_timeout=30;
+}
+upstream php7 {
+        server   unix:/var/run/php-fpm7.sock weight=100 max_fails=10 fail_timeout=30;
+}
+</code></pre><blockquote>
+<p>关于请求测试</p>
+</blockquote>
+<pre><code>配置完毕后，本地可修改host解析去请求news.qq.com域名，然后分别查看前端机的80访问日志和ssl访问日志
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-16T13:54:39.820Z" itemprop="dateUpdated">2018-01-16 21:54:39</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/16/nginx生产环境-案例2/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/443/">443</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/80/">80</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/upstream/">upstream</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/&title=《nginx生产环境-案例2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/&title=《nginx生产环境-案例2》 — Gary Wu&source=环境要求：mongo，redis，nginx，PHP7.1，ffmpeg\ffprobe和fastDFS扩展），其中，nginx需要同时启用80和443
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nginx生产环境-案例2》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">深入理解OpenStack-手动制作qcow2镜像</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/15/深入理解OpenStack-虚拟机存放目录/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">深入理解OpenStack-虚拟机存放目录</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/&title=《nginx生产环境-案例2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/&title=《nginx生产环境-案例2》 — Gary Wu&source=环境要求：mongo，redis，nginx，PHP7.1，ffmpeg\ffprobe和fastDFS扩展），其中，nginx需要同时启用80和443
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nginx生产环境-案例2》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/16/nginx生产环境-案例2/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>问题汇总-openstack计算节点无法调度及热迁移调度 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,计算节点,nova_schedule调度,nova_schedule,热迁移调度">
+    <meta name="description" content="由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：">
+<meta name="keywords" content="高级运维,计算节点,nova_schedule调度,nova_schedule,热迁移调度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="问题汇总-openstack计算节点无法调度及热迁移调度">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-22T12:42:23.321Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="问题汇总-openstack计算节点无法调度及热迁移调度">
+<meta name="twitter:description" content="由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">问题汇总-openstack计算节点无法调度及热迁移调度</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">问题汇总-openstack计算节点无法调度及热迁移调度</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-03-22T12:07:01.000Z" itemprop="datePublished" class="page-time">
+  2017-03-22
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#首先去验证计算节点服务是否正常"><span class="post-toc-number">1.</span> <span class="post-toc-text">首先去验证计算节点服务是否正常</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#其次-需要保证所有计算节点都在一个可用域中"><span class="post-toc-number">2.</span> <span class="post-toc-text">其次,需要保证所有计算节点都在一个可用域中</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#问题1解决方案：计算节点无法被schedule调度"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题1解决方案：计算节点无法被schedule调度</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#问题2解决方案：热迁移配置"><span class="post-toc-number">4.</span> <span class="post-toc-text">问题2解决方案：热迁移配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#以上配置正常后-其中一个计算节点扔不能被调度"><span class="post-toc-number">5.</span> <span class="post-toc-text">以上配置正常后,其中一个计算节点扔不能被调度</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何快速定位故障"><span class="post-toc-number">6.</span> <span class="post-toc-text">如何快速定位故障?</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-问题汇总-openstack计算节点无法调度及热迁移调度"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">问题汇总-openstack计算节点无法调度及热迁移调度</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-03-22 20:07:01" datetime="2017-03-22T12:07:01.000Z"  itemprop="datePublished">2017-03-22</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：
+</code></pre><a id="more"></a>
+<h4 id="首先去验证计算节点服务是否正常"><a href="#首先去验证计算节点服务是否正常" class="headerlink" title="首先去验证计算节点服务是否正常"></a>首先去验证计算节点服务是否正常</h4><pre><code>首先去验证计算节点服务是否正常
+openstack compute service list 
+
+其结果都是正常的
+</code></pre><h4 id="其次-需要保证所有计算节点都在一个可用域中"><a href="#其次-需要保证所有计算节点都在一个可用域中" class="headerlink" title="其次,需要保证所有计算节点都在一个可用域中"></a>其次,需要保证所有计算节点都在一个可用域中</h4><pre><code>通过Web控制台或命令来进行查看与验证
+</code></pre><p>参考：<a href="https://wuyanteng.github.io/2018/03/22/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%E5%8F%AF%E7%94%A8%E5%9F%9Favailablitiy-zone%E9%85%8D%E7%BD%AE/">AZ(可用域)与HA（主机聚合）</a></p>
+<pre><code>以上的排查结果没有发现任何疑问，最后通过比对控制节点的配置文件查出了猫腻。
+
+问题如下：
+1. 后增的计算节点没有配置CPU超配比例与Ceph共享存储
+2. 热迁移调度失败
+</code></pre><h4 id="问题1解决方案：计算节点无法被schedule调度"><a href="#问题1解决方案：计算节点无法被schedule调度" class="headerlink" title="问题1解决方案：计算节点无法被schedule调度"></a>问题1解决方案：计算节点无法被schedule调度</h4><p>所有计算节点操作</p>
+<pre><code>对四台有问题的计算节点进行配置新增, 主要有以下几个方面：
+</code></pre><pre><code>检测计算节点是否支持虚拟化
+egrep -c &#39;(vmx|svm)&#39; /proc/cpuinfo
+
+
+#CPU超配(vim /etc/nova/nova.conf)
+[DEFAULT]
+vcpu_pin_set = 4-31
+cpu_allocation_ratio = 32.0
+ram_allocation_ratio = 0.0
+reserved_host_memory_mb = 4096
+
+
+#ceph共享存储配置
+[libvirt]
+images_type = rbd
+images_rbd_pool = vms
+images_rbd_ceph_conf = /etc/ceph/ceph.conf
+disk_cachemodes = &quot;network=writeback&quot;
+inject_password = false
+inject_key = false
+inject_partition = -2
+hw_disk_discard = unmap
+
+
+#重启计算节点服务,问题解决
+systemctl restart  libvirtd  openstack-nova-compute
+
+
+个别计算节点不能被调度是因为同一个可用域中的计算节点配置环境不同【即CPU超配和Ceph未配置】 导致nova-schedule忽略调度此计算节点导致。因为schedule会根据计算节点的可用资源情况进行条件筛选，符合条件(默认条件是相同计算节点配置，可用资源较少)才被成功调度。
+</code></pre><h4 id="问题2解决方案：热迁移配置"><a href="#问题2解决方案：热迁移配置" class="headerlink" title="问题2解决方案：热迁移配置"></a>问题2解决方案：热迁移配置</h4><p>所有计算节点操作</p>
+<pre><code>修改libvirt配置
+/etc/libvirt/libvirtd.conf 修改为如下内容:
+listen_tls = 0  
+listen_tcp = 1  
+auth_tcp = &quot;none&quot; 
+listen_addr = &quot;0.0.0.0&quot; 
+tcp_port = &quot;16509&quot;
+
+/etc/sysconfig/libvirtd   修改为如下内容:
+LIBVIRTD_ARGS=&quot;--listen&quot;
+
+/etc/libvirt/qemu.conf    修改为如下内容:
+vnc_listen = &quot;0.0.0.0&quot;
+user = &quot;root&quot;
+group = &quot;root&quot;
+dynamic_ownership = 1
+
+
+修改nova配置
+/etc/nova/nova.conf     修改为如下内容：
+[libvirt]
+live_migration_downtime = 500
+live_migration_downtime_steps = 10
+live_migration_downtime_delay = 75
+live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_TUNNELLED
+
+
+#重启服务
+systemctl restart libvirtd openstack-nova-compute
+</code></pre><h4 id="以上配置正常后-其中一个计算节点扔不能被调度"><a href="#以上配置正常后-其中一个计算节点扔不能被调度" class="headerlink" title="以上配置正常后,其中一个计算节点扔不能被调度"></a>以上配置正常后,其中一个计算节点扔不能被调度</h4><pre><code>热迁移测试时, 通过nova-compute.log日志可以看到一堆错误：
+Error oslo_message.rpc.server ...... Exception during message handling
+</code></pre><pre><code>这类报错基本都是由于nova.conf配置文件语法问题导致，虽然服务正常启动，但是不能被成功调度。解决方案：拷贝正常的配置文件覆盖并简要修改，重启服务，测试OK
+</code></pre><h4 id="如何快速定位故障"><a href="#如何快速定位故障" class="headerlink" title="如何快速定位故障?"></a>如何快速定位故障?</h4><pre><code>首先理清楚架构, 其次尝试去修改错误, 验证时或无解决思路时, 务必要查看日志，日志基本能够说明一切。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-22T12:42:23.321Z" itemprop="dateUpdated">2018-03-22 20:42:23</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" target="_blank" rel="external">https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule/">nova_schedule</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule调度/">nova_schedule调度</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/热迁移调度/">热迁移调度</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算节点/">计算节点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&title=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&title=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&source=由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/04/03/Dingo反代Google-DNS/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">dingo反代Goolge DNS</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/03/20/使用光盘搭建本地yum源/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">使用光盘搭建本地yum源</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&title=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&title=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&source=由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

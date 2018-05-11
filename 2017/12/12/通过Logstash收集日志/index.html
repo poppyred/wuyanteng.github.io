@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>通过Logstash收集日志 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,ELK,elasticsearch,kibana,Logstash">
+    <meta name="description" content="配置logstash  #安装 rpm -ivh logstash-5.6.5.rpm   #配置软链 ln -s /etc/logstash /usr/share/logstash/config  #配置 vim /etc/logstash/logstash.yml  path.config: /usr/share/logstash/config/conf.d     #修改path.conf">
+<meta name="keywords" content="高级运维,ELK,elasticsearch,kibana,Logstash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过Logstash收集日志">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="配置logstash  #安装 rpm -ivh logstash-5.6.5.rpm   #配置软链 ln -s /etc/logstash /usr/share/logstash/config  #配置 vim /etc/logstash/logstash.yml  path.config: /usr/share/logstash/config/conf.d     #修改path.conf">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es-head-%E7%B4%A2%E5%BC%95%E5%90%8D%E7%A7%B0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/system-log.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/secure-log.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_discover_log.png">
+<meta property="og:updated_time" content="2017-12-13T13:08:12.374Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过Logstash收集日志">
+<meta name="twitter:description" content="配置logstash  #安装 rpm -ivh logstash-5.6.5.rpm   #配置软链 ln -s /etc/logstash /usr/share/logstash/config  #配置 vim /etc/logstash/logstash.yml  path.config: /usr/share/logstash/config/conf.d     #修改path.conf">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es-head-%E7%B4%A2%E5%BC%95%E5%90%8D%E7%A7%B0.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">通过Logstash收集日志</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">通过Logstash收集日志</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-12T13:04:43.000Z" itemprop="datePublished" class="page-time">
+  2017-12-12
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#收集单个系统日志并输出至文件"><span class="post-toc-number">1.</span> <span class="post-toc-text">收集单个系统日志并输出至文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#通过logstash-收集多个日志文件"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">通过logstash 收集多个日志文件</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-通过Logstash收集日志"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">通过Logstash收集日志</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-12 21:04:43" datetime="2017-12-12T13:04:43.000Z"  itemprop="datePublished">2017-12-12</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>配置logstash</p>
+</blockquote>
+<pre><code>#安装
+rpm -ivh logstash-5.6.5.rpm 
+
+#配置软链
+ln -s /etc/logstash /usr/share/logstash/config
+
+#配置
+vim /etc/logstash/logstash.yml 
+path.config: /usr/share/logstash/config/conf.d     #修改path.config到这个目录
+
+
+#启动
+systemctl start logstash
+systemctl status logstash
+systemctl enable logstash
+
+#软链启动命令
+ln -s /usr/share/logstash/bin/logstash  /sbin  
+</code></pre><a id="more"></a>
+<h3 id="收集单个系统日志并输出至文件"><a href="#收集单个系统日志并输出至文件" class="headerlink" title="收集单个系统日志并输出至文件"></a>收集单个系统日志并输出至文件</h3><pre><code>[root@localhost ~]# cat /etc/logstash/conf.d/system-log.conf 
+input {
+  file {
+    type =&gt; &quot;messagelog&quot;   #
+    path =&gt; &quot;/var/log/messages&quot;
+    start_position =&gt; &quot;beginning&quot;     #第一次从头收集,之后从新添加的日志收集
+  }
+}
+
+output {
+  file {
+    path =&gt; &quot;/tmp/%{type}.%{+YYYY.MM.dd}&quot;  #注：此处dd必须为小写
+  }
+}
+</code></pre><ul>
+<li>检测配置文件语法</li>
+</ul>
+<pre><code>logstash -f /usr/share/logstash/config/conf.d/system-log.conf -t
+</code></pre><ul>
+<li>生成数据并验证</li>
+</ul>
+<pre><code>echo &quot;test&quot; &gt;&gt; /var/log/messages
+echo &quot;测试&quot; &gt;&gt; /var/log/messages
+
+[root@localhost ~]# cat /tmp/messagelog.2017.12.12
+{&quot;@version&quot;:&quot;1&quot;,&quot;host&quot;:&quot;localhost.localdomain&quot;,&quot;path&quot;:&quot;/var/log/messages&quot;,&quot;@timestamp&quot;:&quot;2017-12-12T14:02:22.374Z&quot;,&quot;message&quot;:&quot;Hello Logstash&quot;,&quot;type&quot;:&quot;messagelog&quot;}
+{&quot;@version&quot;:&quot;1&quot;,&quot;host&quot;:&quot;localhost.localdomain&quot;,&quot;path&quot;:&quot;/var/log/messages&quot;,&quot;@timestamp&quot;:&quot;2017-12-12T14:04:15.441Z&quot;,&quot;message&quot;:&quot;测试&quot;,&quot;type&quot;:&quot;messagelog&quot;}
+{&quot;@version&quot;:&quot;1&quot;,&quot;host&quot;:&quot;localhost.localdomain&quot;,&quot;path&quot;:&quot;/var/log/messages&quot;,&quot;@timestamp&quot;:&quot;2017-12-12T14:04:37.454Z&quot;,&quot;message&quot;:&quot;测试&quot;,&quot;type&quot;:&quot;messagelog&quot;}
+</code></pre><ul>
+<li>排错</li>
+</ul>
+<pre><code>如果没有出现上面的测试结果，则需要查看logstash日志
+tailf /var/log/logstash/logstash-plain.log
+
+如果提示/var/log/messages Permission denied无权限，则需要给messages文件授权
+chmod  644 /var/log/messages
+</code></pre><!-- more -->
+<h4 id="通过logstash-收集多个日志文件"><a href="#通过logstash-收集多个日志文件" class="headerlink" title="通过logstash 收集多个日志文件"></a>通过logstash 收集多个日志文件</h4><ul>
+<li>编辑logstash日志收集规则配置文件</li>
+</ul>
+<pre><code>/etc/logstash/conf.d/system-log.conf
+</code></pre><pre><code>[root@localhost conf.d]# cat system-log.conf 
+input {
+  file {
+    path =&gt; &quot;/var/log/messages&quot;       #日志&quot;收集源&quot;的文件路径
+    type =&gt; &quot;systemlog&quot;               #定义事件的唯一类型
+    start_position =&gt; &quot;beginning&quot;     #定义第一次收集日志从头开始
+    stat_interval =&gt; &quot;3&quot;              #定义日志收集时间间隔
+  }
+
+  file {
+    path =&gt; &quot;/var/log/secure&quot;
+    type =&gt; &quot;securelog&quot;
+    start_position =&gt; &quot;beginning&quot;
+    stat_interval =&gt; &quot;3&quot;
+  }
+}
+
+output {
+  if [type] == &quot;systemlog&quot; {          #判断type类型的value，并写入相同(或不同)的Elasticsearch集群
+    elasticsearch {               
+      hosts =&gt; [&quot;10.0.10.21:9200&quot;]    #指定elasticsearch集群节点地址
+      index =&gt; &quot;system-log-%{+YYYY.MM.dd}&quot;  #指定收集日志到elasticsearch后的格式(注：dd必须小写)
+  }}
+  if [type] == &quot;securelog&quot; {
+    elasticsearch {
+      hosts =&gt; [&quot;10.0.10.21:9200&quot;]
+      index =&gt; &quot;secure-log-%{+YYYY.MM.dd}&quot;
+  }}
+
+}
+</code></pre><ul>
+<li>检验配置文件语法是否有误</li>
+</ul>
+<pre><code>[root@localhost conf.d]# logstash -f /usr/share/logstash/config/conf.d/system-log.conf -t
+Sending Logstash&#39;s logs to /var/log/logstash which is now configured via log4j2.properties
+Configuration OK
+</code></pre><ul>
+<li>重启logstash并查看日志是否有报错</li>
+</ul>
+<pre><code>systemctl restart logstash
+systemctl status logstash
+
+注：如果验证后没有“Configuration OK”说明配置一定有问题。可以查看日志来确定并修改具体的错误字段
+tailf /var/log/logstash/logstash-plain.log
+</code></pre><ul>
+<li>向被收集的日志中写入测试数据</li>
+</ul>
+<pre><code>echo &quot;logstash收集多个日志文件-测试&quot;  &gt;&gt; /var/log/secure
+echo &quot;logstash收集多个日志文件-测试&quot;  &gt;&gt; /var/log/messages
+</code></pre><ul>
+<li>kibana界面添加system-messagess 索引</li>
+</ul>
+<pre><code>首先访问elasticsearch-head, 查看索引名称或者通过定义的logstash日志收集规则配置文件查看索引名称
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es-head-%E7%B4%A2%E5%BC%95%E5%90%8D%E7%A7%B0.png" alt="es-head索引" title="">
+                </div>
+                <div class="image-caption">es-head索引</div>
+            </figure>
+<pre><code>访问kibana, Management -- Index Patterns -- 添加索引(如下图)
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/system-log.png" alt="system-log" title="">
+                </div>
+                <div class="image-caption">system-log</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/secure-log.png" alt="secure-log" title="">
+                </div>
+                <div class="image-caption">secure-log</div>
+            </figure>
+<ul>
+<li>kibana展示</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_discover_log.png" alt="kibana_log_展示" title="">
+                </div>
+                <div class="image-caption">kibana_log_展示</div>
+            </figure>
+<ul>
+<li>总结</li>
+</ul>
+<pre><code>1. logstash收集谁的日志，就把logstash安装在哪台机器上，之间使用file模块指定在input即可。
+2. logstash语法大多数为重复性的，记住常用的几个模块和if判断规则即可。特殊使用的话就去官网查找用法。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-12-13T13:08:12.374Z" itemprop="dateUpdated">2017-12-13 21:08:12</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/12/通过Logstash收集日志/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ELK/">ELK</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Logstash/">Logstash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kibana/">kibana</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/&title=《通过Logstash收集日志》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/&title=《通过Logstash收集日志》 — Gary Wu&source=
+配置logstash
+
+#安装
+rpm -ivh logstash-5.6.5.rpm 
+
+#配置软链
+ln -s /etc/logstash /usr..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《通过Logstash收集日志》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/13/通过Logstash收集Tomcat日志/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">通过Logstash收集Tomcat日志</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/10/ELK日志分析平台部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">ELK日志分析平台部署</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/&title=《通过Logstash收集日志》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/&title=《通过Logstash收集日志》 — Gary Wu&source=
+配置logstash
+
+#安装
+rpm -ivh logstash-5.6.5.rpm 
+
+#配置软链
+ln -s /etc/logstash /usr..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《通过Logstash收集日志》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/12/通过Logstash收集日志/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>老男孩-Day9之crontab定时任务-精讲 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,crontab">
+    <meta name="description" content="cron是系统主要的调度进程，可以在无需人工干预的情况下运行作业。 crontab命令用于设置周期性被执行的指令。可以使用它在每天的非高峰负荷时间段运行作业，或在一周或一月中的不同时段运行。">
+<meta name="keywords" content="Linux基础,crontab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="老男孩-Day9之crontab定时任务-精讲">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="cron是系统主要的调度进程，可以在无需人工干预的情况下运行作业。 crontab命令用于设置周期性被执行的指令。可以使用它在每天的非高峰负荷时间段运行作业，或在一周或一月中的不同时段运行。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-06-26T03:33:05.031Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="老男孩-Day9之crontab定时任务-精讲">
+<meta name="twitter:description" content="cron是系统主要的调度进程，可以在无需人工干预的情况下运行作业。 crontab命令用于设置周期性被执行的指令。可以使用它在每天的非高峰负荷时间段运行作业，或在一周或一月中的不同时段运行。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">老男孩-Day9之crontab定时任务-精讲</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">老男孩-Day9之crontab定时任务-精讲</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-24T01:32:21.000Z" itemprop="datePublished" class="page-time">
+  2017-06-24
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#关闭系统服务-命令拼接方式（暂时不使用循环方式）"><span class="post-toc-number">1.</span> <span class="post-toc-text">关闭系统服务-命令拼接方式（暂时不使用循环方式）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#crontab分类"><span class="post-toc-number">2.</span> <span class="post-toc-text">crontab分类</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#crond进程检查"><span class="post-toc-number">3.</span> <span class="post-toc-text">crond进程检查</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#定时任务日志（cron排错日志）"><span class="post-toc-number">4.</span> <span class="post-toc-text">定时任务日志（cron排错日志）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#定时任务详解"><span class="post-toc-number">5.</span> <span class="post-toc-text">定时任务详解</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#定时任务中的常用符号"><span class="post-toc-number">6.</span> <span class="post-toc-text">定时任务中的常用符号</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#示例："><span class="post-toc-number">7.</span> <span class="post-toc-text">示例：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#企业案例1-错误：You-have-new-mail-in-var-spool-mail-root"><span class="post-toc-number">8.</span> <span class="post-toc-text">企业案例1-错误：You have new mail in /var/spool/mail/root</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#企业案例2-tmp目录文件清理"><span class="post-toc-number">9.</span> <span class="post-toc-text">企业案例2-/tmp目录文件清理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#企业案例3-crontab-执行java脚本错误"><span class="post-toc-number">10.</span> <span class="post-toc-text">企业案例3-crontab 执行java脚本错误</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#总结"><span class="post-toc-number">11.</span> <span class="post-toc-text">总结</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#扩展1-vim命令"><span class="post-toc-number">12.</span> <span class="post-toc-text">扩展1: vim命令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#扩展2-while死循环执行命令"><span class="post-toc-number">13.</span> <span class="post-toc-text">扩展2: while死循环执行命令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#扩展3-查看ip-地址"><span class="post-toc-number">14.</span> <span class="post-toc-text">扩展3: 查看ip 地址</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则命令回顾"><span class="post-toc-number">15.</span> <span class="post-toc-text">正则命令回顾</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#正则-取IP地址【排除方式】"><span class="post-toc-number">15.0.1.</span> <span class="post-toc-text">正则-取IP地址【排除方式】</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#取出passwd-第一列【正反方式】"><span class="post-toc-number">15.0.2.</span> <span class="post-toc-text">取出passwd 第一列【正反方式】</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-老男孩-Day9之crontab精讲"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">老男孩-Day9之crontab定时任务-精讲</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-24 09:32:21" datetime="2017-06-24T01:32:21.000Z"  itemprop="datePublished">2017-06-24</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>cron是系统主要的调度进程，可以在无需人工干预的情况下运行作业。</p>
+<p>crontab命令用于设置周期性被执行的指令。可以使用它在每天的非高峰负荷时间段运行作业，或在一周或一月中的不同时段运行。</p>
+<a id="more"></a>
+<p>crontab命令允许用户提交、编辑或删除相应的作业。每一个用户都可以有一个crontab文件来保存调度信息。系统管理员可以通过cron.deny 和 cron.allow 这两个文件来禁止或允许用户拥有自己的crontab文件。</p>
+</blockquote>
+<h4 id="关闭系统服务-命令拼接方式（暂时不使用循环方式）"><a href="#关闭系统服务-命令拼接方式（暂时不使用循环方式）" class="headerlink" title="关闭系统服务-命令拼接方式（暂时不使用循环方式）"></a>关闭系统服务-命令拼接方式（暂时不使用循环方式）</h4><pre><code>chkconfig  |egrep -v &quot;crond|network/syslog|sshd|sysstat&quot; 排除这5个服务
+
+chkconfig  |egrep -v &quot;crond|network/syslog|sshd|sysstat&quot; |awk &#39;{print $1}&#39; 
+
+chkconfig  |egrep -v &quot;crond|network/syslog|sshd|sysstat&quot; |awk &#39;{print &quot;chkconfig &quot;$1&quot; off&quot;}&#39;
+在结果中的前面和后面输入我们想要的字符【只是按照我们的意愿显示了出来，但并没有真正执行】
+
+chkconfig  |egrep -v &quot;crond|network/syslog|sshd|sysstat&quot; |awk &#39;{print &quot;chkconfig &quot;$1&quot; off&quot;}&#39;|bash
+把结果交给bash执行
+</code></pre><pre><code>chkconfig |egrep -v &quot;crond|network|rsyslog|sshd|sysstat&quot; |awk &#39;{print &quot;chkconfig &quot;$1&quot; on&quot;}&#39;|bash
+开启服务
+
+[root@oldboy202 ~]# chkconfig |grep 3:on
+查看已经在命令行模式下启动的服务
+
+拼接命令-联系
+老男孩教育每日一题-第74天-批量重命名
+http://lidao.blog.51cto.com/3388056/1940039
+</code></pre><h4 id="crontab分类"><a href="#crontab分类" class="headerlink" title="crontab分类"></a>crontab分类</h4><pre><code>1.系统使用的定时任务，如: ls -ld /etc/cron* [一般中病毒的时候会用到系统的定时任务]
+   /etc/cron.hourly 每小时运行的任务
+   /etc/cron.daily  每天运行的任务
+   /etc/cron.deny   哪些用户禁止使用定时任务
+
+2.用户的定时任务（crontab）
+  crontab  --help 查看帮助
+
+  crontab -l 查看用户的定时任务
+  【比如: crontab -u garywu -l 查看garywu的cron任务】
+
+  crontab -e 编辑定时任务
+  【比如: crontab -u root -e 编辑root的定时任务；crontab -u gary -e编辑gary用户的cron任务】
+
+  crontab -r //删除某个用户的cron定时任务【工作中慎用！！！】
+  【比如：crontab -u gary -r 想删除gary的cron设置】
+
+  注：crontab命令实际上修改的文件是“/var/spool/cron/当前用户名” , 每次编辑完某个用户的cron设置后，cron自动在/var/spool/cron下生成一个与此用户同名的文件。
+
+  问题：为什么要使用crontab命令，而不直接修改文件？
+        （1）有语法检查功能  （2）方便
+</code></pre><h4 id="crond进程检查"><a href="#crond进程检查" class="headerlink" title="crond进程检查"></a>crond进程检查</h4><pre><code>先确认crond服务是否正在运行
+/etc/init.d/crond status  先确认crond服务是否启动
+
+ps -ef |grep crond        查看系统中正在运行的进程
+UID（谁在运行）  PID进程号  PPID                                进程名称
+root             1361      1     0 May20 ?        00:00:01     crond
+root             15214    15043  0 18:53 pts/0    00:00:00     grep crond
+
+ps -aux |grep crond
+crontab -u oldboy -l  root查看oldboy用户的定时任务
+</code></pre><h4 id="定时任务日志（cron排错日志）"><a href="#定时任务日志（cron排错日志）" class="headerlink" title="定时任务日志（cron排错日志）"></a>定时任务日志（cron排错日志）</h4><pre><code>定时任务的日志：/var/log/cron
+
+工作中对于日志，尽量不使用cat 、vi/vim，因为日志量很大，会直接卡死
+
+建议使用grep或head或tail或lest或tailf ; tailf用来查看实时更新的日志 
+</code></pre><h4 id="定时任务详解"><a href="#定时任务详解" class="headerlink" title="定时任务详解"></a>定时任务详解</h4><pre><code>什么时间执行定时任务？
+
+*  *  *  *  *      comand
+分 时 日 月 周   运行的命令或脚本（强烈建议使用命令绝对路径,比如: /usr/sbin/ntpdate）
+
+* 第1个*号表示分钟（0-59）
+* 第2个*号表示小时（0-23）【注: 24小时制】
+* 第3个*号表示日期（1-31）
+* 第4个*号表示月份（1-12）【或者jan,feb，mar等月份简写】
+* 第5个*号表示周几（0-6） 【周日可以使用0或者7】
+
+注意: 半夜12：00使用 00 00来表示
+</code></pre><h4 id="定时任务中的常用符号"><a href="#定时任务中的常用符号" class="headerlink" title="定时任务中的常用符号"></a>定时任务中的常用符号</h4><pre><code>#     井号,表示注释，不会被处理
+*     在定时任务中表示 “每”，比如每分钟、每天、每月等
+/n    比如：*/10 * * * * ，意思是每隔10分钟
+-     减号表示从哪里来到哪里结束。比如: 每天的17点-19点运行cmd
+,     表示分隔，比如:  30 3-5,17-19 * * * cmd
+2&gt;&amp;1  意思是把标准错误输出重定向到标准输出
+/dev/null  黑洞，运行日志直接丢弃。标准输出和标准错误都重定向到了/dev/null
+</code></pre><h4 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h4><pre><code class="shell">(1)每隔两分钟把自己的名字输出到/tmp/oldboy.txt
+    # print name
+    */2 * * * *  echo &quot;wuyanteng&quot; &gt;&gt; /tmp/oldboy.log
+
+(2) 每天的17-19点的整点，执行cmd 【结果是 17:00 18:00 19:00执行】
+    00 17-19 * * * cmd
+    或
+    00 17,18,19 * * * cmd
+
+(3) 每天的3到5点还有17点到19点的半点执行脚本 cmd
+    30 3-5,17-19 * * * cmd
+    或
+    30 3,4,5,17,18,19 * * * cmd     【了解即可，不推荐作为常用】
+
+(4) 每5分钟更新/同步系统的时间
+    */5 * * * * ntpdate ntp1.aliyun.com &gt;&gt; /tmp/ntpdate.log 2&gt;&amp;1 
+    # log文件放入/tmp/ntpdate.log文件中。
+
+     */5 * * * * ntpdate ntp1.aliyun.com &gt;&gt; /dev/null 2&gt;&amp;1      
+     # log文件直接丢弃放入/dev/null黑洞
+
+    要求：记住2个常用ntp服务器： ntp1.aliyun.com
+                               pool.ntp.org
+
+(5) 每个月的4号和每周的周一到周三的早上11点执行一次重启sshd服务
+    00 11 4 * 1-3 /etc/init.d/sshd restart &gt;&gt;/dev/null 2&gt;&amp;1
+
+(6) 每月1、10、22日的4 : 45重启httpd
+    45 4 1,10,22 * * /etc/init.d/httpd restart &gt;&gt;/usr/local/Apache_service.log 2&gt;&amp;1
+
+(7) 每月的1-5号8:30和9:30刷新DNS缓存
+     30 8,9 1-5 * * unbound-control reload
+
+(8) 在8:03,11:03,14:03,17:03,20:03 执行pwd
+     3 8-20/3 * * *  pwd &gt;&gt;/dev/null 2&gt;&amp;1
+
+(9) 每周六、日上午9:00和下午14：00 执行程序/server/script/oldboy.sh)。
+      00 9,14 * * 0,6 /bin/sh /server/script/oldboy.sh &gt;&gt;/dev/null 2&gt;&amp;1 
+
+(10) 每隔2个小时将/etc/services文件打包备份到/tmp下（最好每次备份成不同的备份包）。
+      00 */2 * * * /bin/tar zcf /tmp/etc-services-$(date +\%F_\%H).tar.gz  /etc/services &gt;&gt; /tmp/tar.log 2&gt;&amp;1
+
+扩展：      
+00 */2 * * * /bin/tar zcf /tmp/etc-services-`date +\%F_\%H`.tar.gz  /etc/services &gt;&gt; /tmp/tar.log 2&gt;&amp;1
+
+[1] ``    英文的反引号(Esc键)也可以调用时间
+[2] date +\%F_\%H  把时间精确到小时
+[3] 注: %号在定时任务里面有特殊含义(表示“回车操作”)，所以需要使用转义符\（撬棍）
+</code></pre>
+<h4 id="企业案例1-错误：You-have-new-mail-in-var-spool-mail-root"><a href="#企业案例1-错误：You-have-new-mail-in-var-spool-mail-root" class="headerlink" title="企业案例1-错误：You have new mail in /var/spool/mail/root"></a>企业案例1-错误：You have new mail in /var/spool/mail/root</h4><pre><code>如果cron定时任务不定向到空（/dev/null）或指定文件，很容易导致硬盘inode空间被占满，从而系统服务不正常。
+
+常见错误： You have new mail in /var/spool/mail/root
+
+原因：邮件软件服务开启后，定时任务没定向到空（/dev/null）或指定文件，然后不断的给root用户发邮件
+
+注：postfix软件的服务如果没有开启（大量小文件堆积在/var/spool/postfix/maildrop/）
+【同时也会导致inode被占满，一个文件占用1个inode，4k文件占用一个bloc】
+</code></pre><h4 id="企业案例2-tmp目录文件清理"><a href="#企业案例2-tmp目录文件清理" class="headerlink" title="企业案例2-/tmp目录文件清理"></a>企业案例2-/tmp目录文件清理</h4><pre><code>inode满了，清除/tmp目录小文件，删除报错：
+
+方法1：
+      cd /tmp 
+      rm -rf *
+      注： rm -f * 命令报错： -bash: /bin/rm: Argument list too long【使用下面方法即可】
+
+方法2：ls /tmp |xargs rm
+
+</code></pre><h4 id="企业案例3-crontab-执行java脚本错误"><a href="#企业案例3-crontab-执行java脚本错误" class="headerlink" title="企业案例3-crontab 执行java脚本错误"></a>企业案例3-crontab 执行java脚本错误</h4><pre><code>crontab执行java脚本报错：java里面缺少PATH变量，java找不到对应的命令位置。
+
+解决方法在脚本里面添加java环境变量。
+</code></pre><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><pre><code>1. 每条定义的定时任务善于添加注释行，方便日后维护
+2. 定时任务中，善于使用命令的绝对路径（使用which来查看命令的绝对路径）
+3. 尽量在cron中去定期运行脚本而不是很多命令
+4. 尽量使用/bin/sh去解释脚本，如：/bin/sh  print_ip.sh 
+5. 定时任务中-命令或脚本结果（正确及错误）定向到空（/dev/null）或定向到指定文件中。
+6. 
+</code></pre><h4 id="扩展1-vim命令"><a href="#扩展1-vim命令" class="headerlink" title="扩展1: vim命令"></a>扩展1: vim命令</h4><pre><code>dG(d+shift+g) 删除当前行的内容，到最后一行一行的内容
+yy    复制
+dd    删除/剪切
+p     粘贴
+5dd    从当前行开始计算，向下删除5行（包含当前行）。即ndd
+yy100n 粘贴n次 
+yy100p 复制当前行，同时粘贴100次
+100u   撤销100行的操作
+u     撤销
+:wq   保存退出
+:q!   不保存，强制退出
+:set nu 显示行号
+G（shift+g） 快速到达文件的最后一行
+10G    快速到达第10行
+gg     快速到达文件第一行
+100gg  快速到达第100行
+o     （小o）在当前行的下面插入一行并进入编辑模式
+^或0   快速移动到当前行的行首
+$      快速移动到当前行的行尾
+/ssh   查找/搜索ssh字符（n继续往下查找, N向上查找）
+
+:h p    vim查看帮助
+:h gg   查找gg的帮助
+:h dG   查找dG的帮助
+</code></pre><h4 id="扩展2-while死循环执行命令"><a href="#扩展2-while死循环执行命令" class="headerlink" title="扩展2: while死循环执行命令"></a>扩展2: while死循环执行命令</h4><pre><code># vim ntpdate.sh
+  sleep 300;          //300秒，即5分钟执行一次
+  #!/bin/sh
+  while true
+  do
+      /usr/sbin/ntpdate ntp1.aliyun.com &gt;&gt; /root/ntp_gary.log 2&gt;&amp;1 
+  sleep 1
+  done
+
+# bash ntpdate.sh
+</code></pre><h4 id="扩展3-查看ip-地址"><a href="#扩展3-查看ip-地址" class="headerlink" title="扩展3: 查看ip 地址"></a>扩展3: 查看ip 地址</h4><pre><code>ip address
+
+ip address show eth0 
+</code></pre><h4 id="正则命令回顾"><a href="#正则命令回顾" class="headerlink" title="正则命令回顾"></a>正则命令回顾</h4><pre><code>echo -e &quot;\na\tb\na&quot;      -e参数让echo支持转义符; \n 换行 ； \t  表示tab键，约8个字符长度的区域
+</code></pre><pre><code>^$表示空行
+要求：查看services文件（不显示空行）
+egrep -v &quot;^$&quot; /etc/services
+sed  &#39;/^$/d&#39; /etc/services
+awk &#39;!/^$/&#39; /etc/services
+
+[^t] 除了包含t的行
+^[^t] 除了以t开头的行
+</code></pre><h6 id="正则-取IP地址【排除方式】"><a href="#正则-取IP地址【排除方式】" class="headerlink" title="正则-取IP地址【排除方式】"></a>正则-取IP地址【排除方式】</h6><pre><code>[root@oldboy202 scripts]# ifconfig eth0 |awk -F &#39;[^0-9.]+&#39; &#39;NR==2{print $2}&#39;
+10.0.0.202
+
+注：[^0-9.]+  表示除了连续的0-9和点
+    NR==2 取行
+    {print $2}取第二列
+</code></pre><h6 id="取出passwd-第一列【正反方式】"><a href="#取出passwd-第一列【正反方式】" class="headerlink" title="取出passwd 第一列【正反方式】"></a>取出passwd 第一列【正反方式】</h6><pre><code>head /etc/passwd &gt;passwd  拷贝passwd文件用于环境测试
+
+[root@oldboy202 ~]# egrep -o &quot;^[a-z0-9A-Z_-]+&quot; passwd   
+root
+bin
+daemon
+adm
+lp
+查找连续以0-9、a-z、A-Z以及下划线&quot;_&quot;和减号&quot;-&quot;开头的行,注意：减号“-”必须放在最后，否则报错
+
+[root@oldboy202 ~]# egrep -o &quot;^[^:]+&quot; passwd        除了以连续:冒号开头的行
+root
+bin
+daemon
+adm
+lp
+sync
+
+
+[root@oldboy202 ~]# egrep  -o &quot;[^:]+$&quot; passwd     除了以连续冒号:为结尾的行
+/bin/bash
+/sbin/nologin
+/sbin/nologin
+/sbin/nologin
+/sbin/nologin
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-06-26T03:33:05.031Z" itemprop="dateUpdated">2017-06-26 11:33:05</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/24/老男孩-Day9之crontab精讲/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/crontab/">crontab</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/&title=《老男孩-Day9之crontab定时任务-精讲》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/&title=《老男孩-Day9之crontab定时任务-精讲》 — Gary Wu&source=
+cron是系统主要的调度进程，可以在无需人工干预的情况下运行作业。
+crontab命令用于设置周期性被执行的指令。可以使用它在每天的非高峰负荷时间段运行..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-Day9之crontab定时任务-精讲》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/25/umount与-tmp-相爱相守/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">crontab与/tmp-相爱相守</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/23/RAID5工作原理/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">RAID5工作原理</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/&title=《老男孩-Day9之crontab定时任务-精讲》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/&title=《老男孩-Day9之crontab定时任务-精讲》 — Gary Wu&source=
+cron是系统主要的调度进程，可以在无需人工干预的情况下运行作业。
+crontab命令用于设置周期性被执行的指令。可以使用它在每天的非高峰负荷时间段运行..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-Day9之crontab定时任务-精讲》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/24/老男孩-Day9之crontab精讲/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

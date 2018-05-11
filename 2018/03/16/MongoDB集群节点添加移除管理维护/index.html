@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MongoDB集群节点-添加移除管理维护 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,MongoDB,MongoDB集群,mongo集群管理维护">
+    <meta name="description" content="此操作在mongo V3.0已验证">
+<meta name="keywords" content="高级运维,MongoDB,MongoDB集群,mongo集群管理维护">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB集群节点-添加移除管理维护">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="此操作在mongo V3.0已验证">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-19T10:43:14.752Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB集群节点-添加移除管理维护">
+<meta name="twitter:description" content="此操作在mongo V3.0已验证">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MongoDB集群节点-添加移除管理维护</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MongoDB集群节点-添加移除管理维护</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-16T10:34:41.000Z" itemprop="datePublished" class="page-time">
+  2018-03-16
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-集群运行时添加节点"><span class="post-toc-number">1.</span> <span class="post-toc-text">1.集群运行时添加节点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-设定节点优先级"><span class="post-toc-number">2.</span> <span class="post-toc-text">2. 设定节点优先级</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-Mongodb运行时-移除节点"><span class="post-toc-number">3.</span> <span class="post-toc-text">3. Mongodb运行时-移除节点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-MongoDB运行时移除分片"><span class="post-toc-number">4.</span> <span class="post-toc-text">4. MongoDB运行时移除分片</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-MongoDB集群节点添加移除管理维护"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MongoDB集群节点-添加移除管理维护</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-16 18:34:41" datetime="2018-03-16T10:34:41.000Z"  itemprop="datePublished">2018-03-16</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>此操作在mongo V3.0已验证
+</code></pre><a id="more"></a>
+<h4 id="1-集群运行时添加节点"><a href="#1-集群运行时添加节点" class="headerlink" title="1.集群运行时添加节点"></a>1.集群运行时添加节点</h4><pre><code>查看复制集节点配置
+./mongo 192.168.1.207:27017
+
+db.version()    查看版本
+ 3.2.11 
+
+rs0:PRIMARY&gt; rs.conf();  查看集群配置文件
+或
+rs0:PRIMARY&gt; rs.isMaster(); 
+</code></pre><p>添加节点</p>
+<pre><code>添加新的数据目录
+mkdir –p /mongodb/data/shard4
+
+启动节点
+./mongod –shardsvr –replSet shard1 –port 27019 –dbpath  /mongodb/data/shard4 –oplogSize 100 –logpath /mongodb/data/shard4.log –logappend –fork
+
+
+连接主节点
+mongo 192.168.1.207:27017
+
+查看集群配置文件
+rs0:PRIMARY&gt; rs.isMaster();  
+
+添加节点
+ rs0:PRIMARY&gt; rs.add(&quot;192.168.1.207:27019&quot;);
+{ &quot;ok&quot; : 1 }
+</code></pre><p>再次查看状态</p>
+<pre><code>再次查看状态
+rs0:PRIMARY&gt; rs.conf();
+或
+rs0:PRIMARY&gt; rs.isMaster();
+
+能看到新增节点说明添加成功
+</code></pre><h4 id="2-设定节点优先级"><a href="#2-设定节点优先级" class="headerlink" title="2. 设定节点优先级"></a>2. 设定节点优先级</h4><pre><code>优先级值越高,就是主节点
+</code></pre><pre><code>在新增节点的时候设定该节点的优先级别
+repSetTest:PRIMARY&gt; rs.add({&quot;_id&quot;:3,&quot;host&quot;:&quot;localhost:27000&quot;,&quot;priority&quot;:1.5})
+</code></pre><pre><code>通过下面的方式修改优先级别
+
+repSetTest:PRIMARY&gt; var config=rs.config()
+
+repSetTest:PRIMARY&gt; config.members[2].priority=2
+2
+repSetTest:PRIMARY&gt; rs.reconfig(config)
+{ &quot;ok&quot; : 1 }
+
+注意：第2步members大括号里面的取值(从0开始往下数,顺序值)和_id是没有关系的。
+这些操作必须在Primary上进行。
+</code></pre><h4 id="3-Mongodb运行时-移除节点"><a href="#3-Mongodb运行时-移除节点" class="headerlink" title="3. Mongodb运行时-移除节点"></a>3. Mongodb运行时-移除节点</h4><pre><code>连接主节点
+mongo 192.168.1.207:27017
+
+rs0:PRIMARY&gt; rs.remove(&quot;192.168.1.207:27019&quot;);    此处输入移除命令
+
+最后还需要关掉192.168.1.207:27019 该服务
+Ps –ef | grep mongo 查找该服务
+然后通过kill -9 pid 关闭服务, 测试没问题之后清理配置文件
+</code></pre><h4 id="4-MongoDB运行时移除分片"><a href="#4-MongoDB运行时移除分片" class="headerlink" title="4. MongoDB运行时移除分片"></a>4. MongoDB运行时移除分片</h4><pre><code>Mongodb运行时移除分片
+1、连接mongos节点 ./mongo 192.168.1.207:30000/admin
+
+2、运行db.runCommand( { removeshard: &quot;your_shard_name&quot; } )
+{ msg : &quot;draining started successfully&quot;, state: &quot;started&quot;, shard :&quot;mongodb0&quot;, ok : 1 }
+
+3、查看状态，我们可以反复执行上面语句查看执行状态
+db.runCommand( { removeshard: &quot;your_shard_name&quot; } )
+{ msg: &quot;draining ongoing&quot;, state: &quot;ongoing&quot;, remaining: { chunks: 42, dbs : 1 }, ok: 1
+说明正在迁移中。
+
+
+4、移除非shard数据
+db.runCommand( { movePrimary: &quot;myapp&quot;, to: &quot;mongodb1&quot; })
+
+这次就不是立即返回了，需要很久，然后会返回如下：
+{ &quot;primary&quot; : &quot;mongodb1&quot;, &quot;ok&quot; : 1 }
+
+
+5、上面步骤都完成后，还需要再执行一次RemoveShard，清理残余数据。
+db.runCommand( { removeshard: &quot;mongodb0&quot; } )
+显示completed后，就可以安心的关闭mongod的进程了。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-19T10:43:14.752Z" itemprop="dateUpdated">2018-03-19 18:43:14</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/03/16/MongoDB集群节点添加移除管理维护/" target="_blank" rel="external">https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB集群/">MongoDB集群</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo集群管理维护/">mongo集群管理维护</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/&title=《MongoDB集群节点-添加移除管理维护》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/&title=《MongoDB集群节点-添加移除管理维护》 — Gary Wu&source=此操作在mongo V3.0已验证
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MongoDB集群节点-添加移除管理维护》 — Gary Wu&url=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/17/gentoo-emerge编译nginx/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">gentoo emerge编译nginx</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/16/问题汇总-VM热迁移live-migration/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">问题汇总: VM热迁移live migration</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/&title=《MongoDB集群节点-添加移除管理维护》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/&title=《MongoDB集群节点-添加移除管理维护》 — Gary Wu&source=此操作在mongo V3.0已验证
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MongoDB集群节点-添加移除管理维护》 — Gary Wu&url=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/03/16/MongoDB集群节点添加移除管理维护/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Mysql单节点部署1 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,mysql,dba,MariaDB,PerconaDB,Oracle">
+    <meta name="description" content="数据库分类  DBMS 指数据库管理系统，分为RDBMS(关系型数据库管理系统)和NoSQL(非关系型数据库)  数据库世界排名统计网站：https://db-engines.com/en/ranking,根据排名趋势可以很清楚的知道研究方向">
+<meta name="keywords" content="高级运维,mysql,dba,MariaDB,PerconaDB,Oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql单节点部署1">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="数据库分类  DBMS 指数据库管理系统，分为RDBMS(关系型数据库管理系统)和NoSQL(非关系型数据库)  数据库世界排名统计网站：https://db-engines.com/en/ranking,根据排名趋势可以很清楚的知道研究方向">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mysql_sql.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.png">
+<meta property="og:updated_time" content="2018-01-08T09:23:17.780Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql单节点部署1">
+<meta name="twitter:description" content="数据库分类  DBMS 指数据库管理系统，分为RDBMS(关系型数据库管理系统)和NoSQL(非关系型数据库)  数据库世界排名统计网站：https://db-engines.com/en/ranking,根据排名趋势可以很清楚的知道研究方向">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mysql_sql.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Mysql单节点部署1</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Mysql单节点部署1</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-23T01:50:45.000Z" itemprop="datePublished" class="page-time">
+  2017-12-23
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署Mysql-V5-6"><span class="post-toc-number">1.</span> <span class="post-toc-text">部署Mysql-V5.6</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据库管理"><span class="post-toc-number">2.</span> <span class="post-toc-text">数据库管理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#"><span class="post-toc-number">3.</span> <span class="post-toc-text"></span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置文件读取顺序"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置文件读取顺序</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Mysql单节点部署1"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Mysql单节点部署1</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-23 09:50:45" datetime="2017-12-23T01:50:45.000Z"  itemprop="datePublished">2017-12-23</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>数据库分类</p>
+</blockquote>
+<pre><code>DBMS 指数据库管理系统，分为RDBMS(关系型数据库管理系统)和NoSQL(非关系型数据库)
+
+数据库世界排名统计网站：https://db-engines.com/en/ranking,根据排名趋势可以很清楚的知道研究方向
+</code></pre><a id="more"></a>
+<p>NoSQL产品代表:</p>
+<pre><code>键值存储：memcache、redis
+列存储：HBASE
+文档数据库: Mongodb(最接近关系型数据库)
+图形存储：Neo4j 
+通常以json格式进行数据存储
+</code></pre><p>DBMS数据库产品代表</p>
+<pre><code>Oracle 、Mysql 、MariaDB、PerconaDB
+</code></pre><!-- more -->
+<blockquote>
+<p>MySQL启动过程</p>
+</blockquote>
+<pre><code>1. 启动后台守护进程，并生成工作线程
+2. 提供预分配内存结构供MySQL处理数据使用
+</code></pre><p>什么是实例？</p>
+<pre><code>MySQL的后台进程+线程+预分配内存结构
+</code></pre><blockquote>
+<p>MySQLD服务器程序构成</p>
+</blockquote>
+<pre><code>连接层 --&gt; SQL层 --&gt; 存储引擎层(磁盘/内存/网格)
+
+连接层：即客户端输入的SQL语句,如: select * from student
+SQL层: 语法解析器解析SQL语句为 执行计划(即解析为SQL能理解的行为模式),授权并通过内部优化器自我判断(即自我判定选出一个成本最低的执行计划方式)，然后查询执行,执行后把结果交给存储引擎层（磁盘/内存/网络）进行数据调用，最后把结果返回给应用程序
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mysql_sql.png" alt="mysql_sql" title="">
+                </div>
+                <div class="image-caption">mysql_sql</div>
+            </figure>
+<p>MySQL启动流程</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.png" alt="mysql启动流程" title="">
+                </div>
+                <div class="image-caption">mysql启动流程</div>
+            </figure>
+<!-- more -->
+<h4 id="部署Mysql-V5-6"><a href="#部署Mysql-V5-6" class="headerlink" title="部署Mysql-V5.6"></a>部署Mysql-V5.6</h4><blockquote>
+<p>编译安装</p>
+</blockquote>
+<pre><code>
+#安装依赖包
+yum groupinstall &quot;Development Tools&quot;
+yum install ncurses-devel libaio-devel -y
+rpm -qa ncurses-devel libaio-devel
+
+#安装预编译工具cmake
+yum install -y cmake
+
+#创建用户
+useradd -s /sbin/nologin -M mysql
+id mysql
+
+#官方下载mysql-版本:mysql-5.6.36
+[root@MBJ-11 ~]# md5sum mysql-5.6.36.tar.gz   #检查md5是否与官方一致
+a36a241164c78286993cbe1079626cdd  mysql-5.6.36.tar.gz
+
+#解压、进入目录编译
+tar -zxvf mysql-5.6.36.tar.gz &amp;&amp; cd mysql-5.6.36
+
+#注: cmake的作用：
+1.定制软件的安装路径
+2.定制mysql的源程序和命令脚本
+    bin/mysqld (二进制的) 关键守护程序源码
+    bin/mysql
+    bin/mysqld_safe
+    scripts/mysql.server
+    bin/mysqldump
+    bin/mysqladmin
+    supports-file/mysql_install_db
+
+mysql编译命令
+cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.36 \
+-DMYSQL_DATADIR=/usr/local/mysql-5.6.36/data \
+-DMYSQL_UNIX_ADDR=/usr/local/mysql-5.6.36/data/mysql.sock \
+-DDEFAULT_CHARSET=utf8 \
+-DDEFAULT_COLLATION=utf8_general_ci \
+-DWITH_EXTRA_CHARSETS=all \
+-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+-DWITH_FEDERATED_STORAGE_ENGINE=1 \
+-DWITH_BLACKHOLE_STORAGE_ENGINE=1 \
+-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 \
+-DWITH_ZLIB=bundled \
+-DWITH_SSL=bundled \
+-DENABLED_LOCAL_INFILE=1 \
+-DWITH_EMBEDDED_SERVER=1 \
+-DENABLE_DOWNLOADS=1 \
+-DWITH_DEBUG=0
+</code></pre><pre><code>如果上面编译出错，重新解压mysql源码包，进入目录重新cmake编译
+make &amp;&amp; make install
+ln -s /usr/local/mysql-5.6.36/ /usr/local/mysql
+</code></pre><blockquote>
+<p>初始化及创建数据库</p>
+</blockquote>
+<pre><code>\cp support-files/my*.cnf /etc/my.cnf
+
+#初始化mysql
+/usr/local/mysql/scripts/mysql_install_db --basedir=/usr/local/mysql/ --datadir=/usr/local/mysql/data --user=mysql
+
+chown -R mysql.mysql //usr/local/mysql/
+cp support-files/mysql.server /etc/init.d/mysqld
+chmod 700 /etc/init.d/mysqld
+chkconfig mysqld on
+chkconfig --list mysqld
+mkdir -p /usr/local/mysql-5.6.36/data   #创建mysql socket存放目录
+chown -R mysql:mysql /usr/local/mysql-5.6.36/data #修改目录权限
+/etc/init.d/mysqld start
+netstat -lntup |grep 3306
+</code></pre><p>配置环境变量</p>
+<pre><code>echo  &#39;export PATH=$PATH:/usr/local/mysql/bin&#39; &gt;&gt;/etc/profile
+tail -1 /etc/profile
+source /etc/profile
+</code></pre><p>排错</p>
+<pre><code>查看错误日志
+tail -5 /usr/local/mysql/data/$HOSTNAME.err
+</code></pre><!-- more -->
+<blockquote>
+<p>Mysql基本优化</p>
+</blockquote>
+<p>设置超级管理员密码</p>
+<pre><code>mysqladmin -u root -p password &#39;123456&#39;  #配置MySQL账户密码,默认为空
+mysql -uroot -p123456   #登陆测试
+mysql&gt; 
+</code></pre><p>清理用户及无用数据库</p>
+<pre><code>mysql&gt; select user,password,host from mysql.user;
++------+-------------------------------------------+--------------------+
+| user | password                                  | host               |
++------+-------------------------------------------+--------------------+
+| root | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 | localhost          |
+| root |                                           | host23.exmaple.com |
+| root |                                           | 127.0.0.1          |
+| root |                                           | ::1                |
+|      |                                           | localhost          |
+|      |                                           | host23.exmaple.com |
++------+-------------------------------------------+--------------------+
+
+#删除用户使用drop user命令
+mysql&gt; drop user &#39;&#39;@&#39;localhost&#39;;
+
+mysql&gt; drop user &#39;&#39;@&#39;host23.exmaple.com&#39;;
+
+mysql&gt; drop user &#39;root&#39;@&#39;::1&#39;;
+
+mysql&gt; drop user &#39;root&#39;@&#39;127.0.0.1&#39;;
+
+mysql&gt; drop user &#39;root&#39;@&#39;host23.exmaple.com&#39;;
+
+mysql&gt; select user,password,host from mysql.user;
++------+-------------------------------------------+-----------+
+| user | password                                  | host      |
++------+-------------------------------------------+-----------+
+| root | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 | localhost |
++------+-------------------------------------------+-----------+
+</code></pre><pre><code>#删除数据库使用drop database命令
+mysql&gt; drop database test;
+
+mysql&gt; drop database performance_schema;
+
+mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
++--------------------+
+</code></pre><p>常见问题</p>
+<pre><code>常见问题:
+故障:ERROR! The server quit without updating PID file 
+解决方法：创建存放pid的目录并使用“chown -R mysql.mysql”命令,修改pid存放目录的权限
+</code></pre><pre><code>kill/pkill关停数据库或mysql服务器意外终止，造成启动失败
+</code></pre><!-- more -->
+<h4 id="数据库管理"><a href="#数据库管理" class="headerlink" title="数据库管理"></a>数据库管理</h4><blockquote>
+<p>客户端连接到MySQL</p>
+</blockquote>
+<pre><code>通过socket方式：(mysql本地连接默认使用socket方式)
+mysql -uroot -p123456 -S /usr/local/mysql/data/mysql.sock
+
+通过TCP/IP方式
+mysql -uroot -p123456 -h 远程IP
+</code></pre><blockquote>
+<p>用户管理</p>
+</blockquote>
+<pre><code>#查询用户名、密码和权限
+mysql&gt; select user,password,host from mysql.user;
++------+-------------------------------------------+-----------+
+| user | password                                  | host      |
++------+-------------------------------------------+-----------+
+| root | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 | localhost |
++------+-------------------------------------------+-----------+
+
+#查看数据库
+show databases;
+
+#创建数据库
+create database app;
+
+#查看指定数据库表
+use mysql;
+show tables;
+
+#创建用户并对指定数据库授权
+mysql&gt; grant all on app.* to app@&#39;10.0.0.%&#39; identified by &#39;123456&#39;;
+
+
+#创建单个用户
+create user &#39;用户&#39;@&#39;主机&#39; IDENTIFIED BY &#39;密码&#39;;
+create user &#39;oldboy&#39;@&#39;locahost&#39; identified by &#39;oldboy123&#39;; 
+
+#给用户授权
+mysql&gt; grant all on mysql.* to zhangsan1@&#39;10.0.10.%&#39;;
+
+
+#删除用户
+drop user &#39;user&#39;@&#39;主机域&#39; 
+特殊的删除方法:
+mysql&gt; delete from mysql.user where user=&#39;app&#39; and host=&#39;localhost&#39;;
+mysql&gt; flush privileges;
+
+#创建用户同时授权
+grant all on *.* to oldgirl@&#39;172.16.1.%&#39; identified by &#39;oldgirl123&#39;;
+flush privileges;
+
+
+#查看某个用户数据库权限
+mysql&gt; select user,host,password from mysql.user;
++----------+-----------+-------------------------------------------+
+| user     | host      | password                                  |
++----------+-----------+-------------------------------------------+
+| root     | localhost | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
+| zhangsan | 10.0.10.% | *23AE809DDACAF96AF0FD78ED04B6A265E05AA257 |
+| lisi     | 10.0.10.% | *23AE809DDACAF96AF0FD78ED04B6A265E05AA257 |
+| super    | localhost | *531E182E2F72080AB0740FE2F2D689DBE0146E04 |
+| wanger   | 10.0.10.% | *E8D868B7DA46FC9F996DC761C1AE01754A4447D5 |
++----------+-----------+-------------------------------------------+
+
+mysql&gt; show grants for lisi@&#39;10.0.10.%&#39;\G;
+*************************** 1. row ***************************
+Grants for lisi@10.0.10.%: GRANT USAGE ON *.* TO &#39;lisi&#39;@&#39;10.0.10.%&#39; IDENTIFIED BY PASSWORD &#39;*23AE809DDACAF96AF0FD78ED04B6A265E05AA257&#39;
+*************************** 2. row ***************************
+Grants for lisi@10.0.10.%: GRANT SELECT ON `app`.* TO &#39;lisi&#39;@&#39;10.0.10.%&#39;
+2 rows in set (0.00 sec)
+注：当单个用户权限出现冲突时，以权限最大的设置为准
+
+
+#单独收回数据库某个权限
+mysql&gt; revoke drop on wordpress.* from wordpress@&#39;10.0.0.%&#39;;
+Query OK, 0 rows affected (0.00 sec)
+
+#可以授权的用户权限:
+INSERT,SELECT, UPDATE, DELETE, CREATE, DROP, RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER, CREATE TABLESPACE
+
+#收回权限:
+REVOKE INSERT ON wordpress.* from oldboy@&#39;localhost&#39;;
+
+#收回某个数据库的所有权限
+revoke all on wordpress.* from wordpress@&#39;10.0.0.%&#39;;
+
+
+注：企业里创建用户一般是授权一个内网网段登录，最常见的网段写法有两种。
+方法1：172.16.1.%（%为通配符，匹配所有内容）。
+方法2：172.16.1.0/255.255.255.0，但是不能使用172.16.1.0/24，是个小遗憾。
+</code></pre><pre><code>例：博客授权:
+grant select,insert,update,delete,create,drop on blog.* to &#39;blog&#39;@&#39;172.16.1.%&#39; identified by &#39;blog123&#39;;
+revoke create,drop on blog.* from &#39;blog&#39;@&#39;172.16.1.%&#39;;
+</code></pre><!-- more -->
+<p>####密码忘记后，修改密码方式</p>
+<pre><code>适用于V5.6版本
+
+#用以下命令启动mysql
+/usr/local/mysql/bin/mysqld_safe  --skip-grant-table --skip-networking &amp; 
+
+#登陆mysql
+mysql
+
+#修改密码：
+mysql&gt; select user,password,host from mysql.user
+mysql&gt; update mysql.user set password=PASSWORD(&#39;123456&#39;) where user=&#39;wordpress&#39; and host=&#39;192.168.56.%&#39;;
+
+#正常启动mysql
+mysql -uroot -p123456 -h 192.168.56.11
+</code></pre><blockquote>
+<p>查看mysql错误代码含义-命令</p>
+</blockquote>
+<pre><code>perror
+
+示例：
+[root@MBJ-11 data]# perror 110
+OS error code 110:  Connection timed out
+[root@MBJ-11 data]# perror 111
+OS error code 111:  Connection refused
+</code></pre><h4 id=""><a href="#" class="headerlink" title=""></a><!-- more --></h4><h4 id="配置文件读取顺序"><a href="#配置文件读取顺序" class="headerlink" title="配置文件读取顺序"></a>配置文件读取顺序</h4><p>mysql配置文件读取顺序</p>
+<pre><code>/etc/my.cnf --&gt;  /etc/mysql/my.cnf --&gt;  $MYSQL_HOME/my.cnf --&gt; ~/.my.cnf  
+--&gt; --defaults-extra-file  --&gt;  --defaults-file  最后读取命令行上其他的配置
+</code></pre><p>单独定义一个文件来作为mysql socket</p>
+<pre><code>/etc/init.d/mysqld stop   #停止服务
+
+vim /tmp/aaa.txt   #创建并配置文件
+[mysqld]
+socket=/tmp/aaa.sock
+
+/usr/local/mysql/bin/mysqld_safe --default-file=/tmp/aaa.txt   #启动
+
+如果想回归源socket文件，只需要正常启动mysqld服务即可。
+
+注：启动命令一旦使用了--default-file参数，其他mysql配置文件(即上面的配置文件读取顺序)均不会再读取
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-08T09:23:17.780Z" itemprop="dateUpdated">2018-01-08 17:23:17</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/23/Mysql单节点部署1/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MariaDB/">MariaDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle/">Oracle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PerconaDB/">PerconaDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dba/">dba</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/&title=《Mysql单节点部署1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/&title=《Mysql单节点部署1》 — Gary Wu&source=
+数据库分类
+
+DBMS 指数据库管理系统，分为RDBMS(关系型数据库管理系统)和NoSQL(非关系型数据库)
+
+数据库世界排名统计网站：https:/..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Mysql单节点部署1》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/23/MySQL多实例部署2/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">MySQL多实例部署2</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/22/分布式消息系统MQ之kafka部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">分布式消息系统MQ之kafka部署</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/&title=《Mysql单节点部署1》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/&title=《Mysql单节点部署1》 — Gary Wu&source=
+数据库分类
+
+DBMS 指数据库管理系统，分为RDBMS(关系型数据库管理系统)和NoSQL(非关系型数据库)
+
+数据库世界排名统计网站：https:/..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Mysql单节点部署1》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/23/Mysql单节点部署1/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

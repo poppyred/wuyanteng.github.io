@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>redis-Cluster集群部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,redis,PHP,ruby,redis cluster">
+    <meta name="description" content="redis原理 redis简介  REmote DIctionary Server(Redis) 是一个由SalvatoreSanfilippo写的key-value存储系统。是一个高性能的key-value数据库。">
+<meta name="keywords" content="高级运维,redis,PHP,ruby,redis cluster">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis-Cluster集群部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="redis原理 redis简介  REmote DIctionary Server(Redis) 是一个由SalvatoreSanfilippo写的key-value存储系统。是一个高性能的key-value数据库。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/redis_3.0%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
+<meta property="og:updated_time" content="2017-11-07T04:34:29.010Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis-Cluster集群部署">
+<meta name="twitter:description" content="redis原理 redis简介  REmote DIctionary Server(Redis) 是一个由SalvatoreSanfilippo写的key-value存储系统。是一个高性能的key-value数据库。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/redis_3.0%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">redis-Cluster集群部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">redis-Cluster集群部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-20T11:51:01.000Z" itemprop="datePublished" class="page-time">
+  2017-09-20
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#redis原理"><span class="post-toc-number">1.</span> <span class="post-toc-text">redis原理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#搭建Redis集群"><span class="post-toc-number">2.</span> <span class="post-toc-text">搭建Redis集群</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#集群命令"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群命令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置redis主从复制"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置redis主从复制</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Redis-Cluster集群部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">redis-Cluster集群部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-20 19:51:01" datetime="2017-09-20T11:51:01.000Z"  itemprop="datePublished">2017-09-20</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="redis原理"><a href="#redis原理" class="headerlink" title="redis原理"></a>redis原理</h4><blockquote>
+<p>redis简介</p>
+</blockquote>
+<pre><code>REmote DIctionary Server(Redis) 是一个由SalvatoreSanfilippo写的key-value存储系统。是一个高性能的key-value数据库。
+</code></pre><a id="more"></a>
+<pre><code>Redis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。
+它通常被称为数据结构服务器，因为值（value）可以是字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和有序集合(sorted sets)等类型。
+</code></pre><p>3.0以后的版本架构图如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/redis_3.0%E6%9E%B6%E6%9E%84%E5%9B%BE.png" alt="redis_3.0jiagou" title="">
+                </div>
+                <div class="image-caption">redis_3.0jiagou</div>
+            </figure>
+<blockquote>
+<p>redis 特点</p>
+</blockquote>
+<pre><code>Redis 与其他 key - value 缓存产品有以下三个特点：
+Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。
+Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。
+Redis支持数据的备份，即master-slave模式的数据备份。
+</code></pre><blockquote>
+<p>Redis集群的数据分片</p>
+</blockquote>
+<pre><code>Redis 集群没有使用一致性hash, 而是引入了哈希槽的概念
+Redis 集群有16384个哈希槽,每个key通过CRC16校验后对16384取模来决定放置哪个槽.集群的每个节点负责一部分hash槽
+
+举个例子,比如当前集群有3个节点,那么:
+* 节点 A 包含 0 到 5500号哈希槽.
+* 节点 B 包含5501 到 11000 号哈希槽.
+* 节点 C 包含11001 到 16384号哈希槽.
+
+这种结构很容易添加或者删除节点. 比如如果我想新添加个节点D, 我需要从节点 A, B, C中得部分槽到D上. 如果我像移除节点A,需要将A中得槽移到B和C节点上,然后将没有任何槽的A节点从集群中移除即可. 
+由于从一个节点将哈希槽移动到另一个节点并不会停止服务,所以无论添加删除或者改变某个节点的哈希槽的数量都不会造成集群不可用的状态
+</code></pre><blockquote>
+<p>Redis集群的主从复制模型</p>
+</blockquote>
+<pre><code>为了使在部分节点失败或者大部分节点无法通信的情况下集群仍然可用，所以集群使用了主从复制模型,每个节点都会有N-1个复制品.
+
+在我们例子中具有A，B，C三个节点的集群,在没有复制模型的情况下,如果节点B失败了，那么整个集群就会以为缺少5501-11000这个范围的槽而不可用.
+
+然而如果在集群创建的时候（或者过一段时间）我们为每个节点添加一个从节点A1，B1，C1,那么整个集群便有三个master节点和三个slave节点组成，这样在节点B失败后，集群便会选举B1为新的主节点继续服务，整个集群便不会因为槽找不到而不可用了
+
+不过当B和B1 都失败后，集群是不可用的.
+</code></pre><blockquote>
+<p>Redis 持久化一致性保证</p>
+</blockquote>
+<pre><code>Redis集群不能保证强一致性。也就是说，在某些情况下集群会丢失部分已经保存在集群中的数据。
+
+第一个原因，异步复制。一般情况，保存数据时会发生如下过程：
+(1)客户端将数据写到主redis B上
+(2)主redis B 返回给客户端 OK
+(3)主redis B 将数据分发到 slaves B1 B2 B3
+如上，主redis B在返回成功的时候，并没有确保数据已经同步到 B1 B2 B3上。假如数据写到主redis B之后，主redis B崩溃了，并且没有将刚才的数据同步到slaves上。那么其中的一个从节点就会被选举成主节点，丢失了刚才写的数据。
+
+这个和大多数据库将数据定时刷到磁盘的情况一样。相同的，为了保证一致性，可以强制数据库将在返回客户端之前将数据写入到磁盘。但是这对性能的影响会很大。所以主从同步也存在这个问题。
+
+在性能和一致性上都会需要做一定的权衡。如果确实需要，Redis集群支持同步的写操作，通过WAIT命令实现。这个可以降低丢失数据的概率。因为Redis集群没有实现强一致性，即使是使用了同步复制，也会有概率丢失数据
+</code></pre><pre><code>另外有一个值得注意的情况，也会丢失数据。集群处于不同的网络分区中。其中一个master B 和 Client 在一个网络分区中，其他节点在另外一个网络分区中。客户端向master B中写入一条记录。这个时候不同网络分区存在联通性问题。如果是短暂的，则不会有问题；如果是较长时间的，slave B 会被推选成 master B，从而导致数据丢失。
+
+网络不畅通的时间配置——node timeout。
+
+如果一个master节点，在经过 node timeout时间后，还是不能连接上其他的master接口，那么它会变成一个错误状态。
+</code></pre><h4 id="搭建Redis集群"><a href="#搭建Redis集群" class="headerlink" title="搭建Redis集群"></a>搭建Redis集群</h4><blockquote>
+<p>测试环境</p>
+</blockquote>
+<pre><code>准备至少3台虚拟机,系统CentOS7
+
+redis1 192.168.56.20   Port:7000/7001/7002
+redis2 192.168.56.21   Port:7003/7004/7005
+redis3 192.168.56.22   Port:7006/7007/7008
+</code></pre><blockquote>
+<p>环境准备【全节点】</p>
+</blockquote>
+<pre><code>(1) 安装GCC编译工具
+    yum install -y gcc g++ gcc-c++ make tcl
+(2) 升级软件包
+    yum -y update
+(3) 关闭firewall
+    systemctl stop firewalld.service &amp;&amp; systemctl disable firewalld.service
+</code></pre><blockquote>
+<p>安装redis【全节点】</p>
+</blockquote>
+<pre><code>cd /opt
+wget http://download.redis.io/releases/redis-4.0.1.tar.gz
+tar xzf redis-4.0.1.tar.gz
+cd redis-4.0.1
+make
+make PREFIX=/usr/local/redis install
+</code></pre><blockquote>
+<p>配置redis【全节点】</p>
+</blockquote>
+<pre><code>mkdir /usr/local/redis/etc -p
+cp /opt/redis-4.0.1/redis.conf /usr/local/redis/etc/
+cd /usr/bin/
+ln -s /usr/local/redis/bin/redis-benchmark ./
+ln -s /usr/local/redis/bin/redis-cli ./
+ln -s /usr/local/redis/bin/redis-server ./
+mkdir /var/log/redis -p     #创建redis日志存放目录
+</code></pre><blockquote>
+<p>56.20节点配置</p>
+</blockquote>
+<pre><code>mkdir -p  /usr/local/redis/etc/700{0..2}  #创建redis缓存数据目录
+cd   /usr/local/redis/etc/
+vim 7000/redis.conf
+vim 7001/redis.conf
+vim 7002/redis.conf
+</code></pre><p>配置文件-简要说明</p>
+<pre><code>daemonize no   ##是否以守护进程方式运行
+
+pidfile /var/run/redis_7000.pid
+port 7000
+
+#高并发环境下你需要一个高backlog值来避免慢客户端连接问题
+tcp-backlog 511 
+bind 192.168.56.20 127.0.0.1
+
+timeout 0  #客户端空闲关闭时间
+
+tcp-keepalive 0   #设置SO_KEEPALIVE选项来向空闲连接的客户端发送ACK
+
+loglevel notice   #指定日志记录级别, debug等
+
+logfile &quot;/var/log/redis/redis_7000.log&quot;  #指明日志文件名
+
+## syslog-enabled no   #redis日志记录到系统日志
+
+## syslog-ident redis  #redis日志在系统日志中的标识
+
+databases 16           #指定数据库个数
+
+#指定rdb快照频率,
+save &quot;&quot;  #表示关闭rdb快照持久化
+#save 900 1
+#save 300 10
+#save 60 10000
+
+#默认如果开启RDB快照(至少一条save指令)并且最新的后台保存失败，Redis将会停止接受写操作
+stop-writes-on-bgsave-error yes 
+
+#指定存储至本地数据库时是否压缩数据，默认为yes
+rdbcompression yes
+
+#生成的关闭校验的RDB文件有一个0的校验和，它将告诉加载代码跳过检查
+rdbchecksum yes 
+
+#指定本地数据库文件名，默认值为dump.rdb
+dbfilename dump.rdb
+
+#指定本地数据库存放目录
+dir /data/A/redis-cluster/7000
+
+#设置当本机为slav服务时，设置master服务的IP地址及端口，在Redis启动时，它会自动从master进行数据同步
+#slaveof  192.168.56.20 6379
+#设置Redis连接密码，如果配置了连接密码，客户端在连接Redis时需要通过AUTH &lt;password&gt;命令提供密码，默认关闭
+## masterauth &lt;master-password&gt;
+
+# 主从同步。通过 slaveof 指令来实现Redis实例的备份
+slave-serve-stale-data yes 
+
+# 从Redis2.6默认所有的slave为只读
+slave-read-only yes 
+
+# 在slave套接字发送SYNC之后禁用 TCP_NODELAY 
+repl-diskless-sync no
+
+#客户端最大连接数
+#maxclients 10000
+
+##指定Redis最大内存限制
+maxmemory 40gb
+
+#指定是否在每次更新操作后进行日志记录
+appendonly no
+
+#指定更新日志文件名，默认为appendonly.aof
+appendfilename &quot;appendonly.aof&quot;
+
+#指定更新日志条件
+## appendfsync always
+appendfsync everysec
+## appendfsync no
+
+#当hash只有少量的entry时，并且最大的entry所占空间没有超过指定的限#制时，会用一种节省内存的 数据结构来编码。可以通过下面的指令来设定限制
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+
+# 与hash似，数据元素较少的list，可以用另一种方式来编码从而节省大量空间。
+# # 这种特殊的方式只有在符合下面限制时才可以用
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
+
+#重建hash表的时候如果内存不足 如果此值设置为no则延时，如果为yes则尽快释放内存
+activerehashing yes
+
+#一个任务可以使用的cpu数目
+hz 10
+
+#当一个子进程重写AOF文件时，如果启用下面的选项，则文件每生成32M数据会被同步。为了增量式写入硬盘并且避免大的延迟高峰这个指令是非常有用的
+aof-rewrite-incremental-fsync yes
+
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+</code></pre><p>vim 7000/redis.conf(最小化配置)</p>
+<pre><code>port 7000
+bind 192.168.56.20
+daemonize yes
+pidfile /var/run/redis_7000.pid
+cluster-enabled yes
+cluster-config-file nodes_7000.conf
+cluster-node-timeout 300
+appendonly yes
+loglevel notice
+logfile &quot;/var/log/redis/redis_7000.log&quot;
+</code></pre><p>vim 7001/redis.conf(最小化配置)</p>
+<pre><code>port 7001
+bind 192.168.56.20
+daemonize yes
+pidfile /var/run/redis_7001.pid
+cluster-enabled yes
+cluster-config-file nodes_7001.conf
+cluster-node-timeout 300
+appendonly yes
+loglevel notice
+logfile &quot;/var/log/redis/redis_7001.log&quot;
+</code></pre><p>vim 7002/redis.conf(最小化配置)</p>
+<pre><code>port 7002
+bind 192.168.56.20
+daemonize yes
+pidfile /var/run/redis_7002.pid
+cluster-enabled yes
+cluster-config-file nodes_7002.conf
+cluster-node-timeout 300
+appendonly yes
+loglevel notice
+logfile &quot;/var/log/redis/redis_7002.log&quot;
+</code></pre><blockquote>
+<p>参考56.20-配置另外两台机器</p>
+</blockquote>
+<pre><code>#56.21机器
+目录：7003/7004/7005，配置文件也对应修改
+bind:192.168.56.21
+
+#56.22机器
+目录：7006/7007/7008，配置文件也对应修改
+bind:192.168.56.22
+</code></pre><blockquote>
+<p>启动</p>
+</blockquote>
+<pre><code>#56.20机器启动
+redis-server /usr/local/redis/etc/7000/redis.conf 
+redis-server /usr/local/redis/etc/7001/redis.conf 
+redis-server /usr/local/redis/etc/7002/redis.conf 
+
+#56.21机器启动
+redis-server /usr/local/redis/etc/7003/redis.conf 
+redis-server /usr/local/redis/etc/7004/redis.conf 
+redis-server /usr/local/redis/etc/7005/redis.conf
+
+#56.22机器启动
+redis-server /usr/local/redis/etc/7006/redis.conf 
+redis-server /usr/local/redis/etc/7007/redis.conf 
+redis-server /usr/local/redis/etc/7008/redis.conf
+
+启动管理可以使用supervisor管理redis
+</code></pre><blockquote>
+<p>检查redis服务【全节点】</p>
+</blockquote>
+<pre><code>ps -ef |grep redis
+ss -lntup |grep redis
+</code></pre><blockquote>
+<p>安装ruby【全节点】</p>
+</blockquote>
+<pre><code>yum -y install ruby ruby-devel rubygems rpm-build
+
+#安装RVM(升级ruby为2.4.0)
+curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+curl -L get.rvm.io | bash -s stable
+source /etc/profile.d/rvm.sh
+rvm reload
+rvm requirements run
+rvm install 2.4.0
+
+#设置默认ruby版本
+rvm list
+rvm use 2.4.0 --default
+ruby --version
+
+
+gem install redis
+</code></pre><blockquote>
+<p>创建集群(只在56.20机器配置即可)</p>
+</blockquote>
+<pre><code>cd /opt/redis-4.0.1/src
+[root@redis1 src]# ./redis-trib.rb create --replicas 1 \
+192.168.56.20:7000 \
+192.168.56.20:7001 \
+192.168.56.20:7002 \
+192.168.56.21:7003 \
+192.168.56.21:7004 \
+192.168.56.21:7005 \
+192.168.56.22:7006 \
+192.168.56.22:7007 \
+192.168.56.22:7008
+
+交互输入: yes
+[OK] All nodes agree about slots configuration.
+&gt;&gt;&gt; Check for open slots...
+&gt;&gt;&gt; Check slots coverage...
+[OK] All 16384 slots covered.
+</code></pre><blockquote>
+<p>关闭集群</p>
+</blockquote>
+<pre><code>pkill redis
+</code></pre><blockquote>
+<p>集群验证</p>
+</blockquote>
+<p>连接集群测试</p>
+<pre><code>参数&quot;-c&quot;可连接到集群，因为 redis.conf将bind改为了ip地址，所以 -h 参数不可以省略，-p 参数为端口号
+
+在56.20机器redis 7000的节点set 一个key
+
+[root@redis1 ~]# redis-cli -h 192.168.56.20 -p 7000 -c 
+192.168.56.20:7000&gt; set name www.test.org
+-&gt; Redirected to slot [5798] located at 192.168.56.21:7003
+OK
+192.168.56.21:7003&gt; 
+
+可以看到redis set name之后重定向到56.21机器的7003节点了
+
+##################################################################
+现在在56.22机器进入任意一个节点,比如：redis 7008的节点get一个key
+
+[root@redis3 etc]# redis-cli -h 192.168.56.22 -p 7007 -c
+192.168.56.22:7007&gt; get name
+-&gt; Redirected to slot [5798] located at 192.168.56.21:7003
+&quot;www.test.org&quot;
+
+由以上结果可以看出,redis get name重定向到了56.21的7003这个节点。如果看到这样的现象，说明机器已经是可用的了。
+</code></pre><blockquote>
+<p>检查集群状态</p>
+</blockquote>
+<pre><code>/opt/redis-4.0.1/src/redis-trib.rb check 192.168.56.20:7000
+或
+/opt/redis-4.0.1/src/redis-trib.rb check 192.168.56.21:7005
+
+注：测试任意redis节点均可
+</code></pre><blockquote>
+<p>列出集群节点</p>
+</blockquote>
+<pre><code>列出集群当前已知的所有节点（node），以及这些节点的相关信息
+[root@redis1 ~]# redis-cli -h 192.168.56.20 -p 7000 -c
+192.168.56.20:7000&gt; 
+192.168.56.20:7000&gt; cluster nodes
+</code></pre><blockquote>
+<p>打印机器信息</p>
+</blockquote>
+<pre><code>[root@redis1 ~]# redis-cli -h 192.168.56.20 -p 7000 -c
+192.168.56.20:7000&gt; 
+192.168.56.20:7000&gt; cluster info
+cluster_state:ok
+cluster_slots_assigned:16384
+cluster_slots_ok:16384
+cluster_slots_pfail:0
+cluster_slots_fail:0
+cluster_known_nodes:9
+cluster_size:4
+cluster_current_epoch:9
+cluster_my_epoch:1
+cluster_stats_messages_ping_sent:71732
+cluster_stats_messages_pong_sent:71716
+cluster_stats_messages_sent:143448
+cluster_stats_messages_ping_received:71708
+cluster_stats_messages_pong_received:71732
+cluster_stats_messages_meet_received:8
+cluster_stats_messages_received:143448
+</code></pre><h4 id="集群命令"><a href="#集群命令" class="headerlink" title="集群命令"></a>集群命令</h4><pre><code>语法格式
+redis-cli -h host -p port -c
+</code></pre><pre><code>集群：
+info
+cluster info ：打印集群的信息
+info Replication :打印Replication信息
+cluster nodes ：列出集群当前已知的所有节点（ node），以及这些节点的相关信息。
+</code></pre><pre><code>节点：
+cluster meet &lt;ip&gt; &lt;port&gt; ：将 ip 和 port 所指定的节点添加到集群当中，让它成为集群的一份子。
+cluster forget &lt;node_id&gt; ：从集群中移除 node_id 指定的节点。
+cluster replicate &lt;node_id&gt; ：将当前节点设置为 node_id 指定的节点的从节点。
+cluster saveconfig ：将节点的配置文件保存到硬盘里面。
+</code></pre><pre><code>槽(slot)
+cluster addslots &lt;slot&gt; [slot ...] ：将一个或多个槽（ slot）指派（ assign）给当前节点。
+cluster delslots &lt;slot&gt; [slot ...] ：移除一个或多个槽对当前节点的指派。
+cluster flushslots ：移除指派给当前节点的所有槽，让当前节点变成一个没有指派任何槽的节点。
+cluster setslot &lt;slot&gt; node &lt;node_id&gt; ：将槽 slot 指派给 node_id 指定的节点，如果槽已经指派给另一个节点，那么先让另一个节点删除该槽&gt;，然后再进行指派。
+cluster setslot &lt;slot&gt; migrating &lt;node_id&gt; ：将本节点的槽 slot 迁移到 node_id 指定的节点中。
+cluster setslot &lt;slot&gt; importing &lt;node_id&gt; ：从 node_id 指定的节点中导入槽 slot 到本节点。
+cluster setslot &lt;slot&gt; stable ：取消对槽 slot 的导入（ import）或者迁移（ migrate）。
+</code></pre><pre><code>键
+cluster keyslot &lt;key&gt; ：计算键 key 应该被放置在哪个槽上。
+cluster countkeysinslot &lt;slot&gt; ：返回槽 slot 目前包含的键值对数量。
+cluster getkeysinslot &lt;slot&gt; &lt;count&gt; ：返回 count 个 slot 槽中的键 。
+</code></pre><blockquote>
+<p>redis数据类型</p>
+</blockquote>
+<p>参考：<a href="http://www.yiibai.com/redis/redis_data_types.html" target="_blank" rel="noopener">http://www.yiibai.com/redis/redis_data_types.html</a> </p>
+<h4 id="配置redis主从复制"><a href="#配置redis主从复制" class="headerlink" title="配置redis主从复制"></a>配置redis主从复制</h4><p>主服务器Master配置（192.168.56.20）</p>
+<pre><code>1、 关闭rdb快照，rdb备份交由slave进行（只需在一台slave开启rdb即可）
+       #save 900 1
+       #save 300 10
+       #save 60 10000
+2、 开启aof日志，因为主服务器的aof日志数据是最新最全的，slave在数据同步时有可能会出现延迟
+       appendonly yes
+       appendfsync everysec
+       no-appendfsync-on-rewrite yes
+       auto-aof-rewrite-percentage 100
+       auto-aof-rewrite-min-size 64mb
+       appendfilename appendonly.aof
+3、 配置ip绑定，redis默认只绑定只允许本机的服务访问，在配置集群时，需要绑定本机的局域网ip后slave才可以连接到master服务器
+        bind 127.0.0.1 192.168.56.20
+</code></pre><p>从服务器Slave配置(192.168.56.21/192.168.56.22)</p>
+<pre><code>1、配置master的IP和端口
+   格式： slaveof  192.168.1.11 6379
+2、 配置密码（如果master有密码）
+3、 打开 rdb快照功能（多台slave只需开一台）
+       save 900 1
+       save 300 10
+       save 60 10000
+       stop-writes-on-bgsave-error yes
+       rdbcompression yes
+       rdbchecksum yes
+       dbfilename &quot;dump.rdb&quot;
+       dir &quot;/data/A/redis_cluster&quot;
+4、 通常从服务器不能写,因此需要配置是否只读，配置项：
+       slave-read-only yes
+5、 优先级配置
+       slave-priority 100
+</code></pre><p>配置成功后启动三台服务器的redis，启动顺序最好为先master后slave，启动后，登录到redis命令行，执行info Replication</p>
+<blockquote>
+<p>参考：<a href="http://www.yiibai.com/redis/redis_data_types.html" target="_blank" rel="noopener">http://www.yiibai.com/redis/redis_data_types.html</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-07T04:34:29.010Z" itemprop="dateUpdated">2017-11-07 12:34:29</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/20/Redis-Cluster集群部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis-cluster/">redis cluster</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ruby/">ruby</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/&title=《redis-Cluster集群部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/&title=《redis-Cluster集群部署》 — Gary Wu&source=redis原理
+redis简介
+
+REmote DIctionary Server(Redis) 是一个由SalvatoreSanfilippo写的key..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《redis-Cluster集群部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/23/Nginx负载均衡/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Nginx负载均衡</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/20/Give-root-password-for-maintenance系统修复/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Give root password for maintenance系统修复</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/&title=《redis-Cluster集群部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/&title=《redis-Cluster集群部署》 — Gary Wu&source=redis原理
+redis简介
+
+REmote DIctionary Server(Redis) 是一个由SalvatoreSanfilippo写的key..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《redis-Cluster集群部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/20/Redis-Cluster集群部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

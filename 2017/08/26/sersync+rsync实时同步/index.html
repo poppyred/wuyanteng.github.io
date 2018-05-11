@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>sersync+rsync实时同步 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,sersync,实时同步,sync">
+    <meta name="description" content="sersync项目介绍  Github发布: https://github.com/wsgzao/sersync">
+<meta name="keywords" content="高级运维,sersync,实时同步,sync">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sersync+rsync实时同步">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="sersync项目介绍  Github发布: https://github.com/wsgzao/sersync">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/sersync%E5%8E%9F%E7%90%86.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/sersy.png">
+<meta property="og:updated_time" content="2017-08-26T08:13:46.201Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sersync+rsync实时同步">
+<meta name="twitter:description" content="sersync项目介绍  Github发布: https://github.com/wsgzao/sersync">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/sersync%E5%8E%9F%E7%90%86.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">sersync+rsync实时同步</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">sersync+rsync实时同步</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-26T06:15:01.000Z" itemprop="datePublished" class="page-time">
+  2017-08-26
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-sersync+rsync实时同步"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">sersync+rsync实时同步</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-26 14:15:01" datetime="2017-08-26T06:15:01.000Z"  itemprop="datePublished">2017-08-26</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>sersync项目介绍</p>
+</blockquote>
+<pre><code>Github发布: https://github.com/wsgzao/sersync
+</code></pre><a id="more"></a>
+<blockquote>
+<p>原理</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/sersync%E5%8E%9F%E7%90%86.png" alt="sersync原理" title="">
+                </div>
+                <div class="image-caption">sersync原理</div>
+            </figure>
+<blockquote>
+<p>下载</p>
+</blockquote>
+<blockquote>
+<p>解压</p>
+</blockquote>
+<pre><code>unzip sersync_installdir_64bit.zip
+mv sersync_installdir_64bit /usr/local/sersync
+cd /usr/local/sersync
+mv sersync/* ./
+rm sersync -rf
+</code></pre><blockquote>
+<p>目录结构</p>
+</blockquote>
+<pre><code>bin目录保存的是sersync可用的命令
+conf目录保存的是配置文件
+logs目录保存的是log文件，默认空
+</code></pre><blockquote>
+<p>编辑sersync配置文件</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/sersy.png" alt="文件配置" title="">
+                </div>
+                <div class="image-caption">文件配置</div>
+            </figure>
+<pre><code>cd bin/ &amp;&amp; chmod +x bin/sersync  #赋予命令可执行权限
+cd conf/ &amp;&amp; cp confxml.xml confxml.xml.bak
+</code></pre><pre><code>vim vim confxml.xml
+
+
+#开启debug信息。
+&lt;debug start=&quot;true&quot;/&gt;
+
+
+#inotify
+&lt;inotify&gt;
+    &lt;delete start=&quot;true&quot;/&gt;
+    &lt;createFolder start=&quot;true&quot;/&gt;
+    &lt;createFile start=&quot;false&quot;/&gt;
+    &lt;moveTo start=&quot;true&quot;/&gt;
+    &lt;attrib start=&quot;false&quot;/&gt;
+    &lt;modify start=&quot;false&quot;/&gt;
+&lt;/inotify&gt;
+
+
+#rsync同步信息配置
+&lt;rsync&gt;
+   &lt;commonParams params=&quot;-az&quot;/&gt;
+   &lt;auth start=&quot;true&quot; users=&quot;rsync_backup&quot; passwordfile=&quot;/etc/rsync.password&quot;/&gt;
+   &lt;userDefinedPort start=&quot;false&quot; port=&quot;874&quot;/&gt;&lt;!-- port=874 --&gt;
+   &lt;timeout start=&quot;false&quot; time=&quot;100&quot;/&gt;&lt;!-- timeout=100 --&gt;
+   &lt;ssh start=&quot;false&quot;/&gt;
+&lt;/rsync&gt;
+
+#配置rsync服务器主机IP和模块名称（如果本地监控/同步的目录如果有多个，需要新增以下字段）
+&lt;sersync&gt;
+    &lt;localpath watch=&quot;/backup&quot;&gt;  #配置本地监控同步的目录
+        &lt;remote ip=&quot;192.168.56.41&quot; name=&quot;backup&quot;/&gt;  #rsync服务器IP和模块名称
+        &lt;!--&lt;remote ip=&quot;192.168.8.39&quot; name=&quot;tongbu&quot;/&gt;--&gt;
+        &lt;!--&lt;remote ip=&quot;192.168.8.40&quot; name=&quot;tongbu&quot;/&gt;--&gt;
+     &lt;/localpath&gt;
+     &lt;rsync&gt;
+         &lt;commonParams params=&quot;-az&quot;/&gt;
+         &lt;auth start=&quot;true&quot; users=&quot;rsync_backup&quot; passwordfile=&quot;/etc/rsync.password&quot;/&gt;
+         &lt;userDefinedPort start=&quot;false&quot; port=&quot;874&quot;/&gt;&lt;!-- port=874 --&gt;
+         &lt;timeout start=&quot;false&quot; time=&quot;100&quot;/&gt;&lt;!-- timeout=100 --&gt;
+         &lt;ssh start=&quot;false&quot;/&gt;
+      &lt;/rsync&gt;
+
+
+#重传机制，每隔多久进行重传，单位:分钟
+&lt;failLog path=&quot;/tmp/rsync_fail_log.sh&quot; timeToExecute=&quot;60&quot;/&gt;&lt;!--default every 60mins execute once--&gt;
+</code></pre><blockquote>
+<p>启动sersync服务</p>
+</blockquote>
+<pre><code>./bin/sersync -h   #查看帮助
+
+####################################################
+参数-d:启用守护进程模式
+参数-r:在监控前，将监控目录与远程主机用rsync命令推送一遍
+c参数-n: 指定开启守护线程的数量，默认为10个
+参数-o:指定配置文件，默认使用confxml.xml文件
+参数-m:单独启用其他模块，使用 -m refreshCDN 开启刷新CDN模块
+参数-m:单独启用其他模块，使用 -m socket 开启socket模块
+参数-m:单独启用其他模块，使用 -m http 开启http模块
+不加-m参数，则默认执行同步程序
+##################################################### 
+
+./bin/sersync -dro /usr/local/sersync/conf/confxml.xml      启动
+</code></pre><pre><code># sersync命令执行后输出信息
+
+[root@nfs01 sersync]# ./bin/sersync -dro /usr/local/sersync/conf/confxml.xml
+set the system param
+execute：echo 50000000 &gt; /proc/sys/fs/inotify/max_user_watches
+execute：echo 327679 &gt; /proc/sys/fs/inotify/max_queued_events
+parse the command param
+option: -d     run as a daemon
+option: -r     rsync all the local files to the remote servers before the sersync work
+option: -o     config xml name：  /usr/local/sersync/conf/confxml.xml
+daemon thread num: 10
+parse xml config file
+host ip : localhost    host port: 8008
+daemon start，sersync run behind the console 
+use rsync password-file :
+user is    rsync_backup
+passwordfile is     /etc/rsync.password
+config xml parse success
+please set /etc/rsyncd.conf max connections=0 Manually
+sersync working thread 12  = 1(primary thread) + 1(fail retry thread) + 10(daemon sub threads) 
+Max threads numbers is: 22 = 12(Thread pool nums) + 10(Sub threads)
+please according your cpu ，use -n param to adjust the cpu rate
+------------------------------------------
+rsync the directory recursivly to the remote servers once
+working please wait...
+execute command: cd /data &amp;&amp; rsync -az -R --delete ./ rsync_backup@172.16.1.41::nfsbackup --password-file=/etc/rsync.password &gt;/dev/null 2&gt;&amp;1 
+run the sersync: 
+watch path is: /data
+</code></pre><blockquote>
+<p>传输测试</p>
+</blockquote>
+<pre><code>1.客户端监控目录与服务端nfs服务器模块目录文件清空
+2.在客户端监控目录创建文件、统计数量。
+3.在nfs服务器端查看实时传输的文件
+</code></pre><blockquote>
+<p>查看进程</p>
+</blockquote>
+<pre><code>[root@nfs01 backup]# ps -ef |grep sersync
+
+root       5771      1  0 11:07 ?        00:00:00 ./bin/sersync -dro /usr/local/sersync/conf/confxml.xml
+</code></pre><blockquote>
+<p>bug</p>
+</blockquote>
+<pre><code>sersync+rsync同步的时候，NFS服务端rsync不能使用xinetd来启动，否则会触发bug，导致文件同步异常。
+
+NFS服务端rsync需要使用: rsync --daemon的方式启动。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-26T08:13:46.201Z" itemprop="dateUpdated">2017-08-26 16:13:46</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/26/sersync+rsync实时同步/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sersync/">sersync</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sync/">sync</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/实时同步/">实时同步</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/&title=《sersync+rsync实时同步》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/&title=《sersync+rsync实时同步》 — Gary Wu&source=
+sersync项目介绍
+
+Github发布: https://github.com/wsgzao/sersync
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《sersync+rsync实时同步》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/26/ssh命令/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ssh命令</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/26/inotify+rsync实时同步/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">inotify+rsync实时同步</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/&title=《sersync+rsync实时同步》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/&title=《sersync+rsync实时同步》 — Gary Wu&source=
+sersync项目介绍
+
+Github发布: https://github.com/wsgzao/sersync
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《sersync+rsync实时同步》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/26/sersync+rsync实时同步/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

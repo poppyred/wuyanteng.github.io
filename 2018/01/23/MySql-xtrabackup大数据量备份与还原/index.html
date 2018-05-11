@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MySql xtrabackup大数据量备份与还原 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,MySQL,备份与还原,innobackupex,xtrabackup">
+    <meta name="description" content="大数据量备份与还原，始终是个难点。当MYSQL超10G，用mysqldump来导出就比较慢了。在这里推荐xtrabackup,这个工具比mysqldump要快很多。">
+<meta name="keywords" content="高级运维,MySQL,备份与还原,innobackupex,xtrabackup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySql xtrabackup大数据量备份与还原">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="大数据量备份与还原，始终是个难点。当MYSQL超10G，用mysqldump来导出就比较慢了。在这里推荐xtrabackup,这个工具比mysqldump要快很多。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-08T08:43:00.546Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySql xtrabackup大数据量备份与还原">
+<meta name="twitter:description" content="大数据量备份与还原，始终是个难点。当MYSQL超10G，用mysqldump来导出就比较慢了。在这里推荐xtrabackup,这个工具比mysqldump要快很多。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MySql xtrabackup大数据量备份与还原</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MySql xtrabackup大数据量备份与还原</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-23T02:26:13.000Z" itemprop="datePublished" class="page-time">
+  2018-01-23
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#增量备份与还原"><span class="post-toc-number">1.</span> <span class="post-toc-text">增量备份与还原</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#innobackup-常用参数说明"><span class="post-toc-number">2.</span> <span class="post-toc-text">innobackup 常用参数说明</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-MySql-xtrabackup大数据量备份与还原"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MySql xtrabackup大数据量备份与还原</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-23 10:26:13" datetime="2018-01-23T02:26:13.000Z"  itemprop="datePublished">2018-01-23</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>大数据量备份与还原，始终是个难点。当MYSQL超10G，用mysqldump来导出就比较慢了。在这里推荐xtrabackup,这个工具比mysqldump要快很多。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>Xtrabackup介绍</p>
+</blockquote>
+<pre><code>Xtrabackup是一个对InnoDB做数据备份的工具，支持在线热备份(备份时不影响数据读写)，是商业备份工具InnoDB Hotbackup的一个很好的替代品。
+</code></pre><pre><code>Xtrabackup有两个主要的工具：xtrabackup、innobackupex
+
+1. xtrabackup只能备份InnoDB和XtraDB两种数据表，而不能备份MyISAM数据表
+2. innobackupex是参考了InnoDB Hotbackup的innoback脚本修改而来的.innobackupex是一个perl脚本封装，封装了xtrabackup。主要是为了方便的 同时备份InnoDB和MyISAM引擎的表，但在处理myisam时需要加一个读锁。并且加入了一些使用的选项。如slave-info可以记录备份恢 复后，作为slave需要的一些信息，根据这些信息，可以很方便的利用备份来重做slave。
+</code></pre><blockquote>
+<p>Xtrabackup可以做什么</p>
+</blockquote>
+<pre><code>(1) 在线(热)备份整个库的InnoDB、 XtraDB表
+(2) 在xtrabackup的上一次整库备份基础上做增量备份(innodb only)
+(3) 以流的形式产生备份，可以直接保存到远程机器上(本机硬盘空间不足时很有用)
+
+注：MySQL数据库本身提供的工具并不支持真正的增量备份，二进制日志恢复是point-in-time(时间点)的恢复而不是增量备份。
+</code></pre><p>Xtrabackup工具支持对InnoDB存储引擎的增量备份，工作原理如下：</p>
+<pre><code>(1)首先完成一个完全备份，并记录下此时检查点的LSN(Log Sequence Number)。
+
+(2)在进程增量备份时，比较表空间中每个页的LSN是否大于上次备份时的LSN，如果是，则备份该页，同时记录当前检查点的LSN。
+首 先，在logfile中找到并记录最后一个checkpoint(“last checkpoint LSN”)，然后开始从LSN的位置开始拷贝InnoDB的logfile到xtrabackup_logfile；接着，开始拷贝全部的数据文 件.ibd；在拷贝全部数据文件结束之后，才停止拷贝logfile。
+因为logfile里面记录全部的数据修改情况，所以，即时在备份过程中数据文件被修改过了，恢复时仍然能够通过解析xtrabackup_logfile保持数据的一致。
+</code></pre><blockquote>
+<p>安装xtrabackup</p>
+</blockquote>
+<pre><code>官网：https://www.percona.com/downloads/XtraBackup/LATEST/
+
+根据需求选择不同版本安装
+</code></pre><p>安装</p>
+<pre><code>安装
+yum -y install https://www.percona.com/downloads/percona-release/redhat/latest/percona-release-0.1-4.noarch.rpm
+yum list | grep percona-xtrabackup
+yum install -y percona-xtrabackup-24
+
+
+注意：
+xtrabackup 2.2.4不支持mysql 5.1.73，所以如果要用新的xtrabackup,就要用高版本的mysql数据库，不然就会报以下错误：
+innobackupex: Error: Unsupported server version: &#39;5.1.73&#39;
+</code></pre><blockquote>
+<p>修改my.cnf</p>
+</blockquote>
+<pre><code>配置datadir(如果不配置还原数据时将会出现错误)
+vim /etc/my.cnf
+
+[mysqld]  
+datadir=/var/lib/mysql  
+</code></pre><blockquote>
+<p>全部数据库备份</p>
+</blockquote>
+<pre><code>innobackupex --defaults-file=/etc/my.cnf --user=root --password=数据库密码 /data/A/mysql/all_databases
+</code></pre><pre><code>如果报以下错误：
+InnoDB: Error: log file ./ib_logfile0 is of different size 5242880 bytes
+InnoDB: than specified in the .cnf file 50331648 bytes!
+innobackupex: Error: The xtrabackup child process has died at /usr/bin/innobackupex line 2679.
+
+解决方法：
+vim /etc/my.cnf
+[mysqld]  
+innodb_log_file_size = 5M  
+</code></pre><blockquote>
+<p>单数据库备份</p>
+</blockquote>
+<pre><code>innobackupex --defaults-file=/etc/my.cnf --user=root --password=数据库密码 --database=backup_test  /data/A/mysql/one_database
+</code></pre><blockquote>
+<p>数据库备份并压缩</p>
+</blockquote>
+<pre><code>innobackupex --defaults-file=/etc/my.cnf --user=root --password=数据库密码 --stream=xbstream  /data/A/mysql/one_database | gzip &gt; /data/A/mysql/one_database`date +%F_%H-%M-%S`.tar.gz
+</code></pre><!-- more -->
+<blockquote>
+<p>全部数据还原</p>
+</blockquote>
+<pre><code>/etc/init.d/mysqld stop      //停掉mysql  
+mv /var/lib/mysql /var/lib/mysql_bak   //数据目录备份  
+mkdir -p /var/lib/mysql  //重建数据目录  
+
+#--apply-log选项的命令是准备在一个备份上启动mysql服务  
+innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log /data/A/mysql/one_database/2017-09-18_16-35-12  
+
+#--copy-back 选项的命令从备份目录拷贝数据、索引、日志到my.cnf文件里规定的初始位置  
+innobackupex --defaults-file=/etc/my.cnf --user=root --copy-back /data/A/mysql/one_database/2017-09-18_16-35-12 
+
+chown -R mysql.mysql /var/lib/mysql    #改变文件所属  
+/etc/init.d/mysqld start           #启动mysql  
+</code></pre><!-- more -->
+<h4 id="增量备份与还原"><a href="#增量备份与还原" class="headerlink" title="增量备份与还原"></a>增量备份与还原</h4><hr>
+<ul>
+<li>创建测试数据库和表</li>
+</ul>
+<pre><code>create database backup_test;  //创建库  
+
+CREATE TABLE `backup` (  //创建表  
+ `id` int(11) NOT NULL AUTO_INCREMENT ,  
+ `name` varchar(20) NOT NULL DEFAULT &#39;&#39; ,  
+ `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ,  
+ `del` tinyint(1) NOT NULL DEFAULT &#39;0&#39;,  
+ PRIMARY KEY (`id`)  
+) ENGINE=myisam DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;  
+</code></pre><ul>
+<li>第1次增量备份</li>
+</ul>
+<pre><code>mysql&gt; INSERT INTO backup (name) VALUES (&#39;tank&#39;),(&#39;tank1&#39;);  //插入数据  
+
+增量备份
+innobackupex --defaults-file=/etc/my.cnf --user=root --incremental-basedir=/data/A/mysql/all_database/2017-09-18_16-35-12  --incremental /data/A/mysql/zengliang
+
+注: 第1次增量备份--incremental-basedir参数应指向完整备份目录的时间戳目录；
+    --incremental来指定第1次增量备份的存储目录
+</code></pre><ul>
+<li>第2次增量备份</li>
+</ul>
+<pre><code>即在增量的基础上在进行增量备份
+
+mysql&gt; INSERT INTO backup (name) VALUES (&#39;tank2&#39;),(&#39;tank3&#39;),(&#39;tank4&#39;),(&#39;tank5&#39;),(&#39;tank6&#39;);  //再插入数据  
+
+注：2014-09-18_18-05-20这个目录，第1次增量备份产生的目录  
+innobackupex --defaults-file=/etc/my.cnf --user=root --incremental-basedir=/data/A/mysql/zengliang/2017-09-18_18-05-20 --incremental /data/A/mysql/zengliang2 
+注意：第二次备份的--incremental-basedir参数应指向第一次增量备份的时间戳目录。
+</code></pre><ul>
+<li>验证增量备份</li>
+</ul>
+<pre><code>[root@2017-09-18_16-35-12]# cat xtrabackup_checkpoints   //全备目录下的文件  
+backup_type = full-prepared  
+from_lsn = 0             //全备起始为0  
+to_lsn = 23853959  
+last_lsn = 23853959  
+compact = 0  
+注：增量备份与还原会以全备目录下的xtrabackup_checkpoints中的lsn号码为基准,若恢复使用脚本，切勿重复执行,会失败，提示类似错误: “lsn号码看起来一致”
+
+[root@2017-09-18_18-05-20]# cat xtrabackup_checkpoints  //第1次增量备份目录下的文件  
+backup_type = incremental  
+from_lsn = 23853959  
+to_lsn = 23854112  
+last_lsn = 23854112  
+compact = 0  
+
+[root@localhost 2014-09-18_18-11-43]# cat xtrabackup_checkpoints  //第二次增量备份目录下的文件  
+backup_type = incremental  
+from_lsn = 23854112  
+to_lsn = 23854712  
+last_lsn = 23854712  
+compact = 0  
+</code></pre><ul>
+<li>增量还原</li>
+</ul>
+<pre><code>停止MySQL服务并清空数据目录：
+
+service mysqld stop
+rm -rf /mysql/*
+</code></pre><p>整合完整备份和增量备份</p>
+<pre><code>innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log --redo-only /home/tank/backup/2017-09-18_16-35-12  
+
+innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log --redo-only /home/tank/backup/2017-09-18_16-35-12 --incremental-dir=/home/tank/backup/2017-09-18_18-05-20  
+
+innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log --redo-only /home/tank/backup/2017-09-18_16-35-12 --incremental-dir=/home/tank/backup/2017-09-18_18-11-43 
+
+innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log  /home/tank/backup/2017-09-18_16-35-12
+
+注：在这里有三个目录:
+1) /home/tank/backup/2017-09-18_16-35-12，全备份目录
+2) /home/tank/backup/2017-09-18_18-05-20，第一次增量备份产生的目录
+3) /home/tank/backup/2017-09-18_18-11-43，第二次增量备份产生的目录
+4) 最后--apply-log下全备目录（最后不需要使用redo-only）
+注意：一定要按照完整备份、第一次增量备份、第二次增量备份的顺序进行整合。
+</code></pre><pre><code>开始还原：
+innobackupex --copy-back /home/tank/backup/2017-09-18_16-35-12
+还原成功后你会看到“completed OK!”的字样。
+</code></pre><pre><code>修改数据目录的属主和属组并启动MySQL服务：
+chown -R mysql.mysql /mysql/
+service mysqld start
+
+通过以上步骤就完成了增量备份的还原。
+</code></pre><!-- more -->
+<hr>
+<blockquote>
+<p>使用xbstream压缩</p>
+</blockquote>
+<pre><code>备份后流式压缩
+time innobackupex --user=bkpuser  --password=s3cret  --no-timestamp --defaults-file=/etc/my.cnf  /data/dbbak/full --tmpdir=/data/dbbak/full -stream=xbstream|gzip - &gt; /data/dbbak/full/full.xbstream.gz
+
+
+解压
+time gzip -d full.xbstream.gz &amp;&amp; xbstream -xC full &lt;full.xbstream
+
+-xC参数表示解压到某个目录中
+</code></pre><blockquote>
+<p>流式压缩-总结</p>
+</blockquote>
+<pre><code>使用--stream=tar备份，压缩、解压、已经压缩后的大小都优于-stream=xbstream,推荐使用--stream=tar方式压缩,解压时还可以配合tar
+</code></pre><hr>
+<h4 id="innobackup-常用参数说明"><a href="#innobackup-常用参数说明" class="headerlink" title="innobackup 常用参数说明"></a>innobackup 常用参数说明</h4><pre><code>--defaults-file
+同xtrabackup的--defaults-file参数
+
+--apply-log
+对xtrabackup的--prepare参数的封装
+
+--copy-back
+做数据恢复时将备份数据文件拷贝到MySQL服务器的datadir ；
+
+--remote-host=HOSTNAME
+通过ssh将备份数据存储到进程服务器上；
+
+--stream=[tar]
+备 份文件输出格式, tar时使用tar4ibd , 该文件可在XtarBackup binary文件中获得.如果备份时有指定--stream=tar, 则tar4ibd文件所处目录一定要在$PATH中(因为使用的是tar4ibd去压缩, 在XtraBackup的binary包中可获得该文件)。
+在 使用参数stream=tar备份的时候，你的xtrabackup_logfile可能会临时放在/tmp目录下，如果你备份的时候并发写入较大的话 xtrabackup_logfile可能会很大(5G+)，很可能会撑满你的/tmp目录，可以通过参数--tmpdir指定目录来解决这个问题。
+
+--tmpdir=DIRECTORY
+当有指定--remote-host or --stream时, 事务日志临时存储的目录, 默认采用MySQL配置文件中所指定的临时目录tmpdir
+
+--redo-only --apply-log组,
+强制备份日志时只redo ,跳过rollback。这在做增量备份时非常必要。
+
+--use-memory=#
+该参数在prepare的时候使用，控制prepare时innodb实例使用的内存量
+
+--throttle=IOS
+同xtrabackup的--throttle参数
+
+--sleep=是给ibbackup使用的，指定每备份1M数据，过程停止拷贝多少毫秒，也是为了在备份时尽量减小对正常业务的影响，具体可以查看ibbackup的手册 ；
+
+--compress[=LEVEL]
+对备份数据迚行压缩，仅支持ibbackup，xtrabackup还没有实现；
+
+--include=REGEXP
+对 xtrabackup参数--tables的封装，也支持ibbackup。备份包含的库表，例如：--include=&quot;test.*&quot;，意思是要备份 test库中所有的表。如果需要全备份，则省略这个参数；如果需要备份test库下的2个表：test1和test2,则写 成：--include=&quot;test.test1|test.test2&quot;。也可以使用通配符，如：--include=&quot;test.test*&quot;。
+
+--databases=LIST
+列出需要备份的databases，如果没有指定该参数，所有包含MyISAM和InnoDB表的database都会被备份；
+
+--uncompress
+解压备份的数据文件，支持ibbackup，xtrabackup还没有实现该功能；
+
+--slave-info,
+备 份从库, 加上--slave-info备份目录下会多生成一个xtrabackup_slave_info 文件, 这里会保存主日志文件以及偏移, 文件内容类似于:CHANGE MASTER TO MASTER_LOG_FILE=&#39;&#39;, MASTER_LOG_POS=0
+
+--socket=SOCKET
+指定mysql.sock所在位置，以便备份进程登录mysql.
+</code></pre><p>参考：<a href="http://blog.51yip.com/mysql/1650.html" target="_blank" rel="noopener">海底苍鹰</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-08T08:43:00.546Z" itemprop="dateUpdated">2018-02-08 16:43:00</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/23/MySql-xtrabackup大数据量备份与还原/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/innobackupex/">innobackupex</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xtrabackup/">xtrabackup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/备份与还原/">备份与还原</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/&title=《MySql xtrabackup大数据量备份与还原》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/&title=《MySql xtrabackup大数据量备份与还原》 — Gary Wu&source=大数据量备份与还原，始终是个难点。当MYSQL超10G，用mysqldump来导出就比较慢了。在这里推荐xtrabackup,这个工具比mysqldump..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySql xtrabackup大数据量备份与还原》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/23/php-fpm-conf配置优化/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">php-fpm.conf配置优化</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/22/docker进阶4-ELK日志收集/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">docker进阶4-ELK日志收集</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/&title=《MySql xtrabackup大数据量备份与还原》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/&title=《MySql xtrabackup大数据量备份与还原》 — Gary Wu&source=大数据量备份与还原，始终是个难点。当MYSQL超10G，用mysqldump来导出就比较慢了。在这里推荐xtrabackup,这个工具比mysqldump..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySql xtrabackup大数据量备份与还原》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup大数据量备份与还原/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

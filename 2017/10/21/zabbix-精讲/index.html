@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>zabbix-精讲 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,zabbix,编译安装zabbix,自定义脚本监控">
+    <meta name="description" content="量化-网站可用性  所谓网站可用性即网站正常运行时间的百分比，业界用N个9来量化可用性，最长说的就是类似4个9（也就是99.99%）的可用性">
+<meta name="keywords" content="高级运维,zabbix,编译安装zabbix,自定义脚本监控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zabbix-精讲">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/10/21/zabbix-精讲/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="量化-网站可用性  所谓网站可用性即网站正常运行时间的百分比，业界用N个9来量化可用性，最长说的就是类似4个9（也就是99.99%）的可用性">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-29T06:15:42.715Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zabbix-精讲">
+<meta name="twitter:description" content="量化-网站可用性  所谓网站可用性即网站正常运行时间的百分比，业界用N个9来量化可用性，最长说的就是类似4个9（也就是99.99%）的可用性">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">zabbix-精讲</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">zabbix-精讲</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-21T01:48:42.000Z" itemprop="datePublished" class="page-time">
+  2017-10-21
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#zabbix"><span class="post-toc-number">1.</span> <span class="post-toc-text">zabbix</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装部署"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">安装部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#zabbix使用"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">zabbix使用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#自定义命令-脚本监控"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">自定义命令/脚本监控</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#聚合图形"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">聚合图形</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#幻灯片播放"><span class="post-toc-number">1.0.5.</span> <span class="post-toc-text">幻灯片播放</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#zabbix主机信息-导入导出"><span class="post-toc-number">1.0.6.</span> <span class="post-toc-text">zabbix主机信息-导入导出</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#自动发现与自动注册"><span class="post-toc-number">1.0.7.</span> <span class="post-toc-text">自动发现与自动注册</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#grafana-zabbix"><span class="post-toc-number">1.0.8.</span> <span class="post-toc-text">grafana-zabbix</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-zabbix-精讲"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">zabbix-精讲</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-21 09:48:42" datetime="2017-10-21T01:48:42.000Z"  itemprop="datePublished">2017-10-21</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>量化-网站可用性</p>
+</blockquote>
+<pre><code>所谓网站可用性即网站正常运行时间的百分比，业界用N个9来量化可用性，最长说的就是类似4个9（也就是99.99%）的可用性
+</code></pre><a id="more"></a>
+<blockquote>
+<p>CPU命令</p>
+</blockquote>
+<pre><code>lscpu   #查看cpu核数等信息
+uptime  #查看系统负载、时间等, 查看帮助 man uptime
+top     #实时查看系统负载，以CPU数值排列的
+【top界面z加颜色，按x显示当前以什么排列，大于号&gt;以资源高的排列，小于号&lt;撤销
+htop】
+w 命令主要用来查看系统已登录的用户
+
+</code></pre><blockquote>
+<p>内存命令</p>
+</blockquote>
+<pre><code>free -m 或 free -h
+</code></pre><blockquote>
+<p>磁盘命令</p>
+</blockquote>
+<pre><code>df -h   #查看磁盘剩余
+iotop   #实时查看磁盘io ; yum install -y iotop
+</code></pre><blockquote>
+<p>网络命令</p>
+</blockquote>
+<pre><code>yum -y install iftop nethogs
+
+iftop   #查看主机流量
+iftop -i eth1  #只查看某个网卡流量
+nethogs  #查看哪个进程占用带宽多
+</code></pre><h2 id="zabbix"><a href="#zabbix" class="headerlink" title="zabbix"></a>zabbix</h2><blockquote>
+<p>官网：<a href="http://www.zabbix.com" target="_blank" rel="noopener">www.zabbix.com</a></p>
+</blockquote>
+<pre><code>zabbix组件构成：zabbix server（服务端） 、zabbix agent(客户端)和zabbix proxy(实现分布式监控)
+</code></pre><h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code>官方中文文档：https://www.zabbix.com/documentation/3.4/zh/manual 
+
+本实例以CentOS7安装zabbix3.2为例
+</code></pre><h4 id="zabbix使用"><a href="#zabbix使用" class="headerlink" title="zabbix使用"></a>zabbix使用</h4><blockquote>
+<p>添加主机</p>
+</blockquote>
+<p>配置 –&gt; 主机 –&gt; 添加主机</p>
+<pre><code>主机名称：需要与主机名称相同
+可见的名称：显示在zabbix上的名称
+IP地址：服务器物理对应网卡IP地址，端口:10050
+启用 ---&gt; 更新
+</code></pre><blockquote>
+<p>图形</p>
+</blockquote>
+<pre><code>最新数据 -- 图形  -- 筛选主机
+固定的与动态的: “动态的”表示会局部自动刷新
+图形的时间若不正确，需要更新zabbix_server的本地时间
+</code></pre><blockquote>
+<p>zabbix相关命令</p>
+</blockquote>
+<pre><code>1. 修改zabbix_agent配置文件中的server项，允许zabbix server获取数据
+
+2. zabbix主动获取客户端数据-测试
+zabbix_get  -s  172.16.1.8  -p 10050  -k &quot;system.cpu.load[all,avg1]&quot;
+</code></pre><h4 id="自定义命令-脚本监控"><a href="#自定义命令-脚本监控" class="headerlink" title="自定义命令/脚本监控"></a>自定义命令/脚本监控</h4><pre><code>(1) 修改指定zabbix_agent主配置文件，检查是否有Include参数
+
+(2) 修改zabbix_agent主配置文件把客户端的key告诉zabbix server：
+    格式：UserParameter=&lt;key&gt;,&lt;shell command&gt;
+
+    echo &quot;UserParameter=login-user,who|wc -l&quot; &gt;&gt;/etc/zabbix/zabbix_agentd.d/userparameter_login.conf
+    /etc/init.d/zabbix-agent restart
+
+(3) zabbix_server检查key值    
+    zabbix_get  -s  172.16.1.8  -p 10050  -k &quot;login-user&quot;
+
+注：如果shell命令较多，可以存放文件里，然后通过sh执行
+    如：UserParameter=login-user,/bin/sh /var/scripts/login-user.sh
+</code></pre><pre><code>(4) zabbix Web添加自定义的监控项
+    4.1 添加模板：配置--&gt; 模板 --&gt;创建模板 
+        模板名称：Template login_user
+        群组：选择或新建一个群组
+    4.2 找到/点击刚创建的Template login_user
+        应用集：创建应用集 -- 名称:安全
+        监控项：创建监控项 -- 名称：登陆用户数量 -- 键值输入：login-user
+               数据更新间隔：300秒 -- 历史数据保留时长 - 趋势数据存储周期
+               新的应用集:选择创建好的&quot;安全&quot;  -- 启用 -- 添加
+
+(5) 触发器：创建触发器
+    名称：登陆用户数量大于3
+    表达式：
+          监控项：添加 -- 选择对应的群组与主机模板名称
+          功能：选择&quot;最新的T值&gt;N&quot;
+          N: 输入3
+          严重性：选择“严重”
+          勾选启用 -- 添加
+
+(6) 图形：创建图形
+         名称：登陆用户数量
+         图形类别：正常
+         查看图例：勾选
+         查看触发器：勾选
+         监控项：添加 -- 勾选我们创建好的监控项
+         注：此处可以添加多个监控项，这样的话就可以实现多个监控放在一张图上
+
+(7) 在对应主机配置中添加模板
+    添加模板 -- 更新
+
+(8) Web查看监控值和主机图形数据    
+</code></pre><h4 id="聚合图形"><a href="#聚合图形" class="headerlink" title="聚合图形"></a>聚合图形</h4><p>检测中 – 聚合图形 – 所有聚合图形 – 新建聚合图形</p>
+<pre><code>1.名称：全网监控流量图  -- 列数：2   --  行：2      注：行和列可以再添加
+
+2. 所有聚合图形，找到并点击最后的“构造函数” -- 更改 -- 添加对应的图形即可
+</code></pre><h4 id="幻灯片播放"><a href="#幻灯片播放" class="headerlink" title="幻灯片播放"></a>幻灯片播放</h4><pre><code>检测中 -- 聚合图形 -- 所有聚合图形  -- 幻灯片播放 - 新建幻灯片播放
+名称：监控大盘 
+默认延迟：30s
+幻灯片：添加 -- 添加聚合图形 -- 全选 -- 选择 -- 添加
+
+作用：多个聚合图形可以自动滚动播放，如果有条件可以投放在大屏幕观看。
+</code></pre><h4 id="zabbix主机信息-导入导出"><a href="#zabbix主机信息-导入导出" class="headerlink" title="zabbix主机信息-导入导出"></a>zabbix主机信息-导入导出</h4><pre><code>配置 -- 模板 -- 选择模板 -- 导出
+配置 -- 模板 -- 选择模板 -- 导入
+
+官方模板：https://share.zabbix.com/
+张耀GitHub：https://github.com/zhangyao8/zabbix-community-repos
+</code></pre><h4 id="自动发现与自动注册"><a href="#自动发现与自动注册" class="headerlink" title="自动发现与自动注册"></a>自动发现与自动注册</h4><pre><code>自动发现：服务端发现客户端
+自动注册: 客户端主动到服务器登记
+</code></pre><blockquote>
+<p>配置 – 自动发现</p>
+</blockquote>
+<pre><code>1. 确保客户端agent配置文件
+   Server=192.168.56.61
+
+2. 配置 -- 自动发现
+
+名称：Local network
+IP范围：172.16.1.1-10（从哪个地址进行搜索）
+延迟:3600(秒)
+检查：服务器通过zabbix_get命令获取客户端的system.uname值来检测是否存活
+设备唯一性准则： 根据情况选择
+已启用：勾选  -- 更新
+
+查看自动发现：检测中 -- 自动发现
+</code></pre><pre><code>配置 -- 动作 -- 事件源：自动发现 -- 创建动作(编辑现有配置即可)
+
+名称：auto find      
+勾选已启用
+条件：无需修改
+
+操作(更新)：
+    添加主机
+    添加主机到群组
+    链接到模板
+    启用主机
+
+</code></pre><blockquote>
+<p>配置自动注册(注：需要关闭自动发现的动作,不能同时存在)</p>
+</blockquote>
+<pre><code>配置客户端zabbix_agentd.conf
+Server=172.16.1.61
+ServerActive=127.0.0.1改为ServerActive=172.16.1.62   #被动改为主动
+Hostname=Zabbix server  改为 Hostname=web01
+/etc/init.d/zabbix-agent restart    #重启客户端
+
+
+配置 -- 动作(事件源：自动注册)-创建动作
+名称：自动注册
+新的触发条件： 主机元数据 似 Linux
+操作：
+    添加主机
+    添加主机到群组
+    链接到模板
+</code></pre><h4 id="grafana-zabbix"><a href="#grafana-zabbix" class="headerlink" title="grafana-zabbix"></a>grafana-zabbix</h4><pre><code>官方GitHub: https://github.com/alexanderzobnin/grafana-zabbix
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-10-29T06:15:42.715Z" itemprop="dateUpdated">2017-10-29 14:15:42</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/10/21/zabbix-精讲/" target="_blank" rel="external">https://wuyanteng.github.io/2017/10/21/zabbix-精讲/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译安装zabbix/">编译安装zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自定义脚本监控/">自定义脚本监控</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/&title=《zabbix-精讲》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/&title=《zabbix-精讲》 — Gary Wu&source=
+量化-网站可用性
+
+所谓网站可用性即网站正常运行时间的百分比，业界用N个9来量化可用性，最长说的就是类似4个9（也就是99.99%）的可用性
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《zabbix-精讲》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/22/saltstack进阶学习4/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">saltstack进阶学习4</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/19/saltstack-jinja2模板-进阶3/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">saltstack-jinja2模板-进阶3</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/&title=《zabbix-精讲》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/&title=《zabbix-精讲》 — Gary Wu&source=
+量化-网站可用性
+
+所谓网站可用性即网站正常运行时间的百分比，业界用N个9来量化可用性，最长说的就是类似4个9（也就是99.99%）的可用性
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《zabbix-精讲》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/10/21/zabbix-精讲/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

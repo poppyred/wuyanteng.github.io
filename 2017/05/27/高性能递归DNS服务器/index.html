@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>高性能递归DNS服务器-部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,DNS,递归DNS服务器,DNScrypts">
+    <meta name="description" content="前言部署，共计分两步走。  环境：CentOS7 第一：DNScrypt部署（目的：DNS防污染） 第二：部署高性能递归DNS服务器-unbound">
+<meta name="keywords" content="高级运维,DNS,递归DNS服务器,DNScrypts">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能递归DNS服务器-部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="前言部署，共计分两步走。  环境：CentOS7 第一：DNScrypt部署（目的：DNS防污染） 第二：部署高性能递归DNS服务器-unbound">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/dnssec.png">
+<meta property="og:updated_time" content="2017-07-27T05:39:19.677Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能递归DNS服务器-部署">
+<meta name="twitter:description" content="前言部署，共计分两步走。  环境：CentOS7 第一：DNScrypt部署（目的：DNS防污染） 第二：部署高性能递归DNS服务器-unbound">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/dnssec.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">高性能递归DNS服务器-部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">高性能递归DNS服务器-部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-27T07:20:59.000Z" itemprop="datePublished" class="page-time">
+  2017-05-27
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-1-DNScrypt-wrapper部署"><span class="post-toc-number">2.</span> <span class="post-toc-text">1.1 DNScrypt-wrapper部署</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-2-dnscrypt-proxy客户端-部署"><span class="post-toc-number">3.</span> <span class="post-toc-text">1.2 dnscrypt-proxy客户端-部署</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-1-CentOS7-部署unbound"><span class="post-toc-number">4.</span> <span class="post-toc-text">2.1 CentOS7 部署unbound</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-2-unbound主配置文件说明"><span class="post-toc-number">5.</span> <span class="post-toc-text">2.2 unbound主配置文件说明</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-高性能递归DNS服务器"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">高性能递归DNS服务器-部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-27 15:20:59" datetime="2017-05-27T07:20:59.000Z"  itemprop="datePublished">2017-05-27</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><pre><code>部署，共计分两步走。 
+环境：CentOS7
+第一：DNScrypt部署（目的：DNS防污染）
+第二：部署高性能递归DNS服务器-unbound
+</code></pre><a id="more"></a>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/dnssec.png" alt="DNSSEC" title="">
+                </div>
+                <div class="image-caption">DNSSEC</div>
+            </figure>
+<h3 id="1-1-DNScrypt-wrapper部署"><a href="#1-1-DNScrypt-wrapper部署" class="headerlink" title="1.1 DNScrypt-wrapper部署"></a>1.1 DNScrypt-wrapper部署</h3><p>DNScrypt-wrapper与Dnscypt-proxy客户端通过密钥交互，实现无污染；<br>当然，Wrapper也可以不部署，直接使用现成的公共服务器，下载客户端“Simple DnsCrypt”来获取【需要翻墙】</p>
+<pre><code>下载：
+ https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.3.tar.gz 
+
+编译安装
+dnscrypt-wrapper 依赖 libsodium 和 libevent2；前者一般源里没有，后者一般默认版本不是2而是比较旧的1，我们得先来手动编译这两个库。
+
+安装依赖
+wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.3.tar.gz
+tar -xzvf libsodium-1.0.3.tar.gz
+cd libsodium-1.0.3
+yum -y groupinstall &quot;Development Tools&quot;     //安装编译环境
+CFLAGS=&quot;-O3 -fPIC&quot; ./configure       //编译
+make &amp;&amp; make install
+ldconfig    //命令作用：是为了让动态链接库为系统所共享
+
+
+然后我们从这里下载 libevent2 ，这里我们选择 2.0.22 稳定版：
+wget https://github.com/libevent/libevent/releases/download/release-2.0.22-stable/libevent-2.0.22-stable.tar.gz
+tar -zxvf libevent-2.0.22-stable.tar.gz
+cd libevent-2.0.22-stable
+./configure --prefix=/usr
+make &amp;&amp; make install
+echo /usr/local/lib &gt; /etc/ld.so.conf.d/usr_local_lib.conf
+ldconfig
+
+
+编译安装dnscrypt-wrapper
+搞定两个依赖库之后，就可以开始编译 dnscrypt-wrapper 啦
+
+yum  install  -y  git
+git clone --recursive git://github.com/Cofyc/dnscrypt-wrapper.git
+cd dnscrypt-wrapper
+make configure
+./configure
+
+如果你在 make configure 这一步出错，你可能需要先安装 autoconfig
+yum install -y autoconfig
+
+如果没什么问题，那么就可以开始编译安装了：
+make &amp;&amp; make install
+
+安装完成会出现如下提示：
+# make install
+install -d -m 755 ‘/usr/local/bin’
+install -p dnscrypt-wrapper ‘/usr/local/bin’
+至此编译完成。
+
+ln -s /usr/local/sbin/dnscrypt-wrapper /usr/sbin/dnscrypt-wrapper
+</code></pre><h3 id="1-2-dnscrypt-proxy客户端-部署"><a href="#1-2-dnscrypt-proxy客户端-部署" class="headerlink" title="1.2 dnscrypt-proxy客户端-部署"></a>1.2 dnscrypt-proxy客户端-部署</h3><pre><code>同样需要安装最开始两个依赖包
+下载：https://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-proxy-1.9.1.tar.bz2 
+
+tar -xf dnscrypt-proxy-1.9.1.tar.bz2 
+cd dnscrypt-proxy-1.9.1
+cd src/libevent-modified/
+CFLAGS=&quot;-O3 -fPIC&quot; ./configure 
+make &amp;&amp; make install 
+cd  ../..
+echo /usr/local/lib &gt; /etc/ld.so.conf.d/usr_local_lib.conf
+ldconfig
+./configure 
+make -j2 &amp;&amp; make install
+
+dnscrypt-proxy启动执行文件 路径默认在/usr/local/sbin/dnscrypt-proxy
+
+/usr/local/share/dnscrypt-proxy/dnscrypt-resolvers.csv中存放了已经支持dnscrypt查询的公共dns
+</code></pre><p>​    </p>
+<pre><code>开机启动服务
+# cd  /etc/init.d/
+# vim  dnscypt-proxy
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides: dnscrypt-proxy
+# Required-Start: $local_fs $network
+# Required-Stop: $local_fs
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: dnscrypt-proxy
+# Description: dnscrypt-proxy secure DNS client
+### END INIT INFO
+
+# Authors: https://github.com/simonclausen/dnscrypt-autoinstall/graphs/contributors
+# Project site: https://github.com/simonclausen/dnscrypt-autoinstall
+
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+DAEMON=/usr/local/sbin/dnscrypt-proxy
+NAME=cisco
+ADDRESS=208.67.220.220
+PNAME=2.dnscrypt-cert.opendns.com
+PKEY=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79
+
+case &quot;$1&quot; in
+start)
+echo &quot;Starting $NAME&quot;
+$DAEMON  --daemonize  --ignore-timestamps --ephemeral-keys  --edns-payload-size=50000 --max-active-requests=100000  --user=root --local-address=127.0.0.1:5353 --resolver-address=$ADDRESS --provider-name=$PNAME --provider-key=$PKEY --logfile=/var/log/dnscrypt.log --pidfile=/var/run/dnscrypt.pid
+;;
+stop)
+echo &quot;Stopping $NAME&quot;
+pkill -f $DAEMON
+;;
+restart)
+$0 stop
+$0 start
+;;
+*)
+echo &quot;Usage: /etc/init.d/dnscrypt-proxy {start|stop|restart}&quot;
+exit 1
+;;
+esac
+
+exit 0
+
+
+# chmod  755  dnscrypt
+# chkconfig  --add dnscrypt
+# chkconfig  dnscrypt  on
+
+使用命令测试：
+root@MyServer:~# dig @127.0.0.1 -p 5353 twitter.com 
+发现获取到的 IP 均相同且为真正的正确 IP 地址，服务生效。
+</code></pre><h3 id="2-1-CentOS7-部署unbound"><a href="#2-1-CentOS7-部署unbound" class="headerlink" title="2.1 CentOS7 部署unbound"></a>2.1 CentOS7 部署unbound</h3><pre><code>事先安装dnscrypt
+
+下载：https://www.unbound.net/downloads/unbound-1.6.0.tar.gz  
+
+1. 安装编译环境插件
+# yum  update
+# yum groupinstall  -y &quot;Development tools&quot; openssl-devel expat-devel
+编译安装libevent2
+# wget https://github.com/libevent/libevent/releases/download/release-2.0.22-stable/libevent-2.0.22-stable.tar.gz
+
+# tar -zxvf libevent-2.0.22-stable.tar.gz
+# cd libevent-2.0.22-stable
+# ./configure --prefix=/usr
+# make &amp;&amp; make install
+# echo /usr/local/lib &gt; /etc/ld.so.conf.d/usr_local_lib.conf
+# ldconfig
+
+
+2.下载、解压后进入unbound目录
+# wget  https://www.unbound.net/downloads/unbound-1.6.0.tar.gz  
+#  tar  -zxvf  unbound-1.6.0.tar.gz  
+#  cd  unbound-1.6.0
+#  ./configure  -with-libevent &amp;&amp; make  &amp;&amp;  make install 
+
+注：libevent可以提高unbound性能，配置文件参数会用到，否则参数无效
+
+3.添加用户和组
+# groupadd unbound
+# useradd -m -g unbound -s /bin/false unbound 
+
+4.关闭firewall开启iptables
+ # systemctl stop firewalld.service           #停止firewall
+ # systemctl disable firewalld.service      #禁止firewall开机启动
+ # firewall-cmd --state                             #查看默认防火墙状态
+ # yum install -y iptables-services           #安装iptables
+
+5.编辑配置文件
+ # vi /usr/local/etc/unbound/unbound.conf  
+ 详见“官方优化文档”说明
+ # unbound-control reload       #重新加载配置文件，同时会清理DNS缓存
+
+6. dnsmasq-china-list 来加速国内域名
+ # yum  install  -y  git 
+ # git   https://github.com/felixonmars/dnsmasq-china-list.git
+ # cd  dnsmasq-china-list
+ # make unbound  
+ # cp  ./accelerated-domains.china.unbound.conf   /usr/local/etc/unbound/
+ 参考： https://blog.phoenixlzx.com/2016/04/27/better-dns-with-unbound/
+
+7.启动【开机启动】
+ # unbound-checkconf           #检测配置文件是否有语法错误
+ # unbound                     # 启动 
+ # whereis  unbound            # 查找启动文件路径
+ # cd  /etc/init.d/
+ # vim  unbound
+     #!/bin/bash
+     # chkconfig: 2345 67 33
+     # description: unbound service start.
+      /usr/local/sbin/unbound
+  # chmod  755  unbound
+  #  chkconfig   --add   unbound
+  #  chkconfig   unbound  on
+  #  chkconfig  --list
+
+8.注：本机127.0.0.1不提供unbound解析，网卡设置里面正常填写外部国内DNS
+
+9.Dig解析测试
+</code></pre><h3 id="2-2-unbound主配置文件说明"><a href="#2-2-unbound主配置文件说明" class="headerlink" title="2.2 unbound主配置文件说明"></a>2.2 unbound主配置文件说明</h3><pre><code>官方文档： https://www.unbound.net/documentation/unbound.conf.html 
+
+num-threads: 8               //线程数可以修改为物理核心数
+interface: 10.0.0.37         //侦听所有 IPv4 地址（只监听本机IP地址）
+//如果只需要本机使用，则一个 interface: 127.0.0.1 即可
+
+verbosity: 4                 //日志输出等级，默认1
+val-log-level:2              //日志级别               
+logfile: &quot;unbound_running.log&quot;         //学会看日志去解决问题，默认路径/usr/local/etc/unbound目录
+so-rcvbuf: 8m                    #官方建议（4m或8m）
+so-sndbuf: 8m                    #官方建议（4m或8m）
+so-reuseport: yes               # 提高UDP性能多线程，就写 yes，
+msg-cache-size: 50m       # msg缓存大小
+rrset-cache-size: 100m       #msg缓存大小，值设置msv-cache-size的2倍。
+由于malloc开销，总内存使用量可能会上升到输入配置的总缓存内存的两倍（或2.5倍）。
+msg-cache-slabs:               #官方建议配置为“num-threads”的2次幂
+rrset-cache-slabs:               #官方建议配置为“num-threads”的2次幂
+infra-cache-slabs:               #官方建议配置为“num-threads”的2次幂
+key-cache-slabs:                 #官方建议配置为“num-threads”的2次幂
+
+cache-max-ttl: 3600           # 最大TTL值，专治各种运营商 DNS 缓存不服
+此选项非常重要，可以解决部分网站加载慢的问题
+outgoing-num-tcp: 1024      # 限制每个线程向上级查询的 TCP 并发数
+incoming-num-tcp: 1024    # 限制每个线程接受查询的 TCP 并发数
+edns-buffer-size: 1480      #默认4096，改为1480 可以解决碎片重组问题
+
+# 下面这四个不需要解释了吧，不想用那个就写 no
+do-ip4: yes
+# do-ip6: yes        #这个IPV6参数务必要注释掉！！！
+do-udp: yes
+do-tcp: yes
+tcp-upstream: yes    # 强制使用 tcp 协议连上游的话写 yes(防止污染)
+access-control: 0.0.0.0/0 allow     # 本允许哪个网段可以使用本DNS
+注意！ 如果监听所有 IPv4 和 IPv6 地址的话，就必须限制允许访问的 IP 地址范围。假设一台主要针对内网，同时为 202.96.0/24 服务的服务器，应配置如下 ACL：
+
+    access-control: 0.0.0.0/0 deny # 禁止除下列地址之外的所有IPv4地址
+    access-control: 202.96.0/24 allow
+    access-control: 10.0.0.0/8 allow # RFC 1918
+    access-control: 172.16.0.0/12 allow # RFC 1918
+    access-control: 192.168.0.0/16 allow # RFC 1918
+    access-control: 127.0.0.0/8 allow # 允许本机查询
+    access-control: ::0/0 deny  # 禁止除下列地址之外的所有IPv6地址
+    access-control: (自己的IPv6网段) allow
+    access-control: ::1 allow # 允许本机查询
+    access-control: ::ffff:127.0.0.1 allow # 允许本机查询
+
+ 当然，对于对内网服务的机器来说，应单独指定内网的 IP 地址而不是监听全部可用 IP 地址，以避免暴露攻击面。
+
+
+
+include: &quot;/usr/local/etc/unbound/hosts.conf&quot;       
+#如果需要做内网域名劫持，需要在这个位置配置
+
+root-hints: &quot;/usr/local/etc/unbound/named.cache&quot;     #顶c级根域 - 没有的话在 
+ftp://FTP.INTERNIC.NET/domain/named.cache 下载一份
+
+module-config: &quot;validator iterator&quot;   #启用DNSSEC，这两个模块缺一不可
+auto-trust-anchor-file: &quot;/usr/local/etc/unbound/root.key&quot;   # 开启DNSSEC 自动信任锚文件
+提前使用“unbound-anchor -a  root.key”命令生成root.key
+
+domain-insecure: &quot;sina.com.cn&quot;  #这个参数非常重要，意思是定义的域名不经过DNSSEC检查，加快国内域名访问速度。有几个写几个，最好使用include维护单独一个文件。
+
+hide-identity: yes          # 不返回对 id.server 和 hostname.bind 的查询。
+hide-version: yes          # 不返回对 version.server 和 version.bind 的查询。
+
+
+接下来配置remote-control【远程控制】
+主要作用是可以很方便的使用 unbound-control命令
+提前在/usr/local/etc/unbound目录下生成必要的TLS密钥文件
+# unbound-control-setup     
+配置文件开启
+remote-control:
+   control-enable: yes
+    server-key-file: &quot;/usr/local/etc/unbound/unbound_server.key&quot;
+    server-cert-file: &quot;/usr/local/etc/unbound/unbound_server.pem&quot;
+    control-key-file: &quot;/usr/local/etc/unbound/unbound_control.key&quot;
+    control-cert-file: &quot;/usr/local/etc/unbound/unbound_control.pem&quot;
+
+# unbound-control  reload | start | stop   #重新加载配置文件，而无需重启DNS服务
+# unbound-control  -h         #显示帮助信息
+
+
+# 不过下面有 identity 和 version 的自定义选项，不隐藏这些的话，修改下选项还可以卖个萌
+harden-glue: yes            # 建议打开
+
+unwanted-reply-threshold: 10000     # 官方为建议1000万
+do-not-query-localhost: no  # 一般是为了防止扯皮丢包开着，不过等下要用 DNSCrypt 所以关掉
+prefetch: yes                          # 蛮好用的，开着吧
+minimal-responses: yes         # 省带宽，开着吧。本机用可以关掉
+username: &quot;root&quot;                   #要求用户运行
+
+# 关键部分来了，把默认查询全部丢给 DNSCrypt。使用 [地址]@[端口] 指定查询地址和端口，默认端口 53。
+# 然后把国内的地址丢给国内的缓存服务器。这两个选项的顺序不能错哟。
+# 如果使用隧道查询，把这个地址改为隧道对端的地址，或者一个国外的 DNS 服务器都可以，例如 8.8.8.8。
+
+#指定域名让特定DNS解析
+forward-zone:
+   name: &quot;jd.com.&quot;
+   forward-addr: 114.114.114.114
+
+forward-zone:
+   name: &quot;.&quot;
+   forward-addr: 127.0.0.1@5353
+   forward-addr: 192.168.10.10@5351 
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-27T05:39:19.677Z" itemprop="dateUpdated">2017-07-27 13:39:19</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/05/27/高性能递归DNS服务器/" target="_blank" rel="external">https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DNS/">DNS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DNScrypts/">DNScrypts</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/递归DNS服务器/">递归DNS服务器</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/&title=《高性能递归DNS服务器-部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/&title=《高性能递归DNS服务器-部署》 — Gary Wu&source=前言部署，共计分两步走。 
+环境：CentOS7
+第一：DNScrypt部署（目的：DNS防污染）
+第二：部署高性能递归DNS服务器-unbound
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《高性能递归DNS服务器-部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/05/27/SoftEther-VPN/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">SoftEther VPN</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/27/flume与kafka那点儿事儿/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">zookeeper和kafka那点儿事儿</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/&title=《高性能递归DNS服务器-部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/&title=《高性能递归DNS服务器-部署》 — Gary Wu&source=前言部署，共计分两步走。 
+环境：CentOS7
+第一：DNScrypt部署（目的：DNS防污染）
+第二：部署高性能递归DNS服务器-unbound
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《高性能递归DNS服务器-部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/05/27/高性能递归DNS服务器/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

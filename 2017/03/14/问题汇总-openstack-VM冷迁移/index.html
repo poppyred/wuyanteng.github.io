@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>问题汇总-openstack-VM冷迁移 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,openstack,VM,compute,计算节点,VM迁移">
+    <meta name="description" content="知识要点: VM虚拟机的创建来自于nova的核心调度,并分配到资源占用较少的计算节点来存储。当然创建了&amp;quot;可用域&amp;quot;后,可以指定某个虚拟机被创建到指定的计算节点中。">
+<meta name="keywords" content="高级运维,openstack,VM,compute,计算节点,VM迁移">
+<meta property="og:type" content="article">
+<meta property="og:title" content="问题汇总-openstack-VM冷迁移">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="知识要点: VM虚拟机的创建来自于nova的核心调度,并分配到资源占用较少的计算节点来存储。当然创建了&amp;quot;可用域&amp;quot;后,可以指定某个虚拟机被创建到指定的计算节点中。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-16T06:43:11.597Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="问题汇总-openstack-VM冷迁移">
+<meta name="twitter:description" content="知识要点: VM虚拟机的创建来自于nova的核心调度,并分配到资源占用较少的计算节点来存储。当然创建了&amp;quot;可用域&amp;quot;后,可以指定某个虚拟机被创建到指定的计算节点中。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">问题汇总-openstack-VM冷迁移</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">问题汇总-openstack-VM冷迁移</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-03-14T04:01:06.000Z" itemprop="datePublished" class="page-time">
+  2017-03-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#适用场景"><span class="post-toc-number">1.</span> <span class="post-toc-text">适用场景</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#VM迁移-或者叫冷漂移"><span class="post-toc-number">2.</span> <span class="post-toc-text">VM迁移/或者叫冷漂移</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#迁移VM命令-深入研究"><span class="post-toc-number">3.</span> <span class="post-toc-text">迁移VM命令-深入研究</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#迁移整个计算节点的所有VM"><span class="post-toc-number">4.</span> <span class="post-toc-text">迁移整个计算节点的所有VM</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-问题汇总-openstack-VM冷迁移"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">问题汇总-openstack-VM冷迁移</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-03-14 12:01:06" datetime="2017-03-14T04:01:06.000Z"  itemprop="datePublished">2017-03-14</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>知识要点: VM虚拟机的创建来自于nova的核心调度,并分配到资源占用较少的计算节点来存储。当然创建了&quot;可用域&quot;后,可以指定某个虚拟机被创建到指定的计算节点中。
+</code></pre><a id="more"></a>
+<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><pre><code>适用场景:当计算节点挂了,迁移上面VM虚拟机的时候用到
+</code></pre><h4 id="VM迁移-或者叫冷漂移"><a href="#VM迁移-或者叫冷漂移" class="headerlink" title="VM迁移/或者叫冷漂移"></a>VM迁移/或者叫冷漂移</h4><pre><code>此操作前提: 已配置共享存储
+</code></pre><pre><code>1. 当某个计算节点挂了之后, 可以通过dashboard看到运行在这台计算节点的虚拟机已经成为关机状态。
+   例如: 挂掉的vm名称为Test-Bad
+
+2. 在控制节点,查看其它可用的计算节点
+   openstack host list
+
+3. 从上面的结果中, 选择一个可用计算节点,准备将VM迁移
+   例如:选中的可用计算节点Host Name为: compute-247
+
+4. 选定新的目标计算节点后, 在控制节点执行如下迁移命令
+   nova evacuate Test-Bad compute-247
+   注:后面可以不加计算节点host则交给nova调度自动分配
+      此迁移命令保留了原始配置,包括实例ID、名称、UID和IP地址等等
+
+5. 迁移完成后, 再查看这个VM所属的计算节点是否已经变更
+   nova-manage vm list 
+   或
+   登陆dashboard -- 管理员 -- 云主机数量中查看虚拟机属于哪个主机(即计算节点)
+
+6. dashboard界面中手动再次启动这个虚拟机   
+</code></pre><pre><code>注意: 如果VM已关机,但是运行这个VM的物理计算节点正常运行, 则迁移会返回如下错误:
+ERROR (BadRequest): Compute service of compute-247 is still in use. (HTTP 400) (Request-ID: req-fa5e05de-2ddb-4392-92ff-2497e65aaae8)
+意思就是这个计算节点正在正常提供服务,无法执行迁移操作。
+</code></pre><!-- more -->
+<h4 id="迁移VM命令-深入研究"><a href="#迁移VM命令-深入研究" class="headerlink" title="迁移VM命令-深入研究"></a>迁移VM命令-深入研究</h4><pre><code>命令格式：
+nova evacuate [--password pass] [--on-shared-storage] instance_name [target_host]
+
+其中:
+--password pass  指定VM实例的admin密码（如果指定了 --on-shared-storage，则无法使用）。如果没有指定密码，一个随机密码会被产生，并在迁移操作完成后被输出控制台。
+
+--on-shared-storage - 指定所有实例文件都在共享存储中。
+
+instance_name - 指定要迁移的实例名称。
+
+target_host - 指定VM实例迁移到的主机；如果您没有指定这个主机，Compute调度会为您自动选择一个可用主机。
+</code></pre><h4 id="迁移整个计算节点的所有VM"><a href="#迁移整个计算节点的所有VM" class="headerlink" title="迁移整个计算节点的所有VM"></a>迁移整个计算节点的所有VM</h4><pre><code>命令格式：
+nova host-evacuate instance_name [--target target_host] [--on-shared-storage] source_host
+
+其中：
+--target target_host 实例撤离到的主机；如果您没有指定这个主机，Compute调度会选择一个主机。可以使用以下命令找到可能的主机：nova host-list | grep compute
+
+--on-shared-storage - 指定所有实例文件都在共享存储中。
+
+source_host - 被迁移的计算节点主机名。
+
+例如：nova host-evacuate --target compute-247 compute-200
+</code></pre><p>官方参考: <a href="https://docs.openstack.org/nova/pike/admin/evacuate.html" target="_blank" rel="noopener">Evacuate instances</a></p>
+<p>参考2：   <a href="https://access.redhat.com/documentation/zh-CN/Red_Hat_Enterprise_Linux_OpenStack_Platform/6/html/Administration_Guide/section-evacuation.html" target="_blank" rel="noopener">RedHat</a>   </p>
+<p>​         </p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-16T06:43:11.597Z" itemprop="dateUpdated">2018-03-16 14:43:11</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/03/14/问题汇总-openstack-VM冷迁移/" target="_blank" rel="external">https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VM/">VM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VM迁移/">VM迁移</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compute/">compute</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openstack/">openstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算节点/">计算节点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/&title=《问题汇总-openstack-VM冷迁移》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/&title=《问题汇总-openstack-VM冷迁移》 — Gary Wu&source=知识要点: VM虚拟机的创建来自于nova的核心调度,并分配到资源占用较少的计算节点来存储。当然创建了&quot;可用域&quot;后,可以指定某个虚拟机..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《问题汇总-openstack-VM冷迁移》 — Gary Wu&url=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/03/20/使用光盘搭建本地yum源/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">使用光盘搭建本地yum源</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/03/04/问题汇总-openstack VM高可用/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">问题汇总-openstack VM高可用</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/&title=《问题汇总-openstack-VM冷迁移》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/&title=《问题汇总-openstack-VM冷迁移》 — Gary Wu&source=知识要点: VM虚拟机的创建来自于nova的核心调度,并分配到资源占用较少的计算节点来存储。当然创建了&quot;可用域&quot;后,可以指定某个虚拟机..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《问题汇总-openstack-VM冷迁移》 — Gary Wu&url=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/03/14/问题汇总-openstack-VM冷迁移/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

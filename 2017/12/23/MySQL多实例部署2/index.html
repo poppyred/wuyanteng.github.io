@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MySQL多实例部署2 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,mysql,dba,MariaDB,PerconaDB,Oracle,MySQL多实例,MySQL多实例远程登陆">
+    <meta name="description" content="注：做多实例，端口若与现有冲突，则需要先关闭mysql再继续 mysql部署  参考：  MySQL部署">
+<meta name="keywords" content="高级运维,mysql,dba,MariaDB,PerconaDB,Oracle,MySQL多实例,MySQL多实例远程登陆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL多实例部署2">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="注：做多实例，端口若与现有冲突，则需要先关闭mysql再继续 mysql部署  参考：  MySQL部署">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-08T09:23:29.013Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL多实例部署2">
+<meta name="twitter:description" content="注：做多实例，端口若与现有冲突，则需要先关闭mysql再继续 mysql部署  参考：  MySQL部署">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MySQL多实例部署2</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MySQL多实例部署2</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-23T10:00:05.000Z" itemprop="datePublished" class="page-time">
+  2017-12-23
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置"><span class="post-toc-number">1.</span> <span class="post-toc-text">配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#多实例socket方式登录"><span class="post-toc-number">2.</span> <span class="post-toc-text">多实例socket方式登录</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试多实例远程登陆"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试多实例远程登陆</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#gt-gt-gt-gt-gt-gt-The-End-gt-gt-gt-gt-gt-gt-gt-gt-gt"><span class="post-toc-number">4.</span> <span class="post-toc-text">-&gt;-&gt;-&gt;-&gt;-&gt;-&gt; The End -&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-MySQL多实例部署2"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MySQL多实例部署2</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-23 18:00:05" datetime="2017-12-23T10:00:05.000Z"  itemprop="datePublished">2017-12-23</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>注：做多实例，端口若与现有冲突，则需要先关闭mysql再继续</p>
+<p>mysql部署</p>
+<blockquote>
+<p>参考：</p>
+</blockquote>
+<p><a href="https://wuyanteng.github.io/2017/12/23/Mysql%E9%AB%98%E7%BA%A7%E6%95%99%E7%A8%8B-%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/#more">MySQL部署</a></p>
+<a id="more"></a>
+<blockquote>
+<p>实例:3307</p>
+</blockquote>
+<p>my.cnf文件</p>
+<pre><code>[client]
+port  = 3307
+socket = /data/3307/mysql.sock
+
+[mysqld]
+user    = mysql
+port    = 3307
+socket  = /data/3307/mysql.sock
+basedir = /usr/local/mysql
+datadir = /data/3307/data
+log-bin = /data/3307/mysql-bin
+server-id = 3307    #server-id不冲突即可，这里和端口号对应
+
+[mysqld_safe]
+log-error=/data/3307/mysql_3307.err
+pid-file=/data/3307/mysqld.pid
+</code></pre><p>mysqld启动脚本</p>
+<pre><code>#!/bin/sh
+################################################
+#3307 MySQL start
+port=3307
+mysql_user=&quot;root&quot;
+CmdPath=&quot;/usr/local/mysql/bin&quot;
+mysql_sock=&quot;/data/${port}/mysql.sock&quot;
+mysqld_pid_file_path=/data/3307/3307.pid
+start(){
+    if [ ! -e &quot;$mysql_sock&quot; ];then
+         printf &quot;Starting MySQL...\n&quot;
+        /bin/sh ${CmdPath}/mysqld_safe --defaults-file=/data/${port}/my.cnf --pid-file=$mysqld_pid_file_path 2&gt;&amp;1 &gt; /dev/null &amp;
+        sleep 3
+    else
+        printf &quot;MySQL is running...\n&quot;
+        exit 1
+    fi
+}
+stop(){
+    if [ ! -e &quot;$mysql_sock&quot; ];then
+        printf &quot;MySQL is stopped...\n&quot;
+        exit 1
+    else
+        printf &quot;Stoping MySQL...\n&quot;
+        mysqld_pid=`cat &quot;$mysqld_pid_file_path&quot;`
+         if (kill -0 $mysqld_pid 2&gt;/dev/null)
+           then
+             kill $mysqld_pid
+             sleep 2
+         fi
+    fi
+}
+
+restart(){
+    printf &quot;Restarting MySQL...\n&quot;
+    stop
+    sleep 2
+    start
+}
+
+case &quot;$1&quot; in
+    start)
+        start
+    ;;
+    stop)
+        stop
+    ;;
+    restart)
+        restart
+    ;;
+    *)
+        printf &quot;Usage: /data/${port}/mysql {start|stop|restart}\n&quot;
+esac
+</code></pre><blockquote>
+<p>实例：3308</p>
+</blockquote>
+<p>my.cnf文件</p>
+<pre><code>[client]
+port = 3308
+socket = /data/3308/mysql.sock
+
+[mysqld]
+user    = mysql
+port    = 3308
+socket  = /data/3308/mysql.sock
+basedir = /usr/local/mysql
+datadir = /data/3308/data
+log-bin = /data/3308/mysql-bin
+server-id = 3308    #server-id不冲突即可，这里和端口号对应
+
+[mysqld_safe]
+log-error=/data/3308/mysql_3308.err
+pid-file=/data/3308/mysqld.pid
+</code></pre><p>mysqld启动脚本</p>
+<pre><code>参考3307启动脚本
+</code></pre><h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><pre><code>创建数据目录授权
+mkdir /data/{3307,3308}/data -p
+把3306的/etc/my.cnf和脚本文件放到/data/3307下
+把3307的/etc/my.cnf和脚本文件放到/data/3308下
+chown -R mysql.mysql /data/
+
+分别初始化2个新的MySQL实例
+cd /usr/local/mysql/scripts  
+./mysql_install_db  --defaults-file=/data/3307/my.cnf --basedir=/usr/local/mysql --datadir=/data/3307/data --user=mysql
+
+./mysql_install_db  --defaults-file=/data/3308/my.cnf --basedir=/usr/local/mysql --datadir=/data/3308/data --user=mysql
+
+
+授权执行权限并启动数据库
+#5.6.36特殊性：需要创建错误日志文件
+touch /data/3307/mysql_3307.err
+touch /data/3308/mysql_3308.err
+chown -R mysql.mysql /data/
+
+给启动脚本添加执行权限
+chmod +x /data/3307/mysql
+chmod +x /data/3308/mysql
+
+分别启动
+/data/3307/mysql start
+/data/3308/mysql start
+
+[root@db02 scripts]# netstat -lntup|grep 330
+[root@host23 3308]# /data/3308/mysql start
+Starting MySQL...
+[root@host23 3308]# ss -lntup |grep 330
+tcp    LISTEN     0      80       :::3306                 :::*                   users:((&quot;mysqld&quot;,pid=25137,fd=10))
+tcp    LISTEN     0      80       :::3307                 :::*                   users:((&quot;mysqld&quot;,pid=31355,fd=11))
+tcp    LISTEN     0      80       :::3308                 :::*                   users:((&quot;mysqld&quot;,pid=31816,fd=11))
+</code></pre><h4 id="多实例socket方式登录"><a href="#多实例socket方式登录" class="headerlink" title="多实例socket方式登录"></a>多实例socket方式登录</h4><pre><code>多实例socket方式登陆
+mysql -S /data/3307/mysql.sock
+mysql -S /data/3308/mysql.sock
+</code></pre><!-- more -->
+<h4 id="测试多实例远程登陆"><a href="#测试多实例远程登陆" class="headerlink" title="测试多实例远程登陆"></a>测试多实例远程登陆</h4><pre><code>多实例初始化密码： 
+mysqladmin -u root -p password &#39;123456&#39; -S /data/3308/mysql.sock 
+
+给用户授权数据库权限
+mysql&gt; create database app;
+mysql&gt; grant all on app.* to admin@&#39;10.0.10.%&#39; identified by &#39;123456&#39;;
+mysql&gt; flush privileges;
+
+在同网段其他机器测试多实例远程登陆
+[root@host24 ~]# mysql -uadmin -p123456 -h 10.0.10.23 -P 3308
+MySQL [(none)]&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| app               |
++--------------------+
+</code></pre><p>-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;</p>
+<p>再新增配置一个3309的实例</p>
+<pre><code>#创建数据目录
+mkdir -p /data/3309/data
+
+#拷贝配置文件
+\cp /data/3307/my.cnf  /data/3309/
+\cp /data/3307/mysql  /data/3309/
+
+#替换配置
+sed -i &#39;s/3307/3309/g&#39; /data/3309/my.cnf 
+sed -i &#39;s/server-id = 3307/server-id = 3309/g&#39; /data/3309/my.cnf 
+sed -i &#39;s/3307/3309/g&#39; /data/3309/mysql
+
+#修改权限
+chown -R mysql:mysql /data/3309
+chmod 700 /data/3309/mysql
+
+#初始化
+cd /usr/local/mysql/scripts
+./mysql_install_db --defaults-file=/data/3309/my.cnf --datadir=/data/3309/data --basedir=/usr/local/mysql --user=mysql
+
+#创建错误日志文件
+touch /data/3309/mysql_3309.err
+
+#修改目录权限
+chown -R mysql:mysql /data/3309
+egrep &quot;server-id|log-bin&quot; /data/3309/my.cnf 
+
+#启动mysql3309实例并验证端口
+/data/3309/mysql start   
+ss -lntup |grep 330
+tcp    LISTEN     0      80       :::3306                 :::*                   users:((&quot;mysqld&quot;,pid=25137,fd=10))
+tcp    LISTEN     0      80       :::3307                 :::*                   users:((&quot;mysqld&quot;,pid=31355,fd=11))
+tcp    LISTEN     0      80       :::3308                 :::*                   users:((&quot;mysqld&quot;,pid=31816,fd=11))
+tcp    LISTEN     0      80       :::3309                 :::*                   users:((&quot;mysqld&quot;,pid=32103,fd=11))
+
+#客户端连接mysql 3309实例
+mysql -S /data/3309/mysql.sock
+</code></pre><!-- more -->
+<h4 id="gt-gt-gt-gt-gt-gt-The-End-gt-gt-gt-gt-gt-gt-gt-gt-gt"><a href="#gt-gt-gt-gt-gt-gt-The-End-gt-gt-gt-gt-gt-gt-gt-gt-gt" class="headerlink" title="-&gt;-&gt;-&gt;-&gt;-&gt;-&gt; The End -&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;"></a>-&gt;-&gt;-&gt;-&gt;-&gt;-&gt; The End -&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;-&gt;</h4>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-08T09:23:29.013Z" itemprop="dateUpdated">2018-01-08 17:23:29</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/23/MySQL多实例部署2/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MariaDB/">MariaDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL多实例/">MySQL多实例</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL多实例远程登陆/">MySQL多实例远程登陆</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle/">Oracle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PerconaDB/">PerconaDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dba/">dba</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/&title=《MySQL多实例部署2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/&title=《MySQL多实例部署2》 — Gary Wu&source=注：做多实例，端口若与现有冲突，则需要先关闭mysql再继续
+mysql部署
+
+参考：
+
+MySQL部署" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL多实例部署2》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/24/云计算OpenStack与KVM虚拟化/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">云计算OpenStack与KVM虚拟化</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/23/Mysql单节点部署1/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Mysql单节点部署1</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/&title=《MySQL多实例部署2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/&title=《MySQL多实例部署2》 — Gary Wu&source=注：做多实例，端口若与现有冲突，则需要先关闭mysql再继续
+mysql部署
+
+参考：
+
+MySQL部署" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL多实例部署2》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/23/MySQL多实例部署2/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

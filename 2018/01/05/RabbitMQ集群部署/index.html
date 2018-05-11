@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>RabbitMQ集群部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,rabbitmq,rabbitmq集群">
+    <meta name="description" content="RabbitMQ集群部署  环境">
+<meta name="keywords" content="高级运维,rabbitmq,rabbitmq集群">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ集群部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="RabbitMQ集群部署  环境">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-19T06:04:46.358Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RabbitMQ集群部署">
+<meta name="twitter:description" content="RabbitMQ集群部署  环境">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">RabbitMQ集群部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">RabbitMQ集群部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-05T03:52:31.000Z" itemprop="datePublished" class="page-time">
+  2018-01-05
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-RabbitMQ集群部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">RabbitMQ集群部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-05 11:52:31" datetime="2018-01-05T03:52:31.000Z"  itemprop="datePublished">2018-01-05</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>RabbitMQ集群部署</p>
+<ul>
+<li>环境</li>
+</ul>
+<a id="more"></a>
+<pre><code>主机名如下：
+10.0.10.21    rabbitmq1
+10.0.10.22    rabbitmq2
+10.0.10.23    rabbitmq3
+
+vim /etc/hosts
+10.0.10.21    rabbitmq1
+10.0.10.22    rabbitmq2
+10.0.10.23    rabbitmq3
+</code></pre><ul>
+<li>在这三台机器上部署RabbitMQ</li>
+</ul>
+<p>参考：<a href="https://wuyanteng.github.io/2018/01/04/RabbitMQ%E5%8E%9F%E7%90%86%E4%B8%8E%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/#more">RabbitMQ原理与单机部署</a></p>
+<!-- more -->
+<ul>
+<li>首先启动rabbitmq1上启动服务</li>
+</ul>
+<pre><code>用来生成.erlang.cookie文件
+[root@rabbitmq1 ~]# rabbitmq-server -detached
+</code></pre><ul>
+<li>读取其中一个节点的cookie,并复制到其他节点</li>
+</ul>
+<pre><code>erlang.cookie是erlang实现分布式的必要文件，erlang分布式的每个节点上要保持相同的.erlang.cookie文件，同时保证文件的权限是400。
+cookie存放在/var/lib/rabbitmq/.erlang.cookie或者$HOME/.erlang.cookie中。
+
+我文件位置在$HOME/.erlang.cookie
+[root@rabbitmq1 ~]# scp .erlang.cookie root@10.0.10.22:/root
+[root@rabbitmq1 ~]# scp .erlang.cookie root@10.0.10.23:/root
+
+注：cookie相当于令牌，集群中的RabbitMQ节点需要通过交换密钥令牌获得相互认证
+</code></pre><ul>
+<li>逐个启动节点</li>
+</ul>
+<pre><code>rabbitmq-server -detached  #以守护方式运行rabbitmq-server
+</code></pre><ul>
+<li>服务开机启动</li>
+</ul>
+<pre><code>略
+</code></pre><ul>
+<li>验证各节点状态</li>
+</ul>
+<pre><code>rabbitmqctl status  #验证单个服务
+rabbitmqctl cluster_status  #验证集群,可以看到目前仍是单节点集群状态。
+</code></pre><blockquote>
+<p>使用rabbitmqctl方式配置集群</p>
+</blockquote>
+<p>以rabbitmq1为主节点</p>
+<pre><code>rabbitmq2上操作如下：
+
+rabbitmqctl stop_app 
+rabbitmqctl reset 
+rabbitmqctl join_cluster rabbit@rabbitmq1 
+rabbitmqctl start_app 
+
+注：rabbit为RabbitMQ具有管理权限的管理用户
+</code></pre><pre><code>rabbitmq3上操作如下：
+
+rabbitmqctl stop_app 
+rabbitmqctl reset 
+rabbitmqctl join_cluster rabbit@rabbitmq1 
+rabbitmqctl start_app 
+</code></pre><p>验证RabbitMQ集群</p>
+<pre><code>rabbitmqctl cluster_status   查看集群的状态信息
+
+出现类似以下信息说明成功：
+Cluster status of node rabbit@rabbitmq1 ...
+[{nodes,[{disc,[rabbit@rabbitmq1,rabbit@rabbitmq2,rabbit@rabbitmq3]}]},
+ {running_nodes,[rabbit@rabbitmq3,rabbit@rabbitmq2,rabbit@rabbitmq1]},
+ {cluster_name,&lt;&lt;&quot;rabbit@rabbitmq1&quot;&gt;&gt;},
+ {partitions,[]},
+ {alarms,[{rabbit@rabbitmq3,[]},{rabbit@rabbitmq2,[]},{rabbit@rabbitmq1,[]}]}]
+</code></pre><p>注：如果关闭了集群中的所有节点，则需要确保在启动的时候最后关闭的那个节点是第一个启动的。</p>
+<!-- more -->
+<blockquote>
+<p>RabbitMQ集群节点类型</p>
+</blockquote>
+<pre><code>共分为2种：磁盘节点和内存节点。内存节点将所有的队列、交换器、绑定关系、用户、权限等元数据信息存储在内存中（提高性能,重启丢失），而磁盘节点则将这些信息存储在硬盘中。rabbitmq默认创建的是硬盘节点，而且它要求集群中至少有一个磁盘节点，所有其他节点都可以是内存节点，但为了可靠性可以配置为至少2个磁盘节点或都为磁盘节点。
+rabbitmqctl cluster_status命令结果中，disc表示磁盘节点，ram表示内存节点。
+
+- 节点加入集群时指定为内存节点
+  rabbitmqctl join_cluster rabbit@rabbitmq1  --ram
+- 已加入集群的节点更改节点类型为内存节点
+  rabbitmqctl stop_app
+  rabbitmqctl change_cluster_node_type ram
+  rabbitmqctl start_app
+  rabbitmqctl cluster_status
+</code></pre><blockquote>
+<p>从集群中剔除单个节点</p>
+</blockquote>
+<pre><code>- 正常方式剔除单个节点
+  rabbitmqctl stop_app
+  rabbitmqctl reset 
+  rabbitmqctl start_app
+  注：rabbitmqctl reset命令将清空节点状态,并将其恢复到空白状态。
+
+- 如果集群所有节点非正常关闭，最后一个关闭的节点因某些异常而导致无法启动，则可以通过以下命令将此节点剔除当前集群。
+  举例：集群中节点按照node3、node2、node1的顺序关闭,此时如果要启动集群，需要先启动node1
+  [node3]# rabbitmqctl stop
+  [node2]# rabbitmqctl stop
+  [node1]# rabbitmqctl stop
+  此时在node2节点中把node1节点剔除当前集群
+  [node2]# rabbitmqctl forget_cluster_node rabbit@node1 --offline
+  [node2]# rabbitmq-server -detached
+  [node2]# rabbitmqctl cluster_status
+</code></pre><blockquote>
+<p>查看服务日志</p>
+</blockquote>
+<pre><code>RabbitMQd 日志默认存放在 $RABBITMQ_HOME/var/log/rabbitmq目录内,一般会出现两个log文件
+</code></pre><blockquote>
+<p>RabbitMQ镜像队列</p>
+</blockquote>
+<pre><code>配置所有节点镜像队列
+rabbitmqctl set_policy ha-all &quot;^&quot; &#39;{&quot;ha-mode&quot;:&quot;all&quot;}&#39;
+配置完成后，通过访问Web页面的Exchanges查看
+
+
+-----------------------------------参考------------------------------------------
+配置镜像队列
+rabbitmqctl set_policy --priority 0 --apply-to queues mirror_queue \
+&quot;^queue_&quot; &#39;{&quot;ha-mode&quot;:&quot;exactly&quot;,&quot;ha-params&quot;:2,&quot;ha-sync-mode&quot;:&quot;automatic&quot;}&#39;
+
+参数解释：
+ha-mode: 指明镜像队列的模式,有效值为all,exactly,nodes,默认为all
+         all表示在集群所有节点上进行镜像; exactly表示在指定个数的节点上进行镜像,节点个数由ha-params指
+         定；nodes表示在指定的节点上进行镜像，节点名称通过ha-params指定，节点名称通常类似于
+         rabbit@hostname,可通过rabbitmqctl cluster_status命令获取节点名称。
+ha-params：配合ha-mode镜像模式进行赋值
+ha-sync-mode: 队列中消息的同步方式,有效值为automatic和manual。当ha-sync-mode设置为automatic时，新加入的slave会默认同步已知的镜像队列。
+</code></pre><blockquote>
+<p>启用RabbitMQ插件</p>
+</blockquote>
+<p>rabbitmq1启用网页插件</p>
+<pre><code>mkdir -p /etc/rabbitmq   #防报错
+rabbitmq-plugins enable rabbitmq_management   #启用网页管理插件,网页管理端口:15672
+
+访问http://10.0.10.21:15672即可, 默认用户guest 密码guest
+</code></pre><p>rabbitmq1添加远程访问用户,这里创建一个openstack用户</p>
+<pre><code>默认网页是不允许访问的，需要增加一个用户修改一下权限，代码如下：
+
+添加用户openstack
+rabbitmqctl add_user openstack password
+
+添加权限
+rabbitmqctl set_permissions -p &quot;/&quot; openstack &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;
+
+修改用户角色
+rabbitmqctl set_user_tags openstack administrator
+
+然后就可以远程访问了，然后可直接配置用户权限等信息。
+</code></pre><p>Web访问查看rabbitmq集群</p>
+<pre><code>使用openstack用户再次访问http://10.0.10.21:15672
+
+注: 如果在Web Overview中的Nodes部分看到“Node statistics not available”的信息，说明在该节点上web管理插件还未启用。在rabbitmq2和rabbitmq3节点上面，分别运行命令即可：
+rabbitmq-plugins enable rabbitmq_management
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-19T06:04:46.358Z" itemprop="dateUpdated">2018-01-19 14:04:46</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/05/RabbitMQ集群部署/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rabbitmq/">rabbitmq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rabbitmq集群/">rabbitmq集群</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/&title=《RabbitMQ集群部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/&title=《RabbitMQ集群部署》 — Gary Wu&source=RabbitMQ集群部署
+
+环境
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《RabbitMQ集群部署》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/05/OpenStack-Pike-Nova计算服务-计算节点6/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">OpenStack-Pike-Nova计算服务-计算节点6</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/04/RabbitMQ原理与单机部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">RabbitMQ原理与单机部署</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/&title=《RabbitMQ集群部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/&title=《RabbitMQ集群部署》 — Gary Wu&source=RabbitMQ集群部署
+
+环境
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《RabbitMQ集群部署》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/05/RabbitMQ集群部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

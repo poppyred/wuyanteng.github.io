@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>云计算OpenStack与KVM虚拟化 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,OpenStack,云计算,virsh,oVirt,KVM虚拟化">
+    <meta name="description" content="什么是云计算？  云计算是使用和交付的一种模式，云计算使用了虚拟化技术,如KVM/XEN/OpenVZ等.  云计算分类  私有云、公有云、混合云、托管云、专用云、行业云、政务云等等 参考：不一样的云计算解释">
+<meta name="keywords" content="高级运维,OpenStack,云计算,virsh,oVirt,KVM虚拟化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云计算OpenStack与KVM虚拟化">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="什么是云计算？  云计算是使用和交付的一种模式，云计算使用了虚拟化技术,如KVM/XEN/OpenVZ等.  云计算分类  私有云、公有云、混合云、托管云、专用云、行业云、政务云等等 参考：不一样的云计算解释">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-15T09:23:36.738Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="云计算OpenStack与KVM虚拟化">
+<meta name="twitter:description" content="什么是云计算？  云计算是使用和交付的一种模式，云计算使用了虚拟化技术,如KVM/XEN/OpenVZ等.  云计算分类  私有云、公有云、混合云、托管云、专用云、行业云、政务云等等 参考：不一样的云计算解释">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">云计算OpenStack与KVM虚拟化</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">云计算OpenStack与KVM虚拟化</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-24T01:38:54.000Z" itemprop="datePublished" class="page-time">
+  2017-12-24
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#KVM虚拟化配置"><span class="post-toc-number">1.</span> <span class="post-toc-text">KVM虚拟化配置</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-云计算OpenStack与KVM虚拟化"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">云计算OpenStack与KVM虚拟化</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-24 09:38:54" datetime="2017-12-24T01:38:54.000Z"  itemprop="datePublished">2017-12-24</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>什么是云计算？</p>
+</blockquote>
+<pre><code>云计算是使用和交付的一种模式，云计算使用了虚拟化技术,如KVM/XEN/OpenVZ等.
+</code></pre><blockquote>
+<p>云计算分类</p>
+</blockquote>
+<pre><code>私有云、公有云、混合云、托管云、专用云、行业云、政务云等等
+</code></pre><p>参考：<a href="https://wuyanteng.github.io/2017/12/24/%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BA%91%E8%AE%A1%E7%AE%97%E8%A7%A3%E9%87%8A/#more">不一样的云计算解释</a></p>
+<a id="more"></a>
+<blockquote>
+<p>什么是KVM</p>
+</blockquote>
+<pre><code>kVM是内核级虚拟化技术，分为硬件虚拟化（即硬件支持的虚拟化）和软件虚拟化（即软件虚拟的虚拟化）
+</code></pre><blockquote>
+<p>KVM、Qemu和qemu-kvm的区别</p>
+</blockquote>
+<pre><code>KVM是内核空间虚拟化的工具,Qemu是一个用户空间虚拟化的工具
+
+Qemu是一个模拟器，它向Guest OS模拟CPU和其他硬件，Guest OS认为自己和硬件直接打交道，其实是同Qemu模拟出来的硬件打交道，Qemu将这些指令转译给真正的硬件。
+
+KVM是linux内核的模块，它需要CPU的支持，采用硬件辅助虚拟化技术Intel-VT，AMD-V，内存的相关如Intel的EPT和AMD的RVI技术，Guest OS的CPU指令不用再经过Qemu转译，直接运行，大大提高了速度
+
+Qemu将KVM整合进来，通过ioctl调用/dev/kvm接口，将有关CPU指令的部分交由内核模块来做。kvm负责cpu虚拟化+内存虚拟化，实现了cpu和内存的虚拟化，但kvm不能模拟其他设备。qemu模拟IO设备（网卡，磁盘等），kvm加上qemu之后就能实现真正意义上服务器虚拟化。因为用到了上面两个东西，所以称之为qemu-kvm。
+</code></pre><pre><code>而OpenStack几乎支持所有的虚拟化管理程序，不论是开源的（Xen与KVM）还是厂商的（Hyper-V与VMware）。但在以前，OpenStack是基于KVM开发的，KVM常常成为默认的虚拟机管理程序。两者都使用相同的开放源理念与开发方法。
+</code></pre><!-- more -->
+<ul>
+<li>服务器开启虚拟化</li>
+</ul>
+<pre><code>Dell服务器 -- 按F2进入 system setup -- processor settimgs -- 开启Virtual Technology
+</code></pre><!-- more -->
+<h4 id="KVM虚拟化配置"><a href="#KVM虚拟化配置" class="headerlink" title="KVM虚拟化配置"></a>KVM虚拟化配置</h4><pre><code>检查CPU是否支持KVM虚拟化：
+egrep &#39;(vmx|svm)&#39; /proc/cpuinfo
+
+注：KVM已经集成到了系统内核当中，如果上面的命令结果出现“vmx或svm”说明CPU支持,否则不支持
+</code></pre><p>kvm管理工具</p>
+<pre><code>libvirt 或 oVirt
+</code></pre><!-- more -->
+<p>安装部署Qemu-kvm</p>
+<pre><code>更换个清华源
+yum install -y qemu-kvm libvirt virt-install
+
+注：libvirt是目前使用最为广泛的对KVM虚拟机进行管理的工具和API。Libvirtd是一个daemon进程，可以被本地的virsh调用，也可以被远程的virsh调用，Libvirtd调用qemu-kvm操作虚拟机。
+</code></pre><pre><code>把镜像放到/opt目录下
+
+ls -lh /opt/CentOS-6.9_x86_64.raw 
+
+#启动libvirt
+systemctl status libvirtd
+
+- libvirt启动后会桥接网卡
+ifconfig 
+
+- libvirt启动后还会启动一个轻量级dns
+ps -ef |grep dnsmasq
+</code></pre><blockquote>
+<p>安装CentOS-KVM虚拟机</p>
+</blockquote>
+<pre><code>创建虚拟机硬盘文件
+qemu-img create -f raw /opt/CentOS-6.9_x86_64.raw 3G
+
+virt-install --virt-type kvm --name CentOS-6.6-x86_64 --ram 1024 --cdrom=/opt/CentOS-6.9-x86_64-minimal.iso --disk path=/opt/CentOS-6.9_x86_64.raw --network network=default --graphics vnc,listen=0.0.0.0 --noautoconsole
+
+此时，立即使用TightVNC Viewer连接kvm宿主机IP地址,连接后就可以看到操作系统安装界面了，一步步安装，然后reboot
+
+注：只有配置了KVM虚拟机，libvirt就会生成一个与操作系统对应的xml文件，其记录了kvm虚拟机的状态。路径如下：/etc/libvirt/qemu/CentOS-6.6-x86_64.xml  
+注：此文件只能通过“virsh edit”命令修改
+</code></pre><p>启动kvm虚拟机</p>
+<pre><code>列出所有虚拟机
+[root@linux-node1 opt]# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ -     CentOS-6.6-x86_64              shut off
+
+启动虚拟机
+virsh start CentOS-6.6-x86_64
+
+再使用TightVNC Viewer连接，进行优化配置
+</code></pre><p>删除kvm虚拟机</p>
+<pre><code>务必按顺序执行
+virsh shutdown CentOS-6.6-x86_64 
+virsh destroy CentOS-6.6-x86_64
+rm -f /opt/CentOS-6.9_x86_64.raw   #删除磁盘镜像文件
+virsh undefine CentOS-6.9_x86_64
+</code></pre><blockquote>
+<p>优化配置</p>
+</blockquote>
+<pre><code>配置网卡：
+DEVICE=eth0
+TYPE=Ethernet
+ONBOOT=yes
+BOOTPROTO=dhcp
+
+service network restart
+
+然后安装你所需的程序即可
+
+注：之所以kvm虚拟机能访问外网，是因为宿主机本身iptables做了映射
+[root@linux-node1 opt]# iptables -t nat -vnL
+</code></pre><blockquote>
+<p>创建/修改kvm虚拟机桥接网卡</p>
+</blockquote>
+<pre><code>关闭kvm虚拟机
+shutdown -h now
+
+查看默认桥接网卡
+[root@linux-node1 opt]# brctl show
+bridge name    bridge id        STP enabled    interfaces
+virbr0        8000.5254009241ef    yes        virbr0-nic
+
+#创建桥接网卡br0
+[root@linux-node1 opt]# brctl addbr br0
+[root@linux-node1 opt]# brctl show
+bridge name    bridge id        STP enabled    interfaces
+br0        8000.000000000000    no        
+virbr0        8000.5254009241ef    yes        virbr0-nic
+
+修改桥接网卡
+brctl addif br0 eth0(注：配置后，xshell连接会中断,可以通过下面的方法配置)
+(注：以下需要在KVM宿主机配置）
+ip addr dev eth0 192.168.56.15/24   #删除eth0网卡IP地址
+ifconfig br0 192.168.56.15/24 up    #添加br0网卡IP地址 
+route add default gw 192.168.56.2   #添加默认网关
+此时，就可以通过xshell连接了
+</code></pre><p>配置kvm虚拟机使用br0桥接模式</p>
+<pre><code>注：只有配置了KVM虚拟机，libvirt就会生成一个与操作系统对应的xml文件，其记录了kvm虚拟机的状态。路径如下：/etc/libvirt/qemu/CentOS-6.6-x86_64.xml  
+注：此文件只能通过“virsh edit”命令修改
+
+virsh edit CentOS-6.6-x86_64  #编辑虚拟机的网络配置为桥接模式
+&lt;interface type=&#39;bridge&#39;&gt;   #改为bridge
+&lt;mac address=&#39;52:54:00:65:f4:57&#39;/&gt;
+&lt;source bridge=&#39;br0&#39;/&gt;     #改为source bridge和br0
+
+查看所有kvm虚拟机
+[root@linux-node1 ~]# virsh list --all
+
+启动kvm虚拟机
+[root@linux-node1 ~]# virsh start CentOS-6.6-x86_64
+Domain CentOS-6.6-x86_64 started
+
+使用TightVNC客户端连接虚拟机IP
+TightVNC添加kvm宿主机的IP地址(此处是192.168.56.15)
+</code></pre><blockquote>
+<p>热添加CPU/内存</p>
+</blockquote>
+<pre><code>注：只有配置了KVM虚拟机，libvirt就会生成一个与操作系统对应的xml文件，其记录了kvm虚拟机的状态。路径如下：/etc/libvirt/qemu/CentOS-6.6-x86_64.xml  
+注：此文件只能通过“virsh edit”命令修改
+
+(1)修改配置文件
+virsh edit CentOS-6.6-x86_64   
+
+cpu改为支持热添加auto, 定义当前分配1个cpu,定义最大支持4个cpu
+&lt;vcpu placement=&#39;auto&#39; current=&quot;1&quot;&gt;4&lt;/vcpu&gt;
+
+定义最大内存和当前内存
+&lt;memory unit=&#39;KiB&#39;&gt;1048576&lt;/memory&gt;
+&lt;currentMemory unit=&#39;KiB&#39;&gt;1048576&lt;/currentMemory&gt;
+
+
+(2)停止并启动kvm虚拟机（重启目的是让刚才定义的热添加配置生效，而非动态扩容需要重启）
+virsh shutdown CentOS-6.6-x86_64
+virsh start CentOS-6.6-x86_64
+
+(3)动态设置cpu
+增加cpu数量到2个
+virsh setvcpus CentOS-6.6-x86_64 2 --live
+
+(4)动态收缩内存大小
+查看当前内存
+virsh qemu-monitor-command CentOS-6.6-x86_64 --hmp --cmd info balloon
+balloon: actual=1024
+
+收缩内存大小
+virsh qemu-monitor-command CentOS-6.6-x86_64 --hmp --cmd balloon 512
+
+增大内存大小
+virsh qemu-monitor-command CentOS-6.6-x86_64 --hmp --cmd balloon 2048
+</code></pre><blockquote>
+<p>virsh使用</p>
+</blockquote>
+<pre><code>virsh --help
+</code></pre><pre><code>virt-clone -o centos7_mini -n centos7_mini15 --auto-clone  #克隆mini，新克隆的为mini15
+-o           #原始机名字，必须为关闭或暂停状态
+-n           #新客户机的名称
+--auto-clone #从原始客户机配置中自动生成克隆名称和存储路径
+--replace    #不检查命名冲突，覆盖任何使用相同名称的客户机
+-f           #可以指定克隆后的主机镜像放在指定目录下
+
+virsh autostart xxx  #让子机随宿主机开机自动启动
+virsh autostart --disable xxx  #解除自动启动
+
+virt-install  #建立kvm虚拟机
+virsh list  #查看正在运行的KVM虚拟机
+virsh list --all  #查看所有KVM虚拟机
+virsh start name   #启动KVM虚拟机
+virsh shutdown name #正常关闭KVM虚拟机
+virsh destroy name  #强制关闭KVM虚拟机(类似于直接断电)
+virsh suspend name  #挂起KVM虚拟机
+virsh resume name  #恢复挂起的KVM虚拟机
+virsh dumpxml name  #查看KVM虚拟机配置文件，可以把输出的内容定义到xml里，用来克隆迁移用。
+virsh edit name  #编辑KVM虚拟机的xml配置文件
+virsh define /etc/libvirt/qemu/name.xml  #定义注册虚拟机，需要先查看xml文件对应的镜像，img等路径是否存在或修改指定路径
+virsh undefine name  #彻底删除KVM虚拟机,不可逆,如果想找回来,需要备份/etc/libvirt/qemu的xml文件
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-15T09:23:36.738Z" itemprop="dateUpdated">2018-01-15 17:23:36</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/24/云计算OpenStack与KVM虚拟化/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KVM虚拟化/">KVM虚拟化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenStack/">OpenStack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oVirt/">oVirt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virsh/">virsh</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/云计算/">云计算</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/&title=《云计算OpenStack与KVM虚拟化》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/&title=《云计算OpenStack与KVM虚拟化》 — Gary Wu&source=
+什么是云计算？
+
+云计算是使用和交付的一种模式，云计算使用了虚拟化技术,如KVM/XEN/OpenVZ等.
+
+云计算分类
+
+私有云、公有云、混合云、托管..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《云计算OpenStack与KVM虚拟化》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/24/不一样的云计算解释/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">不一样的云计算解释</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/23/MySQL多实例部署2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL多实例部署2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/&title=《云计算OpenStack与KVM虚拟化》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/&title=《云计算OpenStack与KVM虚拟化》 — Gary Wu&source=
+什么是云计算？
+
+云计算是使用和交付的一种模式，云计算使用了虚拟化技术,如KVM/XEN/OpenVZ等.
+
+云计算分类
+
+私有云、公有云、混合云、托管..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《云计算OpenStack与KVM虚拟化》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/24/云计算OpenStack与KVM虚拟化/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

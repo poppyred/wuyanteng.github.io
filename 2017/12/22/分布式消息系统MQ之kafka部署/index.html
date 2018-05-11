@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>分布式消息系统MQ之kafka部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="kafka,zookeeper,producer,consumer,MQ,高级运维,logstash,RbbitMQ,topic">
+    <meta name="description" content="原理 kafka介绍  Apache Kafka是分布式发布-订阅消息系统。它最初由LinkedIn公司开发，之后成为Apache项目的一部分。Kafka是一种快速、可扩展的、设计内在就是分布式的，分区的和可复制的提交日志服务。  类似的消息系统还有RbbitMQ、ActiveMQ、ZeroMQ，最主要的优势是其具备分布式功能、并且结合zookeeper 可以实现动态扩容。">
+<meta name="keywords" content="kafka,zookeeper,producer,consumer,MQ,高级运维,logstash,RbbitMQ,topic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式消息系统MQ之kafka部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="原理 kafka介绍  Apache Kafka是分布式发布-订阅消息系统。它最初由LinkedIn公司开发，之后成为Apache项目的一部分。Kafka是一种快速、可扩展的、设计内在就是分布式的，分区的和可复制的提交日志服务。  类似的消息系统还有RbbitMQ、ActiveMQ、ZeroMQ，最主要的优势是其具备分布式功能、并且结合zookeeper 可以实现动态扩容。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kafka%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.png">
+<meta property="og:updated_time" content="2017-12-22T13:21:32.861Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式消息系统MQ之kafka部署">
+<meta name="twitter:description" content="原理 kafka介绍  Apache Kafka是分布式发布-订阅消息系统。它最初由LinkedIn公司开发，之后成为Apache项目的一部分。Kafka是一种快速、可扩展的、设计内在就是分布式的，分区的和可复制的提交日志服务。  类似的消息系统还有RbbitMQ、ActiveMQ、ZeroMQ，最主要的优势是其具备分布式功能、并且结合zookeeper 可以实现动态扩容。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kafka%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">分布式消息系统MQ之kafka部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">分布式消息系统MQ之kafka部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-22T04:03:53.000Z" itemprop="datePublished" class="page-time">
+  2017-12-22
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#原理"><span class="post-toc-number">1.</span> <span class="post-toc-text">原理</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署"><span class="post-toc-number"></span> <span class="post-toc-text">部署</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#–-End-–"><span class="post-toc-number">1.</span> <span class="post-toc-text">– End –</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-分布式消息系统MQ之kafka部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">分布式消息系统MQ之kafka部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-22 12:03:53" datetime="2017-12-22T04:03:53.000Z"  itemprop="datePublished">2017-12-22</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><blockquote>
+<p>kafka介绍</p>
+</blockquote>
+<pre><code>Apache Kafka是分布式发布-订阅消息系统。它最初由LinkedIn公司开发，之后成为Apache项目的一部分。Kafka是一种快速、可扩展的、设计内在就是分布式的，分区的和可复制的提交日志服务。
+
+类似的消息系统还有RbbitMQ、ActiveMQ、ZeroMQ，最主要的优势是其具备分布式功能、并且结合zookeeper 可以实现动态扩容。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>Apache Kafka与传统消息系统相比，有以下不同</p>
+</blockquote>
+<pre><code>它被设计为一个分布式系统，易于向外扩展；
+它同时为发布和订阅提供高吞吐量；
+它支持多订阅者，当失败时能自动平衡消费者；
+它将消息持久化到磁盘，因此可用于批量消费，例如ETL，以及实时应用程序。
+</code></pre><blockquote>
+<p>kafka基本组件</p>
+</blockquote>
+<pre><code>- 话题（Topic）: 是特定类型的消息流。
+  消息是字节的有效负载（Payload），话题是消息的分类名或种子（Feed）名。
+- 生产者（Producer）: 是能够发布消息到话题的任何对象。
+- 已发布的消息保存在一组服务器中，它们被称为代理（Broker）或Kafka集群。
+- 消费者可以订阅一个或多个话题，并从Broker拉数据，从而消费这些已发布的消息。
+</code></pre><blockquote>
+<p>kafka整体架构</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kafka%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.png" alt="kafka整体架构" title="">
+                </div>
+                <div class="image-caption">kafka整体架构</div>
+            </figure>
+<blockquote>
+<p>zookeeper</p>
+</blockquote>
+<pre><code>提到kafka就必须说说zookeeper集群，zookeeper集群特性：
+
+zookeeper集群是否可用的依据是可用节点数量是否超过了集群的一半，zk集群中可用节点如果超过zookeeper集群节点总数量的一半，集群就认为是可用的(可用节点若等于集群的一半集群不可用)。
+
+假如有2台服务器做了zookeeper集群，只要任何一台故障或宕机，整个集群就不可用，因为可用的节点没有大于集群一半的数量；但是假如集群中有3个节点，那么当1个节点故障，还剩2个节点，大于3个节点的一半，所以一个节点故障集群是正常运行的。但是再坏1个节点就只剩一个节点集群就不可用了。
+
+假如有4台服务器做了zookeeper集群，最多只能损坏一个节点，若同时损坏两个，可用节点等于集群总节点的一半，此时集群是不可用的。
+
+所以这也就是为什么一个zookeeper集群的节点数建议是奇数的原因，建议5台机器做zookeeper机器，业务量小3台也行。
+</code></pre><h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><blockquote>
+<p>部署zookeeper集群(3台zookeeper节点)</p>
+</blockquote>
+<pre><code>官网: https://zookeeper.apache.org
+下载最新稳定版zookeeper
+wget https://archive.apache.org/dist/zookeeper/stable/zookeeper-3.4.10.tar.gz
+
+解压
+tar -xf zookeeper-3.4.10.tar.gz -C /usr/local/
+cd /usr/local/
+mv zookeeper-3.4.10 zookeeper
+useradd zookeeper -s /sbin/nologin -M
+chown -R zookeeper:zookeeper zookeeper
+cd zookeeper
+cp conf/zoo_sample.cfg conf/zoo.cfg
+</code></pre><pre><code>配置zookeeper环境变量
+tail -1 /etc/profile
+export PATH=$PATH:/usr/local/zookeeper/bin
+
+source /etc/profile
+env |grep zookeeper
+</code></pre><p>配置zookeeper集群</p>
+<pre><code>创建日志和数据存放目录并授权
+[root@localhost conf]# mkdir /var/log/zookeeper -p
+[root@localhost conf]# chown -R zookeeper:zookeeper /var/log/zookeeper
+[root@localhost zookeeper]# mkdir /usr/local/zookeeper/data -p
+[root@localhost zookeeper]# chown -R zookeeper.zookeeper /usr/local/zookeeper/data
+
+cd /usr/local/zookeeper/conf/
+编辑配置文件zoo.cfg
+[root@localhost conf]# egrep -v &quot;^#|^$&quot; zoo.cfg 
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/usr/local/zookeeper/data
+clientPort=2181
+dataLogDir=/var/log/zookeeper
+server.1= 10.0.10.21:2888:3888
+server.2= 10.0.10.22:2888:3888
+server.3= 10.0.10.23:2888:3888
+</code></pre><p>创建ServerID标识</p>
+<pre><code>注：zookeeper集群模式下还要配置一个myid文件,这个文件需要放在data目录下。
+
+(1)在10.0.10.21服务器上创建myid文件,并设置值为1,同时需要与zoo.cfg文件里面的server.1对应
+   echo &quot;1&quot; &gt; /usr/local/zookeeper/data/myid
+
+(2)在10.0.10.22服务器上创建myid文件,并设置值为2,同时需要与zoo.cfg文件里面的server.2对应
+   echo &quot;2&quot; &gt; /usr/local/zookeeper/data/myid
+
+(3)在10.0.10.23服务器上创建myid文件,并设置值为3,同时需要与zoo.cfg文件里面的server.3对应
+   echo &quot;3&quot; &gt; /usr/local/zookeeper/data/myid
+</code></pre><p>启动并验证zookeeper集群</p>
+<pre><code>分别启动三台zookeeper服务器服务
+zkServer.sh start
+
+在任意一台查看zookeeper集群服务状态(注：需要所有成员服务器均启动服务后才能查看，否则会报错)
+zkServer.sh status
+</code></pre><pre><code>IP地址: 10.0.10.21/24
+[root@localhost ~]# zkServer.sh status
+ZooKeeper JMX enabled by default
+Using config: /usr/local/zookeeper/bin/../conf/zoo.cfg
+Mode: follower
+
+IP地址: 10.0.10.22/24
+[root@localhost ~]# zkServer.sh status
+ZooKeeper JMX enabled by default
+Using config: /usr/local/zookeeper/bin/../conf/zoo.cfg
+Mode: leader
+
+IP地址: 10.0.10.23/24
+[root@localhost ~]# zkServer.sh status
+ZooKeeper JMX enabled by default
+Using config: /usr/local/zookeeper/bin/../conf/zoo.cfg
+Mode: follower
+
+出现以上信息说明：zookeeper集群已经成功部署。
+</code></pre><p>测试连接zookeeper集群</p>
+<pre><code>对于客户端来说，zookeeper集群是一个整体，连接到zookeeper集群实际上感觉在独享整个集群的服务，所以，你可以在任何一个结点上建立到服务集群的连接。例如：
+
+在其中10.0.10.57节点使用zkCli.sh命令连接zookeeper服务器10.0.10.21:2181,如下
+[root@localhost ~]# zkCli.sh -server 10.0.10.21:2181
+Connecting to 10.0.10.21:2181
+2017-11-28 02:12:42,232 [myid:] - INFO  [main:Environment@100] - Client environment:zookeeper.version=3.4.10-39d3a4f269333c922ed3db283be479f9deacaa0f, built on 03/23/2017 10:13 GMT
+2017-11-28 02:12:42,238 [myid:] - INFO  [main:Environment@100] - Client environment:host.name=localhost
+
+WatchedEvent state:SyncConnected type:None path:null
+[zk: 10.0.10.21:2181(CONNECTED) 0] 
+[zk: 10.0.10.21:2181(CONNECTED) 0] ls /            
+[zookeeper]
+[zk: 10.0.10.21:2181(CONNECTED) 1] 
+[zk: 10.0.10.21:2181(CONNECTED) 1]
+
+到此有关zookeeper集群搭建就完全结束
+注意: 生产环境需要考虑zookeeper自启配置,可参考：https://wuyanteng.github.io/2017/11/28/zookeeper%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/
+</code></pre><!-- more -->
+<blockquote>
+<p>部署kafka集群(3台zookeeper机器分别安装kafka)</p>
+</blockquote>
+<pre><code>下载：  https://kafka.apache.org
+
+tar -xf kafka_2.11-1.0.0.tgz -C /usr/local
+ln -s kafka_2.11-1.0.0 kafka
+</code></pre><p>配置kafka环境变量</p>
+<pre><code>配置kafka环境变量
+tail -1 /etc/profile
+export PATH=$PATH:/usr/local/kafka/bin
+
+source /etc/profile
+env |grep kafka
+</code></pre><p>节点1-kafka配置</p>
+<pre><code>[root@host21 local]# grep &quot;^[a-Z]&quot; /usr/local/kafka/config/server.properties
+broker.id=1
+listeners=PLAINTEXT://10.0.10.21:9092
+log.retention.hours=24    #保留指定小时的日志内容
+zookeeper.connect=10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181   #指定所有的kafka节点
+</code></pre><p>节点2-kafka配置</p>
+<pre><code>[root@host21 local]# grep &quot;^[a-Z]&quot; /usr/local/kafka/config/server.properties
+broker.id=2
+listeners=PLAINTEXT://10.0.10.22:9092
+log.retention.hours=24
+zookeeper.connect=10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181
+</code></pre><p>节点3-kafka配置</p>
+<pre><code>[root@host21 local]# grep &quot;^[a-Z]&quot; /usr/local/kafka/config/server.properties
+broker.id=3
+listeners=PLAINTEXT://10.0.10.23:9092
+log.retention.hours=24
+zookeeper.connect=10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181
+</code></pre><p>在3个节点分别启动kafka</p>
+<pre><code>#以守护进程的方式启动
+/usr/local/kafka/bin/kafka-server-start.sh -daemon /usr/local/kafka/config/server.properties
+
+#查看日志
+tailf /usr/local/kafka/logs/server.log
+</code></pre><p>分别验证kafka进程</p>
+<pre><code>[root@host21 ~]# jps
+784 Jps
+30598 QuorumPeerMain
+710 Kafka
+</code></pre><!-- more -->
+<blockquote>
+<p>测试Topic</p>
+</blockquote>
+<p>创建名为logstashtest，partitions(分区)为3，replication(复制)为3的topic(主题)</p>
+<pre><code>在任意kafka服务器上操作：
+[root@host21 ~]# kafka-topics.sh --create --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --partitions 3 --replication-factor 3 --topic logstashtest
+
+Created topic &quot;logstashtest&quot;.
+</code></pre><p>测试获取topic</p>
+<pre><code>可以在任意kafka服务器上测试：
+[root@host23 local]# kafka-topics.sh --describe --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --topic logstashtest
+Topic:logstashtest    PartitionCount:3    ReplicationFactor:3    Configs:
+    Topic: logstashtest    Partition: 0    Leader: 0    Replicas: 0,1,2    Isr: 0,1,2
+    Topic: logstashtest    Partition: 1    Leader: 1    Replicas: 1,2,0    Isr: 1,2,0
+    Topic: logstashtest    Partition: 2    Leader: 2    Replicas: 2,0,1    Isr: 2,0,1
+</code></pre><pre><code>状态说明：logstashtest这个topic，当前有三个分区分别为0、1、2
+         分区0 有三个副本，并且状态都为lsr（ln-sync，表示可以参加选举成为leader）。
+</code></pre><p>删除一个topic</p>
+<pre><code>创建一个名称为test的topic,来测试删除
+[root@host21 ~]# kafka-topics.sh --create --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --partitions 3 --replication-factor 3 --topic test
+Created topic &quot;test&quot;.
+
+删除名为test的topic
+[root@host21 ~]# kafka-topics.sh --delete --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --topic test
+Topic test is marked for deletion.
+Note: This will have no impact if delete.topic.enable is not set to true.
+
+验证是否删除
+[root@host21 ~]# kafka-topics.sh --describe --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --topic test
+[root@host21 ~]# 
+</code></pre><p>获取所有topic</p>
+<pre><code>[root@host21 ~]# kafka-topics.sh --list --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 _consumer_offsets
+logstashtest
+[root@host21 ~]# 
+</code></pre><!-- more -->
+<blockquote>
+<p>kafka命令测试消息发送</p>
+</blockquote>
+<pre><code>[root@host21 ~]# kafka-topics.sh --create --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --partitions 3 --replication-factor 3 --topic messagetest
+Created topic &quot;messagetest&quot;.
+[root@host21 ~]# 
+</code></pre><p>发送消息</p>
+<pre><code>kafka-console-producer.sh --broker-list 10.0.10.21:9092,10.0.10.22:9092,10.0.10.23:9092 --topic logstashtest
+&gt;123
+&gt;456
+&gt;Hello Kafka
+&gt;
+</code></pre><p>其他kafka服务器服务器测试获取消息</p>
+<p>服务器A获取消息</p>
+<pre><code>[root@host21 ~]# kafka-console-consumer.sh --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --topic logstashtest --from-beginning
+Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+456
+Hello Kafka
+123
+</code></pre><p>服务器B获取消息</p>
+<pre><code>[root@host22 local]# kafka-console-consumer.sh --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --topic logstashtest --from-beginning
+Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+456
+Hello Kafka
+123
+</code></pre><p>服务器C获取消息</p>
+<pre><code>[root@host23 local]# kafka-console-consumer.sh --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23:2181 --topic logstashtest --from-beginning
+Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+Hello Kafka
+456
+123
+</code></pre><!-- more -->
+<blockquote>
+<p>使用logstash测试向kafka写入数据</p>
+</blockquote>
+<pre><code>在安装有logstash的机器上操作：
+
+vim /etc/logstash/conf.d/logstash-to-kafka.sh
+input {
+  stdin {}
+}
+
+
+output {
+  kafka {
+    topic_id =&gt; &quot;hello&quot;
+    bootstrap_servers =&gt; &quot;10.0.10.21:9092&quot;
+    batch_size =&gt; 5
+  }
+  stdout {
+    codec =&gt; rubydebug
+  }
+}
+</code></pre><pre><code>验证logstash语法
+[root@localhost conf.d]# logstash -f /usr/share/logstash/config/conf.d/logstash-to-kafka.sh -t
+
+Sending Logstash&#39;s logs to /var/log/logstash which is now configured via log4j2.properties
+Configuration OK
+</code></pre><p>测试logstash向kafka写入数据</p>
+<pre><code>logstash服务器前台启动
+[root@localhost conf.d]# logstash -f /usr/share/logstash/config/conf.d/logstash-to-kafka.sh
+
+手动输入测试内容：
+hello
+{
+      &quot;@version&quot; =&gt; &quot;1&quot;,
+          &quot;host&quot; =&gt; &quot;localhost.localdomain&quot;,
+    &quot;@timestamp&quot; =&gt; 2017-12-22T13:17:56.632Z,
+       &quot;message&quot; =&gt; &quot;hello&quot;
+}
+
+logstash
+{
+      &quot;@version&quot; =&gt; &quot;1&quot;,
+          &quot;host&quot; =&gt; &quot;localhost.localdomain&quot;,
+    &quot;@timestamp&quot; =&gt; 2017-12-22T13:18:21.852Z,
+       &quot;message&quot; =&gt; &quot;logstash&quot;
+}
+
+</code></pre><pre><code>在21的kafka机器上运行如下消费命令：
+kafka-console-consumer.sh --zookeeper 10.0.10.21:2181,10.0.10.22:2181,10.0.10.23,2181 --topic hello --from-beginning
+
+
+结果如下：
+Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+
+2017-12-22T13:17:56.632Z localhost.localdomain hello
+2017-12-22T13:18:21.852Z localhost.localdomain logstash
+</code></pre><!-- more -->
+<h4 id="–-End-–"><a href="#–-End-–" class="headerlink" title="– End –"></a>– End –</h4>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-12-22T13:21:32.861Z" itemprop="dateUpdated">2017-12-22 21:21:32</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/22/分布式消息系统MQ之kafka部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MQ/">MQ</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RbbitMQ/">RbbitMQ</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/consumer/">consumer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kafka/">kafka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/logstash/">logstash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/producer/">producer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/topic/">topic</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/&title=《分布式消息系统MQ之kafka部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/&title=《分布式消息系统MQ之kafka部署》 — Gary Wu&source=原理
+kafka介绍
+
+Apache Kafka是分布式发布-订阅消息系统。它最初由LinkedIn公司开发，之后成为Apache项目的一部分。Kafka..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分布式消息系统MQ之kafka部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/23/Mysql单节点部署1/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Mysql单节点部署1</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/19/logstash测试输出/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">logstash测试输出</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/&title=《分布式消息系统MQ之kafka部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/&title=《分布式消息系统MQ之kafka部署》 — Gary Wu&source=原理
+kafka介绍
+
+Apache Kafka是分布式发布-订阅消息系统。它最初由LinkedIn公司开发，之后成为Apache项目的一部分。Kafka..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分布式消息系统MQ之kafka部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/22/分布式消息系统MQ之kafka部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

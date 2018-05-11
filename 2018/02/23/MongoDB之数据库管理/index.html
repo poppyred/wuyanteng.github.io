@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MongoDB之数据库管理 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Mongo,MongoDB,数据库管理">
+    <meta name="description" content="查看服务器运行状态查看服务器状态mongos&amp;gt; db.serverStatus()">
+<meta name="keywords" content="高级运维,Mongo,MongoDB,数据库管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB之数据库管理">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="查看服务器运行状态查看服务器状态mongos&amp;gt; db.serverStatus()">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-23T05:13:37.226Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB之数据库管理">
+<meta name="twitter:description" content="查看服务器运行状态查看服务器状态mongos&amp;gt; db.serverStatus()">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MongoDB之数据库管理</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MongoDB之数据库管理</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-23T01:49:57.000Z" itemprop="datePublished" class="page-time">
+  2018-02-23
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看服务器运行状态"><span class="post-toc-number">1.</span> <span class="post-toc-text">查看服务器运行状态</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#查看服务器状态"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">查看服务器状态</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#查看服务器命令行参数"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">查看服务器命令行参数</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看数据库-表状态"><span class="post-toc-number">2.</span> <span class="post-toc-text">查看数据库/表状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看当前Query队列执行情况"><span class="post-toc-number">3.</span> <span class="post-toc-text">查看当前Query队列执行情况</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#监控MongoDB各个状态"><span class="post-toc-number">4.</span> <span class="post-toc-text">监控MongoDB各个状态</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#mongotop"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">mongotop</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#mongostat"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">mongostat</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MongoDB日志分割"><span class="post-toc-number">5.</span> <span class="post-toc-text">MongoDB日志分割</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#刷写并锁"><span class="post-toc-number">6.</span> <span class="post-toc-text">刷写并锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#备份还原"><span class="post-toc-number">7.</span> <span class="post-toc-text">备份还原</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-MongoDB之数据库管理"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MongoDB之数据库管理</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-23 09:49:57" datetime="2018-02-23T01:49:57.000Z"  itemprop="datePublished">2018-02-23</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="查看服务器运行状态"><a href="#查看服务器运行状态" class="headerlink" title="查看服务器运行状态"></a>查看服务器运行状态</h4><h5 id="查看服务器状态"><a href="#查看服务器状态" class="headerlink" title="查看服务器状态"></a>查看服务器状态</h5><pre><code>mongos&gt; db.serverStatus()  
+</code></pre><a id="more"></a>
+<pre><code>{
+    &quot;host&quot; : &quot;bogon:20000&quot;,
+    &quot;version&quot; : &quot;3.4.6&quot;,
+    &quot;process&quot; : &quot;mongos&quot;,
+    &quot;pid&quot; : NumberLong(4209),
+    &quot;uptime&quot; : 2501,
+    &quot;uptimeMillis&quot; : NumberLong(2500907),
+    &quot;uptimeEstimate&quot; : NumberLong(2500),
+    &quot;localTime&quot; : ISODate(&quot;2018-02-23T03:22:23.794Z&quot;),
+    &quot;asserts&quot; : {
+        &quot;regular&quot; : 0,
+        &quot;warning&quot; : 0,
+        &quot;msg&quot; : 0,
+        &quot;user&quot; : 3,
+        &quot;rollovers&quot; : 0
+    },
+    &quot;connections&quot; : {
+        &quot;current&quot; : 1,
+        &quot;available&quot; : 818,
+        &quot;totalCreated&quot; : 4
+    },
+    &quot;network&quot; : {
+        &quot;bytesIn&quot; : NumberLong(8630),
+        &quot;bytesOut&quot; : NumberLong(23644),
+        &quot;physicalBytesIn&quot; : NumberLong(8630),
+        &quot;physicalBytesOut&quot; : NumberLong(23644),
+        &quot;numRequests&quot; : NumberLong(183)
+    },
+    &quot;sharding&quot; : {
+        &quot;configsvrConnectionString&quot; : &quot;configs/10.0.10.25:21000,10.0.10.26:21000,10.0.10.27:21000&quot;,
+        &quot;lastSeenConfigServerOpTime&quot; : {
+            &quot;ts&quot; : Timestamp(1519356136, 2),
+            &quot;t&quot; : NumberLong(3)
+        }
+    },
+    &quot;tcmalloc&quot; : {
+        &quot;generic&quot; : {
+            &quot;current_allocated_bytes&quot; : 2584560,
+            &quot;heap_size&quot; : 4194304
+        },
+        &quot;tcmalloc&quot; : {
+            &quot;pageheap_free_bytes&quot; : 311296,
+            &quot;pageheap_unmapped_bytes&quot; : 0,
+            &quot;max_total_thread_cache_bytes&quot; : 1024458752,
+            &quot;current_total_thread_cache_bytes&quot; : 367712,
+            &quot;total_free_bytes&quot; : 1298448,
+            &quot;central_cache_free_bytes&quot; : 181232,
+            &quot;transfer_cache_free_bytes&quot; : 749504,
+            &quot;thread_cache_free_bytes&quot; : 367712,
+            &quot;aggressive_memory_decommit&quot; : 0,
+            &quot;formattedString&quot; : &quot;---
+            ...
+            ...
+        }
+    },
+    &quot;mem&quot; : {
+        &quot;bits&quot; : 64,
+        &quot;resident&quot; : 11,
+        &quot;virtual&quot; : 181,
+        &quot;supported&quot; : true
+    },
+    &quot;ok&quot; : 1
+}
+
+</code></pre><pre><code>通过上面看到MongoDB的版本、后台刷写情况、副本集情况、操作数量情况、进出网络情况、连接数情况和内存(内存单位是M)情况。
+</code></pre><h5 id="查看服务器命令行参数"><a href="#查看服务器命令行参数" class="headerlink" title="查看服务器命令行参数"></a>查看服务器命令行参数</h5><pre><code>mongos&gt; db.serverCmdLineOpts()
+
+{
+    &quot;argv&quot; : [
+        &quot;mongos&quot;,
+        &quot;-f&quot;,
+        &quot;/data/A/mongodb/conf/mongos.conf&quot;
+    ],
+    &quot;parsed&quot; : {
+        &quot;config&quot; : &quot;/data/A/mongodb/conf/mongos.conf&quot;,
+        &quot;net&quot; : {
+            &quot;bindIp&quot; : &quot;0.0.0.0&quot;,
+            &quot;maxIncomingConnections&quot; : 20000,
+            &quot;port&quot; : 20000
+        },
+        &quot;processManagement&quot; : {
+            &quot;fork&quot; : true,
+            &quot;pidFilePath&quot; : &quot;/data/A/mongodb/mongos/mongos.pid&quot;
+        },
+        &quot;sharding&quot; : {
+            &quot;configDB&quot; : &quot;configs/10.0.10.25:21000,10.0.10.26:21000,10.0.10.27:21000&quot;
+        },
+        &quot;systemLog&quot; : {
+            &quot;destination&quot; : &quot;file&quot;,
+            &quot;logAppend&quot; : true,
+            &quot;path&quot; : &quot;/var/log/mongodb/mongos/mongos.log&quot;
+        }
+    },
+    &quot;ok&quot; : 1
+}
+</code></pre><h4 id="查看数据库-表状态"><a href="#查看数据库-表状态" class="headerlink" title="查看数据库/表状态"></a>查看数据库/表状态</h4><p>通过下面命令可以看到数据库的名称，集合（表）数量，索引数量、大小，数据文件大小，存储空间大小和物理文件大小。</p>
+<pre><code>mongos&gt; db.stats()
+{
+    &quot;raw&quot; : {
+        &quot;shard1/10.0.10.25:27001,10.0.10.26:27001&quot; : {
+            &quot;db&quot; : &quot;test&quot;,
+            &quot;collections&quot; : 0,
+            &quot;views&quot; : 0,
+            &quot;objects&quot; : 0,
+            &quot;avgObjSize&quot; : 0,
+            &quot;dataSize&quot; : 0,        #数据文件大小,单位:M
+            &quot;storageSize&quot; : 0,     #存储空间大小：datasize+集合两端预留的未使用空间
+            &quot;numExtents&quot; : 0,
+            &quot;indexes&quot; : 0,
+            &quot;indexSize&quot; : 0,
+            &quot;fileSize&quot; : 0,       #物理文件大小:包括分配
+            &quot;ok&quot; : 1,
+            &quot;$gleStats&quot; : {
+                &quot;lastOpTime&quot; : Timestamp(0, 0),
+                &quot;electionId&quot; : ObjectId(&quot;7fffffff0000000000000002&quot;)
+            }
+        },
+    &quot;objects&quot; : 0,
+    &quot;avgObjSize&quot; : 0,
+    &quot;dataSize&quot; : 0,
+    &quot;storageSize&quot; : 0,
+    &quot;numExtents&quot; : 0,
+    &quot;indexes&quot; : 0,
+    &quot;indexSize&quot; : 0,
+    &quot;fileSize&quot; : 0,
+    &quot;extentFreeList&quot; : {
+        &quot;num&quot; : 0,
+        &quot;totalSize&quot; : 0
+    },
+    &quot;ok&quot; : 1
+}
+</code></pre><h4 id="查看当前Query队列执行情况"><a href="#查看当前Query队列执行情况" class="headerlink" title="查看当前Query队列执行情况"></a>查看当前Query队列执行情况</h4><pre><code>mongos&gt; db.currentOP();
+{
+    &quot;inprog&quot; : [
+        {
+            &quot;desc&quot; : &quot;conn4732&quot;,   #可与日志信息联系起来
+            &quot;threadId&quot; : &quot;0x33903c0&quot;,
+            &quot;connectionId&quot; : 4732, #连接ID
+            &quot;opid&quot; : 221672,       #操作标识，可以用这个ID来终止该操作：db.killOP(opid)
+            &quot;active&quot; : true,       #表示线程是否在运行
+            &quot;secs_running&quot; : 4,    #执行的时间
+            &quot;microsecs_running&quot; : NumberLong(4999899),
+            &quot;op&quot; : &quot;getmore&quot;,      #操作类型：插入、删除、更新、查询
+            &quot;ns&quot; : &quot;local.oplog.rs&quot;, #操作的集合
+            &quot;query&quot; : {
+                &quot;ts&quot; : {
+                    &quot;$gte&quot; : Timestamp(1435674461, 1)
+                }
+            },
+            &quot;client&quot; : &quot;127.0.0.1:52101&quot;, 
+            &quot;numYields&quot; : 0, #表示该操作交出锁，而使其他操作得以运行。
+            &quot;locks&quot; : {      #锁信息
+
+            },
+            &quot;waitingForLock&quot; : false,
+            &quot;lockStats&quot; : {
+                &quot;Global&quot; : {
+                    &quot;acquireCount&quot; : {
+                        &quot;r&quot; : NumberLong(10)
+                    }
+                },
+            }
+        }
+</code></pre><pre><code>通过上面看到当前执行的进程，类似MySQL的show processlist。可以添加过滤条件：
+
+mongos&gt; db.currentOP({&quot;ns&quot;:&quot;test&quot;})
+{
+    &quot;raw&quot; : {
+        &quot;shard1/10.0.10.25:27001,10.0.10.26:27001&quot; : {
+            &quot;inprog&quot; : [ ],
+            &quot;ok&quot; : 1,
+            &quot;$gleStats&quot; : {
+                &quot;lastOpTime&quot; : Timestamp(0, 0),
+                &quot;electionId&quot; : ObjectId(&quot;7fffffff0000000000000002&quot;)
+            }
+        },
+        &quot;shard2/10.0.10.26:27002,10.0.10.27:27002&quot; : {
+            &quot;inprog&quot; : [ ],
+            &quot;ok&quot; : 1,
+            &quot;$gleStats&quot; : {
+                &quot;lastOpTime&quot; : Timestamp(0, 0),
+                &quot;electionId&quot; : ObjectId(&quot;7fffffff0000000000000001&quot;)
+            }
+        },
+        &quot;shard3/10.0.10.25:27003,10.0.10.27:27003&quot; : {
+            &quot;inprog&quot; : [ ],
+            &quot;ok&quot; : 1,
+            &quot;$gleStats&quot; : {
+                &quot;lastOpTime&quot; : Timestamp(0, 0),
+                &quot;electionId&quot; : ObjectId(&quot;7fffffff0000000000000002&quot;)
+            }
+        }
+    },
+    &quot;inprog&quot; : [ ],
+    &quot;ok&quot; : 1
+}
+</code></pre><h4 id="监控MongoDB各个状态"><a href="#监控MongoDB各个状态" class="headerlink" title="监控MongoDB各个状态"></a>监控MongoDB各个状态</h4><h5 id="mongotop"><a href="#mongotop" class="headerlink" title="mongotop"></a>mongotop</h5><pre><code>mongos不支持mongotop，所以不能使用如下命令查看
+mongotop --port 20000
+2018-02-22T22:52:37.486-0500    cannot run mongotop against a mongos
+</code></pre><pre><code>连接到shard1分片查看哪几个数据库最繁忙
+[root@bogon conf]# mongotop --port 27001
+2018-02-22T22:50:29.489-0500    connected to: 127.0.0.1:27001
+
+                    ns    total    read    write    2018-02-22T22:50:30-05:00
+        local.oplog.rs      2ms     2ms      0ms                             
+  admin.system.indexes      0ms     0ms      0ms                             
+    admin.system.roles      0ms     0ms      0ms                             
+  admin.system.version      0ms     0ms      0ms                             
+              local.me      0ms     0ms      0ms                             
+local.replset.election      0ms     0ms      0ms                             
+local.replset.minvalid      0ms     0ms      0ms                             
+     local.startup_log      0ms     0ms      0ms                             
+  local.system.replset      0ms     0ms      0ms                             
+ testdb.system.indexes      0ms     0ms      0ms           
+</code></pre><h5 id="mongostat"><a href="#mongostat" class="headerlink" title="mongostat"></a>mongostat</h5><pre><code>mongostat连接到mongos路由上查询
+mongostat --port 20000   
+
+mongostat加上--discover 可以查看到副本集和分片集群的所有成员状态
+mongostat --port 20000  --discover  
+</code></pre><pre><code>insert、query、update、delete、getmore、command 每种对应操作的发生次数。
+其中faults表示访问失败数，数据从内存交换出去，放到swap。值越小越好，最好不要大于100。
+
+参数解释:
+flushes：表示刷写到磁盘的次数。
+mapped：表示映射到内存的数量，约等于数据目录大小。
+vsize：表示正在使用的虚拟内存大小，通常为数据目录的2倍。（一次用于映射，一次用于日志系统）
+res：表示正在使用的内存大小。
+qr|qw：表示读写操作队列大小，即有多少读写操作被阻塞，等待进行处理。
+ar|aw：表示活动客户端的数量，即正在进行读写操作的客户端。
+netId：表示通过网络传输进来的字节数。
+netou：t表示通过网络传输出的字节数。
+Conn：表示服务器打开的连接数。
+time：表示统计的时间。
+</code></pre><h4 id="MongoDB日志分割"><a href="#MongoDB日志分割" class="headerlink" title="MongoDB日志分割"></a>MongoDB日志分割</h4><pre><code>mongos&gt; db.adminCommand({&quot;logRotate&quot;:1})
+{ &quot;ok&quot; : 1 }
+mongos&gt; 
+mongos&gt;
+
+类似MySQL的flush logs; 命令
+</code></pre><h4 id="刷写并锁"><a href="#刷写并锁" class="headerlink" title="刷写并锁"></a>刷写并锁</h4><pre><code>mongos&gt; db.currentOP()    #查看锁情况
+
+刷写到磁盘，并锁住数据库。此时数据库只能读，不能写。保证了数据的一致性，在此可以进行复制文件或则快照备份
+mongos&gt; db.fsyncLock()    
+
+解锁
+mongos&gt; db.fsyncUnlock()
+
+
+注：mongos路由不支持，报错如下:
+{ &quot;err&quot; : &quot;can&#39;t do unlock through mongos&quot; }
+</code></pre><h4 id="备份还原"><a href="#备份还原" class="headerlink" title="备份还原"></a>备份还原</h4><p>搜索参考另一篇文章：MongoDB 备份与恢复</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-23T05:13:37.226Z" itemprop="dateUpdated">2018-02-23 13:13:37</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/02/23/MongoDB之数据库管理/" target="_blank" rel="external">https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mongo/">Mongo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库管理/">数据库管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/&title=《MongoDB之数据库管理》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/&title=《MongoDB之数据库管理》 — Gary Wu&source=查看服务器运行状态查看服务器状态mongos&gt; db.serverStatus()  
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MongoDB之数据库管理》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/23/MongoDB之用户授权管理/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">MongoDB之用户授权管理</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/22/高可用MongoDB集群/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">高可用MongoDB集群</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/&title=《MongoDB之数据库管理》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/&title=《MongoDB之数据库管理》 — Gary Wu&source=查看服务器运行状态查看服务器状态mongos&gt; db.serverStatus()  
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MongoDB之数据库管理》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/02/23/MongoDB之数据库管理/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

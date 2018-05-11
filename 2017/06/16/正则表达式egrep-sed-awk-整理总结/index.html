@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>正则表达式egrep/sed/awk-整理总结 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,egrep,sed,awk,正则表达式">
+    <meta name="description" content="本总结目的把三剑客工具整理到一篇文档中，方便学习、对比与记忆。 文章尽可能做到全面、详尽，不足之处，可联系我更正。">
+<meta name="keywords" content="Linux基础,egrep,sed,awk,正则表达式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式egrep&#x2F;sed&#x2F;awk-整理总结">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="本总结目的把三剑客工具整理到一篇文档中，方便学习、对比与记忆。 文章尽可能做到全面、详尽，不足之处，可联系我更正。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-06-16T10:47:53.682Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="正则表达式egrep&#x2F;sed&#x2F;awk-整理总结">
+<meta name="twitter:description" content="本总结目的把三剑客工具整理到一篇文档中，方便学习、对比与记忆。 文章尽可能做到全面、详尽，不足之处，可联系我更正。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">正则表达式egrep/sed/awk-整理总结</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">正则表达式egrep/sed/awk-整理总结</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-16T10:43:45.000Z" itemprop="datePublished" class="page-time">
+  2017-06-16
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#通配符"><span class="post-toc-number">1.</span> <span class="post-toc-text">通配符</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展正则表达式"><span class="post-toc-number">2.</span> <span class="post-toc-text">扩展正则表达式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#egrep-sed-awk三剑客-实例用法"><span class="post-toc-number">3.</span> <span class="post-toc-text">egrep/sed/awk三剑客-实例用法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-利用sed取出eth0的IP地址"><span class="post-toc-number">3.0.0.1.</span> <span class="post-toc-text">1. 利用sed取出eth0的IP地址</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SED文件内容替换"><span class="post-toc-number">3.0.1.</span> <span class="post-toc-text">SED文件内容替换</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SED-GREP使用正则提取-ETC-HOSTS权限"><span class="post-toc-number">3.0.2.</span> <span class="post-toc-text">SED/GREP使用正则提取/ETC/HOSTS权限</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#sed使用"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">sed使用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#EGREP-AWK取消某个文件的空行"><span class="post-toc-number">3.1.1.</span> <span class="post-toc-text">EGREP/AWK取消某个文件的空行</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#EGREP-AWK-取出文本前两列"><span class="post-toc-number">3.1.2.</span> <span class="post-toc-text">EGREP/AWK 取出文本前两列</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SED与AWK提取文件权限"><span class="post-toc-number">3.1.3.</span> <span class="post-toc-text">SED与AWK提取文件权限</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#AWK提取IP地址"><span class="post-toc-number">3.1.4.</span> <span class="post-toc-text">AWK提取IP地址</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-正则表达式egrep-sed-awk-整理总结"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">正则表达式egrep/sed/awk-整理总结</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-16 18:43:45" datetime="2017-06-16T10:43:45.000Z"  itemprop="datePublished">2017-06-16</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>本总结目的把三剑客工具整理到一篇文档中，方便学习、对比与记忆。</p>
+<p>文章尽可能做到全面、详尽，不足之处，可联系我更正。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><blockquote>
+<p>首先来了解下通配符与正则表达式的区别。</p>
+<p>通配符：可以简单理解为键盘上除了字母和数字之前的特殊符号。</p>
+<p>正则表达式：为处理大量文本/字符串而定义的一套规则和方法，以行为单位处理</p>
+</blockquote>
+<pre><code>简单理解为键盘上除了字母和数字之外的特殊符号，称为通配符
+
+*      匹配任意文本/字符串，例：*.txt 、*.log等
+{}     用于生成序列。花括号里面以逗号分隔，且不能有空格  
+$      取变量的值
+··    （Esc键下边）反引号 
+|      管道
+;      用于分隔，比如：ls -l ;pwd (前面执行失败，后面依然执行)
+&amp;&amp;     用于分隔，比如：ls -l &amp;&amp; pwd(前面执行成功，才会执行后面的命令)
+</code></pre><blockquote>
+<p>接下来详细说下上面特殊符号的基本用法</p>
+</blockquote>
+<ul>
+<li><p>*(星号)</p>
+<pre><code>ls -l  *.log  *.txt   查找后缀为log和txt的文件
+
+ls -l stu*   查找以stu开头的文件
+
+cat  stu*    查看stu开头文件的内容
+
+ls -l  stu*.txt    查看stu开头并且以txt结尾
+</code></pre></li>
+<li><p>{} (花括号)</p>
+<p><code>`</code><br>[root@oldboy202 20170118]# echo {1..5}<br>1 2 3 4 5</p>
+<p>[root@oldboy202 20170118]# echo {5..1}<br>5 4 3 2 1</p>
+<p>[root@oldboy202 20170118]# echo {1..5} {a..z}<br>1 2 3 4 5 a b c d e f g h i j k l m n o p q r s t u v w x y z</p>
+<p>[root@oldboy202 20170118]# echo A{B,C,D}<br>AB AC AD</p>
+<p>[root@oldboy202 20170118]# echo 2{2,3,4}<br>22 23 24</p>
+<p>[root@oldboy202 20170118]#  echo {1,3,5}<br>1 3 5</p>
+<p>echo stu{0..5}     工作中常用</p>
+<p>示例1：创建文件 stu01.txt 到stu05.txt<br>[root@oldboy202 ~]#  touch stu{01..5}.txt<br>[root@oldboy202 ~]# ls stu*.txt<br>stu01.txt  stu02.txt  stu03.txt  stu04.txt  stu05.txt</p>
+</li>
+</ul>
+<p>  示例2：使用花括号进行备份<br>  公式1： echo A{B,C}    意思是结果粘在一起<br>          AB  AC</p>
+<p>   公式2： echo A{,C}<br>          A  AC</p>
+<p>  使用花括号备份<br>  cp oldboy.txt{,.bak}<br>  这条命令就等于执行  cp  oldboy.txt  oldboy.txt.bak</p>
+<pre><code>
+  ​
+
+&gt; 聊聊单引号、双引号和不加引号的区别
+&gt;
+&gt; ‘’
+&gt;
+&gt; “”
+&gt;
+&gt; 不加引号
+
+</code></pre><p>单引号：通俗理解吃啥吐啥<br>[root@oldboy202 ~]# echo ‘$(which mkdir) {a..z}’<br>$(which mkdir) {a..z}</p>
+<p>双引号：可执行命令的结果，但不支持通配符，比如{}花括号<br>[root@oldboy202 ~]# echo “$(which mkdir) {a..z}”<br>/bin/mkdir {a..z}</p>
+<p>不加引号：既可以执行命令结果，又可以支持通配符<br>[root@oldboy202 ~]# echo  $(which mkdir) {a..z}<br>/bin/mkdir a b c d e f g h i j k l m n o p q r s t u v w x y z</p>
+<pre><code>
+## 正则表达式
+
+&gt; 什么是正则表达式？
+&gt;
+&gt; 为处理大量文本/字符串而定义的一套规则和方法（以行为单位处理）称为正则表达式，英文简称RE。
+&gt;
+&gt; 正则表达式与通配符的区别？
+&gt;
+&gt; 正则表达式是在文件中查找内容，而通配符一般是查找匹配文件
+
+##### egrep/grep技巧
+
+&gt; 让查找的内容显示颜色
+&gt;
+&gt; 方式一：命令上添加–color=auto
+&gt;
+&gt; 如：grep –color=auto 3306 /etc/services
+&gt;
+&gt; 方式2：定义环境变量
+
+</code></pre><p>alias egrep=’egrep –color=auto’<br>alias grep=’grep –color=auto’<br>cat &gt;&gt;/etc/profile&lt;&lt;EOF<br>alias egrep=’egrep –color=auto’<br>alias grep=’grep –color=auto’<br>EOF<br>source  /etc/profile</p>
+<pre><code>
+#### 正则表达式分类
+
+&gt; 1. 基本正则表达式（BRE，basic regular expression）
+&gt; 2. 高级功能:扩展正则表达式（ERE，extended regular expression）
+
+#### 基本正则表达式
+
+测试环境准备
+
+cat oldboy.txt
+
+</code></pre><p>I am oldboy teacher!<br>I teach linux.</p>
+<p>I like badminton ball ,billiard ball and chinese chess!<br>my blog is <a href="http://oldboy.blog.51cto.com" target="_blank" rel="noopener">http://oldboy.blog.51cto.com</a><br>our site is <a href="http://www.etiantian.org" target="_blank" rel="noopener">http://www.etiantian.org</a><br>my qq num is 49000448.</p>
+<p>not 4900000448.<br>my god ,i am not oldbey,but OLDBOY!</p>
+<pre><code>
+</code></pre><p>^ 尖角号    找以什么开头的行<br>示例：grep “^my” oldboy.txt   //查找以my开头的行</p>
+<p>$     找以什么结尾的行<br>示例： grep “m$” oldboy.txt </p>
+<p>^$    表示找空行，这一行什么都没有（不是空格）<br>示例： grep -n “^$” oldboy.txt<br>       3:<br>       8:<br>注：-n  参数意思是添加行号</p>
+<pre><code>
+PS：cat -A oldboy.txt 查看文件空行，空格以$显示
+
+</code></pre><p>. (点)  这个正则表达式，一次可以找到任意1个字符</p>
+<p>PS： grep -o “.” oldboy.txt 显示grep 1次找到了什么内容<br>通常与 grep -o “.*” oldboy.txt 一般这么使用，查看找到的所有内容</p>
+<p>示例1：如果我忘了中间是什么字符，如何匹配查找？<br>[root@oldboy202 ~]# grep “oldb.y” oldboy.txt<br>I am oldboy teacher!<br>my blog is <a href="http://oldboy.blog.51cto.com" target="_blank" rel="noopener">http://oldboy.blog.51cto.com</a><br>my god ,i am not oldbey,but OLDBOY!</p>
+<p>示例2：查找以小数点 “.” 结尾的行<br>[root@oldboy202 ~]# grep “.$” oldboy.txt<br>I teach linux.<br>my qq num is 49000448.<br>not 4900000448.<br>因为.在三剑客有特殊含义，所以需要转义，需要用到\</p>
+<pre><code>
+</code></pre><p>\ 撬棍，转义</p>
+<p>示例3：查找包含“//” 字符的行<br>[root@oldboy202 ~]# egrep “\/\/“ oldboy.txt<br> my blog is <a href="http://oldboy.blog.51cto.com" target="_blank" rel="noopener">http://oldboy.blog.51cto.com</a><br> our site is <a href="http://www.etiantian.org" target="_blank" rel="noopener">http://www.etiantian.org</a></p>
+<pre><code>
+</code></pre><p>0* 表示连续出现多次的时候，就会把 000  00000都取出来。</p>
+<p>grep -o “0*” oldboy.txt   //查看grep如何去查找连续<br>000<br>00000</p>
+<p>0*连续是指从0作为起始，1次以上（含1次）即视为多次</p>
+<ul>
+<li>加号的连续是从1作为起始（后面会说到）<br><code>`</code></li>
+</ul>
+<pre><code>.*   匹配文本*前面任意字符的所有内容
+示例1：
+grep  -on &quot;.*&quot; oldboy.txt
+
+示例2：
+grep  &quot;^.*o&quot; oldboy.txt  查找以任1个字符开头且包含o的行
+表示连续或重复的时候，正则会匹配的更多
+
+示例：
+[root@oldboy202 ~]# grep -no &quot;^.*e&quot; oldboy.txt 
+1:I am oldboy teache
+2:I te
+4:I like badminton ball ,billiard ball and chinese che
+6:our site is http://www.e
+10:my god ,i am not oldbe
+
+[root@oldboy202 ~]# grep  &quot;^.*e&quot; oldboy.txt 
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+our site is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+
+[root@oldboy202 ~]# egrep &quot;.*g.*$&quot; oldboy.txt 
+my blog is http://oldboy.blog.51cto.com
+our sigte is http://www.etiantian.org
+my god ,i am not oldbey,but OLDBOY!
+
+^.*  从头匹配所有，直到指定字符结束
+示例：
+[root@oldboy202 ~]# grep &quot;^.*b&quot; oldboy.txt 
+I am oldboy teacher!
+I like badminton ball ,billiard ball and chinese chess!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+
+
+[abc]  匹配字符集合，正则将其视为一个整体，匹配A或匹配B或匹配C
+[A-Z]匹配大小写字母
+[a-z]
+[0-9]匹配数字
+示例：
+grep  &quot;[b]&quot; oldboy.txt
+grep -no &quot;[abc]&quot; oldboy.txt
+
+grep &quot;[A-Z]&quot; oldboy.txt
+grep &quot;[1-9a-zA-Z]&quot; oldboy.txt
+
+示例：
+找以大写字母开头的行
+grep &quot;^[A-Z]&quot;  oldboy.txt
+找以小写字母结尾的行
+grep &quot;[a-z]$&quot; oldboy.txt
+</code></pre><pre><code>练习：
+找以m或n或o开头的 并且以m或g结尾的行？
+
+方法1：
+[root@oldboy202 ~]# grep &quot;^[mno]&quot; oldboy.txt |grep &quot;[mg]$&quot;
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+
+方法2：
+[root@oldboy202 ~]# grep &quot;^[mno].*[mg]$&quot; oldboy.txt 
+my blog is http://oldboy.blog.51cto.com
+our site is http://www.etiantian.org
+
+
+[^abc] 匹配不包含^后面的字符，其他字符都要
+grep &quot;[^abc]&quot; oldboy.txt
+
+练习：找出除了m或n开头的行
+[root@oldboy202 ~]# grep &quot;^[^mn]&quot; oldboy.txt 
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+our site is http://www.etiantian.org
+</code></pre><pre><code>查找模糊字符串？
+[root@oldboy202 ~]# grep &quot;old.*y&quot; oldboy.txt 
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+
+扩展2：grep -v 与[^abc]区别
+grep -v 排除掉某行
+[^abc] 排除掉a或b或c
+示例：grep -v &quot;[mn]&quot; oldboy.txt
+</code></pre><h2 id="扩展正则表达式"><a href="#扩展正则表达式" class="headerlink" title="扩展正则表达式"></a>扩展正则表达式</h2><pre><code>命令：egrep 或grep -E
+
+ +（加号）  前一个字符连续出现了1个或多个
+ 注：正则里面加号1次就认为是多次
+
+ 示例：
+ [root@oldboy202 ~]# egrep &quot;0+&quot; oldboy.txt 
+  my qq num is 49000448.
+  not 4900000448.
+
+ 查看egrep是如何查找的？
+ [root@oldboy202 ~]# egrep -o &quot;0+&quot; oldboy.txt 
+ 000
+ 00000
+
+ 示例：查找连续小写字母取出来(注：取的是连续的字符)
+ [root@oldboy202 ~]# egrep &quot;[a-z]+&quot; oldboy.txt 
+ I am oldboy teacher!
+ I teach linux.
+
+
+|   管道在正则里面意思是“或者”
+
+示例1：egrep &quot;3306|1521&quot; /etc/services
+
+示例2：找出my或者oldboy取出来
+[root@oldboy202 ~]# egrep &quot;my|oldboy&quot; oldboy.txt 
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+
+示例3：找出dumpe2fs /dev/sda1结果中的inode size和inode count
+dumpe2fs /dev/sda1 |egrep -i &quot;inode size|innode count&quot;
+
+
+()  小括号，正则里面表示一个整体
+
+示例1：取出oldboy和oldbey
+[root@oldboy202 ~]# egrep &quot;oldb(o|e)y&quot; oldboy.txt 
+I am oldboy teacher!
+my blog is http://oldboy.blog.51cto.com
+my god ,i am not oldbey,but OLDBOY!
+
+示例2：找出good和glad
+[root@oldboy202 ~]# egrep &quot;g(oo|la)d&quot; a.log 
+good
+glad
+
+
+?  问号，重复前面的字符0次或1次
+示例：
+[root@oldboy202 ~]# egrep &quot;go?d&quot; a.log 
+gd    
+god
+
+a{n,m} 重复前面的字符n到m次
+a{n,} 重复前面最少n次
+a{,m} 重复前面最多n次
+
+示例1：
+[root@oldboy202 ~]# egrep -o &quot;0{1,3}&quot; oldboy.txt 
+000
+000
+00
+
+示例2：
+[root@oldboy202 ~]# egrep  &quot;0{3,4}&quot; oldboy.txt 
+my qq num is 49000448.
+not 4900000448.
+
+查看其匹配工作情况
+[root@oldboy202 ~]# egrep  -o &quot;0{3,4}&quot; oldboy.txt 
+000
+0000
+</code></pre><blockquote>
+<p>注：egrep 和 sed -r 支持扩展正则，而awk默认支持正则，无需加参数</p>
+</blockquote>
+<!-- more -->
+<h2 id="egrep-sed-awk三剑客-实例用法"><a href="#egrep-sed-awk三剑客-实例用法" class="headerlink" title="egrep/sed/awk三剑客-实例用法"></a>egrep/sed/awk三剑客-实例用法</h2><h5 id="1-利用sed取出eth0的IP地址"><a href="#1-利用sed取出eth0的IP地址" class="headerlink" title="1. 利用sed取出eth0的IP地址"></a>1. 利用sed取出eth0的IP地址</h5><p>步骤： 第一步:定位；第二部：取内容</p>
+<pre><code>方法1：（掐头去尾法）
+
+取IP地址
+[root@oldboy202 ~]# ifconfig eth0|sed -n &#39;2p&#39; |sed &#39;s#^.*addr:##g&#39;|sed &#39;s#Bc.*$##g&#39;
+10.0.0.202  
+
+取出Bcast地址
+[root@oldboy202 ~]# ifconfig eth0|sed -n &#39;2p&#39; |sed &#39;s#^.*ast:##g&#39; |sed &#39;s#Mask.*$##g&#39;
+10.0.0.255
+</code></pre><pre><code>方法2：（精简-掐头去尾法）
+
+取IP
+ [root@oldboy202 ~]# ifconfig eth0 |sed -n &#39;2p&#39; |sed -r &#39;s#^.*dr:|Bc.*$##g&#39;
+ 10.0.0.202 
+
+取Bcast地址
+[root@oldboy202 ~]# ifconfig eth0|sed -n &#39;2p&#39; |sed -r &#39;s#^.*ast:|Mask.*$##g&#39;
+10.0.0.255  
+
+注：sed -r 使用扩展正则
+    |    表示或者
+</code></pre><blockquote>
+<p>反向引用-预备知识：保留谁就括谁</p>
+<p>[root@oldboy202 ~]# echo 123456 |sed -r ‘s#..(..)..#\1#g’<br>34<br>[root@oldboyedu37-nb 20170118]# echo 123456|sed -r ‘s#.(.).(.)..#\1 \2#g’<br>2 4<br>[root@oldboyedu37-nb 20170118]# echo 123456|sed -r ‘s#.(.).(.)..#\2 \1 \2 \2 \2 #g’<br>4 2 4 4 4<br>[root@oldboy202 ~]# echo 123456|sed -r ‘s#.(…).#\1#g’<br>2346</p>
+<p>注：<br>1.前面有多少个字符，就需要写几个点<br>2.后面的\1是指前面括号里边的内容</p>
+</blockquote>
+<pre><code>方法3：反向引用-取出IP地址
+
+[wuyanteng@ns-2 ~]$ ifconfig eno16777984 |sed -n &#39;2p&#39;|sed -r &#39;s#^.*net (.*)netm.*$#\1#g&#39;
+10.0.0.20
+
+同理，取出Bcast地址（我这个Bcast地址在最后一列）
+[wuyanteng@ns-2 ~]$ ifconfig eno16777984 |sed -n &#39;2p&#39; |sed -r &#39;s#^.*cast (.*)#\1#g&#39;
+10.0.1.255
+</code></pre><pre><code>方法4：对某一行字符串进行替换
+
+格式：sed -n &#39;5#原内容#新内容#p&#39;   filename
+
+示例：替换oldboy.txt中第5行的oldboy为oldgirl
+sed -n &#39;5s#oldboy#oldgirl#gp&#39;  oldboy.txt
+
+[wuyanteng@ns-2 ~]$ ifconfig eno16777984 |sed -nr &#39;2s#^.*net (.*) netma.*$#\1#gp&#39; 
+10.0.0.20
+</code></pre><pre><code>egrep方法5: 
+[wuyanteng@ns-2 ~]$ ifconfig eno16777984 |grep &quot;inet &quot; |egrep -o &quot;inet [0-9.]*&quot; |egrep -o &quot;[0-9.]*&quot;
+10.0.0.20
+
+注释：
+ifconfig eno16777984 |grep &quot;inet &quot;  显示包含“inet ”的行
+egrep -o &quot;inet [0-9.]*&quot; |egrep -o &quot;[0-9.]*&quot;    .是因为IP地址包括点   * 代表之前的[0-9.]匹配多次
+</code></pre><h4 id="SED文件内容替换"><a href="#SED文件内容替换" class="headerlink" title="SED文件内容替换"></a>SED文件内容替换</h4><pre><code>sed -i.bak &#39;s#oldboy#oldgirl#g&#39; oldboy.txt
+
+参数：-i.bak 表示修改文件的时候，先保存为oldboy.txt.bak
+
+注：sed 使用-i参数并且标记完修改之前先备份的时候，如果要使用正则表达式，需要把sed -r参数放到前面，这样：
+
+sed -ri.bak &#39;s#old(b)oy#oldgirl\1#g&#39; oldboy.txt
+修改oldoy为oldgirl,同时把b保留下来
+修改结果：
+my blog is http://oldgirlb.blog.51cto.com
+</code></pre><h4 id="SED-GREP使用正则提取-ETC-HOSTS权限"><a href="#SED-GREP使用正则提取-ETC-HOSTS权限" class="headerlink" title="SED/GREP使用正则提取/ETC/HOSTS权限"></a>SED/GREP使用正则提取/ETC/HOSTS权限</h4><pre><code>方法1：     
+[root@oldboyedu37-nb 20170118]# stat /etc/hosts|sed -n &#39;4p&#39;|sed &#39;s#^.*(0##g&#39; |sed &#39;s#/.*$##g&#39;
+644
+
+正则方法2：
+[root@oldboy202 ~]# stat /etc/hosts | sed -n &#39;4p&#39; |sed -r &#39;s#^.* \(0(.*)\/.*$#\1#g&#39;
+644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0
+
+[root@oldboy202 ~]# stat /etc/hosts | sed -n &#39;4p&#39; |sed -r &#39;s#^.* \(0(.*)\/-.*$#\1#g&#39;
+644
+
+方法3：
+[root@oldboy202 ~]# stat /etc/hosts|sed -nr &#39;4s#^.*\(0(.*)/-.*$#\1#gp&#39; 
+644
+
+方法4: 
+[root@oldboy202 ~]# stat /etc/hosts |grep &quot;Uid&quot; |egrep -o &quot;[0-9]{4}&quot;
+0644
+</code></pre><h3 id="sed使用"><a href="#sed使用" class="headerlink" title="sed使用"></a>sed使用</h3><pre><code>## 查找以f或m结尾的行
+[root@server1 oldboy]# sed -n &#39;/f$\|m$/p&#39; oldboy2.txt 
+my blog is http://oldboy.blog.51cto.com
+oldboy f
+## 查找除了以f或m结尾的行
+[root@server1 oldboy]# sed -n &#39;/f$\|m$/!p&#39; oldboy2.txt 
+I am oldboy teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+our site is http://www.etiantian.org
+my qq num is 49000448.
+</code></pre><h4 id="EGREP-AWK取消某个文件的空行"><a href="#EGREP-AWK取消某个文件的空行" class="headerlink" title="EGREP/AWK取消某个文件的空行"></a>EGREP/AWK取消某个文件的空行</h4><pre><code>方法1：
+[root@oldboy202 ~]# egrep -v &quot;^$&quot; oldboy.txt 
+
+方法2：
+[root@oldboy202 ~]# sed &#39;/^$/d&#39; oldboy.txt
+
+方法3：
+[root@oldboy202 ~]# awk &#39;!/^$/&#39; oldboy.txt
+I am oldgirlb teacher!
+I teach linux.
+I like badminton ball ,billiard ball and chinese chess!
+
+方法4：
+[root@oldboy202 ~]# grep &#39;^.&#39; oldboy.txt
+
+方法5:
+[root@oldboy202 ~]# grep &quot;.$&quot; oldboy.txt
+</code></pre><h4 id="EGREP-AWK-取出文本前两列"><a href="#EGREP-AWK-取出文本前两列" class="headerlink" title="EGREP/AWK 取出文本前两列"></a>EGREP/AWK 取出文本前两列</h4><pre><code>[root@oldboy202 ~]# cat ett.txt |egrep &quot;ol+dbo+y&quot; 
+oldboy
+olldboooy
+
+[root@oldboy202 ~]# cat ett.txt |egrep &quot;^o&quot;
+oldboy
+olldboooy
+
+[root@oldboy202 ~]# cat ett.txt |awk &#39;/ol+dbo+y/&#39;
+oldboy
+olldboooy
+</code></pre><h4 id="SED与AWK提取文件权限"><a href="#SED与AWK提取文件权限" class="headerlink" title="SED与AWK提取文件权限"></a>SED与AWK提取文件权限</h4><pre><code>##sed提取/etc/hosts权限
+[root@oldboy202 ~]# stat /etc/hosts |sed -n &#39;4p&#39; |sed -r &#39;s#^.*\(0(.*)/-.*$#\1#g&#39;
+644 
+sed -n &#39;4p&#39; 取第4行
+其中（.*）是我要提取的内容，所以需要括起来，后面使用\1提取
+##awk提取/etc/hosts权限
+[root@oldboy202 ~]# stat /etc/hosts |awk &#39;NR==4&#39;|awk -F &quot;[(/]&quot; &#39;{print $1}&#39;
+Access: 
+#以（或/来切割，然后使用{print $n} 提取对应列
+[root@oldboy202 ~]# stat /etc/hosts |awk &#39;NR==4&#39;|awk -F &quot;[(/]&quot; &#39;{print $2}&#39;
+0644
+#以0或/来切割，然后使用{print $n} 提取对应列
+[root@oldboy202 ~]# stat /etc/hosts |awk &#39;NR==4&#39; |awk -F &quot;[0/]&quot; &#39;{print $2}&#39;
+644
+awk &#39;NR==4&#39; 取第4行
+awk -F 切割
+[root@oldboyedu37-nb ~]# stat -c %a /etc/hosts 
+644
+[root@oldboyedu37-nb ~]# stat -c%a /etc/hosts 
+644
+</code></pre><pre><code>sed 使用-n参数来过滤出某行
+[root@oldboyedu37-nb ~]# stat /etc/hosts |sed -n &#39;4p&#39;
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+使用cut来提取并显示/etc/hosts权限
+[root@oldboyedu37-nb ~]# stat /etc/hosts |sed -n &#39;4p&#39;|cut -d &quot;(&quot; -f2
+0644/-rw-r--r--)  Uid: 
+cut使用-d参数以“（” 分割，提取第二列
+[root@oldboyedu37-nb ~]# stat /etc/hosts |sed -n &#39;4p&#39;|cut -d &quot;(&quot; -f2|cut -d &quot;/&quot; -f1
+0644
+再以“/”作为分割，使用-f参数提取第1列
+cut 切割
+    -d 指定一把菜刀
+    -f1 取第一列
+    -f1,5 取第一列和第五列
+    -f2-6 取第2列到第6列
+</code></pre><h4 id="AWK提取IP地址"><a href="#AWK提取IP地址" class="headerlink" title="AWK提取IP地址"></a>AWK提取IP地址</h4><pre><code>[root@oldboy202 ~]# ifconfig eth0|awk &#39;NR==2&#39;|awk -F &quot;[ :]+&quot; &#39;{print $4}&#39;
+10.0.0.202
+NR==2 提取第二行
+AWK -F 切割
+我们要提取IP地址，所以以空格和冒号作为切割条件，最后打印输出$4的内容
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-06-16T10:47:53.682Z" itemprop="dateUpdated">2017-06-16 18:47:53</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/16/正则表达式egrep-sed-awk-整理总结/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/awk/">awk</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/egrep/">egrep</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sed/">sed</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/正则表达式/">正则表达式</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/&title=《正则表达式egrep/sed/awk-整理总结》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/&title=《正则表达式egrep/sed/awk-整理总结》 — Gary Wu&source=
+本总结目的把三剑客工具整理到一篇文档中，方便学习、对比与记忆。
+文章尽可能做到全面、详尽，不足之处，可联系我更正。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正则表达式egrep/sed/awk-整理总结》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/17/老男孩37期-Day8-往期知识点-回顾/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">老男孩37期-Day8-往期知识点-回顾</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/16/搭建在线Yum源/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">搭建在线Yum源-CentOS6</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/&title=《正则表达式egrep/sed/awk-整理总结》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/&title=《正则表达式egrep/sed/awk-整理总结》 — Gary Wu&source=
+本总结目的把三剑客工具整理到一篇文档中，方便学习、对比与记忆。
+文章尽可能做到全面、详尽，不足之处，可联系我更正。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正则表达式egrep/sed/awk-整理总结》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/16/正则表达式egrep-sed-awk-整理总结/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

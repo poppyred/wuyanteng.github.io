@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>ELK日志分析平台部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,ELK,elasticsearch,kibana,logstash,kopf,ELK安全设置,elasticsearch集群监控">
+    <meta name="description" content="什么是ELK？ELK 是由Elasticsearch、Logstash、Kibana 三个开源软件的组成的一个组合体。  官方网站: https://www.elastic.co/">
+<meta name="keywords" content="高级运维,ELK,elasticsearch,kibana,logstash,kopf,ELK安全设置,elasticsearch集群监控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELK日志分析平台部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="什么是ELK？ELK 是由Elasticsearch、Logstash、Kibana 三个开源软件的组成的一个组合体。  官方网站: https://www.elastic.co/">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es-head.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es-input_data.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es%E7%B4%A2%E5%BC%95%E9%AA%8C%E8%AF%81.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/logstash%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_status.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es_log.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_pattern.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_discover.png">
+<meta property="og:updated_time" content="2018-02-04T08:24:09.242Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ELK日志分析平台部署">
+<meta name="twitter:description" content="什么是ELK？ELK 是由Elasticsearch、Logstash、Kibana 三个开源软件的组成的一个组合体。  官方网站: https://www.elastic.co/">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es-head.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">ELK日志分析平台部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">ELK日志分析平台部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-10T01:40:22.000Z" itemprop="datePublished" class="page-time">
+  2017-12-10
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是ELK？"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么是ELK？</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署"><span class="post-toc-number"></span> <span class="post-toc-text">部署</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Elasticsearch集群部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">Elasticsearch集群部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署Logstash"><span class="post-toc-number">2.</span> <span class="post-toc-text">部署Logstash</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署kibana"><span class="post-toc-number">3.</span> <span class="post-toc-text">部署kibana</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#nginx反向代理kibana"><span class="post-toc-number">4.</span> <span class="post-toc-text">nginx反向代理kibana</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-ELK日志分析平台部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">ELK日志分析平台部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-10 09:40:22" datetime="2017-12-10T01:40:22.000Z"  itemprop="datePublished">2017-12-10</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="什么是ELK？"><a href="#什么是ELK？" class="headerlink" title="什么是ELK？"></a>什么是ELK？</h4><pre><code>ELK 是由Elasticsearch、Logstash、Kibana 三个开源软件的组成的一个组合体。
+
+官方网站: https://www.elastic.co/
+</code></pre><a id="more"></a>
+<pre><code>Elasticsearch 是一个高度可扩展的开源全文搜索和分析引擎，它可实现数据的实时全文搜索、支持分布式可实现高可用、提供API 接口，可以处理大规模日志数据，比如Nginx、Tomcat、系统日志等功能。
+
+Logstash 可以通过插件实现日志收集和转发，支持日志过滤，支持普通log、自定义json格式的日志解析。
+
+kibana：主要是通过接口调用elasticsearch 的数据，并进行前端数据可视化的展现。
+</code></pre><!-- more -->
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h4 id="Elasticsearch集群部署"><a href="#Elasticsearch集群部署" class="headerlink" title="Elasticsearch集群部署"></a>Elasticsearch集群部署</h4><blockquote>
+<p>环境初始化</p>
+</blockquote>
+<pre><code>1. 为保证效果特额外添加一块单独的数据磁盘大小为50G 并格式化挂载到/elk
+   mkdir /elk &amp;&amp; mkfs.ext4 /dev/sdb
+   blkid /dev/sdb
+
+2. 关闭防所有服务器的火墙和selinux。是为了避免出现各种未知问题
+3. 修改limit限制
+   echo &quot;* soft nofile 65536&quot; &gt;&gt; /etc/security/limits.conf
+   echo &quot;* hard nofile 65536&quot; &gt;&gt; /etc/security/limits.conf
+4. 各服务器配置本地域名解析
+   10.0.10.21   host21.exmaple.com
+   10.0.10.22   host22.exmaple.com
+   10.0.10.23   host23.exmaple.com
+5. 设置epel源、安装基本操作命令并同步时间 
+   wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+   cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+   echo &quot;*/5 * * * * ntpdate -u time1.aliyun.com &gt;/dev/null 2&gt;&amp;1 &quot; &gt;&gt;/var/spool/cron/root
+
+重启系统，没有问题的话给虚拟机做快照以方便后期还原   
+</code></pre><blockquote>
+<p>安装Elasticsearch</p>
+</blockquote>
+<ul>
+<li>安装java环境</li>
+</ul>
+<pre><code>http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+接受协议并下载&quot;jdk-8u151-linux-x64.tar.gz&quot;
+</code></pre><pre><code>tar xvf jdk-8u121-linux-x64.tar.gz -C /usr/local/
+ln -sv /usr/local/jdk1.8.0_121 /usr/local/jdk
+
+cat &gt;&gt; /etc/profile &lt;&lt;EOF
+export HISTTIMEFORMAT=&quot;%F %T `whoami` &quot;     
+export JAVA_HOME=/usr/local/jdk
+export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+EOF
+
+注：export HISTTIMEFORMAT=&quot;%F %T `whoami` &quot; 是给history加上时间戳
+
+
+source /etc/profile
+
+[root@linux~]# java -version
+java version &quot;1.8.0_121&quot;   #确认可以出现当前的java 版本号
+Java(TM) SE Runtime Environment (build 1.8.0_121-b13)
+Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)
+</code></pre><ul>
+<li>安装Elasticsearch</li>
+</ul>
+<pre><code>目前稳定版本为5.6.5,建议使用此版本用于生产环境
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.5.rpm
+yum install -y elasticsearch-5.6.5.rpm
+</code></pre><ul>
+<li>编辑各elasticsearch服务器节点的配置文件</li>
+</ul>
+<pre><code>[root@linux-host1 ~]# grep &quot;^[a-Z]&quot; /etc/elasticsearch/elasticsearch.yml
+cluster.name: ELK-Cluster         #ELK集群名称，名称相同即属于是同一个集群
+node.name: elk-node1              #本机在集群内的节点名称,其他为elk-node2、elk-node3...
+path.data: /elk/data              #数据保存目录
+path.logs: /elk/logs              #日志保存目
+bootstrap.memory_lock: true       #服务启动的时候锁定足够的内存，防止数据写入swap
+network.host: 0.0.0.0             #监听IP
+http.port: 9200
+discovery.zen.ping.unicast.hosts: [&quot;10.0.10.21&quot;, &quot;10.0.10.22&quot;, &quot;10.0.10.23&quot;]
+</code></pre><ul>
+<li>修改各节点内存限制</li>
+</ul>
+<pre><code>修改elasticsearch的启动文件脚本
+vim /usr/lib/systemd/system/elasticsearch.service
+搜索“LimitNOFILE=65536”  在这个位置，添加如下参数：
+LimitMEMLOCK=infinity      ##此参数,可以最大化使用内存
+
+
+[root@host21 ~]# grep &quot;^[-]&quot; /etc/elasticsearch/jvm.options    #修改最小和最大内存
+-Xms4g
+-Xmx4g
+注：此处内存设置不能等于物理内存，否则进程启动后会立即自杀
+注：官方建议此处最大内存配置为30G ；
+为什么最大和最小内存配置为一样大？参考官方说明：
+https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html
+</code></pre><ul>
+<li>目录权限更改</li>
+</ul>
+<pre><code>修改各节点中用于存放elasticsearch数据和日志目录的权限为elasticsearch
+id  elasticsearch
+mkdir -p /elk/{data,logs}
+chown -R elasticsearch:elasticsearch /elk
+ll /elk
+</code></pre><ul>
+<li>启动各节点elasticsearch服务并验证</li>
+</ul>
+<pre><code>systemctl start elasticsearch
+systemctl status elasticsearch
+systemctl enable elasticsearch
+
+[root@host23 ~]# ss -lntup |grep 9200
+tcp    LISTEN     0      128      :::9200   :::*    users:((&quot;java&quot;,pid=19034,fd=223))
+</code></pre><ul>
+<li>通过浏览器访问各节点的elasticsearch服务端口</li>
+</ul>
+<pre><code>http://10.0.10.21:9200
+http://10.0.10.22:9200
+http://10.0.10.23:9200
+</code></pre><pre><code>访问http://10.0.10.21:9200结果如下：
+
+{
+  &quot;name&quot; : &quot;elk-node1&quot;,             #本节点名称
+  &quot;cluster_name&quot; : &quot;ELK-Cluster&quot;,   #集群名称
+  &quot;cluster_uuid&quot; : &quot;8GbwHyOFRQ-FtF785a0HPQ&quot;,   
+  &quot;version&quot; : {
+    &quot;number&quot; : &quot;5.6.5&quot;,             #elasticsearch版本号
+    &quot;build_hash&quot; : &quot;6a37571&quot;,
+    &quot;build_date&quot; : &quot;2017-12-04T07:50:10.466Z&quot;,
+    &quot;build_snapshot&quot; : false,
+    &quot;lucene_version&quot; : &quot;6.6.1&quot;      #lucene版本号,elasticsearch基于Lucene做搜索
+  },
+  &quot;tagline&quot; : &quot;You Know, for Search&quot;  #口号
+}
+</code></pre><!-- more -->
+<blockquote>
+<p>安装elasticsearch插件之head(其中一个节点安装即可)</p>
+</blockquote>
+<ul>
+<li>安装es5.x版本的elasticsearch-head插件</li>
+</ul>
+<pre><code>在elasticsearch 5.x 版本以后不再支持直接安装head 插件，而是需要通过启动npm方式安装
+git地址：https://github.com/mobz/elasticsearch-head
+
+yum install -y npm
+
+cd /usr/local/src/ &amp;&amp; git clone git://github.com/mobz/elasticsearch-head.git
+cd elasticsearch-head/ &amp;&amp; yum install -y openssl openssl-devel
+npm install grunt -save
+ll node_modules/grunt      #确认生成文件
+npm install                #执行安装
+npm run start &amp;            #后台启动服务
+</code></pre><ul>
+<li>修改各节点elasticsearch服务配置文件【每个es节点都要修改】</li>
+</ul>
+<pre><code>开启跨域访问支持，然后重启elasticsearch 服务：
+
+vim /etc/elasticsearch/elasticsearch.yml    #最下方添加以下两行
+http.cors.enabled: true 
+http.cors.allow-origin: &quot;*&quot;
+
+systemctl  restart elasticsearch
+</code></pre><ul>
+<li>web访问elasticsearch-head</li>
+</ul>
+<pre><code>http://10.0.10.21:9100
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es-head.png" alt="es-head" title="">
+                </div>
+                <div class="image-caption">es-head</div>
+            </figure>
+<ul>
+<li>测试提交数据</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es-input_data.png" alt="es-input-data" title="">
+                </div>
+                <div class="image-caption">es-input-data</div>
+            </figure>
+<ul>
+<li>验证索引是否存在</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es%E7%B4%A2%E5%BC%95%E9%AA%8C%E8%AF%81.png" alt="es验证索引" title="">
+                </div>
+                <div class="image-caption">es验证索引</div>
+            </figure>
+<ul>
+<li>查看数据</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE.png" alt="es查看数据" title="">
+                </div>
+                <div class="image-caption">es查看数据</div>
+            </figure>
+<ul>
+<li>Master与Slave的区别</li>
+</ul>
+<pre><code>Master 的职责：统计各node节点状态信息、集群状态信息统计、索引的创建和删除、索引分配的管理、关闭node节点等
+Slave 的职责：同步数据、等待机会成为Master
+</code></pre><!-- more -->
+<blockquote>
+<p>elasticsearch 插件之kopf</p>
+</blockquote>
+<pre><code>Git项目地址: https://github.com/lmenezes/elasticsearch-kopf
+
+但是目前还不支持5.x版本的elasticsearch，但是可以安装在elasticsearc 1.x 或2.x 的版本安装。
+</code></pre><blockquote>
+<p>elasticsearch集群监控</p>
+</blockquote>
+<pre><code>[root@host21 ~]# curl -sXGET http://10.0.10.21:9200/_cluster/health?pretty=true
+{
+  &quot;cluster_name&quot; : &quot;ELK-Cluster&quot;,
+  &quot;status&quot; : &quot;green&quot;,
+  &quot;timed_out&quot; : false,
+  &quot;number_of_nodes&quot; : 3,
+  &quot;number_of_data_nodes&quot; : 3,
+  &quot;active_primary_shards&quot; : 5,
+  &quot;active_shards&quot; : 10,
+  &quot;relocating_shards&quot; : 0,
+  &quot;initializing_shards&quot; : 0,
+  &quot;unassigned_shards&quot; : 0,
+  &quot;delayed_unassigned_shards&quot; : 0,
+  &quot;number_of_pending_tasks&quot; : 0,
+  &quot;number_of_in_flight_fetch&quot; : 0,
+  &quot;task_max_waiting_in_queue_millis&quot; : 0,
+  &quot;active_shards_percent_as_number&quot; : 100.0
+}
+
+#获取到的是一个json 格式的返回值，那就可以通过python对其中的信息进行分
+析，例如对status进行分析，如果等于green(绿色)就是运行在正常，等于yellow(黄色)表示副本分片丢失，red(红色)表示主分片丢失
+</code></pre><p>python检测脚本</p>
+<pre><code>[root@linux ~]# cat els-cluster-monitor.py
+#!/usr/bin/env python
+#coding:utf-8
+#Author Zhang Jie
+import smtplib
+from email.mime.text import MIMEText
+from email.utils import formataddr
+import subprocess
+body = &quot;&quot;
+false=&quot;false&quot;
+obj = subprocess.Popen((&quot;curl -sXGET http://10.0.10.21:9200/_cluster/healthpretty=true&quot;),shell=True,stdout=subprocess.PIPE)
+data = obj.stdout.read()
+data1 = eval(data)
+status = data1.get(&quot;status&quot;)
+if status == &quot;green&quot;:
+print &quot;50&quot;
+else:
+print &quot;100&quot;
+</code></pre><pre><code>脚本执行结果：
+[root@linux-host1 ~]# python els-cluster-monitor.py
+50
+</code></pre><blockquote>
+<p>排错</p>
+</blockquote>
+<pre><code>如果服务无法启动或启动立即停止，查看/var/log/message最新日志或ELK的logs目录
+</code></pre><!-- more -->
+<h4 id="部署Logstash"><a href="#部署Logstash" class="headerlink" title="部署Logstash"></a>部署Logstash</h4><pre><code>Logstash 是一个开源的数据收集引擎，可以水平伸缩，而且logstash 整个ELK
+当中拥有最多插件的一个组件，其可以接收来自不同来源的数据并统一输出到指
+定的且可以是多个不同目的地。
+
+注：生产环境Logstash尽量与elasticsearch服务器分开，因为都是java程序，太浪费内存
+</code></pre><blockquote>
+<p>logstash工作流程图</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/logstash%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="logstash" title="">
+                </div>
+                <div class="image-caption">logstash</div>
+            </figure>
+<blockquote>
+<p>环境准备</p>
+</blockquote>
+<pre><code>服务器：
+10.0.10.24
+10.0.10.25
+
+关闭防火墙和selinux
+更新时间：
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ntpdate -u ntp1.aliyun.com
+
+systemctl stop firewalld
+systemctl disable firewalld
+sed -i &#39;/SELINUX/s/enforcing/disabled/&#39; /etc/selinux/config
+
+安装java 环境: 同es初始化java安装
+</code></pre><blockquote>
+<p>安装logstash</p>
+</blockquote>
+<pre><code>官网：https://www.elastic.co/downloads/past-releases/logstash-5-6-5
+同样是下载5.6.5版本
+
+wget https://artifacts.elastic.co/downloads/logstash/logstash-5.6.5.rpm
+yum install -y logstash-5.6.5.rpm
+</code></pre><pre><code>#启动
+systemctl start logstash
+systemctl status logstash
+systemctl enable logstash
+
+注：rpm包方式安装，如果启动失败(提示无启动文件),依次执行如下命令
+rpm -e logstash
+rpm -ivh logstash-5.4.1.rpm
+systemctl start logstash
+</code></pre><ul>
+<li>Logstash测试语法</li>
+</ul>
+<pre><code>logstash -f /etc/logstash/conf.d/systemlog.conf -t
+Configuration OK
+</code></pre><blockquote>
+<p>测试logstash</p>
+</blockquote>
+<ul>
+<li>测试标准输入</li>
+</ul>
+<pre><code>[root@localhost ~]# logstash -e &#39;input { stdin{} }
+output { stdout{ codec =&gt; rubydebug }}&#39;
+Hello Logstash !           #标准输入和输出
+
+
+{
+      &quot;@version&quot; =&gt; &quot;1&quot;,     #事件版本号，一个事件就是一个ruby对象
+          &quot;host&quot; =&gt; &quot;localhost.localdomain&quot;,   #标记事件发生在哪里
+    &quot;@timestamp&quot; =&gt; 2017-12-12T10:05:13.600Z,     #当前事件的发生时间
+       &quot;message&quot; =&gt; &quot;Hello Logstash !&quot;     #消息的具体内容（就是我刚才输入的）
+}
+</code></pre><ul>
+<li>测试输出到文件</li>
+</ul>
+<pre><code>logstash -e &#39;input { stdin{} }  output { file { path =&gt; &quot;/tmp/log-%{+YYYY.MM.dd}messages.gz&quot;}}&#39;
+</code></pre><pre><code>[root@localhost ~]# tailf /tmp/log-2017.12.12messages.gz   #打开文件验证
+{&quot;@version&quot;:&quot;1&quot;,&quot;host&quot;:&quot;localhost.localdomain&quot;,&quot;@timestamp&quot;:&quot;2017-12-12T10:12:17.087Z&quot;,&quot;message&quot;:&quot;Test&quot;}     
+</code></pre><ul>
+<li>测试输出到elasticsearch</li>
+</ul>
+<pre><code>logstash -e &#39;input { stdin{} } output { elasticsearch {hosts =&gt; [&quot;10.0.10.21:9200&quot;] index =&gt;&quot;mytest-%{+YYYY.MM.dd}&quot; }}&#39;
+</code></pre><pre><code>elasticsearch 服务器验证收到数据：
+[root@host21 ~]# ll /elk/data/nodes/0/indices/
+total 8
+drwxr-xr-x 6 elasticsearch elasticsearch 4096 Dec 12 05:18 thwe1ENcR-ed2zZe7FncDA
+drwxr-xr-x 6 elasticsearch elasticsearch 4096 Dec 11 08:00 _x7SPg0MSdCC-sDJ43gRVQ
+</code></pre><!-- more -->
+<h4 id="部署kibana"><a href="#部署kibana" class="headerlink" title="部署kibana"></a>部署kibana</h4><pre><code>kibana：主要是通过接口调用elasticsearch 的数据，并进行前端数据可视化的展现。
+</code></pre><ul>
+<li>安装kibana到10.0.10.21服务器</li>
+</ul>
+<pre><code>官方下载：
+wget https://artifacts.elastic.co/downloads/kibana/kibana-5.6.5-x86_64.rpm
+yum install -y kibana-5.6.5-x86_64.rpm
+</code></pre><ul>
+<li>配置kibana</li>
+</ul>
+<pre><code>[root@host21 ~]# grep -n &quot;^[a-Z]&quot; /etc/kibana/kibana.yml
+server.port: 5601      #监听端口
+server.host: &quot;0.0.0.0&quot; #监听地址
+elasticsearch.url: http://192.168.56.11:9200  #elasticsearch服务器地址
+</code></pre><ul>
+<li>启动kibana服务</li>
+</ul>
+<pre><code>systemctl start kibana
+systemctl status kibana
+systemctl enable kibana
+[root@host21 ~]# ss -lntup |grep 5601
+tcp    LISTEN     0      128       *:5601     *:*     users:((&quot;node&quot;,pid=3158,fd=11))
+</code></pre><ul>
+<li>验证</li>
+</ul>
+<pre><code>http://10.0.10.21:5601
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_status.png" alt="kibana_status" title="">
+                </div>
+                <div class="image-caption">kibana_status</div>
+            </figure>
+<ul>
+<li>kibana新建索引</li>
+</ul>
+<pre><code>访问elasticsearch-head插件：http://10.0.10.21:9100，查看elasticsearch已有的日志
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/es_log.png" alt="es_log" title="">
+                </div>
+                <div class="image-caption">es_log</div>
+            </figure>
+<pre><code>然后，登陆kibana -- Management -- Index Patterns
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_pattern.png" alt="kibana_pattern" title="">
+                </div>
+                <div class="image-caption">kibana_pattern</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/kibana_discover.png" alt="kibana_discover" title="">
+                </div>
+                <div class="image-caption">kibana_discover</div>
+            </figure>
+<p>由于日志并没有持续输出，所以此处显示为空，接下来将对logstash日志输出做详细说明，基本部署完成。</p>
+<!-- more -->
+<h4 id="nginx反向代理kibana"><a href="#nginx反向代理kibana" class="headerlink" title="nginx反向代理kibana"></a>nginx反向代理kibana</h4><blockquote>
+<p>安全部署说明</p>
+</blockquote>
+<pre><code>通过nginx和kibana监听127.0.0.1以及在kibana客户端绑定hosts来实现安全
+
+测试环境：10.0.10.21服务器
+</code></pre><pre><code>yum install gcc gcc++ pcre openssl openssl-devel  zlib zlib-devel pcre-devel
+./configure  --prefix=/usr/local/nginx --with-http_sub_module --with-http_ssl_module &amp;&amp; make &amp;&amp; make install
+</code></pre><p>配置nginx代理kibana</p>
+<pre><code>vim /etc/kibana/kibana.yml
+server.host: &quot;127.0.0.1&quot;    #只监听127.0.0.1
+
+systemctl restart kibana
+
+mkdir  /usr/local/nginx/conf/conf.d/
+
+
+nginx配置文件添加一行：
+include /usr/local/nginx/conf/conf.d/*.conf;
+
+
+
+vim /usr/local/nginx/conf/conf.d/kibana5612.conf   #添加如下配置
+upstream kibana_server {
+        server  127.0.0.1:5601 weight=1 max_fails=3  fail_timeout=60;
+}
+
+server {
+        listen 80;
+        server_name www.kibana1021.com;
+        location / {
+        proxy_pass http://kibana_server;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &#39;upgrade&#39;;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        }
+}
+
+启动Nginx
+/usr/local/nginx/sbin/nginx 
+</code></pre><pre><code>yum install -y httpd-tools
+htpasswd -bc htpasswd.txt garywu 123456   #文件路径需在/usr/local/nginx下
+</code></pre><p>修改nginx kibana配置</p>
+<pre><code>upstream kibana_server {
+        #nginx也改为127.0.0.1 
+        server  127.0.0.1:5601 weight=1 max_fails=3  fail_timeout=60;    
+}
+
+server {
+        listen 80;
+        server_name www.kibana1021.com;
+        auth_basic &quot;Restricted Access&quot;;
+        auth_basic_user_file /usr/local/nginx/htpasswd.txt;   #文件名千万别错了
+        location / {
+        proxy_pass http://kibana_server;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &#39;upgrade&#39;;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        }
+}
+</code></pre><pre><code>windows添加本地解析：  10.0.10.21  www.kibana5612.com
+
+重启kibana和nginx
+web访问：http://www.kibana1021.com/    出现账号密码界面了
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-04T08:24:09.242Z" itemprop="dateUpdated">2018-02-04 16:24:09</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/10/ELK日志分析平台部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ELK/">ELK</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ELK安全设置/">ELK安全设置</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch集群监控/">elasticsearch集群监控</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kibana/">kibana</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kopf/">kopf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/logstash/">logstash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/&title=《ELK日志分析平台部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/&title=《ELK日志分析平台部署》 — Gary Wu&source=什么是ELK？ELK 是由Elasticsearch、Logstash、Kibana 三个开源软件的组成的一个组合体。
+
+官方网站: https://ww..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ELK日志分析平台部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/12/通过Logstash收集日志/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">通过Logstash收集日志</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/09/shell高级编程-进阶3/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">shell高级编程-进阶3</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/&title=《ELK日志分析平台部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/&title=《ELK日志分析平台部署》 — Gary Wu&source=什么是ELK？ELK 是由Elasticsearch、Logstash、Kibana 三个开源软件的组成的一个组合体。
+
+官方网站: https://ww..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ELK日志分析平台部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/10/ELK日志分析平台部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

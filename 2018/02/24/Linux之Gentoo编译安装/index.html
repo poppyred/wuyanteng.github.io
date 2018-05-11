@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Linux之Gentoo编译安装 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Linux,Gentoo,Kernel,内核编译">
+    <meta name="description" content="前段时间搞过一次Gentoo，最终以失败告终,新年开工正好有时间卷土重来。  配置过程相当复杂，需要很强的耐心，但整个过程下来后，会学到很多东西。 官方文档: Gentoo AMD64手册">
+<meta name="keywords" content="高级运维,Linux,Gentoo,Kernel,内核编译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux之Gentoo编译安装">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="前段时间搞过一次Gentoo，最终以失败告终,新年开工正好有时间卷土重来。  配置过程相当复杂，需要很强的耐心，但整个过程下来后，会学到很多东西。 官方文档: Gentoo AMD64手册">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-27T10:50:25.002Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux之Gentoo编译安装">
+<meta name="twitter:description" content="前段时间搞过一次Gentoo，最终以失败告终,新年开工正好有时间卷土重来。  配置过程相当复杂，需要很强的耐心，但整个过程下来后，会学到很多东西。 官方文档: Gentoo AMD64手册">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Linux之Gentoo编译安装</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Linux之Gentoo编译安装</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-24T08:53:57.000Z" itemprop="datePublished" class="page-time">
+  2018-02-24
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#准备工作"><span class="post-toc-number">1.</span> <span class="post-toc-text">准备工作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#下载minimal镜像"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">下载minimal镜像</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#制作引导U盘"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">制作引导U盘</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#记录服务器硬件配置"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">记录服务器硬件配置</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装基本系统"><span class="post-toc-number">2.</span> <span class="post-toc-text">安装基本系统</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#分区"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">分区</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置网络"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">配置网络</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置make-conf"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">配置make.conf</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#进入新环境"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">进入新环境</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#编译内核"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">编译内核</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#内核-启用devtmpfs支持"><span class="post-toc-number">2.5.1.</span> <span class="post-toc-text">内核:启用devtmpfs支持</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#内核-启用SCSI磁盘支持"><span class="post-toc-number">2.5.2.</span> <span class="post-toc-text">内核: 启用SCSI磁盘支持</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#内核-选择必要的文件系统"><span class="post-toc-number">2.5.3.</span> <span class="post-toc-text">内核: 选择必要的文件系统</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#内核-选择PPPoE必要的驱动程序"><span class="post-toc-number">2.5.4.</span> <span class="post-toc-text">内核: 选择PPPoE必要的驱动程序</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#内核-激活SMP支持"><span class="post-toc-number">2.5.5.</span> <span class="post-toc-text">内核: 激活SMP支持</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#内核-选择处理器类型和特点"><span class="post-toc-number">2.5.6.</span> <span class="post-toc-text">内核: 选择处理器类型和特点</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#内核-启用对GPT的支持-用于支持GPT分区"><span class="post-toc-number">2.5.7.</span> <span class="post-toc-text">内核: 启用对GPT的支持(用于支持GPT分区)</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#内核-启用对UEFI方式引导系统的支持"><span class="post-toc-number">2.5.8.</span> <span class="post-toc-text">内核: 启用对UEFI方式引导系统的支持</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置系统"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置系统</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置fstab"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">配置fstab</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置网络-1"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">配置网络</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#系统启动时激活网卡配置"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">系统启动时激活网卡配置</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#定义hosts文件"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">定义hosts文件</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#系统信息"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">系统信息</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#中文语言支持"><span class="post-toc-number">3.6.</span> <span class="post-toc-text">中文语言支持</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#修改时区"><span class="post-toc-number">3.7.</span> <span class="post-toc-text">修改时区</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#安装系统日志记录器"><span class="post-toc-number">3.8.</span> <span class="post-toc-text">安装系统日志记录器</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#安装crond定时任务"><span class="post-toc-number">3.9.</span> <span class="post-toc-text">安装crond定时任务</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#远程访问"><span class="post-toc-number">3.10.</span> <span class="post-toc-text">远程访问</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#文件索引"><span class="post-toc-number">3.11.</span> <span class="post-toc-text">文件索引</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#文件系统工具"><span class="post-toc-number">3.12.</span> <span class="post-toc-text">文件系统工具</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置GRUB引导"><span class="post-toc-number">3.13.</span> <span class="post-toc-text">配置GRUB引导</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#现在基本系统安装完成，卸载分区，重启。"><span class="post-toc-number">3.14.</span> <span class="post-toc-text">现在基本系统安装完成，卸载分区，重启。</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#故障处理"><span class="post-toc-number">3.14.1.</span> <span class="post-toc-text">故障处理</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Linux之Gentoo编译安装"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Linux之Gentoo编译安装</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-24 16:53:57" datetime="2018-02-24T08:53:57.000Z"  itemprop="datePublished">2018-02-24</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>前段时间搞过一次Gentoo，最终以失败告终,新年开工正好有时间卷土重来。
+
+配置过程相当复杂，需要很强的耐心，但整个过程下来后，会学到很多东西。
+</code></pre><p>官方文档: <a href="https://wiki.gentoo.org/wiki/Handbook:AMD64" target="_blank" rel="noopener">Gentoo AMD64手册</a></p>
+<a id="more"></a>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><h5 id="下载minimal镜像"><a href="#下载minimal镜像" class="headerlink" title="下载minimal镜像"></a>下载minimal镜像</h5><pre><code>官方镜像地址：http://distfiles.gentoo.org/releases/
+网易镜像地址：http://mirrors.163.com/gentoo/releases/
+</code></pre><pre><code>截止目前最新的是install-amd64-minimal-20180222T214502Z.iso
+
+minimal镜像和stage3下载地址：
+http://mirrors.163.com/gentoo/releases/amd64/autobuilds/current-stage3-amd64/
+
+portage下载地址: 
+http://mirrors.163.com/gentoo/releases/snapshots/current/portage-20180220.tar.bz2 
+
+注：如果网络较好可以通过网络下载stage3和portage。如果提前下载需要拷贝到U盘里，需要的时候挂载解压。
+我这边网络比较好，选择在安装的过程中从网上下载。
+</code></pre><h5 id="制作引导U盘"><a href="#制作引导U盘" class="headerlink" title="制作引导U盘"></a>制作引导U盘</h5><pre><code>把iso刻录到U盘里，用来启动引导，这里推荐使用UltraISO，启动-&gt;写入硬盘镜像
+</code></pre><h5 id="记录服务器硬件配置"><a href="#记录服务器硬件配置" class="headerlink" title="记录服务器硬件配置"></a>记录服务器硬件配置</h5><pre><code>因为在安装的过程中要自己编译内核，需要配置一些硬件驱动信息，主要是CPU、显卡、网卡，可以自行查看，配置选好的话可以节省很多编译时间和内核资源。
+</code></pre><h4 id="安装基本系统"><a href="#安装基本系统" class="headerlink" title="安装基本系统"></a>安装基本系统</h4><pre><code>从U盘启动，在boot处输入: gentoo dopcmcia ,根据引导进入命令行模式,接下来安装基本系统。
+</code></pre><h5 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h5><pre><code>建议分区规划
+bios_grub        BIOS启动分区，官方是2M,我这里给9M  
+boot    300M     启动系统目录,挂载目录: /mnt/gentoo/boot
+swap   8192M     
+/     剩余All      挂载目录: /mnt/gentoo
+
+注：系统使用BIOS引导方式,所以不需要EFI分区
+</code></pre><pre><code>分区格式（MBR或GPT）直接影响到后边的GRUB引导,本例是MBR分区（BIOS引导方式）
+livecd # parted
+select /dev/sda   #选择操作的磁盘
+mklabel gpt    #分区格式使用MBR
+mkpart primary 1M 10M   #BIOS启动分区必须有,否则grub安装出错
+name 1 grub
+set 1 bios_grub on   #设置BIOS分区可启动
+
+mkpart primary 10M 310M   #boot系统分区
+name 2 boot
+set 2 boot on    #设置boot分区为可启动
+
+mkpart primary 310M 8502M   #swap分区
+name 3 swap
+mkpart primary 8502M -1  #剩余全部给根分区
+name 4 bootfs
+p     查看分区
+quit  退出parted
+----------------------------------------------
+格式化
+mkfs.ext2  /dev/sda1  格式化预留空间分区
+mkfs.ext2  /dev/sda2  格式化boot分区
+mkswap /dev/sda3        格式化swap分区
+mkfs.ext4 /dev/sda4     格式化根分区
+----------------------------------------------
+挂载到/mnt/下
+mount /dev/sda4 /mnt/gentoo   先挂载根分区
+mkdir -p /mnt/gentoo/boot  创建boot挂载目录
+mount /dev/sda2 /mnt/gentoo/boot  挂载boot
+swapon /dev/sda3   挂载swap
+</code></pre><pre><code>分区相关-知识点总结:
+
+(1)如果是MBR分区的磁盘，使用以下方法创建ESP：
+parted创建的boot_grub和boot分区, 使用mkfs.ext2格式化
+-----------------------------------------------------------------------------------------------
+(2)关于parted set命令的flag类型,可参考官方文档: https://www.gnu.org/software/parted/manual/html_node/set.html
+</code></pre><h5 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h5><pre><code>配置网络主要是用来下载portage和stage,如果已经下载到U盘里,直接挂载U盘拷贝到/mnt/gentoo/os目录下。
+使用如下命令来配置网络:
+ifconfig   查看网络标识
+net-setup eno16777728  根据提示输入IP地址、broadcast、netmask、gateway、DNS和dns search suffix地址(如:qq.com)
+使用ping qq.com来测试网络是否可用
+
+官方网络配置参考：https://wiki.gentoo.org/wiki/Handbook:X86/Installation/Networking#Manual_network_configuration
+</code></pre><pre><code>开启ssh，配置后边的东西会方便很多，比如:命令粘贴或文件粘贴
+/etc/init.d/sshd start  #启动ssh服务
+passwd root   #修改root密码
+
+此时就可以使用xshell连接了
+</code></pre><pre><code>使用links命令把portage和stage下载到/mnt/gentoo里
+cd /mnt/gentoo/  #切换到挂载的根分区下载包(只有这个有大空间)
+links mirrors.163.com/gentoo
+注: stage在releases/x86/current-iso/目录下; portage在snapshots/目录下
+
+#解压(按照下面顺序解压)
+xz -d stage3-amd64-20180225T214502Z.tar.xz &amp;&amp; tar -xf stage3-amd64-20180225T214502Z.tar  
+tar -xjf portage-20180220.tar.bz2 -C /mnt/gentoo/usr/
+</code></pre><h5 id="配置make-conf"><a href="#配置make-conf" class="headerlink" title="配置make.conf"></a>配置make.conf</h5><pre><code>为了优化Gentoo，必须在软件编译的时候指定某些参数，这样编译出来的程序运行效率将非常高，系统在编译用到的参数就在make.conf里，文件路径是/mnt/gentoo/etc/portage/make.conf.
+Gentoo给了我们一个配置的sample在/mnt/gentoo/usr/share/portage/config/make.conf.example，他里面讲的很详细，下面的是我的make.conf。
+</code></pre><pre><code>vi /mnt/gentoo/etc/portage/make.conf
+
+#USE用于控制软件的安装
+USE=&quot;bindist mmx sse sse2&quot;  
+#这两个变量使用相同的值,这两个变量定义gcc和c++编译器的优化
+CFLAGS=&quot;-march=native -mtune=native -O2 -pipe&quot; 
+CXXFLAGS=&quot;${CFLAGS}&quot; 
+#指定gcc同时编译的数量,一般是CPU个数(或核心数）+1
+MAKEOPTS=&quot;-j9&quot; 
+
+注:&quot;-march=native&quot;参数,native意思是让系统自动检测cpu型号进行配置
+</code></pre><h5 id="进入新环境"><a href="#进入新环境" class="headerlink" title="进入新环境"></a>进入新环境</h5><pre><code>接下来就可以进入新环境/mnt/gentoo, 在chroot进入新环境前需要做一些设备的挂载和DNS文件复制
+cp -L /etc/resolv.conf /mnt/gentoo/etc/
+mount -t proc none /mnt/gentoo/proc 
+mount --rbind /sys /mnt/gentoo/sys
+mount --make-rslave /mnt/gentoo/sys
+mount --rbind /dev /mnt/gentoo/dev
+mount --make-rslave /mnt/gentoo/dev
+</code></pre><pre><code>使用chroot进入新环境,并更新环境变量
+chroot /mnt/gentoo /bin/bash
+env-update
+source /etc/profile
+
+为了使portage里的软件保持最新，最好同步一下
+emerge --sync   
+注:如果同步出错，需要检查/etc/portage/make.conf文件中的参数
+</code></pre><pre><code>Gentoo中除了USE和CFLAGS用于优化外还有一个重要的profile，这个是Gentoo自带的配置文件，我们只要选择合适的就行了。
+
+eselect profile list   #列出所有的子版本(带*号的是默认选项)
+  [1]   default/linux/amd64/13.0 (stable)*
+  [2]   default/linux/amd64/13.0/selinux (dev)
+  [3]   default/linux/amd64/13.0/desktop (stable)
+  [4]   default/linux/amd64/13.0/desktop/gnome (stable)
+  [5]   default/linux/amd64/13.0/desktop/gnome/systemd (stable)
+  ......
+
+eselect profile set 12  #选择对应版本
+</code></pre><h5 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h5><pre><code>选择一个内核并进行安装
+emerge --ask sys-kernel/gentoo-sources
+
+进入内核源码
+cd /usr/src/linux
+
+手动配置内核
+make menuconfig
+
+注：make menuconfig显示错误“Your display is too small to run Menuconfig!”
+如果在终端执行 make menuconfig ,显示错误：
+Your display is too small to run Menuconfig!
+It must be at least 19 lines by 80 columns.
+make[1]: *** [menuconfig] Error 1
+make: *** [menuconfig] Error 2
+表示xshell终端窗口太小。把终端窗口适当的调大（或是直接最大化）就行了。
+</code></pre><pre><code>注：内核的配置可以参考官方文档:https://wiki.gentoo.org/wiki/Handbook:X86/Installation/Kernel
+</code></pre><h6 id="内核-启用devtmpfs支持"><a href="#内核-启用devtmpfs支持" class="headerlink" title="内核:启用devtmpfs支持"></a>内核:启用devtmpfs支持</h6><pre><code>作用：用来挂载/dev,以便在启动过程中使用关键设备文件
+
+Device Drivers ---&gt;
+  Generic Driver Options ---&gt;
+    [*] Maintain a devtmpfs filesystem to mount at /dev
+    [*] Automount devtmpfs at /dev, after the kernel mounted the rootfs
+</code></pre><h6 id="内核-启用SCSI磁盘支持"><a href="#内核-启用SCSI磁盘支持" class="headerlink" title="内核: 启用SCSI磁盘支持"></a>内核: 启用SCSI磁盘支持</h6><pre><code>Device Drivers ---&gt;
+   SCSI device support  ---&gt;
+      &lt;*&gt; SCSI disk support
+</code></pre><h6 id="内核-选择必要的文件系统"><a href="#内核-选择必要的文件系统" class="headerlink" title="内核: 选择必要的文件系统"></a>内核: 选择必要的文件系统</h6><pre><code>建议常用的文件系统格式都选择上，免得用的时候抓瞎
+File systems ---&gt;
+  &lt;*&gt; Second extended fs support
+  &lt;*&gt; The Extended 3 (ext3) filesystem
+  &lt;*&gt; The Extended 4 (ext4) filesystem
+  &lt;*&gt; Reiserfs support
+  &lt;*&gt; JFS filesystem support
+  &lt;*&gt; XFS filesystem support
+  &lt;*&gt; Btrfs filesystem support
+  DOS/FAT/NT Filesystems  ---&gt;
+    &lt;*&gt; MSDOS fs support
+    &lt;*&gt; VFAT (Windows-95) fs support
+</code></pre><h6 id="内核-选择PPPoE必要的驱动程序"><a href="#内核-选择PPPoE必要的驱动程序" class="headerlink" title="内核: 选择PPPoE必要的驱动程序"></a>内核: 选择PPPoE必要的驱动程序</h6><pre><code>Device Drivers ---&gt;
+  Network device support ---&gt;
+    &lt;*&gt; PPP (point-to-point protocol) support
+    &lt;*&gt;   PPP support for async serial ports
+    &lt;*&gt;   PPP support for sync tty ports
+</code></pre><h6 id="内核-激活SMP支持"><a href="#内核-激活SMP支持" class="headerlink" title="内核: 激活SMP支持"></a>内核: 激活SMP支持</h6><pre><code>作用：用于支持多内核存在,用来在多个内核间进行切换
+
+Processor type and features  ---&gt;
+  [*] Symmetric multi-processing support
+</code></pre><p>内核: 启用输入设备的USB支持</p>
+<pre><code>Device Drivers ---&gt;
+  HID support  ---&gt;
+    -*- HID bus support
+    &lt;*&gt;   Generic HID driver
+    [*]   Battery level reporting for HID devices
+      USB HID support  ---&gt;
+        &lt;*&gt; USB HID transport layer
+  [*] USB support  ---&gt;
+    &lt;*&gt;     xHCI HCD (USB 3.0) support
+    &lt;*&gt;     EHCI HCD (USB 2.0) support
+    &lt;*&gt;     OHCI HCD (USB 1.1) support
+</code></pre><h6 id="内核-选择处理器类型和特点"><a href="#内核-选择处理器类型和特点" class="headerlink" title="内核: 选择处理器类型和特点"></a>内核: 选择处理器类型和特点</h6><pre><code>Processor type and features  ---&gt;
+   [ ] Machine Check / overheating reporting 
+   [ ]   Intel MCE Features
+   [ ]   AMD MCE Features
+   Processor family (AMD-Opteron/Athlon64)  ---&gt;
+      ( ) Opteron/Athlon64/Hammer/K8
+      ( ) Intel P4 / older Netburst based Xeon
+      ( ) Core 2/newer Xeon
+      ( ) Intel Atom
+      ( ) Generic-x86-64
+Executable file formats / Emulations  ---&gt;
+   [*] IA32 Emulation
+</code></pre><h6 id="内核-启用对GPT的支持-用于支持GPT分区"><a href="#内核-启用对GPT的支持-用于支持GPT分区" class="headerlink" title="内核: 启用对GPT的支持(用于支持GPT分区)"></a>内核: 启用对GPT的支持(用于支持GPT分区)</h6><pre><code>-*- Enable the block layer ---&gt;
+   Partition Types ---&gt;
+      [*] Advanced partition selection
+      [*] EFI GUID Partition support
+</code></pre><h6 id="内核-启用对UEFI方式引导系统的支持"><a href="#内核-启用对UEFI方式引导系统的支持" class="headerlink" title="内核: 启用对UEFI方式引导系统的支持"></a>内核: 启用对UEFI方式引导系统的支持</h6><pre><code>注:如果不启用,则系统不能通过UEFI方式引导
+
+Processor type and features  ---&gt;
+    [*] EFI runtime service support 
+    [*]   EFI stub support
+    [*]     EFI mixed-mode support
+
+Firmware Drivers  ---&gt;
+    EFI (Extensible Firmware Interface) Support  ---&gt;
+        &lt;*&gt; EFI Variable Support via sysfs
+</code></pre><pre><code>编译并安装模块
+make &amp;&amp; make modules_install
+
+内核编译完成后，使用如下命令将内核镜像复制到/boot/目录中
+make install
+</code></pre><h4 id="配置系统"><a href="#配置系统" class="headerlink" title="配置系统"></a>配置系统</h4><pre><code>emerge app-editors/vim    #安装vim
+</code></pre><h5 id="配置fstab"><a href="#配置fstab" class="headerlink" title="配置fstab"></a>配置fstab</h5><pre><code>vim /etc/fstab
+/dev/sda4  /    ext4  defaults 1 1             #配置挂载根分区
+/dev/sda3  none  swap  sw  0 0                 #配置挂载swap
+/dev/sda2  /boot ext2  noauto,noatime    1 2    #配置挂载boot分区
+
+注: 生产环境下,最前面的/dev/sda1、sda2、sda3要通过blkid命令替换成对应的UUID
+</code></pre><p>配置主机名</p>
+<pre><code>vim /etc/conf.d/hostname
+
+hostname =“gentoo”  ＃将主机名变量设置为所选主机名
+</code></pre><h5 id="配置网络-1"><a href="#配置网络-1" class="headerlink" title="配置网络"></a>配置网络</h5><pre><code>这次是配置的系统网络，而非LiveCD的网络
+emerge --ask --noreplace net-misc/netifrc
+
+
+vi /etc/conf.d/net   #配置静态IP
+config_eth0=&quot;10.0.10.100 netmask 255.255.255.0 brd 10.0.10.255&quot;
+routes_eth0=&quot;default via 10.0.10.1&quot;
+
+注：如果系统自动获取IP则进行如下配置
+config_eth0=&quot;dhcp&quot;
+</code></pre><h5 id="系统启动时激活网卡配置"><a href="#系统启动时激活网卡配置" class="headerlink" title="系统启动时激活网卡配置"></a>系统启动时激活网卡配置</h5><pre><code>cd /etc/init.d
+ln -s net.lo net.eth0
+rc-update add net.eth0 default
+</code></pre><pre><code>排错
+如果在启动系统后，我们发现有关网络接口名称（目前记录为eth0）的假设是错误的，那么执行以下步骤来解决这个问题：
+使用正确的接口名称更新/etc/conf.d/net文件（enp3s0而不是eth0）。
+创建新的符号链接（如/etc/init.d/net.enp3s0）。
+删除旧的符号链接（rm /etc/init.d/net.eth0）。
+将新的添加到默认运行级别。
+使用rc-update del net.eth0默认值删除旧的。
+</code></pre><h5 id="定义hosts文件"><a href="#定义hosts文件" class="headerlink" title="定义hosts文件"></a>定义hosts文件</h5><pre><code>vim  /etc/hosts
+127.0.0.1 gentoo.homenetwork gentoo localhost   ＃这定义了当前系统并且必须设置
+</code></pre><h5 id="系统信息"><a href="#系统信息" class="headerlink" title="系统信息"></a>系统信息</h5><pre><code>使用passwd命令设置root密码。
+</code></pre><p>配置rc.conf文件</p>
+<pre><code>作用: Gentoo使用/etc/rc.conf来配置系统的服务，启动和关闭。
+
+打开/etc/rc.conf并享受文件中的所有注释。查看设置并在需要的地方进行更改。
+</code></pre><h5 id="中文语言支持"><a href="#中文语言支持" class="headerlink" title="中文语言支持"></a>中文语言支持</h5><pre><code>vim /etc/locale.gen
+en_US ISO-8859-1
+en_US.UTF-8 UTF-8
+#把需要的项前面的#号去掉
+
+执行
+locale-gen
+</code></pre><h5 id="修改时区"><a href="#修改时区" class="headerlink" title="修改时区"></a>修改时区</h5><pre><code>cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone
+
+#设置硬件时间为本地，不然会多8个小时
+hwclock -w --localtime
+</code></pre><h5 id="安装系统日志记录器"><a href="#安装系统日志记录器" class="headerlink" title="安装系统日志记录器"></a>安装系统日志记录器</h5><pre><code>作用：提供传统的系统日志守护进程
+emerge --ask app-admin/sysklogd  
+rc-update add sysklogd default
+</code></pre><h5 id="安装crond定时任务"><a href="#安装crond定时任务" class="headerlink" title="安装crond定时任务"></a>安装crond定时任务</h5><pre><code>作用：cron守护进程执行预定的命令。如果需要定期执行某些命令（例如每天，每周或每月），这非常方便。
+emerge --ask sys-process/cronie
+rc-update add cronie default
+
+如果使用dcron或fcron，则需要执行额外的初始化命令：
+crontab /etc/crontab
+</code></pre><h5 id="远程访问"><a href="#远程访问" class="headerlink" title="远程访问"></a>远程访问</h5><pre><code>rc-update add sshd default     #添加ssh开机自启动
+</code></pre><h5 id="文件索引"><a href="#文件索引" class="headerlink" title="文件索引"></a>文件索引</h5><pre><code>作用：为了索引文件系统以提供更快的文件位置功能
+emerge --ask sys-apps/mlocate
+</code></pre><h5 id="文件系统工具"><a href="#文件系统工具" class="headerlink" title="文件系统工具"></a>文件系统工具</h5><pre><code>作用: 用于检查文件系统完整性，创建其他文件系统等,按需安装
+
+emerge     sys-fs/e2fsprogs     用于管理Ext2, Ext3, EXT4
+emerge  sys-fs/xfsprogs      用于管理XFS
+emerge  sys-fs/reiserfsprogs 用于管理ReiserFS
+emerge  sys-fs/jfsutils      用于管理JFS
+emerge  sys-fs/dosfstools    用于管理VFAT（如：FAT32、NTFS等）
+emerge  sys-fs/btrfs-progs   用于管理Btrfs
+</code></pre><h5 id="配置GRUB引导"><a href="#配置GRUB引导" class="headerlink" title="配置GRUB引导"></a>配置GRUB引导</h5><pre><code>(1)修改vim /etc/portage/make.conf
+添加：
+# Both UEFI and PC
+GRUB_PLATFORMS=&quot;efi-64 pc&quot;
+
+(2)MBR分区-BIOS方式引导
+emerge --ask sys-boot/grub:2
+
+(3)安装到MBR。假定第一个（系统引导的）磁盘是/dev/sda
+grub-install /dev/sda
+
+(4)自动生成grub2配置
+grub-mkconfig -o /boot/grub/grub.cfg   
+
+(5)保险起见再次执行一次这个命令
+   grub-install /dev/sda
+</code></pre><h5 id="现在基本系统安装完成，卸载分区，重启。"><a href="#现在基本系统安装完成，卸载分区，重启。" class="headerlink" title="现在基本系统安装完成，卸载分区，重启。"></a>现在基本系统安装完成，卸载分区，重启。</h5><pre><code>exit
+umount -l /mnt/gentoo/dev
+umount -l /mnt/gentoo/proc
+umount -l /mnt/gentoo/sys
+umount -l /mnt/gentoo
+reboot
+</code></pre><h6 id="故障处理"><a href="#故障处理" class="headerlink" title="故障处理"></a>故障处理</h6><pre><code>Grub引导正常，但启动系统过程中,出现 LFS kernel panic -not syncing :VFS:Unable to mount root fs on Unknown-block(0,0)
+</code></pre><pre><code>原因：
+(1)进入LiveCD，挂载根和boot分区,然后修改修改/etc/fstab文件
+注:一律使用uuid替代/dev/sdx
+
+(2)内核编译的时候没有添加相应的硬件模块,建议只增不减。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-27T10:50:25.002Z" itemprop="dateUpdated">2018-02-27 18:50:25</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/02/24/Linux之Gentoo编译安装/" target="_blank" rel="external">https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gentoo/">Gentoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kernel/">Kernel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内核编译/">内核编译</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/&title=《Linux之Gentoo编译安装》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/&title=《Linux之Gentoo编译安装》 — Gary Wu&source=前段时间搞过一次Gentoo，最终以失败告终,新年开工正好有时间卷土重来。
+
+配置过程相当复杂，需要很强的耐心，但整个过程下来后，会学到很多东西。
+官方文..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux之Gentoo编译安装》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/26/mysql主从复制错误-错误号1236/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">mysql主从复制错误-错误号1236</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/23/MongoDB之用户授权管理/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MongoDB之用户授权管理</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/&title=《Linux之Gentoo编译安装》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/&title=《Linux之Gentoo编译安装》 — Gary Wu&source=前段时间搞过一次Gentoo，最终以失败告终,新年开工正好有时间卷土重来。
+
+配置过程相当复杂，需要很强的耐心，但整个过程下来后，会学到很多东西。
+官方文..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux之Gentoo编译安装》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/02/24/Linux之Gentoo编译安装/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

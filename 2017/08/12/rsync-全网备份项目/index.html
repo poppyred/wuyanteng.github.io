@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>rsync-全网备份项目 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,rsync,tar,crontab">
+    <meta name="description" content="定期备份服务器中重要的文件，并且在凌晨00:00执行。备份后发送邮件通知管理员备份状态。">
+<meta name="keywords" content="高级运维,rsync,tar,crontab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rsync-全网备份项目">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="定期备份服务器中重要的文件，并且在凌晨00:00执行。备份后发送邮件通知管理员备份状态。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/rsync%E5%85%A8%E7%BD%91%E5%A4%87%E4%BB%BD.png">
+<meta property="og:updated_time" content="2017-08-12T10:40:28.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rsync-全网备份项目">
+<meta name="twitter:description" content="定期备份服务器中重要的文件，并且在凌晨00:00执行。备份后发送邮件通知管理员备份状态。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/rsync%E5%85%A8%E7%BD%91%E5%A4%87%E4%BB%BD.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">rsync-全网备份项目</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">rsync-全网备份项目</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-12T06:06:14.000Z" itemprop="datePublished" class="page-time">
+  2017-08-12
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#具体要求如下："><span class="post-toc-number">1.</span> <span class="post-toc-text">具体要求如下：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#全网备份-项目实践过程"><span class="post-toc-number">2.</span> <span class="post-toc-text">全网备份-项目实践过程</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-rsync-全网备份项目"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">rsync-全网备份项目</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-12 14:06:14" datetime="2017-08-12T06:06:14.000Z"  itemprop="datePublished">2017-08-12</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>定期备份服务器中重要的文件，并且在凌晨00:00执行。备份后发送邮件通知管理员备份状态。</p>
+</blockquote>
+<a id="more"></a>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/rsync%E5%85%A8%E7%BD%91%E5%A4%87%E4%BB%BD.png" alt="rsync全网备份架构图" title="">
+                </div>
+                <div class="image-caption">rsync全网备份架构图</div>
+            </figure>
+<h4 id="具体要求如下："><a href="#具体要求如下：" class="headerlink" title="具体要求如下："></a>具体要求如下：</h4><pre><code>1)所有服务器的备份目录必须都为/backup。
+
+2)要备份的系统配置文件包括但不限于：
+
+a.定时任务服务的配置文件(/var/spool/cron/root)（适合web和nfs服务器）。
+
+b.开机自启动的配置文件(/etc/rc.local)（适合web和nfs服务器）。
+
+c.日常脚本的目录 (/server/scripts)（适合web和nfs服务器）。
+
+d.防火墙iptables的配置文件(/etc/sysconfig/iptables)。
+
+e.自己思考下还有什么需要备份呢？
+
+3)Web服务器站点目录假定为(/var/html/www)。
+
+4)Web服务器A访问日志路径假定为（/app/logs）
+
+5)Web服务器保留打包后的7天的备份数据即可(本地留存不能多于7天，因为太多硬盘会满)
+
+6)备份服务器上,保留每周一的所有数据副本，其它要保留6个月的数据副本。
+
+7)备份服务器上要按照备份数据服务器的内网IP为目录保存备份，备份的文件按照时间名字保存。
+
+8）需要确保备份的数据尽量完整正确，在备份服务器上对备份的数据进行检查，把备份的成功及失败结果信息发给系统管理员邮箱中
+
+3)
+要求：每天晚上00点整在Web服务器上打包备份系统配置文件、网站程序目录及访问日志并通过rsync命令推送
+</code></pre><h4 id="全网备份-项目实践过程"><a href="#全网备份-项目实践过程" class="headerlink" title="全网备份-项目实践过程"></a>全网备份-项目实践过程</h4><blockquote>
+<p>实现rsync数据推送功能</p>
+</blockquote>
+<p>服务端</p>
+<pre><code># 安装
+rpm -qa |grep rsync
+yum install -y rsync
+
+# rsync配置文件（略）
+
+# 添加备份目录的管理用户信息
+useradd -s /sbin/nologin -M rsync
+
+#创建备份数据的目录
+mkdir /backup -p
+chown -R rsync:rsync /backup
+
+# 创建用户认证文件
+echo &quot;rsync_backup:oldboy123&quot; &gt;/etc/rsync.passwd (文件路径需要与配置文件一致)
+chmod 600 /etc/rsync.passwd
+
+# 启动rsync服务
+rsync --daemon
+echo &quot;rsync --daemon&quot; &gt;&gt;/etc/rc.local   开机启动
+</code></pre><p>客户端</p>
+<pre><code># 安装
+rpm -qa |grep rsync
+yum install -y rsync
+
+# 创建用户认证文件
+echo &quot;oldboy123&quot; &gt;/etc/rsync.passwd 
+chmod 600 /etc/rsync.passwd
+
+# 测试数据推送功能
+rsync -avz /etc/hosts rsync_backup@172.16.1.41::backup --password-file=/etc/rsync.passwd
+</code></pre><blockquote>
+<p>编写备份脚本</p>
+</blockquote>
+<p>NFS01服务器脚本（rsync客户端）</p>
+<pre><code>①创建备份目录
+mkdir /backup -p
+
+②NFS01和web服务器上压缩备份数据到备份目录
+#NFS服务器压缩
+tar zcvhf /backup/systemfile_info.tar.gz /var/spool/cron/root  /etc/rc.local /server/scripts /etc/sysconfig/iptables
+注：tar打包时使用h参数表示当要打包的数据文件是软链接时不会打包软链接，而是打包真实路径文件
+
+③推送推送命令到rsync服务器
+rsync -avz /backup/  rsync_backup@172.16.1.41::nfsbackup --password-file=/etc/rsync.password
+
+④删除7天之前的数据
+find /backup -type f  -name &quot;*.tar.gz&quot; -mtime +7 -exec rm {} \;    方法一
+find /backup -type f  -name &quot;*.tar.gz&quot; -mtime +7 |xargs rm -f      方法二
+find /backup -type f  -name &quot;*.tar.gz&quot; -mtime +7 -delete           方法三
+
+⑤对客户端备份的数据进行指纹验证(指纹文件同备份文件一并rsync到服务器)
+ NFS01服务器：cd /backup &amp;&amp; md5sum systemfile_info.tar.gz &gt; systemfile_info_md5.txt
+
+PS：【rsync服务器验证】
+ backup备份服务器指纹验证：cd /backup &amp;&amp; md5sum -c systemfile_info.txt
+ [root@backup nfsbackup]# md5sum -c systemfile_info_md5.txt 
+ systemfile_info.tar.gz: OK 
+
+ ⑥脚本编写
+ vim /server/scripts/nfs01_backup.sh
+ ########################################################################
+ #!/bin/bash
+ # name: nfs_backup.sh
+ # time: 2017.8.12
+ # desc: backup rsync client data info
+ # author garywu
+
+Backup_Dir=&quot;/backup&quot;
+#创建客户端备份目录
+mkdir $Backup_Dir -p
+
+#压缩系统数据到/backup
+tar zchf $Backup_Dir/systemfile_info.tar.gz /var/spool/cron/root  /etc/rc.local /server/scripts /etc/sysconfig/iptables
+#生成系统压缩数据指纹信息
+cd $Backup_Dir/ &amp;&amp; md5sum systemfile_info.tar.gz &gt;systemfile_info_md5.txt
+
+#推送系统压缩数据以及指纹文件到rsync服务器41的/nfsbackup目录中
+rsync -az $Backup_Dir/  rsync_backup@172.16.1.41::nfsbackup --password-file=/etc/rsync.password
+
+#删除7天之前的数据
+find $Backup_Dir -type f  -name &quot;*.tar.gz&quot; -mtime +7 -delete
+</code></pre><pre><code>注：脚本调试命令  
+sh -x  /server/scripts/nfs.backup.sh 
+</code></pre><p>web服务器（rsync客户端）</p>
+<pre><code> vim /server/scripts/web01_backup.sh
+ ########################################################################
+ #!/bin/bash
+ # name: nfs_backup.sh
+ # time: 2017.8.12
+ # desc: backup rsync client data info
+ # author garywu
+
+date=`date +%F_%w`   #w显示周几
+IP=`hostname -i` 
+Backup_Dir=&quot;/backup&quot;
+
+#创建客户端备份目录
+mkdir $Backup_Dir/${IP} -p
+mkdir /var/html/www /app/logs -p
+
+#压缩系统数据到/backup
+tar zchf $Backup_Dir/${IP}/${date}_${IP}_systemfile_info.tar.gz /var/spool/cron/root  /etc/rc.local /server/scripts /etc/sysconfig/iptables 
+#大文件分开压缩
+tar zchf $Backup_Dir/${IP}/${date}_${IP}_www_info.tar.gz /var/html/www  
+tar zchf $Backup_Dir/${IP}/${date}_${IP}_www_log.tar.gz /app/logs
+
+#同时给多个文件-生成系统压缩数据指纹信息
+cd $Backup_Dir/${IP} &amp;&amp; md5sum $(find $Backup_Dir/${IP} -type f -name &quot;${date}*.tar.gz&quot;) &gt;${date}_${IP}_systemfile_info_md5.txt
+
+#推送系统压缩数据以及指纹文件到rsync服务器41的/nfsbackup目录中
+rsync -az $Backup_Dir/${IP}  rsync_backup@172.16.1.41::nfsbackup --password-file=/etc/rsync.password
+
+#删除7天之前的数据
+find $Backup_Dir/${IP} -type f  -name &quot;*.tar.gz&quot; -mtime +7 -delete
+</code></pre><p>NFS服务器-rsync客户端定时任务编写</p>
+<pre><code>crontab -e
+#备份数据信息
+00 00 * * * sh /server/scripts/nfs01_backup.sh &amp;&gt;/dev/null  
+</code></pre><p>web服务器-rsync定时任务编写</p>
+<pre><code>crontab -e
+#备份数据信息
+00 00 * * * sh /server/scripts/web01_backup.sh &amp;&gt;/dev/null  
+</code></pre><p>rsync服务端脚本</p>
+<pre><code>#验证数据完整性
+find /backup/ -type f -name &quot;finger.txt&quot; |xargs md5sum -c &gt;/backup/check_info.txt
+
+#将验证结果通过邮件发送给管理员
+mail -s &quot;check_rsync_data mail&quot; 617597237@qq.com &lt;/backup/check_info.txt  邮件发送邮件方式1
+echo &quot;oldboy 37&quot; |mail -s &quot;check_rsync_data mail&quot; 617597237@qq.com   邮件发送邮件方式2
+
+# 配置邮件服务
+vim /etc/mail.rc 增加如下：
+set from=邮箱地址  smtp=smtp.163.com  
+set smtp-auth-user=邮箱账号  smtp-auth-password=授权码信息  smtp-auth=login
+
+#重启服务
+/etc/init.d/postfix restart
+
+#测试邮件发送
+mail -s &quot;check_rsync_data mail&quot; 617597237@qq.com &lt;/backup/check_info.txt  邮件发送邮件方式1
+echo &quot;oldboy 37&quot; |mail -s &quot;check_rsync_data mail&quot; 617597237@qq.com   邮件发送邮件方式2
+
+#删除180天前的数据进行删除，但保留每周一数据
+find /backup -type f  -name &quot;*.tar.gz&quot; -mtime +180 ! -name &quot;*_1.tar.gz&quot; |xargs rm -f
+
+#################################################################
+脚本编写
+vim /server/scripts/backup_server.sh
+
+#!/bin/bash
+
+#邮件完整性检查
+find /backup/ -type f -name &quot;finger.txt&quot; |xargs md5sum -c &gt;/backup/check_info.txt
+
+#邮件发送数据完整性检查状态
+mail -s &quot;check_rsync_data mail&quot; 617597237@qq.com &lt;/backup/check_info.txt
+
+#删除180天前的数据进行删除，但保留每周一数据
+find /backup -type f  -name &quot;*.tar.gz&quot; -mtime +180 ! -name &quot;*_1.tar.gz&quot; |xargs rm -f
+</code></pre><p>rsync服务端-定时任务</p>
+<pre><code>#凌晨三点整检查备份过来数据完整性
+00 3 * * * sh /server/scripts/backup_server.sh
+</code></pre><blockquote>
+<p>假如今天是8月1日，但是备份时间是晚上00点整，数据备份后正确的是8月2号</p>
+</blockquote>
+<pre><code>可按如下方法把备份出来的文件日期与实际日期统一
+Date_info=`data +F%_%w -d &quot;-1day&quot;`
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-12T10:40:28.922Z" itemprop="dateUpdated">2017-08-12 18:40:28</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/12/rsync-全网备份项目/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/crontab/">crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rsync/">rsync</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tar/">tar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/&title=《rsync-全网备份项目》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/&title=《rsync-全网备份项目》 — Gary Wu&source=
+定期备份服务器中重要的文件，并且在凌晨00:00执行。备份后发送邮件通知管理员备份状态。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《rsync-全网备份项目》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/15/Cobbler自动化系统部署/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Cobbler自动化系统部署</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/10/Apache目录浏览功能-部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Apache目录浏览功能-部署</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/&title=《rsync-全网备份项目》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/&title=《rsync-全网备份项目》 — Gary Wu&source=
+定期备份服务器中重要的文件，并且在凌晨00:00执行。备份后发送邮件通知管理员备份状态。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《rsync-全网备份项目》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/12/rsync-全网备份项目/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

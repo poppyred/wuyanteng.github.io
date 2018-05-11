@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>lsof命令-总结 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,lsof">
+    <meta name="description" content="lsof介绍lsof（list open files）是一个列出当前系统打开文件的工具。  在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。">
+<meta name="keywords" content="Linux基础,lsof">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lsof命令-总结">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/07/lsof命令-总结/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="lsof介绍lsof（list open files）是一个列出当前系统打开文件的工具。  在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-06-07T10:46:20.157Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lsof命令-总结">
+<meta name="twitter:description" content="lsof介绍lsof（list open files）是一个列出当前系统打开文件的工具。  在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">lsof命令-总结</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">lsof命令-总结</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-07T09:39:31.000Z" itemprop="datePublished" class="page-time">
+  2017-06-07
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#lsof介绍"><span class="post-toc-number">1.</span> <span class="post-toc-text">lsof介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#命令示例"><span class="post-toc-number">2.</span> <span class="post-toc-text">命令示例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-找出谁在使用某个文件"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">1. 找出谁在使用某个文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-递归查找某个目录中所有打开的文件"><span class="post-toc-number">2.0.2.</span> <span class="post-toc-text">2. 递归查找某个目录中所有打开的文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-列出某个用户打开的所有文件"><span class="post-toc-number">2.0.3.</span> <span class="post-toc-text">3. 列出某个用户打开的所有文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-查看某个程序打开的所有文件"><span class="post-toc-number">2.0.4.</span> <span class="post-toc-text">4. 查看某个程序打开的所有文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5-查看某个PID对应的进程打开的文件"><span class="post-toc-number">2.0.5.</span> <span class="post-toc-text">5. 查看某个PID对应的进程打开的文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-列出所有TCP网络连接"><span class="post-toc-number">2.0.6.</span> <span class="post-toc-text">6. 列出所有TCP网络连接</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#7-列出所有UDP网络连接"><span class="post-toc-number">2.0.7.</span> <span class="post-toc-text">7. 列出所有UDP网络连接</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#8-找到使用某个端口的进程"><span class="post-toc-number">2.0.8.</span> <span class="post-toc-text">8. 找到使用某个端口的进程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#9-列出ipv4所有进程"><span class="post-toc-number">2.0.9.</span> <span class="post-toc-text">9. 列出ipv4所有进程</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-lsof命令-总结"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">lsof命令-总结</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-07 17:39:31" datetime="2017-06-07T09:39:31.000Z"  itemprop="datePublished">2017-06-07</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="lsof介绍"><a href="#lsof介绍" class="headerlink" title="lsof介绍"></a>lsof介绍</h2><pre><code>lsof（list open files）是一个列出当前系统打开文件的工具。
+
+在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。
+</code></pre><a id="more"></a>
+<h2 id="命令示例"><a href="#命令示例" class="headerlink" title="命令示例"></a>命令示例</h2><h4 id="1-找出谁在使用某个文件"><a href="#1-找出谁在使用某个文件" class="headerlink" title="1. 找出谁在使用某个文件"></a>1. 找出谁在使用某个文件</h4><pre><code>    [root@ns-2 ~]# lsof /var/log/messages
+    COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF     NODE NAME
+    rsyslogd 697 root    3w   REG  253,0   504163 69130584 /var/log/messages
+</code></pre><h4 id="2-递归查找某个目录中所有打开的文件"><a href="#2-递归查找某个目录中所有打开的文件" class="headerlink" title="2. 递归查找某个目录中所有打开的文件"></a>2. 递归查找某个目录中所有打开的文件</h4><pre><code>    [root@ns-2 ~]# lsof +D /usr/local/etc/unbound/
+    COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF      NODE NAME
+    unbound 28966 root  cwd    DIR  253,0     4096 134379613 /usr/local/etc/unbound
+    unbound 28966 root  rtd    DIR  253,0     4096 134379613 /usr/local/etc/unbound
+    unbound 28966 root   21w   REG  253,0  1618157 134358803 /usr/local/etc/unbound/unbound_running.log
+</code></pre><h4 id="3-列出某个用户打开的所有文件"><a href="#3-列出某个用户打开的所有文件" class="headerlink" title="3. 列出某个用户打开的所有文件"></a>3. 列出某个用户打开的所有文件</h4><pre><code>    [root@ns-2 ~]# lsof -u wuyanteng |more
+    sshd    8039 wuyanteng  mem    REG              253,0     15480 134358778 /usr/lib64/security/pam_lastlog.so
+    sshd    8039 wuyanteng  mem    REG              253,0     15624 201432150 /usr/lib64/libpam_misc.so.0.82.0
+    sshd    8039 wuyanteng  mem    REG              253,0     19600 134358779 /usr/lib64/security/pam_limits.so
+</code></pre><h4 id="4-查看某个程序打开的所有文件"><a href="#4-查看某个程序打开的所有文件" class="headerlink" title="4. 查看某个程序打开的所有文件"></a>4. 查看某个程序打开的所有文件</h4><pre><code>    [root@ns-2 ~]# lsof -c unbound
+    COMMAND   PID USER   FD      TYPE             DEVICE SIZE/OFF      NODE NAME
+    unbound 28966 root  cwd       DIR              253,0     4096 134379613 /usr/local/etc/unbound
+    unbound 28966 root  rtd       DIR              253,0     4096 134379613 /usr/local/etc/unbound
+    unbound 28966 root  txt       REG              253,0  4069713    535415 /usr/local/sbin/unbound
+</code></pre><h4 id="5-查看某个PID对应的进程打开的文件"><a href="#5-查看某个PID对应的进程打开的文件" class="headerlink" title="5. 查看某个PID对应的进程打开的文件"></a>5. 查看某个PID对应的进程打开的文件</h4><pre><code>    [root@ns-2 ~]# lsof -p 766
+    dnscrypt- 766 root  txt       REG              253,0   461231    503249 /usr/local/sbin/dnscrypt-proxy
+    dnscrypt- 766 root  mem       REG              253,0    62184 201328501 /usr/lib64/libnss_files-2.17.so
+    dnscrypt- 766 root  mem       REG              253,0  2118128 201328482 /usr/lib64/libc-2.17.so
+</code></pre><h4 id="6-列出所有TCP网络连接"><a href="#6-列出所有TCP网络连接" class="headerlink" title="6. 列出所有TCP网络连接"></a>6. 列出所有TCP网络连接</h4><pre><code>     [root@ns-2 ~]# lsof -i tcp
+     COMMAND     PID         USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
+     dnscrypt-   766         root   11u  IPv4   17618      0t0  TCP localhost:mdns (LISTEN)
+     sshd        941         root    3u  IPv4     649      0t0  TCP *:ssh (LISTEN)
+     sshd        941         root    4u  IPv6     651      0t0  TCP *:ssh (LISTEN)
+     dnscrypt-   943         root   11u  IPv4   16020      0t0  TCP localhost:mdns (LISTEN)
+</code></pre><h4 id="7-列出所有UDP网络连接"><a href="#7-列出所有UDP网络连接" class="headerlink" title="7. 列出所有UDP网络连接"></a>7. 列出所有UDP网络连接</h4><pre><code>     [root@ns-2 ~]# lsof -i udp
+
+     local      7831 postfix   16u  IPv4 2814062      0t0  UDP *:40209 
+     yum        8091    root    8u  IPv4 2826722      0t0  UDP bogon:47324-&gt;public1.114dns.com:domain 
+     unbound   28966    root    3u  IPv4  671972      0t0  UDP bogon:domain 
+</code></pre><h4 id="8-找到使用某个端口的进程"><a href="#8-找到使用某个端口的进程" class="headerlink" title="8. 找到使用某个端口的进程"></a>8. 找到使用某个端口的进程</h4><pre><code>     [root@ns-2 ~]# lsof -i:10050
+     COMMAND   PID         USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+     zabbix_ag 963 zabbix-agent    4u  IPv4  14018      0t0  TCP *:zabbix-agent (LISTEN)
+     zabbix_ag 969 zabbix-agent    4u  IPv4  14018      0t0  TCP *:zabbix-agent (LISTEN)
+     zabbix_ag 970 zabbix-agent    4u  IPv4  14018      0t0  TCP *:zabbix-agent (LISTEN)
+</code></pre><h4 id="9-列出ipv4所有进程"><a href="#9-列出ipv4所有进程" class="headerlink" title="9. 列出ipv4所有进程"></a>9. 列出ipv4所有进程</h4><pre><code>     [root@ns-2 ~]# lsof -i 4    //列举出所有ipv4进程
+
+     [root@ns-2 ~]# lsof -i 6    //列举出所有ipv6进程
+     COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+     sshd      941 root    4u  IPv6    651      0t0  TCP *:ssh (LISTEN)
+     master   1371 root   14u  IPv6   9677      0t0  TCP localhost:smtp (LISTEN)
+     unbound 28966 root   19u  IPv6 671988      0t0  TCP localhost:ub-dns-control (LISTEN)
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-06-07T10:46:20.157Z" itemprop="dateUpdated">2017-06-07 18:46:20</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/07/lsof命令-总结/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/07/lsof命令-总结/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lsof/">lsof</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/&title=《lsof命令-总结》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/&title=《lsof命令-总结》 — Gary Wu&source=lsof介绍lsof（list open files）是一个列出当前系统打开文件的工具。
+
+在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《lsof命令-总结》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/08/Typora-For-MarkDown-语法总结/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Typora For MarkDown-语法总结</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/07/logrotate日志管家/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">logrotate日志管家</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/&title=《lsof命令-总结》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/&title=《lsof命令-总结》 — Gary Wu&source=lsof介绍lsof（list open files）是一个列出当前系统打开文件的工具。
+
+在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《lsof命令-总结》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/07/lsof命令-总结/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Cobbler自动化系统部署 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,PXE,Cobbler,自动化">
+    <meta name="description" content="Cobbler是一个Linux服务器安装的服务，可以通过网络启动(PXE)的方式来快速安装、重装物理服务器和虚拟机，同时还可以管理DHCP，DNS等。Cobbler可以使用命令行方式管理，也提供了基于Web的界面管理工具(cobbler-web)，还提供了API接口，可以方便二次开发使用。">
+<meta name="keywords" content="高级运维,PXE,Cobbler,自动化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cobbler自动化系统部署">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Cobbler是一个Linux服务器安装的服务，可以通过网络启动(PXE)的方式来快速安装、重装物理服务器和虚拟机，同时还可以管理DHCP，DNS等。Cobbler可以使用命令行方式管理，也提供了基于Web的界面管理工具(cobbler-web)，还提供了API接口，可以方便二次开发使用。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cobbler%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cobbler-%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mac_auto.jpg">
+<meta property="og:updated_time" content="2017-08-24T05:31:46.282Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cobbler自动化系统部署">
+<meta name="twitter:description" content="Cobbler是一个Linux服务器安装的服务，可以通过网络启动(PXE)的方式来快速安装、重装物理服务器和虚拟机，同时还可以管理DHCP，DNS等。Cobbler可以使用命令行方式管理，也提供了基于Web的界面管理工具(cobbler-web)，还提供了API接口，可以方便二次开发使用。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cobbler%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Cobbler自动化系统部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Cobbler自动化系统部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-15T08:50:08.000Z" itemprop="datePublished" class="page-time">
+  2017-08-15
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#cobbler工作原理"><span class="post-toc-number">1.</span> <span class="post-toc-text">cobbler工作原理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#环境准备"><span class="post-toc-number">2.</span> <span class="post-toc-text">环境准备</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装cobbler"><span class="post-toc-number">3.</span> <span class="post-toc-text">安装cobbler</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#重要配置文件注释"><span class="post-toc-number">4.</span> <span class="post-toc-text">重要配置文件注释</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#启动服务"><span class="post-toc-number">5.</span> <span class="post-toc-text">启动服务</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#检查cobbler的配置"><span class="post-toc-number">6.</span> <span class="post-toc-text">检查cobbler的配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置DHCP"><span class="post-toc-number">7.</span> <span class="post-toc-text">配置DHCP</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#同步cobbler配置"><span class="post-toc-number">8.</span> <span class="post-toc-text">同步cobbler配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#cobbler的命令行管理"><span class="post-toc-number">9.</span> <span class="post-toc-text">cobbler的命令行管理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#导入镜像文件"><span class="post-toc-number">10.</span> <span class="post-toc-text">导入镜像文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#指定ks-cfg文件调整内核参数"><span class="post-toc-number">11.</span> <span class="post-toc-text">指定ks.cfg文件调整内核参数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署操作系统"><span class="post-toc-number">12.</span> <span class="post-toc-text">部署操作系统</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#自定义登陆界面"><span class="post-toc-number">13.</span> <span class="post-toc-text">自定义登陆界面</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Cobbler-web使用"><span class="post-toc-number">14.</span> <span class="post-toc-text">Cobbler web使用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#定制化安装"><span class="post-toc-number">15.</span> <span class="post-toc-text">*定制化安装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#指定设备系统重装-在需要重装系统的机器上面操作"><span class="post-toc-number">16.</span> <span class="post-toc-text">*指定设备系统重装(在需要重装系统的机器上面操作)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ks附件"><span class="post-toc-number">17.</span> <span class="post-toc-text">*.ks附件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#关于包组"><span class="post-toc-number">18.</span> <span class="post-toc-text">关于包组</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Cobbler自动化系统部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Cobbler自动化系统部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-15 16:50:08" datetime="2017-08-15T08:50:08.000Z"  itemprop="datePublished">2017-08-15</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>Cobbler是一个Linux服务器安装的服务，可以通过网络启动(PXE)的方式来快速安装、重装物理服务器和虚拟机，同时还可以管理DHCP，DNS等。Cobbler可以使用命令行方式管理，也提供了基于Web的界面管理工具(cobbler-web)，还提供了API接口，可以方便二次开发使用。</p>
+</blockquote>
+<a id="more"></a>
+<h4 id="cobbler工作原理"><a href="#cobbler工作原理" class="headerlink" title="cobbler工作原理"></a>cobbler工作原理</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cobbler%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png" alt="cobbler-works" title="">
+                </div>
+                <div class="image-caption">cobbler-works</div>
+            </figure>
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><pre><code>1. 查看系统版本
+   [root@cobbler-9 ~]# cat /etc/redhat-release 
+   CentOS Linux release 7.3.1611 (Core) 
+
+2. 内核版本
+   [root@cobbler-9 ~]# uname -a
+   Linux cobbler-9 3.10.0-514.el7.x86_64
+
+3. 关闭selinux
+   [root@cobbler-9 ~]# getenforce 
+   Permissive
+   [root@cobbler-9 ~]# cat /etc/selinux/config 
+   SELINUX=disabled
+
+4. 停止firewalld防火墙
+   [root@cobbler-9 ~]# systemctl stop firewalld.service
+   [root@cobbler-9 ~]# systemctl disable firewalld.service
+
+
+5. 主机名
+   [root@cobbler-9 ~]# hostname
+   cobbler-9
+
+6. 安装yum源
+   mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+   wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+   yum clean all &amp;&amp; yum makecache
+</code></pre><h4 id="安装cobbler"><a href="#安装cobbler" class="headerlink" title="安装cobbler"></a>安装cobbler</h4><pre><code>[root@cobbler-9 ~]# yum install cobbler cobbler-web pykickstart httpd dhcp tftp xinetd -y
+
+cobbler          #Cobbler程序包
+cobbler-web      #Cobbler的web服务包
+pykickstart      #Cobbler检查kickstart语法错误
+httpd            #Apache web服务
+dhcp             #Dhcp服务
+tftp             #Tftp服务
+</code></pre><h4 id="重要配置文件注释"><a href="#重要配置文件注释" class="headerlink" title="重要配置文件注释"></a>重要配置文件注释</h4><pre><code>[root@cobbler-9 ~]# rpm -ql cobbler
+/etc/cobbler                  # 配置文件目录
+/etc/cobbler/settings         # cobbler主配置文件，这个文件是YAML格式，Cobbler是python写的程序。
+/etc/cobbler/dhcp.template    # DHCP服务的配置模板
+/etc/cobbler/tftpd.template   # tftp服务的配置模板
+/etc/cobbler/rsync.template   # rsync服务的配置模板
+/etc/cobbler/iso              # iso模板配置文件目录
+/etc/cobbler/pxe              # pxe模板文件目录
+/etc/cobbler/power            # 电源的配置文件目录
+/etc/cobbler/users.conf       # Web服务授权配置文件
+/etc/cobbler/users.digest     # 用于web访问的用户名密码配置文件
+/etc/cobbler/dnsmasq.template # DNS服务的配置模板
+/etc/cobbler/modules.conf     # Cobbler模块配置文件
+/var/lib/cobbler              # Cobbler数据目录
+/var/lib/cobbler/config       # 配置文件
+/var/lib/cobbler/kickstarts   # 默认存放kickstart文件
+/var/lib/cobbler/loaders      # 存放的各种引导程序
+/var/www/cobbler              # 系统安装镜像目录
+/var/www/cobbler/ks_mirror    # 导入的系统镜像列表
+/var/www/cobbler/images       # 导入的系统镜像启动文件
+/var/www/cobbler/repo_mirror  # yum源存储目录
+/var/log/cobbler              # 日志目录
+/var/log/cobbler/install.log  # 客户端系统安装日志
+/var/log/cobbler/cobbler.log  # cobbler日志
+</code></pre><h4 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h4><pre><code>cobbler的运行依赖于dhcp、tftp、rsync及dns服务。
+
+[root@cobbler-9 ~]# systemctl start httpd
+[root@cobbler-9 ~]# systemctl enable httpd
+
+[root@cobbler-9 ~]# systemctl start cobblerd
+[root@cobbler-9 ~]# systemctl enable cobblerd
+
+[root@cobbler-9 ~]# ss -lntup |grep cobblerd
+</code></pre><h4 id="检查cobbler的配置"><a href="#检查cobbler的配置" class="headerlink" title="检查cobbler的配置"></a>检查cobbler的配置</h4><pre><code>[root@cobbler-9 ~]# cobbler check
+
+针对出现的问题逐一解决：
+
+问题1：修改/etc/cobbler/settings文件中--提供cobbler服务的主机相应的IP地址或主机名
+[root@cobbler-9 ~]# sed -i &#39;s/server: 127.0.0.1/server: 10.10.0.10/&#39; /etc/cobbler/settings
+[root@cobbler-9 ~]# grep 10.10.0.10 /etc/cobbler/settings 
+next_server: 10.10.0.10
+server: 10.10.0.10
+
+问题2：修改/etc/xinetd.d/tftp
+修改disable = no
+
+问题3：按照提示执行“cobbler get-loaders” 下载loaders
+[root@cobbler-9 ~]# cobbler get-loaders
+[root@cobbler-9 ~]# ls /var/lib/cobbler/loaders/  查看下载内容
+
+问题4：按照提示执行&quot;systemctl enable rsyncd&quot;
+[root@cobbler-9 ~]# systemctl start rsyncd
+[root@cobbler-9 ~]# systemctl enable rsyncd
+
+问题5：创建cobbler默认系统用户及密码
+[root@cobbler-9 ~]# openssl passwd -1 -salt &#39;root&#39; &#39;passwd&#39;
+$1$root$CZ.bdnz2SUozLTg0W7Yhm1
+修改密码为刚创建的新密码
+[root@cobbler-9 ~]# grep default_password /etc/cobbler/settings
+default_password_crypted: &quot;$1$root$CZ.bdnz2SUozLTg0W7Yhm1&quot;
+
+重启cobbler后再检查
+[root@cobbler-9 ~]# systemctl restart cobblerd
+[root@cobbler-9 ~]# cobbler check
+
+此时，还剩下最后两项，一个是与debian系统相关，另一个是电影管理设备相关，此处暂不做调整。
+</code></pre><h4 id="配置DHCP"><a href="#配置DHCP" class="headerlink" title="配置DHCP"></a>配置DHCP</h4><pre><code>此参数为1时表示使用，cobbler管理dhcp
+[root@cobbler-9 ~]# sed -i &#39;s#manage_dhcp: 0#manage_dhcp: 1#g&#39; /etc/cobbler/settings
+[root@cobbler-9 ~]# vim /etc/cobbler/dhcp.template
+#仅列出修改过的部分
+subnet 10.10.0.0 netmask 255.255.255.0 {
+     option routers             10.10.0.1;
+     option domain-name-servers 10.10.0.1;
+     option subnet-mask         255.255.255.0;
+     range dynamic-bootp        10.10.0.100 10.10.0.254;
+     #next-server               $next_server;
+     next-server                10.10.0.10; 
+</code></pre><h4 id="同步cobbler配置"><a href="#同步cobbler配置" class="headerlink" title="同步cobbler配置"></a>同步cobbler配置</h4><pre><code>#同步最新cobbler配置，它会根据配置自动修改dhcp等服务。
+[root@cobbler-9 ~]# systemctl restart xinetd
+[root@cobbler-9 ~]# systemctl enable xinetd
+[root@cobbler-9 ~]# systemctl restart cobblerd
+[root@cobbler-9 ~]# cobbler sync
+......
+running python trigger cobbler.modules.scm_track
+running shell triggers from /var/lib/cobbler/triggers/change/*
+*** TASK COMPLETE ***
+
+#查看dhcp配置文件的标注开头证明自己由Cobbler管理
+[root@cobbler-9 ~]# less /etc/dhcp/dhcpd.conf 
+# ******************************************************************
+# Cobbler managed dhcpd.conf file
+# generated from cobbler dhcp.conf template (Tue Aug 15 12:16:44 2017)
+# Do NOT make changes to /etc/dhcpd.conf. Instead, make your changes
+# in /etc/cobbler/dhcp.template, as /etc/dhcpd.conf will be
+# overwritten.
+# ******************************************************************
+</code></pre><h4 id="cobbler的命令行管理"><a href="#cobbler的命令行管理" class="headerlink" title="cobbler的命令行管理"></a>cobbler的命令行管理</h4><blockquote>
+<p>查看帮助</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# cobbler
+usage
+=====
+cobbler &lt;distro|profile|system|repo|image|mgmtclass|package|file&gt; ... 
+        [add|edit|copy|getks*|list|remove|rename|report] [options|--help]
+cobbler &lt;aclsetup|buildiso|import|list|replicate|report|reposync|sync|validateks|version|signature|get-loaders|hardlink&gt; [options|--help]
+</code></pre><blockquote>
+<p>导入镜像参数</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# cobbler import --help
+Usage: cobbler import [options]
+
+Options:
+  -h, --help            show this help message and exit
+  --arch=ARCH           OS architecture being imported
+  --breed=BREED         the breed being imported
+  --os-version=OS_VERSION
+                        the version being imported
+  --path=PATH           local path or rsync location
+  --name=NAME           name, ex &#39;RHEL-5&#39;
+  --available-as=AVAILABLE_AS
+                        tree is here, don&#39;t mirror
+  --kickstart=KICKSTART_FILE
+                        assign this kickstart file
+  --rsync-flags=RSYNC_FLAGS
+                        pass additional flags to rsync
+</code></pre><blockquote>
+<p>常见参数注释</p>
+</blockquote>
+<pre><code>cobbler check    核对当前设置是否有问题
+cobbler list     列出所有的cobbler元素
+cobbler report   列出元素的详细信息
+cobbler sync     同步配置到数据目录,更改配置最好都要执行下
+cobbler reposync 同步yum仓库
+cobbler distro   查看导入的发行版系统信息
+cobbler system   查看添加的系统信息
+cobbler profile  查看配置信息
+</code></pre><blockquote>
+<p>可单个执行查看帮助信息，例：</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# cobbler distro
+usage
+=====
+cobbler distro add
+cobbler distro copy
+cobbler distro edit
+cobbler distro find
+cobbler distro list
+cobbler distro remove
+cobbler distro rename
+cobbler distro report
+</code></pre><h4 id="导入镜像文件"><a href="#导入镜像文件" class="headerlink" title="导入镜像文件"></a>导入镜像文件</h4><pre><code>#我的CentOS6.6 和CentOS7的ISO文件已经上传到/iso目录，需要使用mount挂载后使用。
+[root@cobbler-9 ~]# mount -o loop /iso/CentOS-6.6-x86_64-bin-DVD1.iso /mnt/
+
+#导入操作系统来自/mnt目录下
+[root@cobbler-9 ~]# cobbler import --path=/mnt --name=CentOS-6.6-x86_64 --arch=x86_64
+task started: 2017-08-15_085536_import
+......
+......
+looking for /var/www/cobbler/ks_mirror/CentOS-6.6-x86_64/repodata/*comps*.xml
+Keeping repodata as-is :/var/www/cobbler/ks_mirror/CentOS-6.6-x86_64/repodata
+*** TASK COMPLETE ***
+
+#参数注释：
+# --path 镜像路径
+# --name 为安装源定义一个名字
+# --arch 指定安装源是32位、64位、ia64, 目前支持的选项有: x86│x86_64│ia64
+# 安装源的唯一标示就是根据name参数来定义，如果重复，系统会提示导入失败。
+#镜像存放目录，cobbler会将镜像中的所有安装文件拷贝到本地一份，放在/var/www/cobbler/ks_mirror下的CentOS-6.6-x86_64目录下。因此/var/www/cobbler目录必须具有足够容纳安装文件的空间。
+</code></pre><blockquote>
+<p>同理，再导入一份CentOS-7.3的操作系统</p>
+</blockquote>
+<pre><code>#先卸载之前的挂载，重新挂载CentOS7
+[root@cobbler-9 ~]# umount /mnt/
+[root@cobbler-9 ~]# mount -o loop /iso/CentOS-7-x86_64-Minimal-1611.iso /mnt
+[root@cobbler-9 ~]# cobbler import --path=/mnt/ --name=CentOS-7.3-x86_64 --arch=x86_64
+task started: 2017-08-15_090352_import
+......
+......
+looking for /var/www/cobbler/ks_mirror/CentOS-7.3-x86_64/repodata/*comps*.xml
+Keeping repodata as-is :/var/www/cobbler/ks_mirror/CentOS-7.3-x86_64/repodata
+*** TASK COMPLETE ***
+</code></pre><blockquote>
+<p>查看镜像列表：</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# cobbler distro list
+CentOS-6.6-x86_64
+CentOS-7.3-x86_64
+</code></pre><blockquote>
+<p>镜像文件位置</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# ls /var/www/cobbler/ks_mirror/
+CentOS-6.6-x86_64  CentOS-7.3-x86_64  config
+</code></pre><blockquote>
+<p>删除指定的镜像</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# cobbler profile remove --name=CentOS-7xxx
+[root@cobbler-9 ~]# cobbler distro remove --name=CentOS-7xxx
+</code></pre><h4 id="指定ks-cfg文件调整内核参数"><a href="#指定ks-cfg文件调整内核参数" class="headerlink" title="指定ks.cfg文件调整内核参数"></a>指定ks.cfg文件调整内核参数</h4><pre><code>Cobbler使用ks.cfg文件来制定所需要的安装配置，分区，网络，主机名等开机优化操作，还可以指定系统安装相应的软件。
+
+CentOS-6.6-x86_64.ks
+CentOS-7.3-x86_64.ks
+配置文件见文章底部；
+</code></pre><blockquote>
+<p>Cobbler的默认ks.cfg文件存放位置</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# ls /var/lib/cobbler/kickstarts/
+default.ks        legacy.ks            sample_esx4.ks   sample_old.seed
+esxi4-ks.cfg      pxerescue.ks         sample_esxi4.ks  sample.seed
+esxi5-ks.cfg      sample_autoyast.xml  sample_esxi5.ks
+install_profiles  sample_end.ks(默认使用的ks文件)        sample.ks
+</code></pre><blockquote>
+<p>检查ks.cfg文件是否有语法错误</p>
+</blockquote>
+<pre><code>[root@cobbler-9]# cd /var/lib/cobbler/kickstarts
+
+[root@cobbler-9 kickstarts]# ksvalidator CentOS-6.6-x86_64.ks
+</code></pre><blockquote>
+<p>上传准备好的cfg 文件到/var/lib/cobbler/kickstarts/路径，并修改distro list镜像对应的cfg文件</p>
+</blockquote>
+<pre><code>[root@cobbler-9 kickstarts]# ls -l CentOS*
+-rw-r--r-- 1 root root 65853 Aug 15 09:13 CentOS-6.6-x86_64.ks
+-rw-r--r-- 1 root root 53180 Aug 15 09:13 CentOS-7.3-x86_64.ks
+
+
+[root@cobbler-9 kickstarts]# cobbler profile edit --name=CentOS-6.6-x86_64 --kickstart=/var/lib/cobbler/kickstarts/CentOS-6.6-x86_64.ks
+[root@cobbler-9 kickstarts]# cobbler profile edit --name=CentOS-7.3-x86_64 --kickstart=/var/lib/cobbler/kickstarts/CentOS-7.3-x86_64.ks
+</code></pre><blockquote>
+<p>CentOS7系统网卡名变成eno…这种，为了运维标准化，我们需要修改为我们常用的eth0，使用下面的参数。但要注意是CentOS7才需要下面的步骤(CentOS6不需要)。</p>
+</blockquote>
+<pre><code>[root@cobbler-9 kickstarts]# cobbler profile edit --name=CentOS-7.3-x86_64 --kopts=&#39;net.ifnames=0 biosdevname=0&#39;
+</code></pre><blockquote>
+<p>查看安装img镜像文件信息</p>
+</blockquote>
+<pre><code>[root@cobbler-9 kickstarts]# cobbler distro report
+Name                           : CentOS-6.6-x86_64    #镜像名称
+Architecture                   : x86_64
+TFTP Boot Files                : {}
+Breed                          : redhat
+Comment                        : 
+Fetchable Files                : {}
+Initrd                         : /var/www/cobbler/ks_mirror/CentOS-6.6-x86_64/imges/pxeboot/initrd.img
+Kernel                         : /var/www/cobbler/ks_mirror/CentOS-6.6-x86_64/imges/pxeboot/vmlinuz
+Kernel Options                 : {}
+Kernel Options (Post Install)  : {}
+Kickstart Metadata             : {&#39;tree&#39;: &#39;http://@@http_server@@/cblr/links/CenOS-6.6-x86_64&#39;}
+Management Classes             : []
+OS Version                     : rhel6
+Owners                         : [&#39;admin&#39;]
+Red Hat Management Key         : &lt;&lt;inherit&gt;&gt;
+Red Hat Management Server      : &lt;&lt;inherit&gt;&gt;
+Template Files                 : {}
+
+Name                           : CentOS-7.3-x86_64    #镜像名称
+Architecture                   : x86_64
+TFTP Boot Files                : {}
+Breed                          : redhat
+Comment                        : 
+Fetchable Files                : {}
+Initrd                         : /var/www/cobbler/ks_mirror/CentOS-7.3-x86_64/imges/pxeboot/initrd.img
+Kernel                         : /var/www/cobbler/ks_mirror/CentOS-7.3-x86_64/imges/pxeboot/vmlinuz
+Kernel Options                 : {}
+Kernel Options (Post Install)  : {}
+Kickstart Metadata             : {&#39;tree&#39;: &#39;http://@@http_server@@/cblr/links/CenOS-7.3-x86_64&#39;}
+Management Classes             : []
+OS Version                     : rhel7
+Owners                         : [&#39;admin&#39;]
+Red Hat Management Key         : &lt;&lt;inherit&gt;&gt;
+Red Hat Management Server      : &lt;&lt;inherit&gt;&gt;
+Template Files                 : {}
+</code></pre><blockquote>
+<p>查看指定的img镜像文件</p>
+</blockquote>
+<pre><code>[root@cobbler-9 kickstarts]# cobbler distro report --name=CentOS-7.3-x86_64
+</code></pre><blockquote>
+<p>查看所有的cfg配置文件内容</p>
+</blockquote>
+<pre><code>[root@cobbler-9 kickstarts]# cobbler profile report
+</code></pre><blockquote>
+<p>可以指定名称查看某一个配置的cfg文件</p>
+</blockquote>
+<pre><code>[root@cobbler-9 kickstarts]# cobbler profile report --name=CentOS-7.3-x86_64
+Name                           : CentOS-7.3-x86_64
+TFTP Boot Files                : {}
+Comment                        : 
+DHCP Tag                       : default
+Distribution                   : CentOS-7.3-x86_64
+Enable gPXE?                   : 0
+Enable PXE Menu?               : 1
+Fetchable Files                : {}
+Kernel Options                 : {&#39;biosdevname&#39;: &#39;0&#39;, &#39;net.ifnames&#39;: &#39;0&#39;}
+Kernel Options (Post Install)  : {}
+Kickstart                      : /var/lib/cobbler/kickstarts/CentOS-7.3-x86_64.cfg
+Kickstart Metadata             : {}
+Management Classes             : []
+Management Parameters          : &lt;&lt;inherit&gt;&gt;
+Name Servers                   : []
+Name Servers Search Path       : []
+Owners                         : [&#39;admin&#39;]
+Parent Profile                 : 
+Internal proxy                 : 
+Red Hat Management Key         : &lt;&lt;inherit&gt;&gt;
+Red Hat Management Server      : &lt;&lt;inherit&gt;&gt;
+Repos                          : []
+Server Override                : &lt;&lt;inherit&gt;&gt;
+Template Files                 : {}
+Virt Auto Boot                 : 1
+Virt Bridge                    : xenbr0
+Virt CPUs                      : 1
+Virt Disk Driver Type          : raw
+Virt File Size(GB)             : 5
+Virt Path                      : 
+Virt RAM (MB)                  : 512
+Virt Type                      : kvm
+</code></pre><blockquote>
+<p>每次修改为都要执行一次同步</p>
+</blockquote>
+<pre><code>[root@cobbler-9 kickstarts]# cobbler sync
+</code></pre><h4 id="部署操作系统"><a href="#部署操作系统" class="headerlink" title="部署操作系统"></a>部署操作系统</h4><blockquote>
+<p>1) 使用一台物理机，与cobbler服务器在同一个局域网，然后开机按F12通过网络启动即可。</p>
+<p>2) 自动化安装完成后，登陆操作系统检查配置。</p>
+</blockquote>
+<h4 id="自定义登陆界面"><a href="#自定义登陆界面" class="headerlink" title="自定义登陆界面"></a>自定义登陆界面</h4><blockquote>
+<p>打个广告</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# vim /etc/cobbler/pxe/pxedefault.template
+修改第3行内容
+MENU TITLE Cobbler | online ks.cfg update date 2017.8.15   
+
+注：企业中一般会以ks.cfg文件作为服务器操作系统初始化标准，所以可以把广告改为文件更新日期，有利于维护
+</code></pre><blockquote>
+<p>每次修改为都需要执行一次同步</p>
+</blockquote>
+<pre><code>[root@cobbler-9 ~]# cobbler sync
+</code></pre><blockquote>
+<p>效果图类似</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cobbler-%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA.jpg" alt="自定义信息" title="">
+                </div>
+                <div class="image-caption">自定义信息</div>
+            </figure>
+<h4 id="Cobbler-web使用"><a href="#Cobbler-web使用" class="headerlink" title="Cobbler web使用"></a>Cobbler web使用</h4><blockquote>
+<p>重置cobbler账号的密码</p>
+</blockquote>
+<pre><code>htdigest /etc/cobbler/users.digest &quot;Cobbler&quot; root
+</code></pre><blockquote>
+<p>新建用户</p>
+</blockquote>
+<pre><code>htdigest /etc/cobbler/users.digest &quot;Cobbler&quot; your_newname
+</code></pre><blockquote>
+<p>访问cobbler页面</p>
+</blockquote>
+<pre><code>https://cobbler_server_ip/cobbler_web
+</code></pre><h4 id="定制化安装"><a href="#定制化安装" class="headerlink" title="*定制化安装"></a>*定制化安装</h4><pre><code>1. Cobbler支持设备的物理MAC地址来区分设备，针对不同设备安装操作系统
+2. 查看服务器MAC地址，并牢记
+3. Cobbler可以自定义配置网络接口，通过system来固定机器的IP、掩码、网关、DNS、主机名、等等实现基础环境标准化
+
+[root@cobbler-9 kickstarts]# cobbler system add --name=linux-Centos7.3-online --mac=00:50:56:38:F3:C5 --profile=CentOS-7.3-x86_64 \
+--ip-address=10.10.0.10 --subnet=255.255.255.0 --gateway=10.10.0.1 --interface=eth0 \
+--static=1 --hostname=centos7.3 --name-servers=&quot;10.10.0.1&quot; \
+--kickstart=/var/lib/cobbler/kickstarts/CentOS-7.3-x86_64.ks
+#--name 自定义，但不能重复
+</code></pre><blockquote>
+<p>查看定义的列表</p>
+</blockquote>
+<pre><code>[root@linux-node1 ~]# cobbler system list
+linux-Centos7.3-online
+</code></pre><blockquote>
+<p>打开MAC地址为”00:50:56:38:F3:C5”的机器发现会自动安装预选的操作系统</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mac_auto.jpg" alt="macauto" title="">
+                </div>
+                <div class="image-caption">macauto</div>
+            </figure>
+<blockquote>
+<p>检查新安装的设备，IP、掩码、网关、DNS、主机名、等等配置发现与预设的信息一致。</p>
+</blockquote>
+<h4 id="指定设备系统重装-在需要重装系统的机器上面操作"><a href="#指定设备系统重装-在需要重装系统的机器上面操作" class="headerlink" title="*指定设备系统重装(在需要重装系统的机器上面操作)"></a>*指定设备系统重装(在需要重装系统的机器上面操作)</h4><blockquote>
+<p>有些需要重新安装的系统希望reboot后自动重装</p>
+</blockquote>
+<pre><code>在需要重装的机器上面！！！安装koan
+
+安装yum源
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+yum clean all &amp;&amp; yum makecache
+
+yum install -y koan
+</code></pre><blockquote>
+<p>检查在Cobbler上面有可选择的img</p>
+</blockquote>
+<pre><code>[root@linux-node2 ~]# koan --server=10.10.1.10 --list=profiles
+\- looking for Cobbler at http://10.10.1.10:80/cobbler_api
+CentOS-6.6-x86_64
+CentOS-7.2-x86_64
+</code></pre><blockquote>
+<p>指定要选择重装的系统</p>
+</blockquote>
+<pre><code>[root@linux-node2 ~]# koan --replace-self --server=10.10.1.10 --profile=CentOS-6.6-x86_64
+
+\- looking for Cobbler at http://10.10.1.10:80/cobbler_api
+\- reading URL: http://10.10.1.10/cblr/svc/op/ks/profile/CentOS-6.6-x86_64
+install_tree: http://10.10.1.10/cblr/links/CentOS-6.6-x86_64
+downloading initrd initrd.img to /boot/initrd.img_koan
+url=http://10.10.1.10/cobbler/images/CentOS-6.6-x86_64/initrd.img
+\- reading URL: http://10.10.1.10/cobbler/images/CentOS-6.6-x86_64/initrd.img
+downloading kernel vmlinuz to /boot/vmlinuz_koan
+url=http://10.10.1.10/cobbler/images/CentOS-6.6-x86_64/vmlinuz
+\- reading URL: http://10.10.1.10/cobbler/images/CentOS-6.6-x86_64/vmlinuz
+\- [&#39;/sbin/grubby&#39;, &#39;--add-kernel&#39;, &#39;/boot/vmlinuz_koan&#39;, &#39;--initrd&#39;, &#39;/boot/initrd.img_koan&#39;, &#39;--args&#39;, &#39;&quot;ks=http://10.10.1.10/cblr/svc/op/ks/profile/CentOS-6.6-x86_64 ksdevice=link kssendmac lang= text &quot;&#39;, &#39;--copy-default&#39;, &#39;--make-default&#39;, &#39;--title=kick1464941350&#39;]
+\- [&#39;/sbin/grubby&#39;, &#39;--update-kernel&#39;, &#39;/boot/vmlinuz_koan&#39;, &#39;--remove-args=root&#39;]
+\- reboot to apply changes
+</code></pre><blockquote>
+<p>重启需要重装的系统,发现系统已经按照指定的镜像重新安装为CentOS6.6操作系统</p>
+</blockquote>
+<pre><code>[root@linux-node2 ~]# reboot
+</code></pre><h4 id="ks附件"><a href="#ks附件" class="headerlink" title="*.ks附件"></a>*.ks附件</h4><p>centos_6.6.ks [注：ks文件内不允许出现中文，即便是注释]</p>
+<pre><code>#Install OS
+install
+
+#Use network installation
+url --url=&quot;http://10.10.0.10/cobbler/ks_mirror/CentOS-6.6-x86_64/&quot;
+
+#System language
+lang zh_CN.UTF-8
+
+#System keyboard
+keyboard us
+
+#System timezone
+timezone --utc Asia/Shanghai
+
+#SELinux configuration
+selinux --disabled
+firewall --disabled
+
+#Reboot after installation
+reboot
+
+
+#System authentication method
+authconfig --useshadow --passalgo=sha512
+
+#Root password
+#Use command [grub-crypt --sha-512] to generate a password.
+rootpw --iscrypted $6$H3I9mtaYtcKyOCwd$oquT.LoIPqF9Tk3l1g9Z4uD1GRvOp80.q/AFyfx86XaZgddcs.qF1I4K9.qSMpo/AC4YcdBe8ftSMBgyq1b/R1
+
+#System bootloader configuration(Greater than 2T using GPT)
+#bootloader --location=gpt --driveorder=sda
+bootloader --location=mbr --driveorder=sda
+
+#Text mode installation
+text
+
+#Do not configure the X Window System
+skipx
+
+#The system does not configure user information after the first startup
+firstboot --disabled
+
+#Clear the Master Boot Record
+zerombr
+
+#Clean the system partition before installing the system
+clearpart --all --initlabel
+
+#Disk partitioning information
+part  /boot  --fstype=&quot;ext4&quot; --size=100  --ondisk=sda
+part  swap  --fstype=&quot;swap&quot; --size=8192 --ondisk=sda
+part  /   --fstype=&quot;ext4&quot; --grow  --size=1 --ondisk=sda
+
+#Network configuration information
+network --bootproto=dhcp --device=em1 --onboot=on
+network --bootproto=dhcp --device=em2 --onboot=on
+network --bootproto=dhcp --device=em3
+network --bootproto=dhcp --device=em4
+
+
+%packages
+@chinese-support
+@core
+@server-policy
+@workstation-policy
+@system-management-snmp
+bind-utils
+lrzsz
+vim-enhanced
+%end
+
+
+#Configure the yum source 
+%post
+
+id lustlost &amp;&gt;; /dev/null || useradd mongo
+echo 123456 | passwd –stdin mongo
+
+cat &gt;&gt; /etc/yum.repos.d/base.repo &lt;&lt; eof 
+[base] 
+name=baseserver 
+baseurl=http://192.168.1.254/yum 
+gpgcheck=0 
+enable=1 
+eof   
+
+
+%end
+</code></pre><p>centos_7.x.ks</p>
+<pre><code>#version=CentOS7.x by garywu. - 2017.08.23
+
+install
+
+# url
+url --url=&quot;http://10.10.0.10/cobbler/ks_mirror/CentOS-7.3-x86_64/&quot;
+
+# Keyboard layouts
+keyboard us
+
+# System language
+lang zh_CN.UTF-8
+
+# System timezone
+timezone --utc Asia/Shanghai
+
+
+# Reboot after installation
+reboot
+
+# Run the Setup Agent on first boot
+firstboot --disable
+ignoredisk --only-use=sda
+
+# Initialize the logging level
+logging --level=info
+
+# Root password
+rootpw --iscrypted $6$H3I9mtaYtcFyOCwd$oquO.LoIRqY9Tk3l1g9Z4uD1FRvOp80.q/AFyfx86XaZgdKcs.qF1I4K9.qSMpo/AC4YcdBe8ftSMBgyq1b/R1
+
+
+# Firewall configuration
+firewall --disabled
+selinux --disabled
+
+# System authorization information
+authconfig --enableshadow --passalgo=sha512
+
+
+# Do not configure the X Window System
+skipx
+text
+
+
+# clear the source data.
+zerombr
+clearpart --all --initlabel
+
+# System bootloader configuration
+bootloader --location=mbr
+
+# Disk partitioning information
+part /boot --fstype=&quot;ext4&quot; --size=500
+part swap --fstype=&quot;swap&quot; --size=8092
+part / --fstype=&quot;ext4&quot; --grow --size=1
+
+
+# Network information
+#network --bootproto=dhcp --device=em1 --onboot=off --ipv6=auto
+#network --bootproto=dhcp --device=em2 --onboot=off --ipv6=auto
+#network --hostname=localhost.localdomain
+
+%packages
+bind-utils
+lrzsz
+vim*
+%end
+
+%post
+systemctl disable postfix.service
+%end
+</code></pre><p>注：</p>
+<ol>
+<li>上面的 %post …… %end,意思是可以在系统啥的都配置完之后，最后执行一些命令，比如添加epel源或者检查用户是否存在，如果不存在则创建用户</li>
+<li>通过cat方式追加文本，如果文本中包含特殊字符比如: “$” , 需要在其前面加转义符”\”。否则变量会丢失。</li>
+<li>CentOS7系统中，mbr可以识别2TB以上的硬盘，并且没有gpt一说，所以分区格式使用mbr即可。</li>
+</ol>
+<p>最后感谢感谢老男孩、赵班长、徐布斯的付出，<a href="https://github.com/congto/cobbler-1" target="_blank" rel="noopener">原文</a></p>
+<h4 id="关于包组"><a href="#关于包组" class="headerlink" title="关于包组"></a>关于包组</h4><pre><code>如果不清楚要安装哪些包组，需要使用system-config-kickstart命令配合X windows环境进行配置ks文件查看。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-08-24T05:31:46.282Z" itemprop="dateUpdated">2017-08-24 13:31:46</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/15/Cobbler自动化系统部署/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cobbler/">Cobbler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PXE/">PXE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自动化/">自动化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/&title=《Cobbler自动化系统部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/&title=《Cobbler自动化系统部署》 — Gary Wu&source=
+Cobbler是一个Linux服务器安装的服务，可以通过网络启动(PXE)的方式来快速安装、重装物理服务器和虚拟机，同时还可以管理DHCP，DNS等。C..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Cobbler自动化系统部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/18/ip自动配置脚本/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ip自动配置脚本</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/12/rsync-全网备份项目/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">rsync-全网备份项目</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/&title=《Cobbler自动化系统部署》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/&title=《Cobbler自动化系统部署》 — Gary Wu&source=
+Cobbler是一个Linux服务器安装的服务，可以通过网络启动(PXE)的方式来快速安装、重装物理服务器和虚拟机，同时还可以管理DHCP，DNS等。C..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Cobbler自动化系统部署》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/15/Cobbler自动化系统部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

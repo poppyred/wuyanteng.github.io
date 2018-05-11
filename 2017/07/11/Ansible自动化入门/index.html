@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Ansible自动化入门 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Ansible">
+    <meta name="description" content="Ansible特性：  ansible基于Python实现，有Paramiko、PyYAML、Jinjia2主要模块 使用SSH连接主机，部署简单 可以使用自定义模块，也可以使用其他语言编写模块，基于模块可以完成各种任务">
+<meta name="keywords" content="Ansible">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ansible自动化入门">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Ansible特性：  ansible基于Python实现，有Paramiko、PyYAML、Jinjia2主要模块 使用SSH连接主机，部署简单 可以使用自定义模块，也可以使用其他语言编写模块，基于模块可以完成各种任务">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-11T10:52:58.112Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ansible自动化入门">
+<meta name="twitter:description" content="Ansible特性：  ansible基于Python实现，有Paramiko、PyYAML、Jinjia2主要模块 使用SSH连接主机，部署简单 可以使用自定义模块，也可以使用其他语言编写模块，基于模块可以完成各种任务">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Ansible自动化入门</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Ansible自动化入门</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-11T10:51:21.000Z" itemprop="datePublished" class="page-time">
+  2017-07-11
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装Ansible管理机"><span class="post-toc-number">1.</span> <span class="post-toc-text">安装Ansible管理机</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置Ansible"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置Ansible</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#hosts文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">hosts文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#先尝试输出-hello-world"><span class="post-toc-number">4.</span> <span class="post-toc-text">先尝试输出: hello world</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Ansible模块查询"><span class="post-toc-number">5.</span> <span class="post-toc-text">Ansible模块查询</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Ansible自动化入门"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Ansible自动化入门</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-11 18:51:21" datetime="2017-07-11T10:51:21.000Z"  itemprop="datePublished">2017-07-11</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>Ansible特性：</p>
+<ul>
+<li>ansible基于Python实现，有Paramiko、PyYAML、Jinjia2主要模块</li>
+<li>使用SSH连接主机，部署简单</li>
+<li>可以使用自定义模块，也可以使用其他语言编写模块，基于模块可以完成各种任务</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<h4 id="安装Ansible管理机"><a href="#安装Ansible管理机" class="headerlink" title="安装Ansible管理机"></a>安装Ansible管理机</h4><pre><code> yum install -y epel-release 
+ yum install -y ansible
+ ansible --version
+</code></pre><h4 id="配置Ansible"><a href="#配置Ansible" class="headerlink" title="配置Ansible"></a>配置Ansible</h4><pre><code>Ansible重要的配置文件：
+ansible.cfg: ansible全局配置
+hosts: 是ansible管理的主机列表和部分参数
+</code></pre><p>配置参数-参考(主要是配置hosts文件位置)</p>
+<pre><code># (扩展插件存放目录)
+action_plugins = /usr/share/ansible_plugins/action_plugins 
+# (插入Ansible模板的字符串)
+ansible_managed = Ansible managed: {file} modified on %Y-%m-%d %H:%M:%S by {uid} on {host}
+# （PlayBook是否需要提供密码，默认为No）
+# ask_pass=True
+# （PlayBook是否需要提供sudo 密码）[](http://www.ansible.cn/docs/intro_configuration.html#ask-sudo-pass)
+# ask_sudo_pass=True
+# （回调函数插件存放路径）
+action_plugins = /usr/share/ansible_plugins/action_plugins
+# （连接插件存放路径）
+action_plugins = /usr/share/ansible_plugins/action_plugins
+# （是否展示警告信息）
+deprecation_warnings = True
+# （是否展示跳过的主机的信息）
+# display_skipped_hosts=True
+# （执行错误时候赋予的变量）
+# error_on_undefined_vars=True
+# （默认的Shell）
+# executable = /bin/bash
+# （拦截器插件）
+action_plugins = /usr/share/ansible_plugins/action_plugins
+# （最大进程数）
+forks=5
+# （哈希特性，没事不用去动它）
+# hash_behavior=replace
+# （资产文件存放位置）
+hostfile = /etc/ansible/hosts
+# （是否检查SSH key）
+host_key_checking=True
+# （JinJa扩展）
+jinja2_extensions = jinja2.ext.do,jinja2.ext.i18n
+# （PlayBook变量）
+legacy_playbook_variables = no
+# （Ansible默认库）
+library = /usr/share/ansible
+# （日志路径）
+log_path=/var/log/ansible.log
+# （插件路径）
+action_plugins = /usr/share/ansible_plugins/action_plugins
+# （默认模块名称）
+module_name = command
+# (输出样式)
+nocolor=0
+# (是否使用cowsay打印)
+nocows=0
+# （主机）
+hosts=*
+# （pool间隔）
+poll_interval=15
+# （私钥的存放路径）
+private_key_file=/path/to/file.pem
+# （远程连接端口号）
+remote_port = 22
+# (远程目录临时文件夹)
+remote_temp = $HOME/.ansible/tmp
+# （远程用户）
+remote_user = root
+# （角色路径）
+roles_path = /opt/mysite/roles
+# （SUDO执行）
+sudo_exe=sudo
+# （SUDO标记）
+sudo_flags=-H
+# （sudo用户）
+sudo_user=root
+# （重连次数）
+timeout = 10
+# （传输模式） 默认用的smart
+transport
+# （变量插件存放路径）
+action_plugins = /usr/share/ansible_plugins/action_plugins
+# SSH变量
+# (SSH连接参数)
+ssh_args = -o ControlMaster=auto -o ControlPersist=60s
+# （采用SCP还是SFTP进行文件传输）
+scp_if_ssh=False
+</code></pre><h4 id="hosts文件"><a href="#hosts文件" class="headerlink" title="hosts文件"></a>hosts文件</h4><p>hosts文件是ansible管理主机的Inventory文件，里面存放的是主机组和部分参数</p>
+<p>例如：</p>
+<pre><code>[local]
+127.0.0.2 ansible_ssh_port=22 ansible_user=zing ansible_ssh_pass=
+
+
+# 单独的主机域名
+mail.example.com
+
+#单独的主机ip
+8.8.8.8
+
+[webservers] #主机组的名称
+127.0.0.1 #主机1
+bar.example.com #主机2
+
+[dbservers] #新的主机组
+one.example.com #主机1
+two.example.com #主机2
+three.example.com
+</code></pre><p>port：ssh到目标主机的端口;   user：目标主机将会以这个身份登录;      pass：目标主机该用户的密码<br>中括号内是主机的分组名</p>
+<h4 id="先尝试输出-hello-world"><a href="#先尝试输出-hello-world" class="headerlink" title="先尝试输出: hello world"></a>先尝试输出: hello world</h4><pre><code>[root@cm-master ansible]# ansible 127.0.0.1 -m command -a &#39;echo &quot;hello world&quot;&#39;
+
+[WARNING]: provided hosts list is empty, only localhost is available
+
+127.0.0.1 | SUCCESS | rc=0 &gt;&gt;
+hello world
+
+命令组成：ansible  127.0.0.1  -m command   -a &#39;echo &quot;hello world&quot;&#39;
+         ansible关键字 主机组    指定模块    执行的命令
+</code></pre><pre><code>如果默认的hosts文件中，定义了主机组，也可以将ip换成主机组的名字
+# /etc/ansible/hosts 文件
+[local]
+127.0.0.1
+
+例如：aisible local -m command -a &#39;echo hello world&#39;
+
+local会去hosts文件中找到对应的组，组下的每一台机器都会运行指令。
+
+如果想让所以主机全部执行
+aisible all -m command -a &#39;echo hello world&#39;
+</code></pre><h4 id="Ansible模块查询"><a href="#Ansible模块查询" class="headerlink" title="Ansible模块查询"></a>Ansible模块查询</h4><pre><code># 查询所有模块
+ansible-doc -l
+
+# 查看command模块
+ansible-doc command
+
+# 查看shell 模块
+ansible-doc shell
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-11T10:52:58.112Z" itemprop="dateUpdated">2017-07-11 18:52:58</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/07/11/Ansible自动化入门/" target="_blank" rel="external">https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/&title=《Ansible自动化入门》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/&title=《Ansible自动化入门》 — Gary Wu&source=
+Ansible特性：
+
+ansible基于Python实现，有Paramiko、PyYAML、Jinjia2主要模块
+使用SSH连接主机，部署简单
+可以..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ansible自动化入门》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/11/Ansible常用模块/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Ansible常用模块</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Cloudera_Manager-CDH5.2.0部署</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/&title=《Ansible自动化入门》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/&title=《Ansible自动化入门》 — Gary Wu&source=
+Ansible特性：
+
+ansible基于Python实现，有Paramiko、PyYAML、Jinjia2主要模块
+使用SSH连接主机，部署简单
+可以..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ansible自动化入门》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/07/11/Ansible自动化入门/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

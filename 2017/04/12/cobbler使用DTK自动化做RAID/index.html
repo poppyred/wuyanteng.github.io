@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>cobbler使用DTK自动化做RAID | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,RAID,cobbler,DTK,raidcfg">
+    <meta name="description" content="Dell提供一个叫做DTK(dell openmanage deployment toolkit)的套件, 套件包含了 raidcfg 这个工具。dtk导入cobbler之后，就可以自动化的完成RAID卡的设置；以及自动化完成修改BIOS设置.">
+<meta name="keywords" content="高级运维,RAID,cobbler,DTK,raidcfg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cobbler使用DTK自动化做RAID">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Dell提供一个叫做DTK(dell openmanage deployment toolkit)的套件, 套件包含了 raidcfg 这个工具。dtk导入cobbler之后，就可以自动化的完成RAID卡的设置；以及自动化完成修改BIOS设置.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-17T12:53:12.357Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cobbler使用DTK自动化做RAID">
+<meta name="twitter:description" content="Dell提供一个叫做DTK(dell openmanage deployment toolkit)的套件, 套件包含了 raidcfg 这个工具。dtk导入cobbler之后，就可以自动化的完成RAID卡的设置；以及自动化完成修改BIOS设置.">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">cobbler使用DTK自动化做RAID</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">cobbler使用DTK自动化做RAID</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-12T06:27:50.000Z" itemprop="datePublished" class="page-time">
+  2017-04-12
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#自动化配置RAID"><span class="post-toc-number">1.</span> <span class="post-toc-text">自动化配置RAID</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#下载DTK-ISO镜像"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">下载DTK ISO镜像</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#挂载iso并安装rpm基础包"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">挂载iso并安装rpm基础包</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#了解文件SA-1和SA-2"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">了解文件SA.1和SA.2</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#手动添加dtk所需文件到cobbler启动菜单"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">手动添加dtk所需文件到cobbler启动菜单</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置RAID自动化脚本并与distro进行关联"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">配置RAID自动化脚本并与distro进行关联</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#最后执行cobbler-sync命令"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">最后执行cobbler sync命令</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#导入多个dtk满足不同raid自动化需求"><span class="post-toc-number">2.</span> <span class="post-toc-text">导入多个dtk满足不同raid自动化需求</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#常用RAID脚本"><span class="post-toc-number">3.</span> <span class="post-toc-text">常用RAID脚本</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#附录：RAID参数详解"><span class="post-toc-number">4.</span> <span class="post-toc-text">附录：RAID参数详解</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#raidcfg命令分类"><span class="post-toc-number">5.</span> <span class="post-toc-text">raidcfg命令分类</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#信息输出类"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">信息输出类</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#vdisk操作类"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">vdisk操作类</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#hotspare类"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">hotspare类</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#raid控制类"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">raid控制类</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#通用参数"><span class="post-toc-number">5.5.</span> <span class="post-toc-text">通用参数</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-cobbler使用DTK自动化做RAID"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">cobbler使用DTK自动化做RAID</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-12 14:27:50" datetime="2017-04-12T06:27:50.000Z"  itemprop="datePublished">2017-04-12</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>Dell提供一个叫做DTK(dell openmanage deployment toolkit)的套件, 套件包含了 raidcfg 这个工具。dtk导入cobbler之后，就可以自动化的完成RAID卡的设置；以及自动化完成修改BIOS设置.
+</code></pre><a id="more"></a>
+<h4 id="自动化配置RAID"><a href="#自动化配置RAID" class="headerlink" title="自动化配置RAID"></a>自动化配置RAID</h4><h5 id="下载DTK-ISO镜像"><a href="#下载DTK-ISO镜像" class="headerlink" title="下载DTK ISO镜像"></a>下载DTK ISO镜像</h5><p>  下载: <a href="https://www.dell.com/support/home/us/en/04/Drivers/DriversDetails?driverId=GYHHX" target="_blank" rel="noopener">DTK_v5.3(最新版)</a></p>
+<h5 id="挂载iso并安装rpm基础包"><a href="#挂载iso并安装rpm基础包" class="headerlink" title="挂载iso并安装rpm基础包"></a>挂载iso并安装rpm基础包</h5><pre><code>mount -o loop dtk_5.3.0_1908_Linux64_A00.iso /mnt
+cd /mnt/RPMs/rhel7/x86_64
+ls        
+
+#注:以下包安装有前后顺序
+yum install -y srvadmin*
+yum install -y raidcfg-5.3.0-1908.9058.el7.x86_64.rpm
+yum install -y syscfg-5.3.0-1908.9058.el7.x86_64.rpm
+yum install -y dtk-scripts-5.3.0-1908.9058.el7.x86_64.rpm
+
+命令软链
+ln -sv /opt/dell/toolkit/bin/raidcfg /usr/sbin/raidcfg
+
+注：我的cobbler部署在了CentOS7上，所以需要进入rhel7目录。
+</code></pre><h5 id="了解文件SA-1和SA-2"><a href="#了解文件SA-1和SA-2" class="headerlink" title="了解文件SA.1和SA.2"></a>了解文件SA.1和SA.2</h5><pre><code># ls -lh /mnt/isolinux/
+......
+-r--r--r-- 1 root root 4.0M Feb 15  2016 SA.1
+-r--r--r-- 1 root root 158M Feb 15  2016 SA.2
+......
+
+# file /mnt/isolinux/SA.1 
+# file /mnt/isolinux/SA.2
+
+上面可以看到有两个文件SA.1和SA.2, 这两个文件分别是kernel和initrd文件,稍后导入到cobbler的时候会用到它们。
+</code></pre><h5 id="手动添加dtk所需文件到cobbler启动菜单"><a href="#手动添加dtk所需文件到cobbler启动菜单" class="headerlink" title="手动添加dtk所需文件到cobbler启动菜单"></a>手动添加dtk所需文件到cobbler启动菜单</h5><pre><code>拷贝SA.1和SA.2到/var/www/cobbler/ks_mirror/目录中
+# mkdir /var/www/cobbler/ks_mirror/dtk5.3_raid5_n3x1/
+# cp /mnt/isolinux/SA* /var/www/cobbler/ks_mirror/dtk5.3_raid5_n3x1
+
+将dtk导入到cobbler
+# cobbler distro add --name=dtk5.3_raid5_n3x1 --kernel=/var/www/cobbler/ks_mirror/dtk5.3_raid5_n3x1/SA.1 --initrd=/var/www/cobbler/ks_mirror/dtk5.3_raid5_n3x1/SA.2
+# cobbler profile add --name=dtk5.3_raid5_n3x1 --distro=dtk5.3_raid5_n3x1
+注: name名称定义为&quot;dtk5.3_raid5_n3x1&quot;原因是便于识别,即3块盘做1组RAID5。
+
+查看确认
+# cobbler profile list 
+# cobbler distro list
+</code></pre><h5 id="配置RAID自动化脚本并与distro进行关联"><a href="#配置RAID自动化脚本并与distro进行关联" class="headerlink" title="配置RAID自动化脚本并与distro进行关联"></a>配置RAID自动化脚本并与distro进行关联</h5><pre><code>创建raid脚本文件存放目录
+mkdir /var/lib/tftpboot/raidcfg/raid5_n3x1  
+
+接下来配置raid5.sh脚本
+vim /var/lib/tftpboot/raidcfg/raid5_n3x1/raid5_n3x1.sh  内容如下：
+
+##-----------脚本内容开始-------------------------
+#!/bin/bash
+
+cat &gt;&gt; /tmp/raid5.ini &lt;&lt;EOF
+[vdisk0]
+controllerid=0
+raid=5
+readpolicy=nra
+writepolicy=wt
+stripesize=64
+cachepolicy=e
+adisk=0:0:1,0:1:1,0:2:1
+EOF
+
+echo &quot;…………. reset all disks ………….&quot;   
+raidcfg -ctrl -c=0 -ac=rst
+echo &quot;………. 3 disks for raid5  ……….&quot;
+raidcfg -i=/tmp/raid5.ini
+echo &quot;…………… fast init ……………&quot;
+raidcfg -vd -c=0 -vd=0 -ac=fi 
+echo &quot;…………… RAID5 is created, this is server will be shutdown... ……………&quot;
+shutdown
+##-------------脚本内容结束-----------------------
+
+脚本含义：
+首先使用raidcfg命令reset控制器，删除所有原有RAID配置，将磁盘置为&quot;JBOD&quot;模式。然后再次调用raidcfg，创建RAID5。创建好RAID之后，让系统重启(如果写shutdown则关机)
+
+chmod 755 /var/lib/tftpboot/raidcfg/raid5_n3x1/raid5_n3x1.sh
+注：cobbler服务器千万不要运行这个脚本,你懂得
+</code></pre><pre><code>把raid5脚本与distro进行关联
+cobbler distro edit --name=dtk5.3_raid5_n3x1  --kopts=&quot;share_type=tftp share_location=/raidcfg/dtk5.3_raid5_n3x1 share_script=dtk5.3_raid5_n3x1.sh tftp_ip=x.x.x.x&quot;
+
+注: 这条命令修改的配置文件是/var/lib/tftpboot/pxelinux.cfg/default
+</code></pre><h5 id="最后执行cobbler-sync命令"><a href="#最后执行cobbler-sync命令" class="headerlink" title="最后执行cobbler sync命令"></a>最后执行cobbler sync命令</h5><pre><code>最后执行命令: cobbler sync
+目的：保存配置
+</code></pre><h4 id="导入多个dtk满足不同raid自动化需求"><a href="#导入多个dtk满足不同raid自动化需求" class="headerlink" title="导入多个dtk满足不同raid自动化需求"></a>导入多个dtk满足不同raid自动化需求</h4><pre><code>例如：Dell R720,8块盘满配，4块一组RAID5，做两组。
+
+mount -o loop dtk_5.3.0_1908_Linux64_A00.iso /mnt
+cd /var/www/cobbler/ks_mirror/
+mkdir dtk5.3_raid5_n4x2
+cp /mnt/isolinux/SA* dtk5.3_raid5_n4x2/
+cd dtk5.3_raid5_n4x2/ &amp;&amp; ls
+
+cobbler distro add --name=dtk5.3_raid5_n4x2 --kernel=/var/www/cobbler/ks_mirror/dtk5.3_raid5_n4x2/SA.1 --initrd=/var/www/cobbler/ks_mirror/dtk5.3_raid5_n4x2/SA.2
+
+cobbler profile add --name=dtk5.3_raid5_n4x2 --distro=dtk5.3_raid5_n4x2
+cobbler profile list
+cobbler distro list
+
+cd /var/lib/tftpboot/raidcfg/
+mkdir raid5_n4x2
+
+接下来配置raid5_n4x2.sh脚本
+vim /var/lib/tftpboot/raidcfg/raid5/raid5_n4x2.sh
+(略)
+chmod 755 /var/lib/tftpboot/raidcfg/raid5/raid5_n4x2.sh
+
+cobbler distro edit --name=dtk5.3_raid5_n4x2  --kopts=&quot;share_type=tftp share_location=/raidcfg/raid5_n4x2 share_script=raid5_n4x2.sh tftp_ip=x.x.x.x&quot;
+
+cobbler sync
+</code></pre><h4 id="常用RAID脚本"><a href="#常用RAID脚本" class="headerlink" title="常用RAID脚本"></a>常用RAID脚本</h4><p>raid5-3块盘/组</p>
+<pre><code>cat &gt;&gt; /tmp/raid5.ini &lt;&lt;EOF
+[vdisk0]
+controllerid=0
+raid=5
+readpolicy=nra
+writepolicy=wt
+stripesize=64
+cachepolicy=e
+adisk=0:0:1,0:1:1,0:2:1
+EOF
+
+echo &quot;…………. reset Other Raid ………….&quot;
+raidcfg -ctrl -c=0 -ac=fgnclr
+echo &quot;…………. reset all disks ………….&quot;   
+raidcfg -ctrl -c=0 -ac=rst
+echo &quot;………. 3 disks for raid5  ……….&quot;
+raidcfg -i=/tmp/raid5.ini
+echo &quot;…………… fast init ……………&quot;
+raidcfg -vd -c=0 -vd=0 -ac=fi 
+echo &quot;…………… RAID5 is created, this is server will be shutdown... ……………&quot;
+shutdown
+</code></pre><p>2组raid5-4块盘/组(Dell R720)</p>
+<pre><code>#!/bin/bash
+
+cat &gt;&gt; /tmp/raid5_n4x2.ini &lt;&lt;EOF
+[vdisk0]
+controllerid=0
+raid=5
+readpolicy=nra
+writepolicy=wt
+stripesize=64
+cachepolicy=e
+adisk=0:0:1,0:1:1,0:2:1,0:3:1
+
+[vdisk1]
+controllerid=0
+raid=5
+readpolicy=nra
+writepolicy=wt
+stripesize=64
+cachepolicy=e
+adisk=0:4:1,0:5:1,0:6:1,0:7:1
+
+EOF
+
+echo &quot;………….reset Other Raid ………….&quot;
+raidcfg -ctrl -c=0 -ac=fgnclr
+echo &quot;…………. reset all disks ………….&quot;
+raidcfg -ctrl -c=0 -ac=rst
+echo &quot;………. 4 disks for raid5  ……….&quot;
+raidcfg -i=/tmp/raid5_n4x2.ini
+echo &quot;…………… fast init ……………&quot;
+raidcfg -vd -c=0 -vd=0 -ac=fi 
+raidcfg -vd -c=0 -vd=1 -ac=fi 
+echo &quot;…………… This is server will be shutdown... ……………&quot;
+shutdown
+
+注：
+1.多组Raid下，controllerid都配置为0，因为共属于一个控制器，而vdisk可以有多个，如[vdisk=0]、[vdisk=1]
+2.多组Raid与硬盘容量无关，只需保证每组RAID容量一致即可。
+3.若原硬盘已有RAID信息, 这条指令可以清除：raidcfg -ctrl -c=0 -ac=fgnclr
+</code></pre><p>raid5_n3x1+raid0_n1x1</p>
+<pre><code>#!/bin/bash
+
+cat &gt;&gt; /tmp/raid5_n3x1+raid0_n1x1.ini &lt;&lt;EOF
+[vdisk0]
+controllerid=0
+raid=5
+readpolicy=nra
+writepolicy=wt
+stripesize=64
+cachepolicy=e
+adisk=0:0:1,0:1:1,0:2:1
+
+[vdisk1]
+controllerid=0
+raid=0
+readpolicy=nra
+writepolicy=wt
+stripesize=64
+cachepolicy=e
+adisk=0:3:1
+
+EOF
+
+echo &quot;………….reset Other Raid ………….&quot;
+raidcfg -ctrl -c=0 -ac=fgnclr
+echo &quot;…………. reset all disks ………….&quot;
+raidcfg -ctrl -c=0 -ac=rst
+echo &quot;………. raid5 + raid0  ……….&quot;
+raidcfg -i=/tmp/raid5_n3x1+raid0_n1x1.ini
+echo &quot;…………… fast init ……………&quot;
+raidcfg -vd -c=0 -vd=0 -ac=fi 
+raidcfg -vd -c=0 -vd=1 -ac=fi 
+echo &quot;…………… RAID is created, this is server will be shutdown... ……………&quot;
+shutdown
+</code></pre><h4 id="附录：RAID参数详解"><a href="#附录：RAID参数详解" class="headerlink" title="附录：RAID参数详解"></a>附录：RAID参数详解</h4><pre><code>上面这些指令从哪儿来？
+raidcfg -h 帮助都有使用方法，常用的如下：
+
+controller 简写为 -ctrl
+action 简写为 -ac
+controllerid 简写为 -c
+adisk, pdisk 简写为 -ad, -pd
+raid 简写为 -r
+size 简写为 -sz
+stripsize 简写为 -ssz
+cachepolicy 简写为 -cp
+writepolicy 简写为 -wp
+readpolicy 简写为 -rp
+vdisk 简写为 -vd
+</code></pre><h4 id="raidcfg命令分类"><a href="#raidcfg命令分类" class="headerlink" title="raidcfg命令分类"></a>raidcfg命令分类</h4><h5 id="信息输出类"><a href="#信息输出类" class="headerlink" title="信息输出类"></a>信息输出类</h5><pre><code>#列出所有RAID控制器信息
+raidcfg &lt;-ctrl&gt;
+
+#列出指定ID的RAID控制器信息
+raidcfg &lt;-ctrl&gt; [-c=ID]
+
+#显示指定控制器上的所有物理磁盘信息
+raidcfg &lt;-ad|-pd&gt; &lt;-c=ID&gt;
+
+#显示指定控制器指定vdisk上的所有物理磁盘信息
+raidcfg &lt;-ad|-pd&gt; &lt;-c=ID&gt; [-vd=ID]
+
+#显示具体某块物理磁盘的信息
+raidcfg &lt;-ad|-pd&gt; &lt;-c=ID&gt; [-ad=ch:targ[:encl],ch:targ[:encl],...]
+
+#显示所有控制器上的所有vdisk信息
+raidcfg &lt;-vd&gt;
+
+#显示指定控制器上的所有vdisk信息
+raidcfg &lt;-vd&gt; [-c=ID]
+
+#显示指定控制器上的指定vdisk信息
+raidcfg &lt;-vd&gt; &lt;-c=ID&gt; [-vd=ID]
+
+#将系统函数调用的返回值赋予用户指定的环境变量
+raidcfg &lt;-se&gt; &lt;-envn=string&gt; &lt;-envc=function&gt; [-f=filename]
+        Function Calls: getcontrollerslots.
+
+#将系统函数调用的返回值赋予用户指定的环境变量
+raidcfg &lt;-se&gt; &lt;-envn=string&gt; &lt;-envc=function&gt; &lt;-c=ID&gt; [-f=filename]
+        Function Calls:getfirmware,getcontrollertype,getadisks,getadiskcount,getfreeadisks, getfreeadiskcount,getfreeadisksize,gethotspares.
+</code></pre><h5 id="vdisk操作类"><a href="#vdisk操作类" class="headerlink" title="vdisk操作类"></a>vdisk操作类</h5><pre><code>#创建vdisk
+raidcfg &lt;-ctrl&gt; &lt;-ac=cvd&gt; &lt;-c=ID&gt; &lt;-ad|-pd=ch:targ[:encl],ch:targ[:encl], ...&gt;
+        [-r=n] [-sz=n] [-ssz=n] [-cp=d | e]
+        [-rp=ra | ara | nra | rc | nrc] [-wp=wb | wt | fwb | wc | nwc]
+        [-fd=ch:targ,ch:targ,...] [-str=number] [-sp=number]
+
+#删除指定控制器上的所有vdisk
+raidcfg &lt;-vd&gt; &lt;-ac=dvd&gt; &lt;-c=ID&gt;
+
+#删除指定控制器上的指定vdisk
+raidcfg &lt;-vd&gt; &lt;-ac=dvd&gt; &lt;-c=ID&gt; [-vd=ID]
+
+#对指定控制器上的vdisk执行快速初始化
+raidcfg &lt;-vd&gt; &lt;-c=ID&gt; &lt;-vd=ID&gt; &lt;-ac=fi&gt;
+
+#对指定控制器上的vdisk执行完全(慢速)初始化
+raidcfg &lt;-vd&gt; &lt;-c=ID&gt; &lt;-vd=ID&gt; &lt;-ac=sli&gt;
+
+#取消指定vdisk的完全(慢速)初始化
+raidcfg &lt;-vd&gt; &lt;-c=ID&gt; &lt;-vd=ID&gt; &lt;-ac=ci&gt;
+</code></pre><h5 id="hotspare类"><a href="#hotspare类" class="headerlink" title="hotspare类"></a>hotspare类</h5><pre><code>#分配全局hotspare磁盘
+raidcfg &lt;-ctrl&gt; &lt;-ac=sghs&gt; &lt;-c=ID&gt; &lt;-ad|-pd=ch:targ[:encl]&gt;
+
+#取消分配全局hotspare磁盘
+raidcfg &lt;-ctrl&gt; &lt;-ac=rghs&gt; &lt;-c=ID&gt; &lt;-ad|-pd=ch:targ[:encl]&gt;
+
+#在指定控制器上启用Controller Persistent Hot Spare
+raidcfg &lt;-ctrl&gt; &lt;-c=ID&gt; &lt;-ac=ephs&gt;
+
+#在指定控制器上禁用Controller Persistent Hot Spare
+raidcfg &lt;-ctrl&gt; &lt;-c=ID&gt; &lt;-ac=dphs&gt;
+</code></pre><h5 id="raid控制类"><a href="#raid控制类" class="headerlink" title="raid控制类"></a>raid控制类</h5><pre><code>#reset指定控制器
+raidcfg &lt;-ctrl&gt; &lt;-c=ID&gt; &lt;-ac=rst&gt;
+
+#读取所有控制器上的RAID配置信息，输出到指定的ini文件
+raidcfg &lt;-o=filename&gt;
+
+#读取指定的ini文件,在配置文件指定的制器上创建RAID
+raidcfg &lt;-i=filename&gt;
+
+#在指定控制器上导入外部RAID配置信息
+raidcfg &lt;-ctrl&gt; &lt;-c=ID&gt; &lt;-ac=fgnimp&gt;
+
+#在指定控制器上清除外部RAID配置信息
+raidcfg &lt;-ctrl&gt; &lt;-c=ID&gt; &lt;-ac=fgnclr&gt;
+
+#在指定控制器上恢复外部RAID配置信息
+raidcfg &lt;-ctrl&gt; &lt;-c=ID&gt; &lt;-ac=fgnrvr&gt;
+</code></pre><h5 id="通用参数"><a href="#通用参数" class="headerlink" title="通用参数"></a>通用参数</h5><pre><code>除了[-ver]之外，可以应用于上边任何命令中:
+
+[-ver]                      -- 显示RAIDCFG版本
+[-l=logfilename]            -- 将输出写入到log文件中
+[-si]                       -- 静默，抑制console输出
+
+应用举例:
+假设系统总共有8块硬盘,前两块146G做RAID1,后5块900G做RAID5,最后一块做全局hotspare
+raidcfg -ctrl -ac=cvd -c=0 -ad=0:0:0,0:1:0 -r=1
+raidcfg -ctrl -ac=cvd -c=0 -ad=0:2:0,0:3:0,0:4:0,0:5:0,0:6:0 -r=5
+raidcfg -ctrl -ac=sghs -c=0 -ad=0:7:0
+</code></pre><p>参考：<a href="http://www.dell.com/support/manuals/us/en/19/dell-opnmang-dplymnt-toolkit-v5.0.1/dtk_cli-v5/creating-virtual-disks?guid=guid-a664bc81-5700-4319-a906-3dcdba8b984a&amp;lang=en-us" target="_blank" rel="noopener">官方参数说明</a></p>
+<p>参考：<a href="http://bbs.chinaunix.net/thread-4092992-1-1.html" target="_blank" rel="noopener">chinaunix</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T12:53:12.357Z" itemprop="dateUpdated">2018-04-17 20:53:12</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/04/12/cobbler使用DTK自动化做RAID/" target="_blank" rel="external">https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DTK/">DTK</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RAID/">RAID</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cobbler/">cobbler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/raidcfg/">raidcfg</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/&title=《cobbler使用DTK自动化做RAID》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/&title=《cobbler使用DTK自动化做RAID》 — Gary Wu&source=Dell提供一个叫做DTK(dell openmanage deployment toolkit)的套件, 套件包含了 raidcfg 这个工具。dtk导..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cobbler使用DTK自动化做RAID》 — Gary Wu&url=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/04/13/cacti配置邮件告警/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">cacti配置邮件短信告警</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/03/Dingo反代Google-DNS/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">dingo反代Goolge DNS</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/&title=《cobbler使用DTK自动化做RAID》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/&title=《cobbler使用DTK自动化做RAID》 — Gary Wu&source=Dell提供一个叫做DTK(dell openmanage deployment toolkit)的套件, 套件包含了 raidcfg 这个工具。dtk导..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cobbler使用DTK自动化做RAID》 — Gary Wu&url=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/04/12/cobbler使用DTK自动化做RAID/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>ansible自动化-实现(较全) | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,自动化,saltstack,ansible,剧本,playbooks,ssh,批量自动化管理">
+    <meta name="description" content="ansible介绍  ansible批量自动化管理软件, 约200-300台机器可以使用ansible来完成自动化。 高于这个数量需要使用性能更强/效率更高的saltstack，而saltstack需要安装相应客户端">
+<meta name="keywords" content="高级运维,自动化,saltstack,ansible,剧本,playbooks,ssh,批量自动化管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ansible自动化-实现(较全)">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="ansible介绍  ansible批量自动化管理软件, 约200-300台机器可以使用ansible来完成自动化。 高于这个数量需要使用性能更强/效率更高的saltstack，而saltstack需要安装相应客户端">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-09-02T10:46:55.916Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ansible自动化-实现(较全)">
+<meta name="twitter:description" content="ansible介绍  ansible批量自动化管理软件, 约200-300台机器可以使用ansible来完成自动化。 高于这个数量需要使用性能更强/效率更高的saltstack，而saltstack需要安装相应客户端">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">ansible自动化-实现(较全)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">ansible自动化-实现(较全)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-02T04:00:09.000Z" itemprop="datePublished" class="page-time">
+  2017-09-02
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ansible-剧本（playbooks）功能"><span class="post-toc-number">1.</span> <span class="post-toc-text">ansible 剧本（playbooks）功能</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-ansible自动化-实现-较全"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">ansible自动化-实现(较全)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-02 12:00:09" datetime="2017-09-02T04:00:09.000Z"  itemprop="datePublished">2017-09-02</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>ansible介绍</p>
+</blockquote>
+<pre><code>ansible批量自动化管理软件, 约200-300台机器可以使用ansible来完成自动化。
+高于这个数量需要使用性能更强/效率更高的saltstack，而saltstack需要安装相应客户端
+</code></pre><a id="more"></a>
+<blockquote>
+<p>官方说明：</p>
+</blockquote>
+<pre><code>ansible软件相关参考链接信息
+http://docs.ansible.com/ansible/intro_installation.html 
+http://www.ansible.com.cn/ 
+http://docs.ansible.com/modules_by_category.html 
+http://www.ansible.cn/docs/
+</code></pre><blockquote>
+<p>控制端-安装ansible</p>
+</blockquote>
+<pre><code>1.安装阿里云epel yum源
+  http://mirrors.aliyun.com/
+
+2.安装ansible
+  yum install -y ansible
+</code></pre><blockquote>
+<p>被控端服务器-安装libselinux-python</p>
+</blockquote>
+<pre><code>所有被管理端需要安装libselinux-python软件
+yum install libselinux-python -y
+</code></pre><blockquote>
+<p>配置文件</p>
+</blockquote>
+<pre><code>[root@web01 ~]# cd /etc/ansible/
+[root@web01 ~]# vim hosts     #添加要管理的服务器，并定义一个组模块，类似于rsync
+[oldboy]
+172.16.1.31
+172.16.1.41
+</code></pre><blockquote>
+<p>ansible命令格式</p>
+</blockquote>
+<pre><code>命令格式：
+ansible  oldboy  -m command   -a &quot;hostname&quot;
+ 命令    主机组    指定模块       要执行的命令
+</code></pre><pre><code>查下命令，执行ansible命令后，没有发生改变，会显示绿色
+执行ansible命令，发生配置改变时，表示黄色
+执行ansible命令，出现异常表示红色
+</code></pre><blockquote>
+<ol>
+<li>command模块（命令模块）</li>
+</ol>
+</blockquote>
+<pre><code>示例: 
+[root@web01 ansible]# ansible oldboy -m command -a &quot;hostname&quot;
+
+172.16.1.41 | SUCCESS | rc=0 &gt;&gt;
+backup
+172.16.1.31 | SUCCESS | rc=0 &gt;&gt;
+nfs01
+
+
+[root@web01 ansible]# ansible oldboy -a &quot;df -h&quot;
+</code></pre><blockquote>
+<ol start="2">
+<li>copy模块 （拷贝文件）</li>
+</ol>
+</blockquote>
+<pre><code>示例：
+ansible oldboy -m copy -a &quot;src=/etc/hosts dest=/tmp/host_oldboy backup=yes&quot;
+ansible oldboy -m copy -a &quot;src=/etc/hosts dest=/tmp/host_oldboy owner=oldboy group=oldboy mode=600&quot;
+
+
+参数：
+backup 文件复制之前，如果目标存在，则先进行备份，再进行拷贝覆盖
+owner=oldboy   定义用户属主（注意：指定的用户需要存在，否则报错）
+group=oldboy 定义用户属组
+mode=600  定义文件权限权限
+
+示例：
+ansible oldboy -m copy -a &quot;src=/etc/hosts dest=/tmp/a/b/c/ backup=yes&quot;
+其中“/tmp/a/b/c/”目录可以没有，ansible可以自动创建。
+
+但是，不能在没有的目录下重命名，比如：
+[错误的命令，仅用于示范]
+ansible oldboy -m copy -a &quot;src=/etc/hosts dest=/tmp/a/b/c/new_hosts backup=yes&quot;
+</code></pre><blockquote>
+<ol start="3">
+<li>shell模块</li>
+</ol>
+</blockquote>
+<pre><code>shell模块--是万能模块,支持正则或特殊符号信息
+比如：
+ansible oldboy -m shell -a &quot;ls -l /etc/*&quot;
+
+##########################################
+先定义一个简单脚本：
+[root@web01 scripts]# cat yum.sh
+#!/bin/bash
+yum install -y htop
+
+脚本分发并给脚本执行权限：
+ansible oldboy -m copy -a &quot;src=/server/scripts/yum.sh dest=/server/scripts/ mode=655&quot;
+远程批量执行脚本
+ansible oldboy -m shell -a &quot;sh /server/scripts/yum.sh&quot;
+</code></pre><blockquote>
+<ol start="4">
+<li>script模块-只能执行脚本</li>
+</ol>
+</blockquote>
+<pre><code># 利用script模块在远程执行本地脚本
+ansible oldboy -m script -a &quot;/server/scripts/yum.sh&quot;   
+
+注:需要使用绝对路径方式执行脚本
+</code></pre><blockquote>
+<p>yum模块</p>
+</blockquote>
+<pre><code>ansible oldboy -m yum -a &quot;name=htop state=installed&quot;
+
+注：
+name=htop 指定安装软件包的名称
+state=installed 指定安装动作
+</code></pre><blockquote>
+<p>service模块</p>
+</blockquote>
+<pre><code>#控制服务的状态信息，比如重启、停止等。
+ansible oldboy -m service -a &quot;name=crond state=stopped enabled=no&quot;
+
+检查：
+ansible oldboy -m shell -a &quot;/etc/init.d/crond status&quot;
+ansible oldboy -m shell -a &quot;chkconfig --list|grep cron&quot;
+
+##########################################################
+state状态选择：running,started,stopped,restarted,reloaded
+enabled开机自启动，yes或no
+</code></pre><blockquote>
+<p>file模块</p>
+</blockquote>
+<pre><code>#创建软连接
+ansible oldboy -m file -a &quot;src=/etc/hosts dest=/tmp/hosts state=link&quot;
+
+参数：
+owner 定义文件/目录属组
+group 定义文件/目录属主
+mode  定义文件/目录权限
+PATH 定义文件/目录路径
+dest 在远端创建文件或目录
+
+sate
+    directory 如果目录不存在就创建目录
+    file   即使文件不存在，也不会被创建
+    link   创建软链接
+    hard   创建硬链接
+    touch  创建文件
+    absent 删除目录、文件或取消链接文件
+</code></pre><blockquote>
+<p>cron模块-定时任务模块</p>
+</blockquote>
+<pre><code>#批量创建定时任务--每天凌晨0点整执行yum.sh脚本
+ansible oldboy -m cron -a &#39;name=install_htop minute=0 hour=0 job=&quot;/bin/sh /server/scripts/yum.sh &amp;&gt;/dev/null&quot;&#39;
+
+#批量删除定时任务
+ansible oldboy -m cron -a &#39;state=absent name=install_htop minute=0 hour=0 job=&quot;/bin/sh /server/scripts/yum.sh &amp;&gt;/dev/null&quot;&#39;
+
+#注释cron任务
+ansible oldboy -m cron -a &#39;name=install_htop minute=0 hour=0 job=&quot;/bin/sh /server/scripts/yum.sh &amp;&gt;/dev/null&quot; disabled=yes&#39;
+
+#启用被注释的cron任务
+ansible oldboy -m cron -a &#39;name=install_htop minute=0 hour=0 job=&quot;/bin/sh /server/scripts/yum.sh &amp;&gt;/dev/null&quot; disabled=no&#39;
+
+name 定义一个cron任务名称。如果不指定名称的话，ansible命令执行多次，会多次追加
+state=absent 删除计划任务
+disabled   注释crontab
+job     指定任务
+minute  分钟,0-59
+hour    小时，0-23
+day     日, 1-31
+month   月, 1-12
+weekday  周, 0-6
+</code></pre><blockquote>
+<p>ping模块</p>
+</blockquote>
+<pre><code>[root@web01 ~]# ansible all -m ping
+172.16.1.41 | SUCCESS =&gt; {
+    &quot;changed&quot;: false, 
+    &quot;ping&quot;: &quot;pong&quot;
+
+注：如果ping正确，则返回结果“pong”
+</code></pre><blockquote>
+<p>查看ansible帮助信息</p>
+</blockquote>
+<pre><code>ansible-doc -s shell  查看指定模块用法
+ansible-doc -l    列出所有模块
+</code></pre><blockquote>
+<p>基于密码方式实现ansible管理</p>
+</blockquote>
+<pre><code>我们上面所有的操作均是基于密钥的管理
+
+如果个别服务器不希望通过密钥来访问，那ansible如何管理呢？
+vim /etc/ansible/hosts 
+172.16.1.31 ansible_ssh_user=root ansible_ssh_pass=123456
+意思是：ansible管理这台31服务器时，使用ssh的root用户登录
+
+
+那么有人可能又说了，密码写在文档里，很不安全，怎么办？
+vim /etc/ansible/hosts 
+172.16.1.31 ansible_ssh_user=root
+这样定义，然后在执行ansible命令的时候，密码自己输入
+</code></pre><h4 id="ansible-剧本（playbooks）功能"><a href="#ansible-剧本（playbooks）功能" class="headerlink" title="ansible 剧本（playbooks）功能"></a>ansible 剧本（playbooks）功能</h4><blockquote>
+<p>剧本格式：</p>
+</blockquote>
+<pre><code>### 剧本的开头，可以不写
+- hosts:空格 all       #此处all表示所有主机，也可以指定主机模块名称
+
+  tasks：
+  - 模块: 要执行的命令 
+</code></pre><p>用于ansible/saltstack编写剧本所使用的语言格式：pyYAML</p>
+<blockquote>
+<p>定义剧本</p>
+</blockquote>
+<pre><code>创建剧本存放目录
+[root@web01 ~]# mkdir /etc/ansible/ansible_playbook
+
+[root@web01 ansible_playbook]# vim cron.yml
+- hosts: all
+  tasks:
+  - cron: name=install_htop minute=0 hour=0 job=&quot;/bin/sh /server/scripts/yum.sh  /dev/null&quot;
+
+
+#执行剧本
+ansible-playbook cron.yml
+</code></pre><blockquote>
+<p>剧本格式检查命令</p>
+</blockquote>
+<pre><code>ansible-playbook --syntax-check cron.yml
+</code></pre><blockquote>
+<p>模拟执行剧本</p>
+</blockquote>
+<pre><code>ansible-playbook -C cron.yml
+</code></pre><blockquote>
+<p>多任务剧本–编写–不同主机多任务</p>
+</blockquote>
+<pre><code># more tasks
+- hosts: 172.16.1.41
+  tasks:
+    - name: cron task
+      cron: name=install_htop minute=0 hour=0 job=&quot;/bin/sh /server/scripts/yum.sh /dev/null&quot;
+
+    - name: hostname task
+      shell: echo $HOSTNAME &gt;&gt;/tmp/hostname.txt
+
+- hosts: 172.16.1.31
+  tasks:
+    - name: yum install nfs-utils task
+      shell: yum install -y nfs-utils rpcbind    
+</code></pre><p>注：- name前面共计4个空格</p>
+<blockquote>
+<p>剧本编写模式</p>
+</blockquote>
+<pre><code>剧本编写方式
+01 多主机单任务编写方式
+02 多主机多任务编写方式
+03 不同主机多任务编写方式
+</code></pre><blockquote>
+<p>环境测试</p>
+</blockquote>
+<pre><code>要求利用ansible剧本安装rsync服务器    
+01. 重新克隆两台主机，一台作为rsync服务端 -台作为rsync客户端
+02. 利用ansible管理主机（编写剧本），部署rsync服务端，与rsync客户端
+03. rsync客户端主机不需分发公钥文件，实现ansible管理    
+</code></pre><pre><code>剧本参考:
+# command play-book
+
+- hosts: 172.16.1.41
+  tasks:
+    - name: step01:install rsync
+      yum: name=rsync state=installed
+    - name: step02:edit rsync conf file
+      copy: src=/etc/ansible/conf/rsync_conf/rsyncd.conf dest=/etc/
+    - name: step03:create rsync user
+      shell: userdel -r rsync &amp;&amp; useradd rsync -s /sbin/nologin -M
+    - name: step04:create auth file
+      copy: src=/etc/ansible/conf/rsync_conf/rsync.password dest=/etc/ mode=600
+    - name: step05:create backup dir
+      file: dest=/backup state=directory owner=rsync group=rsync
+    - name: step06:boot rsync server
+      shell: rsync --daemon
+
+- hosts: 172.16.1.31
+  tasks:
+    - name: step01:set auth info
+      shell: export RSYNC_PASSWORD=oldboy123   #注:ansible定义环境变量不生效，此行无效
+    - name: step02:create auth file
+      copy: src=/etc/ansible/conf/rsync_conf/rsync_client.password dest=/etc/rsync.password mode=600   
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-02T10:46:55.916Z" itemprop="dateUpdated">2017-09-02 18:46:55</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/02/ansible自动化-实现-较全/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ansible/">ansible</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/playbooks/">playbooks</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/saltstack/">saltstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssh/">ssh</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/剧本/">剧本</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/批量自动化管理/">批量自动化管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自动化/">自动化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/&title=《ansible自动化-实现(较全)》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/&title=《ansible自动化-实现(较全)》 — Gary Wu&source=
+ansible介绍
+
+ansible批量自动化管理软件, 约200-300台机器可以使用ansible来完成自动化。
+高于这个数量需要使用性能更强/效率..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ansible自动化-实现(较全)》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/03/ITIL-v3凸显IT服务价值/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ITIL v3凸显IT服务价值</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/02/ssh基于密钥的安全认证/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">ssh基于密钥的安全认证</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/&title=《ansible自动化-实现(较全)》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/&title=《ansible自动化-实现(较全)》 — Gary Wu&source=
+ansible介绍
+
+ansible批量自动化管理软件, 约200-300台机器可以使用ansible来完成自动化。
+高于这个数量需要使用性能更强/效率..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ansible自动化-实现(较全)》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/02/ansible自动化-实现-较全/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>saltstack-jinja2模板-进阶3 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,saltstack,jinja2,模板">
+    <meta name="description" content="什么是Jinja2  Jinja2 是一个 Python 的功能齐全的模板引擎。 它有完整的 unicode 支持，一个可选的集成沙箱执行环境，被广泛使用，以 BSD 许可证授权。">
+<meta name="keywords" content="高级运维,saltstack,jinja2,模板">
+<meta property="og:type" content="article">
+<meta property="og:title" content="saltstack-jinja2模板-进阶3">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="什么是Jinja2  Jinja2 是一个 Python 的功能齐全的模板引擎。 它有完整的 unicode 支持，一个可选的集成沙箱执行环境，被广泛使用，以 BSD 许可证授权。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-19T10:30:16.672Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="saltstack-jinja2模板-进阶3">
+<meta name="twitter:description" content="什么是Jinja2  Jinja2 是一个 Python 的功能齐全的模板引擎。 它有完整的 unicode 支持，一个可选的集成沙箱执行环境，被广泛使用，以 BSD 许可证授权。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">saltstack-jinja2模板-进阶3</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">saltstack-jinja2模板-进阶3</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-19T08:28:18.000Z" itemprop="datePublished" class="page-time">
+  2017-10-19
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Jinja2模板的基本使用"><span class="post-toc-number">1.</span> <span class="post-toc-text">Jinja2模板的基本使用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Jinja2模板的高级使用–监听-“IP-端口”-形式"><span class="post-toc-number">2.</span> <span class="post-toc-text">Jinja2模板的高级使用–监听 “IP:端口” 形式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#附录：在master上查看minion的grains值"><span class="post-toc-number">3.</span> <span class="post-toc-text">附录：在master上查看minion的grains值</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-saltstack-jinja2模板-进阶3"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">saltstack-jinja2模板-进阶3</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-19 16:28:18" datetime="2017-10-19T08:28:18.000Z"  itemprop="datePublished">2017-10-19</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>什么是Jinja2</p>
+</blockquote>
+<pre><code>Jinja2 是一个 Python 的功能齐全的模板引擎。
+它有完整的 unicode 支持，一个可选的集成沙箱执行环境，被广泛使用，以 BSD 许可证授权。
+</code></pre><a id="more"></a>
+<blockquote>
+<p>salt使用Jinja2模板</p>
+</blockquote>
+<pre><code>SaltStack 是使用YAML语言来将sls文件解释成它自己可以识别的内容，Jinja 是一种基于Python的模板引擎，
+在sls文件里可以直接使用 Jinja 模板来做一些操作。
+
+比如当我们需要对多台服务器做一些 Apache 服务配置时，由于每台服务器信息不一样（比如 IP 不同），
+如果为每台服务器去创建 SLS 文件就不太合理，而通过 Jinja 模板则可以用生成变量→读取变量的方式来为每个服务器设置应有的信息。
+</code></pre><blockquote>
+<p>salt使用jinja2模板的三步骤</p>
+</blockquote>
+<pre><code>1. 告诉file模块，要使用jinja
+2. 列出参数列表
+如下：
+apache-config:
+  file.managed:
+    - name: /etc/httpd/conf/httpd.conf
+    - source: salt://lamp/files/httpd.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja      # 1. 增加这行表示开启jinja模板
+    - defaults:            # 2. 下面设定变量的值
+      PORT: 88
+
+3. 文件中模板变量的引用
+   模板里面支持 salt/grains/pillar 进行变量赋值
+</code></pre><!-- more -->
+<h4 id="Jinja2模板的基本使用"><a href="#Jinja2模板的基本使用" class="headerlink" title="Jinja2模板的基本使用"></a>Jinja2模板的基本使用</h4><pre><code>1. 首先修改源文件中需要引用变量的内容。
+   比如: 只修改Apache的端口，需要修改httpd.conf文件中将Listen 80 为Listen {{ PORT }}
+
+2. 对sls文件进行编辑以定义模板并且给变量赋值，vim apache-config.sls
+
+apache-config:
+  file.managed:
+    - name: /etc/httpd/conf/httpd.conf
+    - source: salt://files/httpd.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
+    - defaults:
+      PORT: 8080
+
+
+3. 执行salt命令：salt \* state.sls apache-config
+   结果输出如下：
+   ......
+   #Listen 12.34.56.78:80
+   -Listen 80 
+   +Listen 8080
+   ......
+
+   说明端口已经修改成功！
+</code></pre><!-- more -->
+<h4 id="Jinja2模板的高级使用–监听-“IP-端口”-形式"><a href="#Jinja2模板的高级使用–监听-“IP-端口”-形式" class="headerlink" title="Jinja2模板的高级使用–监听 “IP:端口” 形式"></a>Jinja2模板的高级使用–监听 “IP:端口” 形式</h4><pre><code>在基本使用中由于修改的是端口，端口信息一般是固定的，如果想要修改的信息是每个 minion 自身的 IP 就没办法设置一个通用的信息了， 这个时候需要通过其他方法来获取 minion 相关信息，这里可以使用 Grains 、Pillar 和执行模块三个方法来获取。
+</code></pre><ul>
+<li>用Grains举例</li>
+</ul>
+<pre><code>1. 首先修改源文件中需要引用变量的内容。
+   比如: 只修改Apache的端口，需要修改httpd.conf文件中将Listen 80 为
+   Listen {{ IPADDR }}:{{ PORT }}
+
+2. 对sls文件进行编辑以定义模板并且给变量赋值，vim apache-config.sls
+
+apache-config:
+  file.managed:
+    - name: /etc/httpd/conf/httpd.conf
+    - source: salt://files/httpd.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
+    - defaults:
+      PORT: 8080
+      IPADDR: {{ grains['fqdn_ip4'][0] }}
+
+3. 执行salt命令：salt \* state.sls apache-config
+   ......
+    #Listen 12.34.56.78:80
+    -Listen 8080
+    +Listen 192.168.56.22:80
+
+    出现此类信息说明执行成功！
+</code></pre><pre><code>上面的例子中： IPADDR: {{ grains['fqdn_ip4'][0] }}
+
+注：[fqdn_ip4]代表的是IP，该信息需要先执行 salt &#39;*&#39; grains.items 查询，由于grains查询输出的是列表，会有多个值，需要加上[0]代表取第一个值
+
+另外一点，所有minion节点需要修改/etc/hosts把本机IP地址与主机名正确对应填写，否则执行报错
+</code></pre><h4 id="附录：在master上查看minion的grains值"><a href="#附录：在master上查看minion的grains值" class="headerlink" title="附录：在master上查看minion的grains值"></a>附录：在master上查看minion的grains值</h4><pre><code>salt \* grains.ls       #列出grains的所有key
+salt \* grains.get app  # 查看grains中的app信息
+salt \* grains.get os   #查看grains中的os信息
+salt \* grains.get ipv4 #查看grains的ipv4信息
+salt \* grains.get mem_total  #查看grains中的总内存信息
+......      #只要是grains.ls所列出的项，均可以使用salt \* grains.get命令获取
+
+salt \* grains.items    # 查看所有“树形列出”的grains信息
+salt &#39;*&#39; grains.item os # 获取操作系统名称
+salt &#39;*&#39; grains.item fqdn_ip4  #查看物理网卡IP地址
+salt \* grains.setval hello world    #在master上给minion设置grain键值对
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-10-19T10:30:16.672Z" itemprop="dateUpdated">2017-10-19 18:30:16</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/10/19/saltstack-jinja2模板-进阶3/" target="_blank" rel="external">https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jinja2/">jinja2</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/saltstack/">saltstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模板/">模板</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/&title=《saltstack-jinja2模板-进阶3》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/&title=《saltstack-jinja2模板-进阶3》 — Gary Wu&source=
+什么是Jinja2
+
+Jinja2 是一个 Python 的功能齐全的模板引擎。
+它有完整的 unicode 支持，一个可选的集成沙箱执行环境，被广泛使..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《saltstack-jinja2模板-进阶3》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/21/zabbix-精讲/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">zabbix-精讲</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/18/saltstack进阶学习2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">saltstack进阶学习2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/&title=《saltstack-jinja2模板-进阶3》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/&title=《saltstack-jinja2模板-进阶3》 — Gary Wu&source=
+什么是Jinja2
+
+Jinja2 是一个 Python 的功能齐全的模板引擎。
+它有完整的 unicode 支持，一个可选的集成沙箱执行环境，被广泛使..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《saltstack-jinja2模板-进阶3》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/10/19/saltstack-jinja2模板-进阶3/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

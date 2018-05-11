@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>cacti配置邮件短信告警 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,cacti,邮件告警,短信告警,将Bites转换为Mbits">
+    <meta name="description" content="cacti邮件告警">
+<meta name="keywords" content="高级运维,cacti,邮件告警,短信告警,将Bites转换为Mbits">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cacti配置邮件短信告警">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="cacti邮件告警">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/BitsM.jpg">
+<meta property="og:updated_time" content="2018-04-13T08:32:22.271Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cacti配置邮件短信告警">
+<meta name="twitter:description" content="cacti邮件告警">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/BitsM.jpg">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">cacti配置邮件短信告警</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">cacti配置邮件短信告警</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-13T07:50:38.000Z" itemprop="datePublished" class="page-time">
+  2017-04-13
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#cacti插件安装"><span class="post-toc-number">1.</span> <span class="post-toc-text">cacti插件安装</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#启动插件"><span class="post-toc-number">2.</span> <span class="post-toc-text">启动插件</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置发送邮件信息"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置发送邮件信息</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#将Bitys转换为Mbits-便于设置阈值"><span class="post-toc-number">4.</span> <span class="post-toc-text">将Bitys转换为Mbits,便于设置阈值</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#添加监控对象与报警信息"><span class="post-toc-number">5.</span> <span class="post-toc-text">添加监控对象与报警信息</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#查看报警状态及测试报警"><span class="post-toc-number">6.</span> <span class="post-toc-text">查看报警状态及测试报警</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-cacti配置邮件告警"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">cacti配置邮件短信告警</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-13 15:50:38" datetime="2017-04-13T07:50:38.000Z"  itemprop="datePublished">2017-04-13</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>cacti邮件告警
+</code></pre><a id="more"></a>
+<h5 id="cacti插件安装"><a href="#cacti插件安装" class="headerlink" title="cacti插件安装"></a>cacti插件安装</h5><pre><code>所需插件：
+Setting插件              用于邮件报警
+Thold插件                用于设备异常预警、阀值报警
+monitor插件              主机状态监控
+
+下载插件：
+http://docs.cacti.net/plugin:thold
+http://docs.cacti.net/plugin:settings
+http://docs.cacti.net/plugin:monitor
+
+安装插件：
+tar zxvf thold-v0.5.0.tgz -C /usr/local/nginx/html/cacti/plugins
+tar zxvf settings-v0.71-1.tgz -C /usr/local/nginx/html/cacti/plugins/
+tar zxvf monitor-v1.3-1.tgz -C /usr/local/nginx/html/cacti/plugins/
+
+注册到Cacti页签
+[root@localhost ~]# vi /usr/local/nginx/html/cacti/include/config.php
+$url_path = &quot;/&quot;;    #在这行下面添加如下两行
+$plugins[] = &#39;settings&#39;;
+$plugins[] = &#39;thold&#39;;
+</code></pre><h5 id="启动插件"><a href="#启动插件" class="headerlink" title="启动插件"></a>启动插件</h5><pre><code>登陆Web -- console -- Plugin Management -- 点击向下箭头↓ 来安装插件3个插件 --- 启动插件
+
+之后，Web控制栏会多出一些功能选项
+</code></pre><h5 id="配置发送邮件信息"><a href="#配置发送邮件信息" class="headerlink" title="配置发送邮件信息"></a>配置发送邮件信息</h5><pre><code>console -- Settings -- Mail/DNS 
+
+Test Email：用于发送到这个邮箱做测试
+Mail Services: SMTP
+From Email Address: 填写发送邮箱地址  
+From Name: 填写发送邮箱地址
+SMTP Hostname: exmail.qq.com
+SMTP Port: 25
+SMTP Username: 填写发送邮箱地址
+SMTP Password: 填写邮箱密码
+DNS：114.114.114.114
+</code></pre><h5 id="将Bitys转换为Mbits-便于设置阈值"><a href="#将Bitys转换为Mbits-便于设置阈值" class="headerlink" title="将Bitys转换为Mbits,便于设置阈值"></a>将Bitys转换为Mbits,便于设置阈值</h5><pre><code>默认Cacti报警使用Bites来监控流量的，需要转换成Mbits，这样方便设置阀值。
+
+console -- GraphManagement -- CDEFs -- 填写：Add—Byte to Mbits  添加成如下所示
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/BitsM.jpg" alt="B-Mb" title="">
+                </div>
+                <div class="image-caption">B-Mb</div>
+            </figure>
+<p>#####告警展示在Monitor界面</p>
+<pre><code>console -- settings -- Misc -- 勾选：Show Icon Legend
+</code></pre><h5 id="添加监控对象与报警信息"><a href="#添加监控对象与报警信息" class="headerlink" title="添加监控对象与报警信息"></a>添加监控对象与报警信息</h5><pre><code>console -- Thresholds -- add
+
+Host: 选择对应的HOST
+Graph: 选择要监控的接口
+Data Source: 选择traffic_in或traffic_out
+点击Create创建
+</code></pre><pre><code>接下来分别设置traffic_in和traffic_out, 配置如下：
+
+勾选：Threshold Enabled
+Re-Alert Cycle: Every 30 Minutes   若故障持续存在,30分钟后，重复发送告警。
+Warning High / Low Settings：根据实际情况修改, 这个是高于某个值发警告
+Alert High / Low Settings：   这个严重等级更高
+          High Threshold： 450
+          Low Threshold：0
+          Breach Duration：5 Minutes
+
+
+套用刚才自定义的带宽模板
+Data Type： CDEF
+Threshold CDEF: Byte to Mbits
+
+Alert Emails: 填写收件人邮箱
+Warning Emails: 填写收件人邮箱
+</code></pre><h5 id="查看报警状态及测试报警"><a href="#查看报警状态及测试报警" class="headerlink" title="查看报警状态及测试报警"></a>查看报警状态及测试报警</h5><pre><code>Web控制栏  -- thold
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-13T08:32:22.271Z" itemprop="dateUpdated">2018-04-13 16:32:22</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/04/13/cacti配置邮件告警/" target="_blank" rel="external">https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cacti/">cacti</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/将Bites转换为Mbits/">将Bites转换为Mbits</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/短信告警/">短信告警</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/邮件告警/">邮件告警</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/&title=《cacti配置邮件短信告警》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/&title=《cacti配置邮件短信告警》 — Gary Wu&source=cacti邮件告警
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cacti配置邮件短信告警》 — Gary Wu&url=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/04/17/cobbler使用DTK自动化升级BIOS/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">cobbler使用DTK自动化升级BIOS</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/12/cobbler使用DTK自动化做RAID/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">cobbler使用DTK自动化做RAID</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/&title=《cacti配置邮件短信告警》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/&title=《cacti配置邮件短信告警》 — Gary Wu&source=cacti邮件告警
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cacti配置邮件短信告警》 — Gary Wu&url=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/04/13/cacti配置邮件告警/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>shell高级编程-进阶2 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,shell">
+    <meta name="description" content="定义变量的三种方式   直接赋值  如：x=10 或 file=/etc/hosts  规律：脚本中能用变量的地方尽量使用变量  传参(传递参数)  $0 $1 ... $n  $#  传参方式让脚本更加灵活  交互式设置变量  使用read命令实现脚本交互。">
+<meta name="keywords" content="高级运维,shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell高级编程-进阶2">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="定义变量的三种方式   直接赋值  如：x=10 或 file=/etc/hosts  规律：脚本中能用变量的地方尽量使用变量  传参(传递参数)  $0 $1 ... $n  $#  传参方式让脚本更加灵活  交互式设置变量  使用read命令实现脚本交互。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/shell%E5%AD%90%E4%B8%B2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fuzhi.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/true_false.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/zifu_panduan.png">
+<meta property="og:updated_time" content="2017-12-02T10:27:50.767Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="shell高级编程-进阶2">
+<meta name="twitter:description" content="定义变量的三种方式   直接赋值  如：x=10 或 file=/etc/hosts  规律：脚本中能用变量的地方尽量使用变量  传参(传递参数)  $0 $1 ... $n  $#  传参方式让脚本更加灵活  交互式设置变量  使用read命令实现脚本交互。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/shell%E5%AD%90%E4%B8%B2.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">shell高级编程-进阶2</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">shell高级编程-进阶2</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-02T01:39:59.000Z" itemprop="datePublished" class="page-time">
+  2017-12-02
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#条件表达式"><span class="post-toc-number">1.</span> <span class="post-toc-text">条件表达式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#条件语句"><span class="post-toc-number">2.</span> <span class="post-toc-text">条件语句</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-shell高级编程-进阶2"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">shell高级编程-进阶2</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-02 09:39:59" datetime="2017-12-02T01:39:59.000Z"  itemprop="datePublished">2017-12-02</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>定义变量的三种方式</p>
+</blockquote>
+<ul>
+<li>直接赋值</li>
+</ul>
+<pre><code>如：x=10 或 file=/etc/hosts
+
+规律：脚本中能用变量的地方尽量使用变量
+</code></pre><ul>
+<li>传参(传递参数)</li>
+</ul>
+<pre><code>$0 $1 ... $n  $#
+
+传参方式让脚本更加灵活
+</code></pre><ul>
+<li>交互式设置变量</li>
+</ul>
+<pre><code>使用read命令实现脚本交互。 
+</code></pre><a id="more"></a>
+<pre><code>[root@jkbackup scripts]# read
+oldboy                 #输入字符就相当于给$REPLY变量赋值
+[root@jkbackup scripts]# echo $REPLY
+oldboy             
+</code></pre><pre><code>[root@jkbackup scripts]# read -p &quot;请输入你的年龄:&quot;
+请输入你的年龄:18
+[root@jkbackup scripts]# echo $REPLY
+18
+
+-p 设置提示语句
+age 设置的变量名称,前面要有空格
+</code></pre><p>把值明确赋值给某个变量</p>
+<pre><code>[root@jkbackup scripts]# read -p &quot;请输入你的姓名:&quot; age
+请输入你的姓名:garywu
+[root@jkbackup scripts]# echo $age
+garywu
+[root@jkbackup scripts]# echo $REPLY     #可以看到$REPLY的值没变
+18
+</code></pre><p>交互输入银行卡账号密码</p>
+<pre><code>[root@jkbackup scripts]# cat test.sh 
+read -t 5 -p &quot;请输入你的银行卡账号: &quot; account
+read -t 5 -s -p &quot;请输入你的银行卡密码: &quot; pass
+echo
+echo &quot;你的银行卡卡号：&quot; $account ，&quot;你的银行卡密码：&quot; $pass 
+
+注：-s 用来关闭回显,即不显示输入的内容
+   -t  设置超时时间,单位:秒。超时后将退出交互
+   echo  shell换行符
+
+结果:
+[root@jkbackup scripts]# sh test.sh 
+请输入你的银行卡账号: 12345
+请输入你的银行卡密码: 
+你的银行卡卡号： 12345 ，你的银行卡密码： 67890
+</code></pre><blockquote>
+<p>变量的子串</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/shell%E5%AD%90%E4%B8%B2.png" alt="shell子串" title="">
+                </div>
+                <div class="image-caption">shell子串</div>
+            </figure>
+<pre><code>查找man bash搜索Parameter Expansion
+
+变量的长度是指: 变量值的长度
+</code></pre><pre><code>基础知识
+[root@jkbackup scripts]# OLDBOY=&quot;I am oldboy&quot;
+[root@jkbackup scripts]# echo ${OLDBOY}
+I am oldboy
+[root@jkbackup scripts]# echo ${OLDBOY}|wc -L   #统计变量值的长度
+11
+[root@jkbackup scripts]# time echo ${OLDBOY}|wc -L
+11
+
+real    0m0.006s
+user    0m0.000s
+sys    0m0.005s
+</code></pre><p>获取子串(变量值)的长度</p>
+<pre><code>格式: echo ${#OLDBOY}
+
+例：
+[root@jkbackup scripts]# file=/etc/sysconfig/network-scripts/ifcfg-eth0 
+[root@jkbackup scripts]# echo ${#file}
+41
+</code></pre><p>提取部分子串</p>
+<pre><code>[root@jkbackup scripts]# echo ${file}
+/etc/sysconfig/network-scripts/ifcfg-eth0
+
+#从第4个子串开始切(起始是0)
+[root@jkbackup scripts]# echo ${file:4}     
+/sysconfig/network-scripts/ifcfg-eth0
+
+#从第4个开始切(起始是0),并且往后保留10位
+[root@jkbackup scripts]# echo ${file:4:10}  
+/sysconfig
+</code></pre><p>删除部分字符串</p>
+<pre><code>[root@jkbackup scripts]#  oldboy=abcABC123ABCabc
+[root@jkbackup scripts]# echo ${oldboy}
+abcABC123ABCabc
+[root@jkbackup scripts]# echo ${oldboy#a*c}   #从前往后最短匹配
+ABC123ABCabc
+[root@jkbackup scripts]# echo ${oldboy#a*C}
+123ABCabc
+[root@jkbackup scripts]# echo ${oldboy##a*C} #从前往后最长匹配
+abc
+</code></pre><pre><code>[root@jkbackup scripts]# echo ${oldboy}
+abcABC123ABCabc
+[root@jkbackup scripts]# echo ${oldboy%abc}   #从后往前最短匹配
+abcABC123ABC
+[root@jkbackup scripts]# echo ${oldboy%a*c}   #从后往前最短匹配
+abcABC123ABC
+[root@jkbackup scripts]# echo ${oldboy%a*C}
+abcABC123ABCabc
+[root@jkbackup scripts]# echo ${oldboy%%a*c}   #从后往前最长匹配
+
+[root@jkbackup scripts]# 
+[root@jkbackup scripts]# echo ${oldboy%%A*c}   #从后往前最长匹配
+abc
+</code></pre><p>替换</p>
+<pre><code>单个替换
+[root@jkbackup scripts]# echo ${oldboy}
+abcABC123ABCabc
+[root@jkbackup scripts]# echo ${oldboy/123/888}
+abcABC888ABCabc
+
+全部替换
+[root@jkbackup scripts]# echo ${oldboy}
+abcABC123ABCabc
+[root@jkbackup scripts]# echo ${oldboy//ABC/KKK}
+abcKKK123KKKabc
+</code></pre><blockquote>
+<p>空变量</p>
+</blockquote>
+<pre><code>find一个空变量并删除的结果: 
+
+find {$test}  |xargs rm  -rf   
+#此操作会删除当前目录所有文件,如果是在root用户执行，结果就呵呵了O(∩_∩)O~
+</code></pre><blockquote>
+<p>变量赋值</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fuzhi.png" alt="赋值" title="">
+                </div>
+                <div class="image-caption">赋值</div>
+            </figure>
+<pre><code>示例：
+httpd=${HTTPD-/usr/sbin/httpd}
+prog=httpd
+pidfile=${PIDFILE-/var/run/httpd/httpd.pid}
+lockfile=${LOCKFILE-/var/lock/subsys/httpd}
+
+如果$HTTP变量值为空，则赋值为/usr/sbin/httpd
+</code></pre><pre><code>#检测变量不存在就临时赋值
+[root@jkbackup scripts]# echo ${HTTPD-/usr/sbin/httpd} 
+/usr/sbin/httpd
+[root@jkbackup scripts]# echo $HTTPD     #此时这个变量值还是空
+
+[root@jkbackup scripts]# 
+</code></pre><pre><code>#检测变量不存在就进行赋值
+[root@jkbackup scripts]# echo ${HTTPD=/usr/sbin/httpd} 
+/usr/sbin/httpd
+[root@jkbackup scripts]# echo $HTTPD    #变量值随之改变
+/usr/sbin/httpd
+</code></pre><blockquote>
+<p>变量的数值运算</p>
+</blockquote>
+<p>使用双括号 (())  进行加减乘除  </p>
+<pre><code>格式：echo $((1+1*8))
+[root@jkbackup scripts]# echo $((1+1*8))
+9
+[root@jkbackup scripts]# echo $((1+2**3))   #1+2的三次方
+9
+[root@jkbackup scripts]# echo $((1+2**3-(5+1)))   #先算括号内的,再加减乘除
+3
+</code></pre><pre><code>i=5
+echo $((i++)) 或echo $((++i))       #每次运算的值自动加1
+
+[root@jkbackup scripts]# i=5
+[root@jkbackup scripts]# 
+[root@jkbackup scripts]# echo $((i++))
+5
+[root@jkbackup scripts]# echo $((i++))
+6
+[root@jkbackup scripts]# echo $((i++))
+7
+</code></pre><pre><code>i=7
+echo $((i--)) 或echo $((--i))       #每次运算的值自动减1
+
+[root@jkbackup scripts]# echo $((--i))
+7
+[root@jkbackup scripts]# echo $((--i))
+6
+[root@jkbackup scripts]# echo $((--i))
+5
+[root@jkbackup scripts]# echo $((--i))
+4
+</code></pre><blockquote>
+<p>写一个加减乘除的shell计算器</p>
+</blockquote>
+<pre><code>[root@jkbackup scripts]# cat jisuanqi.sh 
+#!/bin/bash
+echo &quot;shell计算器&quot;
+read -p &#39;输入一个数字: &#39; a
+read -p &#39;请输入计算方法: &#39; b
+read -p &#39;输入一个数字: &#39; c
+echo &quot;计算结果: &quot;$(($a$b$c))
+</code></pre><p>使用let进行加减乘除运算</p>
+<pre><code>[root@jkbackup scripts]# i=1
+[root@jkbackup scripts]# let i=i+1
+[root@jkbackup scripts]# echo $i
+2
+</code></pre><p>使用expr进行加减乘除运算</p>
+<pre><code>示例：expr 1 + 2    
+
+[root@jkbackup scripts]# expr 1 + 2
+3
+[root@jkbackup scripts]# expr 1 \* 2
+2
+[root@jkbackup scripts]# 
+[root@jkbackup scripts]# expr 4 \/ 2
+2
+</code></pre><p>使用expr判断输入的传参是否为整数</p>
+<pre><code>[root@jkbackup scripts]# expr 1 + a
+expr: non-integer argument(非整数参数)
+[root@jkbackup scripts]# expr 1 + 12.5
+expr: non-integer argument
+
+[root@jkbackup scripts]# echo $?        #非整数返回值是2
+2
+[root@jkbackup scripts]# 
+</code></pre><p>bc 小数计算</p>
+<pre><code>bc进入交互界面
+1+1
+3
+
+[root@jenkins ~]# echo &quot;scale=2;355/113&quot;|bc
+3.14
+[root@jenkins ~]# echo &quot;scale=12;355/113&quot;|bc
+3.141592920353
+</code></pre><p>[]加减乘除计算</p>
+<pre><code>[root@jenkins ~]# echo $[2+3]
+5
+[root@jenkins ~]# echo $[2*3]
+6
+</code></pre><p>awk计算</p>
+<pre><code>[root@jenkins ~]# echo &quot;7.7 3.8&quot;|awk &#39;{print ($1-$2)}&#39;
+3.9
+[root@jenkins ~]# echo &quot;7.7 3.8&quot;|awk &#39;{print ($1-$2*$1)}&#39;
+-21.56
+</code></pre><h4 id="条件表达式"><a href="#条件表达式" class="headerlink" title="条件表达式"></a>条件表达式</h4><pre><code>对环境等进行判断
+</code></pre><blockquote>
+<p>文件判断</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/true_false.png" alt="文件判断" title="">
+                </div>
+                <div class="image-caption">文件判断</div>
+            </figure>
+<pre><code>先敲一对[],然后退格输入2个空格[  ],最后再回退一个空格开始输入[ -f /etc/hosts ]
+
+文件判断
+[root@jkbackup scripts]# [  -f /etc/hosts ]
+[root@jkbackup scripts]# echo $?       #0表示命令执行成功，文件存在
+0
+</code></pre><pre><code>[ -f /etc/hosts ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+[ -f /etc/host ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+[ -f /etc/hosts ] &amp;&amp; cat /etc/hosts  || echo &quot;文件不存在&quot;
+[ -f /etc/host ] &amp;&amp; cat /etc/hosts  || echo &quot;文件不存在&quot;
+
+[ -d /etc1/ ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+表达式不成立
+[ -d /etc/ ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+表达式成立
+</code></pre><blockquote>
+<p>字符串判断</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/zifu_panduan.png" alt="字符长度判断" title="">
+                </div>
+                <div class="image-caption">字符长度判断</div>
+            </figure>
+<pre><code>[root@jenkins scripts]# name=
+[root@jenkins scripts]# [ -z &quot;$name&quot; ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+表达式成立
+[root@jenkins scripts]# name=&quot; &quot;
+[root@jenkins scripts]# [ -z &quot;$name&quot; ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+表达式不成立
+</code></pre><pre><code>[root@jenkins scripts]# [ -z &quot;$age&quot; ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+表达式成立
+[root@jenkins scripts]# [ -n &quot;$age&quot; ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+</code></pre><pre><code>[ &quot;$name1&quot; == &quot;$name2&quot; ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+[ &quot;$name1&quot; != &quot;$name2&quot; ] &amp;&amp; echo &quot;表达式成立&quot;  || echo &quot;表达式不成立&quot;
+</code></pre><blockquote>
+<p>整数判断</p>
+</blockquote>
+<pre><code>-eq     equal 等于
+-ne     not equal 不等于
+-gt     great than 大于
+-ge     great equal 大于等于
+-lt     less than   小于
+-le     less equal  小于等于
+
+[root@jkbackup scripts]# [ 1 -ne 2 ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;
+表达式成立
+[root@jkbackup scripts]# [ 10 -le 2 ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成 立&quot;
+表达式不成立
+[root@jkbackup scripts]# [ 10 -gt 19 ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不.立&quot;
+表达式不成立
+[root@jkbackup scripts]# [ 10 -le 19 ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不.立&quot;
+表达式成立
+</code></pre><blockquote>
+<p>逻辑判断符</p>
+</blockquote>
+<pre><code>与    简写：-a
+或    简写：-o
+非    简写: ！
+
+[root@jkbackup scripts]# [ 10 -le 19 -a 5 -gt 8 ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;&quot;
+表达式不成立
+[root@jkbackup scripts]# 
+[root@jkbackup scripts]# [ 10 -le 19 -a 5 -lt 8 ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;&quot;
+表达式成立
+[root@jkbackup scripts]# [ 10 -le 19 -a ! 5 -lt 8 ] &amp;&amp; echo &quot;表达式成立&quot; || echo &quot;表达式不成立&quot;
+表达式不成立
+</code></pre><blockquote>
+<p>判断两个数字-测试</p>
+</blockquote>
+<pre><code>直接赋值方式
+
+[root@jkbackup shell]# cat read.sh 
+#!/bin/bash
+
+num1=10
+num2=3
+
+#判断变量不为空
+[ -z &quot;$num1&quot; ] &amp;&amp; echo &quot;第一个变量未赋值&quot; &amp;&amp; exit 1
+[ -z &quot;$num2&quot; ] &amp;&amp; echo &quot;第二个变量未赋值&quot; &amp;&amp; exit 1
+
+#判断是不是整数
+expr 2 + &quot;$num1&quot; &amp;&gt;/dev/null
+[ $? -eq 2 ] &amp;&amp; echo “第一个不是数字” &amp;&amp; exit 1
+expr 2 + &quot;$num2&quot; &amp;&gt;/dev/null
+[ $? -eq 2 ] &amp;&amp; echo “第二个不是数字” &amp;&amp; exit 1
+
+
+#正式判断
+[ $num1 -gt $num2 ] &amp;&amp; echo &quot;$num1 &gt; $num2&quot; &amp;&amp; exit
+[ $num1 -eq $num2 ] &amp;&amp; echo &quot;$num1 = $num2&quot; &amp;&amp; exit
+[ $num1 -lt $num2 ] &amp;&amp; echo &quot;$num1 &lt; $num2&quot; 
+</code></pre><pre><code>变量方式
+
+[root@jkbackup shell]# cat  read.sh 
+#!/bin/bash
+
+num1=$1
+num2=$2
+[ $# != 2 ] &amp;&amp; echo &quot;USAGE：sh $0 num1 num2&quot; &amp;&amp; exit 1
+
+#判断变量不为空
+[ -z &quot;$num1&quot; ] &amp;&amp; echo &quot;第一个变量未赋值&quot; &amp;&amp; exit 1
+[ -z &quot;$num2&quot; ] &amp;&amp; echo &quot;第二个变量未赋值&quot; &amp;&amp; exit 1
+
+#判断是不是整数
+expr 2 + &quot;$num1&quot; &amp;&gt;/dev/null
+[ $? -eq 2 ] &amp;&amp; echo “第一个不是数字” &amp;&amp; exit 1
+expr 2 + &quot;$num2&quot; &amp;&gt;/dev/null
+[ $? -eq 2 ] &amp;&amp; echo “第二个不是数字” &amp;&amp; exit 1
+
+
+#正式判断
+[ $num1 -gt $num2 ] &amp;&amp; echo &quot;$num1 &gt; $num2&quot; &amp;&amp; exit
+[ $num1 -eq $num2 ] &amp;&amp; echo &quot;$num1 = $num2&quot; &amp;&amp; exit
+[ $num1 -lt $num2 ] &amp;&amp; echo &quot;$num1 &lt; $num2&quot; 
+
+测试结果：
+[root@jkbackup shell]# sh read.sh 
+USAGE：sh read.sh num1 num2
+[root@jkbackup shell]# sh read.sh 1.5 2
+“第一个不是数字”
+[root@jkbackup shell]# 
+[root@jkbackup shell]# sh read.sh 5 10
+5 &lt; 10
+</code></pre><pre><code>read读入方式
+
+[root@jkbackup shell]# cat read.sh 
+#!/bin/bash
+
+read -p &quot;请输入第一个数字: &quot; num1
+read -p &quot;请输入第二个数字: &quot; num2
+
+#判断变量不为空
+[ -z &quot;$num1&quot; ] &amp;&amp; echo &quot;第一个变量未赋值&quot; &amp;&amp; exit 1
+[ -z &quot;$num2&quot; ] &amp;&amp; echo &quot;第二个变量未赋值&quot; &amp;&amp; exit 1
+
+#判断是不是整数
+expr 2+&quot;$num1&quot; &amp;&gt;/dev/null
+[ $? -eq 2 ] &amp;&amp; echo “第一个不是数字” &amp;&amp; exit 1
+expr 2+&quot;$num2&quot; &amp;&gt;/dev/null
+[ $? -eq 2 ] &amp;&amp; echo “第二个不是数字” &amp;&amp; exit 1
+
+
+#正式判断
+[ $num1 -gt $num2 ] &amp;&amp; echo &quot;$num1 &gt; $num2&quot; &amp;&amp; exit
+[ $num1 -eq $num2 ] &amp;&amp; echo &quot;$num1 = $num2&quot; &amp;&amp; exit
+[ $num1 -lt $num2 ] &amp;&amp; echo &quot;$num1 &lt; $num2&quot; 
+</code></pre><h4 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h4><blockquote>
+<p>if条件语句</p>
+</blockquote>
+<p>单分支语句</p>
+<pre><code>如果  条件成立；则
+    执行命令    
+</code></pre><pre><code>if [ $num1 -gt $num2 ];then
+   echo &quot;$num1&quot; &gt; &quot;$num2&quot;
+   exit
+fi   
+
+if [ $num1 -lt $num2 ];then
+   echo &quot;$num1&quot; &lt; &quot;$num2&quot;
+   exit
+fi   
+
+if [ $num1 -eq $num2 ];then
+   echo &quot;$num1&quot; = &quot;$num2&quot;
+fi   
+</code></pre><p>双分支语句</p>
+<pre><code>if [ $num1 -gt $num2 ];then
+   echo &quot;$num1&quot; &gt; &quot;$num2&quot;
+   exit
+else 
+    echo &quot;$num1&quot; 不大于 &quot;$num2&quot;
+
+fi   
+</code></pre><p>多分支语句</p>
+<pre><code>if [ $num1 -gt $num2 ];then
+   echo &quot;$num1 &gt; $num2&quot;
+
+elif  [ $num1 -eq $num2 ];then
+    echo &quot;$num1 = $num2&quot;
+
+else
+     echo &quot;$num1 &lt; $num2&quot;
+
+fi     
+</code></pre><blockquote>
+<p>小结</p>
+</blockquote>
+<pre><code>单分支：一个条件一个结果
+双分支：一个条件多个结果
+多分支语句: 多个条件多个结果
+</code></pre><blockquote>
+<p>练习</p>
+</blockquote>
+<pre><code>要求：使用脚本监测系统内存，低于100M发邮件报警, 3分钟检查一次
+</code></pre><pre><code>#!/bin/bash
+
+mem=`free -m | awk &#39;NR==2{print $NF}&#39;`
+
+if [ $mem -lt 1600 ];then
+   echo “警告:系统可用内存低于100M” &amp;&amp; echo &quot;当前值:$mem&quot;|mail -s WARNING 110@110.cn
+
+else
+   exit 0
+
+fi
+</code></pre><blockquote>
+<p>写一个nginx启动脚本</p>
+</blockquote>
+<pre><code>[root@jenkins scripts]# . /etc/init.d/functions 
+[root@jenkins scripts]# action &quot;start nginx&quot; /bin/true
+start nginx                                                [  确定  ]
+[root@jenkins scripts]# action &quot;start nginx&quot; /bin/false
+start nginx                                                [失败]
+
+调用上述的functions就可以返回“确定”或“失败”
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-12-02T10:27:50.767Z" itemprop="dateUpdated">2017-12-02 18:27:50</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/02/shell高级编程-进阶2/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/&title=《shell高级编程-进阶2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/&title=《shell高级编程-进阶2》 — Gary Wu&source=
+定义变量的三种方式
+
+
+直接赋值
+
+如：x=10 或 file=/etc/hosts
+
+规律：脚本中能用变量的地方尽量使用变量
+
+传参(传递参数)
+
+$..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shell高级编程-进阶2》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/04/Jenkins安装初始化/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Jenkins安装初始化</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/28/Codis3.2集群部署/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Codis3.2.0集群部署</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/&title=《shell高级编程-进阶2》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/&title=《shell高级编程-进阶2》 — Gary Wu&source=
+定义变量的三种方式
+
+
+直接赋值
+
+如：x=10 或 file=/etc/hosts
+
+规律：脚本中能用变量的地方尽量使用变量
+
+传参(传递参数)
+
+$..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shell高级编程-进阶2》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/02/shell高级编程-进阶2/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

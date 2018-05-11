@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>shell高级编程-进阶3 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,shell,break,DDos,shell DDos,continue,exit,return">
+    <meta name="description" content="case条件语句  如果$x等于”值1”则执行命令1…以此类推 case $x in          值1)          命令1          ;;      值2)          命令2          ;;       ...        *)          命令n          ;;  esac 使用场景：系统服务的启动脚本或菜单脚本一般使用case语句">
+<meta name="keywords" content="高级运维,shell,break,DDos,shell DDos,continue,exit,return">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell高级编程-进阶3">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="case条件语句  如果$x等于”值1”则执行命令1…以此类推 case $x in          值1)          命令1          ;;      值2)          命令2          ;;       ...        *)          命令n          ;;  esac 使用场景：系统服务的启动脚本或菜单脚本一般使用case语句">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-09T11:42:53.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="shell高级编程-进阶3">
+<meta name="twitter:description" content="case条件语句  如果$x等于”值1”则执行命令1…以此类推 case $x in          值1)          命令1          ;;      值2)          命令2          ;;       ...        *)          命令n          ;;  esac 使用场景：系统服务的启动脚本或菜单脚本一般使用case语句">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">shell高级编程-进阶3</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">shell高级编程-进阶3</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-09T01:37:27.000Z" itemprop="datePublished" class="page-time">
+  2017-12-09
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#shell函数"><span class="post-toc-number">1.</span> <span class="post-toc-text">shell函数</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-shell高级编程-进阶3"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">shell高级编程-进阶3</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-09 09:37:27" datetime="2017-12-09T01:37:27.000Z"  itemprop="datePublished">2017-12-09</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>case条件语句</p>
+</blockquote>
+<p>如果$x等于”值1”则执行命令1…以此类推</p>
+<pre><code>case $x in    
+     值1)
+         命令1
+         ;;
+     值2)
+         命令2
+         ;;
+
+     ...
+
+      *)
+         命令n
+         ;;
+
+esac
+</code></pre><p>使用场景：系统服务的启动脚本或菜单脚本一般使用case语句</p>
+<a id="more"></a>
+<p>case语句</p>
+<pre><code>脚本：
+[root@linux-node1 ~]# cat menu.sh 
+#!/bin/bash
+
+cat&lt;&lt;EOF
+-------------------------
+  1.apple
+  2.pear
+  3.banana
+  4.exit
+-------------------------
+EOF
+
+
+read -p &quot;请输入一种水果名称：&quot; num
+
+case $num in
+
+     1)
+          echo -e &quot;\033[31m Hi,李雷.This is Apple! \033[0m&quot;
+          ;;
+     2)
+          echo -e &quot;\033[32m Hi,李雷.This is Pear! \033[0m&quot;
+          ;;
+     3)
+          echo -e &quot;\033[33m Hi,李雷.This is banana! \033[0m&quot;
+          ;;
+     *)
+        echo -e &quot;\033[41;37m Error,输入错误,请重新输入\033[0m&quot;
+        ;;
+esac
+</code></pre><ul>
+<li>rsync服务简单启动服务脚本</li>
+</ul>
+<pre><code>[root@linux-node1 ~]# cat rsync    #判断配置文件与命令文件是否存在,否则就退出
+#!/bin/bash
+
+[ -f /etc/rsync/rsyncd.conf ] || exit    
+[ -f /usr/sbin/rsync ] || exit
+
+case $1 in
+     start)
+          rsync --daemon
+          ;; 
+
+     stop)
+          pkill rsync
+          ;;
+
+     reload)
+          pkill rsync
+          sleep 2
+          rsync --daemon
+          ;;
+
+         *)
+          echo &quot;USAGE: sh $0 start|stop|reload&quot;
+          ;;          
+esac
+</code></pre><!-- more -->
+<blockquote>
+<p>for循环语句</p>
+</blockquote>
+<p>语法:</p>
+<pre><code>for 变量 in 变量取值列表
+
+   do 
+      命令1
+      ....
+done
+</code></pre><pre><code>for i in `ls` ;do echo $i;done
+
+for n in  `seq 5 -1 1`;do echo $n;done
+</code></pre><ul>
+<li>使用for循环,批量创建10个文件，要求:文件名包含10个随机字符并以_oldboy.html结尾</li>
+</ul>
+<pre><code>[root@oldboyedu scripts]# cat 19-1.sh 
+
+
+#!/bin/bash
+dir=/oldboy
+[ ! -d $dir ] &amp;&amp; mkdir -p $dir
+
+cd $dir &amp;&amp; \
+for i in {1..10}
+  do
+   ranStr=`uuidgen|tr &#39;0-9-&#39; &#39;a-z&#39;|cut -c -10`
+   touch ${ranStr}_oldboy.html
+done
+</code></pre><ul>
+<li>批量修改上一个练习中的文件名，要求: 修改oldboy为oldgirl并修改.html为.HTML</li>
+</ul>
+<pre><code>#!/bin/bash
+
+dir=/oldboy
+cd $dir \
+
+for i in `ls`
+  do
+    str=`echo $i|cut -c -10`
+    mv $i ${str}_oldgirl.HTML
+done
+</code></pre><ul>
+<li>批量创建10个oldboy为前缀的用户并为用户创建随机密码</li>
+</ul>
+<pre><code>#!/bin/bash
+
+for user in oldboy{01..10}
+
+do
+    id $user
+    if [ ! $? -eq 0 ];then
+       useradd $user
+       pass=`echo $RANDOM|md5sum|cut -c -5`
+       echo &quot;$pass&quot; |passwd --stdin $user &gt;&gt;/dev/null
+       echo &quot;用户账号: &quot; $user ,&quot;用户密码: &quot; $pass &gt;/root/users.txt
+    else
+       echo &quot;用户已存在&quot;   
+    fi
+done
+</code></pre><ul>
+<li>做一个监控内网主机存活的脚本(串行脚本,耗费时间较长)</li>
+</ul>
+<pre><code>[root@linux-node1 ~]# cat alive.sh 
+#!/bin/bash
+. /etc/init.d/functions    //与下方的action ... /bin/true配合使用
+
+for i in 192.168.56.{1..254}
+
+  do
+    ping -c 1 -W 1 $i &amp;&gt;/dev/null
+    if [ $? -eq 0 ];then
+       action &quot;$i&quot; /bin/true
+
+    fi    
+
+done
+</code></pre><pre><code>后台运行程序
+ping -c 1 -W 1 $i &amp;&gt;/dev/null &amp;
+
+管理后台程序命令
+jobs
+输出结果如下：
+[1]+  Terminated              ping 192.168.56.253 &amp;&gt;/dev/null
+
+杀死后台进程
+kill %1 
+kill %2
+kill %n
+</code></pre><ul>
+<li>要求：筛选不大于6个数的单词</li>
+</ul>
+<pre><code>#!/bin/bash
+
+for i in I am oldboy teacher welcome to oldboy trainingclass
+  do
+    [ ${#i} -le 6 ] &amp;&amp; echo $i
+done 
+</code></pre><ul>
+<li>破解RANDOM随机数</li>
+</ul>
+<pre><code>通过man bash 搜索“RANDOM”可以看到RANDOM结果的范围,即0-32767
+
+[root@linux-node1 ~]# cat pass.sh 
+#!/bin/bash
+
+dbFile=/tmp/password.txt
+
+for i in {0..32767}
+do
+    screct=`echo $i|md5sum`
+    echo &quot;$i $screct&quot; &gt;&gt; $dbFile
+
+done
+
+注意: 输出到文档后，需要使用追加！
+</code></pre><pre><code>执行结果：
+[root@linux-node1 ~]# egrep &#39;21029299|00205d1c|a3da1677|1f6d12dd|890684b&#39; /tmp/password.txt 
+1346 00205d1cbbeb97738ad5bbdde2a6793d  -
+7041 1f6d12dd61b5c7523f038a7b966413d9  -
+10082 890684ba3685395c782547daf296935f  -
+25345 a3da1677501d9e4700ed867c5f33538a  -
+25667 2102929901ee1aa769d0f479d7d78b05  -
+</code></pre><ul>
+<li>输出乘法口诀</li>
+</ul>
+<pre><code>for a in `seq 9`
+  do
+    for b in `seq 9`
+       do
+                [ $a -ge $b ] &amp;&amp; echo -en &quot;$a x $b = $(expr $a \* $b)  &quot;
+    done
+echo &quot; &quot;
+done
+</code></pre><blockquote>
+<p>while循环语句</p>
+</blockquote>
+<pre><code>条件一旦成立则永远进行死循环
+
+使用场景：一般用于守护进程(不停止的进程)
+</code></pre><pre><code>语法：
+while 条件
+   do
+   执行的命令
+   sleep 30
+done
+</code></pre><ul>
+<li>水果菜单-while循环-修改版</li>
+</ul>
+<pre><code>[root@linux-node1 ~]# cat menu.sh 
+#!/bin/bash
+cat&lt;&lt;EOF
+-------------------------
+1.apple
+2.pear
+3.banana
+4.exit
+-------------------------
+EOF
+
+while true
+do
+
+   read -p &quot;请输入一种水果名称：&quot; num
+
+   case $num in
+
+     1)
+          echo -e &quot;\033[31m Hi,李雷.This is Apple! \033[0m&quot;
+          ;;
+     2)
+          echo -e &quot;\033[32m Hi,李雷.This is Pear! \033[0m&quot;
+          ;;
+
+     3)
+          echo -e &quot;\033[33m Hi,李雷.This is banana! \033[0m&quot;
+          ;;
+     *)
+          echo -e &quot;\033[41;37m Error,输入错误,请重新输入\033[0m&quot;
+          exit
+          ;;
+   esac
+done
+</code></pre><pre><code>执行效果：
+
+[root@linux-node1 ~]# sh menu.sh 
+-------------------------
+1.apple
+2.pear
+3.banana
+4.exit
+-------------------------
+请输入一种水果名称：1
+ Hi,李雷.This is Apple! 
+请输入一种水果名称：2
+ Hi,李雷.This is Pear! 
+请输入一种水果名称：3
+ Hi,李雷.This is banana! 
+请输入一种水果名称：4
+ Error,输入错误,请重新输入
+[root@linux-node1 ~]# 
+</code></pre><pre><code>sleep 1      //1秒
+usleep 10000     //10000微秒
+</code></pre><pre><code>vim /etc/while1.sh
+
+i=0
+while [ $i -lt 4 ]
+  do
+    uptime
+    sleep 1
+    ((i++))
+done
+</code></pre><ul>
+<li>shell脚本限制DDos攻击</li>
+</ul>
+<pre><code>1.防止服务器被DDoS攻击的Shell脚本
+　　mkdir /root/bin
+　　vi /root/bin/dropip.sh
+　　#!/bin/bash
+　　/bin/netstat -na|grep ESTABLISHED|awk &#39;{print $5}&#39;|awk -F: &#39;{print $1}&#39;|sort|uniq -c|sort -rn|head -10|grep -v -E &#39;192.168|127.0&#39;|awk &#39;{if ($2!=null &amp;&amp; $1&gt;4) {print $2}}&#39;&gt;/tmp/dropip
+　　for i in $(cat /tmp/dropip)
+　　do
+　　/sbin/iptables -A INPUT -s $i -j DROP
+　　echo “$i kill at `date`”&gt;&gt;/var/log/ddos
+　　Done
+
+脚本说明;在这段脚本中，最重要的是第二行：意思为获取ESTABLISHED连接数最多的前10个ip并写入临时文件/tmp/dropip,排除了内部ip段192.168|127.0开头的.通过for循环将dropip里面的ip通过iptables全部drop掉，然后写到日志文件/var/log/ddos
+
+2.增加执行权限
+　chmod +x /root/bin/dropip.sh
+
+3.添加到计划任务，每分钟执行一次
+　crontab -e
+　*/1 * * * * /root/bin/dropip.sh
+</code></pre><ul>
+<li>使用while循环从文件一行一行读入</li>
+</ul>
+<pre><code>#!/bin/bash
+n=1
+while read i
+     do
+       echo &quot;第$no行: &quot; $i
+       ((no++))
+done &lt; /etc/hosts       
+</code></pre><blockquote>
+<p>30个shell生产环境面试题</p>
+</blockquote>
+<pre><code>http://blog.51cto.com/oldboy/1867160s
+</code></pre><blockquote>
+<p>exit n</p>
+</blockquote>
+<pre><code>while true
+   do 
+   exit
+done
+作用：一旦条件满足,则脚本立即退出；其中exit中的n，意思是定义退出返回值
+</code></pre><blockquote>
+<p>break n</p>
+</blockquote>
+<pre><code>作用：一旦条件满足，则跳出循环(注：if是判断不是循环)，但会继续执行循环之外的内容
+其中n是指退出几层循环
+</code></pre><blockquote>
+<p>continue n</p>
+</blockquote>
+<pre><code>作用：一旦条件满足，则结束当前本次循环,继续下一次循环
+其中n是指退出几层循环
+</code></pre><blockquote>
+<p>reture n</p>
+</blockquote>
+<pre><code>作用：只在函数中起作用,用来判断函数执行是否正确。和exit一样。
+</code></pre><blockquote>
+<p>shell数组</p>
+</blockquote>
+<p>注：数组是保存到内存中的,由于性能差劲，了解即可</p>
+<pre><code>arry=(1 2 3)   定义数组,将1、2、3同时赋值给变量array
+
+如：
+
+[root@linux-node1 ~]# arry=(1 2 3)
+
+[root@linux-node1 ~]# echo ${arry[@]}     #查看数组所有内容
+1 2 3
+[root@linux-node1 ~]# 
+
+[root@linux-node1 ~]# echo ${arry[0]}   #查看第0个值（从0开始）
+1
+[root@linux-node1 ~]# echo ${arry[1]}   #查看第1个值
+2
+[root@linux-node1 ~]# echo ${arry[2]}   #查看第2个值
+3
+[root@linux-node1 ~]# 
+</code></pre><p>获取数组长度</p>
+<pre><code>[root@linux-node1 ~]# echo ${#arry[0]}
+1
+[root@linux-node1 ~]# echo ${#arry[1]}
+1
+</code></pre><p>数组赋值</p>
+<pre><code>[root@linux-node1 ~]# arry[3]=4
+[root@linux-node1 ~]# echo ${arry[3]}
+4
+[root@linux-node1 ~]# echo ${arry[@]}
+1 2 3 4
+</code></pre><p>遍历数组</p>
+<pre><code>[root@linux-node1 ~]# for i in ${arry[@]};do echo $i;done
+1
+2
+3
+4
+</code></pre><h2 id="shell函数"><a href="#shell函数" class="headerlink" title="shell函数"></a>shell函数</h2><pre><code>作用：把脚本里面多次调用相同的代码定义成一份，起个名字，需要的时候直接调用即可。
+优势：把相同的程序段定义成函数，减少程序代码量、易读
+</code></pre><pre><code>[root@linux-node1 ~]# cat fun.sh 
+#!/bin/bash
+
+#定义函数名：sendmail
+sendmail(){      
+    echo &quot;Hello World&quot;
+    return 3
+
+}
+
+#调用函数
+sendmail
+
+
+[root@linux-node1 ~]#  
+[root@linux-node1 ~]# sh fun.sh 
+Hello World
+</code></pre><pre><code>source下函数脚本之后，函数名称(sendmail)可以通过Tab键补全
+
+[root@linux-node1 ~]# source fun.sh   
+Hello World 
+[root@linux-node1 ~]# sendmail       #按两次Tab,sendmail就是刚才定义的函数
+sendmail          sendmail.postfix  
+[root@linux-node1 ~]# sendmail
+</code></pre><pre><code>[root@linux-node1 ~]# cat fun.sh 
+#!/bin/bash
+
+sendmail(){
+    echo &quot;Hello World&quot;
+    return 3
+}
+
+sendmail
+echo $?
+</code></pre><ul>
+<li>函数传参</li>
+</ul>
+<pre><code>[root@oldboyedu scripts]# cat func.sh 
+
+#!/bin/bash
+#oldboyedu
+
+function oldboyedu(){
+    echo &quot;Hello world&quot;
+    echo $0
+    echo $1
+    echo $2
+    exit
+}
+
+etiantian(){
+    echo &quot;good&quot;
+    return 3
+    echo &#39;bad&#39;
+}
+
+#oldboyedu hanshu1 hanshu2
+oldboyedu $1 $2
+etiantian
+</code></pre><blockquote>
+<p>将函数体与脚本分离</p>
+</blockquote>
+<pre><code>#!/bin/bash
+
+. /etc/init.d/functions  #加载系统函数库
+. /server/scirpts/fun.sh   #加载自定义函数库  
+</code></pre><blockquote>
+<p>了解</p>
+</blockquote>
+<pre><code>basename  /server/scripts/fun.sh   #取出脚本名（去除脚本目录）
+dirname /server/scripts/fun.sh     #取出脚本路径（去除脚本名称）
+basename /server/scripts/fun.sh .sh  #去除脚本路径并去除脚本文件.sh后缀
+</code></pre><blockquote>
+<p>实现shell文件锁</p>
+</blockquote>
+<pre><code>不让脚本在执行的过程中重复执行的问题，可以使用shell文件锁解决。
+</code></pre><pre><code>#!/bin/bash
+
+# 脚本初始化
+function scripts_init(){
+  prog=`basename $0 .sh`
+  LockFile=/var/lock/subsys/${prog}.lock   # 使用锁文件
+  LogFile=/var/log/${prog}.log   # 脚本记录日志
+  PidFile=/var/run/${prog}.pid   # 记录进程号，可以管理脚本
+
+  [ -f $LockFile ] &amp;&amp; echo &quot;There $LockFile is exist!!&quot; &amp;&amp; exit 1 ||touch $LockFile
+  [ ! -f $LogFile ] &amp;&amp; touch $LogFile
+  [ -f $PidFile ] &amp;&amp; echo &quot;There $PidFile is exist!!&quot; &amp;&amp; exit 2|| echo $$ &gt; $PidFile
+}
+
+# 记录日志
+function writelog(){
+  Date=$(date &quot;+%F_%T&quot;)
+  ShellName=`basename $0`
+  Info=$1
+  echo &quot;$Date : ${ShellName} : ${Info}&quot; &gt;&gt; ${LogFile}
+}
+
+# 脚本退出扫尾
+function closeout(){
+  [ -f $LockFile ] &amp;&amp; rm -f $LockFile 
+  [ -f $PidFile ]&amp;&amp; rm -f $PidFile
+}
+</code></pre><blockquote>
+<p>脚本调试</p>
+</blockquote>
+<pre><code>(1) sh -x &quot;脚本名称&quot;
+
+(2) vim fun.sh +9    #直接跳到fun.sh脚本的第9行
+
+(3) 指定调试位置：
+在脚本内，在指定位置前面加上 sed -x ,在后面加上 sed +x ,使用sh &quot;脚本名称&quot; 就实现了部分内容调试
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-12-09T11:42:53.838Z" itemprop="dateUpdated">2017-12-09 19:42:53</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/12/09/shell高级编程-进阶3/" target="_blank" rel="external">https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DDos/">DDos</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/break/">break</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/continue/">continue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/exit/">exit</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/return/">return</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-DDos/">shell DDos</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/&title=《shell高级编程-进阶3》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/&title=《shell高级编程-进阶3》 — Gary Wu&source=
+case条件语句
+
+如果$x等于”值1”则执行命令1…以此类推
+case $x in    
+     值1)
+         命令1
+       ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shell高级编程-进阶3》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/12/10/ELK日志分析平台部署/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ELK日志分析平台部署</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/05/部署Gitlab-maven-jenkins持续集成环境-进阶1/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">部署Gitlab+maven+jenkins持续集成环境-进阶1</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/&title=《shell高级编程-进阶3》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/&title=《shell高级编程-进阶3》 — Gary Wu&source=
+case条件语句
+
+如果$x等于”值1”则执行命令1…以此类推
+case $x in    
+     值1)
+         命令1
+       ..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shell高级编程-进阶3》 — Gary Wu&url=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/12/09/shell高级编程-进阶3/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

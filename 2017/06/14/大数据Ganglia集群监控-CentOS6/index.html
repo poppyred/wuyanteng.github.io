@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>大数据Ganglia集群监控-CentOS6 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,大数据,hadoop,Ganglia">
+    <meta name="description" content="Ganglia单群集部署Ganglia集群监控 Ganglia是由UC Berkeley发起的一个开源监控项目，设计用于监控数以千几的节点。每台服务器都运行一个收集和发送监控数据名为gmond的守护进程。它将从操作系统和指定主机中收集。 接收所有监控数据的主机可以显示这些数据并且可以将这些数据的精简表单传递到层次结构中。正因为有这种层次架构模式，使ganglia可以实现良好的扩展。Gmond带来的">
+<meta name="keywords" content="高级运维,大数据,hadoop,Ganglia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据Ganglia集群监控-CentOS6">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Ganglia单群集部署Ganglia集群监控 Ganglia是由UC Berkeley发起的一个开源监控项目，设计用于监控数以千几的节点。每台服务器都运行一个收集和发送监控数据名为gmond的守护进程。它将从操作系统和指定主机中收集。 接收所有监控数据的主机可以显示这些数据并且可以将这些数据的精简表单传递到层次结构中。正因为有这种层次架构模式，使ganglia可以实现良好的扩展。Gmond带来的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-04T11:02:54.065Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据Ganglia集群监控-CentOS6">
+<meta name="twitter:description" content="Ganglia单群集部署Ganglia集群监控 Ganglia是由UC Berkeley发起的一个开源监控项目，设计用于监控数以千几的节点。每台服务器都运行一个收集和发送监控数据名为gmond的守护进程。它将从操作系统和指定主机中收集。 接收所有监控数据的主机可以显示这些数据并且可以将这些数据的精简表单传递到层次结构中。正因为有这种层次架构模式，使ganglia可以实现良好的扩展。Gmond带来的">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">大数据Ganglia集群监控-CentOS6</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">大数据Ganglia集群监控-CentOS6</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-14T07:26:39.000Z" itemprop="datePublished" class="page-time">
+  2017-06-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Ganglia单群集部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">Ganglia单群集部署</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Ganglia集群监控"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">Ganglia集群监控</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Ganglia的组件"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">Ganglia的组件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Ganglia-工作模式"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">Ganglia 工作模式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#环境结构说明"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">环境结构说明</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#更换epel源-推荐"><span class="post-toc-number">1.0.5.</span> <span class="post-toc-text">更换epel源(推荐)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#服务端安装"><span class="post-toc-number">1.0.6.</span> <span class="post-toc-text">服务端安装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端安装"><span class="post-toc-number">1.0.7.</span> <span class="post-toc-text">客户端安装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#软件安装目录说明"><span class="post-toc-number">1.0.8.</span> <span class="post-toc-text">软件安装目录说明</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置服务端-gmetad"><span class="post-toc-number">1.0.9.</span> <span class="post-toc-text">配置服务端(gmetad)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置客户端-gmond"><span class="post-toc-number">1.0.10.</span> <span class="post-toc-text">配置客户端(gmond)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#管理ganglia"><span class="post-toc-number">1.0.11.</span> <span class="post-toc-text">管理ganglia</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#你可能会遇到的问题"><span class="post-toc-number">1.0.12.</span> <span class="post-toc-text">你可能会遇到的问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#debug排错"><span class="post-toc-number">1.0.13.</span> <span class="post-toc-text">debug排错</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#访问"><span class="post-toc-number">1.0.14.</span> <span class="post-toc-text">访问</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Ganglia多个群集-部署（多播模式）"><span class="post-toc-number">2.</span> <span class="post-toc-text">Ganglia多个群集-部署（多播模式）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#需求：服务器复用，Ganglia分别监控同1台机器"><span class="post-toc-number">3.</span> <span class="post-toc-text">需求：服务器复用，Ganglia分别监控同1台机器</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实施方案"><span class="post-toc-number">3.0.1.</span> <span class="post-toc-text">实施方案</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#维护"><span class="post-toc-number">3.0.2.</span> <span class="post-toc-text">维护</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#附加：gmond命令帮助"><span class="post-toc-number">3.0.2.0.1.</span> <span class="post-toc-text">附加：gmond命令帮助</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-大数据Ganglia集群监控-CentOS6"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">大数据Ganglia集群监控-CentOS6</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-14 15:26:39" datetime="2017-06-14T07:26:39.000Z"  itemprop="datePublished">2017-06-14</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Ganglia单群集部署"><a href="#Ganglia单群集部署" class="headerlink" title="Ganglia单群集部署"></a>Ganglia单群集部署</h2><h4 id="Ganglia集群监控"><a href="#Ganglia集群监控" class="headerlink" title="Ganglia集群监控"></a>Ganglia集群监控</h4><blockquote>
+<p>Ganglia是由UC Berkeley发起的一个开源监控项目，设计用于监控数以千几的节点。每台服务器都运行一个收集和发送监控数据名为gmond的守护进程。它将从操作系统和指定主机中收集。</p>
+<p>接收所有监控数据的主机可以显示这些数据并且可以将这些数据的精简表单传递到层次结构中。正因为有这种层次架构模式，使ganglia可以实现良好的扩展。Gmond带来的系统负载非常小，这使得它成为集群中各个服务器上运行一段代码而不会影响用户性能。</p>
+<a id="more"></a>
+<p>Ganglia主要用来监控系统性能的软件，通过曲线很容易见到每个节点的工作状态，对合理调整，分配系统资源，提高系统整体性能起到重要作用，支持浏览器方式访问，但不能监控节点硬件技术指标。Ganglia是分布式的监控系统。</p>
+</blockquote>
+<h4 id="Ganglia的组件"><a href="#Ganglia的组件" class="headerlink" title="Ganglia的组件"></a>Ganglia的组件</h4><blockquote>
+<p>ganglia由三个组件构成</p>
+<ul>
+<li><strong>gmond</strong> :（client）是一个守护进程，他运行在每一个需要监测的节点上，收集监测统计，发送和接受在同一个组播或单播通道上的统计信息。</li>
+<li><strong>gmetad</strong>:（server端）也是一个守护进程，他定期检查gmonds，从那里拉取数据，并将他们的指标存储在RRD存储引擎中。他可以查询多个集群并聚合指标，然后生成并在用户界面的web前端展示。</li>
+<li><strong>ganglia-web</strong> :（server端）顾名思义，他应该安装在有gmetad运行的机器上，以便读取RRD文件。 </li>
+</ul>
+</blockquote>
+<h4 id="Ganglia-工作模式"><a href="#Ganglia-工作模式" class="headerlink" title="Ganglia 工作模式"></a>Ganglia 工作模式</h4><blockquote>
+<p>Ganglia收集数据可以工作在单播或多播模式下，默认为多播模式<br>单播：发送自己收集到的监控数据到特定的一台或几台服务器上，可以跨网段。<br>多播：发送自己收集到的监控数据到同一网段所有的服务器上，同时收集同一网段的所有服务器发送过来的监控数据。因为是以广播包的形式发送，因此需要在同一网段内，但同一网段内，又可以定义不同的发送通道。</p>
+<p>工作模式：<a href="http://www.ttlsa.com/wp-content/uploads/2011/11/ganglia-1.jpg" target="_blank" rel="noopener">图例</a></p>
+</blockquote>
+<h4 id="环境结构说明"><a href="#环境结构说明" class="headerlink" title="环境结构说明"></a>环境结构说明</h4><blockquote>
+<p>现在有3台机器用来测试搭建Ganglia监控集群环境，采用多播的方式来监控各机器运行情况。</p>
+<p>我以server-25为主节点（它上面部署监控服务端）</p>
+<p>首先，在server-25 hosts 中配置主机信息。目的是为了读取各机器的主机名而不是IP。</p>
+<pre><code>cat  &gt;&gt; /etc/hosts &lt;&lt; EOF
+
+192.168.0.25 server-25
+192.168.0.26 client1-26
+192.168.0.27 client2-27
+
+EOF
+</code></pre></blockquote>
+<h4 id="更换epel源-推荐"><a href="#更换epel源-推荐" class="headerlink" title="更换epel源(推荐)"></a>更换epel源(推荐)</h4><blockquote>
+<p>该epel源内置大量优秀的软件，如果默认的yum源找不到你要安装的软件，那么这个epel源很适合你。</p>
+</blockquote>
+<pre><code>安装epel源(服务端/客户端运行)
+yum update &amp;&amp; yum install epel-release 
+</code></pre><h4 id="服务端安装"><a href="#服务端安装" class="headerlink" title="服务端安装"></a>服务端安装</h4><pre><code>安装gmetad（服务端运行）
+yum install -y ganglia-gmetad ganglia-devel 
+
+安装依赖图形软件rrdtool
+yum erase rrdtool -y
+yum install -y rrdtool
+
+安装httpd服务器(用于搭建php网页服务器)
+yum install -y httpd
+
+安装ganglia-web及php
+yum install -y ganglia-web php
+</code></pre><h4 id="客户端安装"><a href="#客户端安装" class="headerlink" title="客户端安装"></a>客户端安装</h4><pre><code>安装gmond(所有客户端运行)
+yum install -y ganglia-gmond
+</code></pre><h4 id="软件安装目录说明"><a href="#软件安装目录说明" class="headerlink" title="软件安装目录说明"></a>软件安装目录说明</h4><pre><code>ganglia配置文件目录：/etc/ganglia
+rrd数据库存放目录：/var/lib/ganglia/rrds
+httpd主站点目录：/var/www/html
+ganglia-web安装目录：/usr/share/ganglia
+ganglia-web配置目录：/etc/httpd/conf.d/ganglia.conf
+</code></pre><h4 id="配置服务端-gmetad"><a href="#配置服务端-gmetad" class="headerlink" title="配置服务端(gmetad)"></a>配置服务端(gmetad)</h4><pre><code>将ganglia-web的站点目录连接到httpd主站点目录
+ln -s /usr/share/ganglia/ /var/www/html/
+
+修改httpd主站点目录下ganglia站点目录的访问权限
+chown -R apache:apache /var/www/html/ganglia
+
+修改ganglia站点目录访问权限属主属组为apache
+chmod -R 755 /var/www/html/ganglia
+
+修改rrd数据库存放目录访问权限属主属组为ganglia
+chown -R ganglia:ganglia /var/lib/ganglia/rrds
+</code></pre><pre><code>修改ganglia-web的访问权限
+cat  /etc/httpd/conf.d/ganglia.conf
+
+       Alias /ganglia /usr/share/ganglia
+
+       &lt;Location /ganglia&gt;
+          Order deny,allow
+          Deny from all
+          #Allow from 127.0.0.1
+          #Allow from ::1
+          allow from all
+          # Allow from .example.com
+       &lt;/Location&gt;
+</code></pre><blockquote>
+<p>配置/etc/ganglia/gmetad.conf</p>
+</blockquote>
+<pre><code>data_source &quot;hadoop_cluster_yarn&quot; 30 host1:8649 host2:8649
+（1）data_source参数定义了集群名字，以及集群中的节点。由于采用multicast模式，每台gmond节点都有本Cluster1内节点机器的所有监控数据，因此不需要把所有节点写入data_source中。建议写入不低于2个，在host1节点死机的时候，会自动找host2节点取数据。
+(2)中间的30，单位是秒。意思是30s轮询向后面的node查询信息然后交给rrd画图。如果不加30参数，默认15s一个轮询。
+
+setuid_username ganglia 
+该用户名需要与/var/lib/ganglia/rrds/属主保持一致，这样能确保读写没问题。否则启动gmetad会出现：gmetad dead but subsys locked的错误
+
+xml_port 8651
+xml_port定义了一个收集数据汇总的交互端口，如果不指定，默认是8651，可以通过telnet这个端口得到监控管理端收集到的客户端的所有数据。
+
+interactive_port 8652
+interactive_port 定义了Web端获取数据的端口，这个端口在配置Ganglia的web监控界面时需要指定。
+
+rrd_rootdir &quot;/var/lib/ganglia/rrds&quot;
+rrd_rootdir参数定义了rrd数据库的存放路径，gmetad收集到监控数据后，会更新到该目录下的对应的rrd数据库中。
+
+gridname &quot;Hadoop&quot;  定义grad名称，该名称会显示在Web界面中
+
+上面通过data_source参数定义了一个监控集群，如果要监控多个应用系统，可以通过如下方式定义：
+data_source &quot;my cluster&quot; 10 localhost  my.machine.edu:8649  1.2.3.5:8655
+data_source &quot;my grid&quot; 50 1.3.4.7:8655 grid.org:8651 grid-backup.org:8651
+data_source &quot;another source&quot; 1.3.4.7:8655  1.3.4.8
+在定义集群节点的时候，可以采用主机名、IP地址等形式，也可以加端口，如果不加端口的话，默认是8649端口，同时可以设定采集数据的频率，如上面的“10 localhost、50 1.3.4.7:8655”等，分别表示每隔10秒钟、50秒钟采集一次数据。
+</code></pre><pre><code>case_sensitive_hostnames 1
+
+在gmetad之前版本中，RRD文件区分主机名大小写，但是现在已经有所改变。如果希望继续使用Ganglia 3.2之前版本创建的RRD文件，将该值设置为1。
+
+注意：如果该参数非1，将会导致“浏览器访问ganglia出现各个节点的表格显示“ganglia no matching metrics detected”错误，内页不出图。
+</code></pre><h4 id="配置客户端-gmond"><a href="#配置客户端-gmond" class="headerlink" title="配置客户端(gmond)"></a>配置客户端(gmond)</h4><pre><code>配置文件
+vim /etc/ganglia/gmond.conf
+</code></pre><pre><code>#global部分
+globals {
+  daemonize = yes        #以后台的方式运行
+  setuid = yes
+  user = ganglia         #运行gmond的用户
+  debug_level = 0        #调试级别。如果有问题，可以修改值为10看启动信息
+  max_udp_msg_len = 1472
+  mute = no             #哑巴，本节点将不会再广播任何自己收集到的数据到网络上
+  deaf = no             #聋子，本节点将不再接收任何其他节点广播的数据包
+  allow_extra_data = yes
+  host_dmax = 0 /*secs */
+  cleanup_threshold = 300 /*secs */
+  gexec = no            #是否使用gexec
+  send_metadata_interval = 0
+}
+
+
+#cluster部分
+cluster {
+  name = &quot;hadoop_cluster_yarn&quot;     #本节点属于哪个cluster，该值需要和服务端配置文件data_source一致。
+  owner = &quot;apache&quot;          #谁是该节点的所有者
+  latlong = &quot;unspecified&quot;   #类似于地球上的坐标，经度、纬度？
+  url = &quot;unspecified&quot;
+}
+
+
+#host部分
+host {
+  location = &quot;unspecified&quot;  #显示，可以起一个描述机器位置的信息
+ }
+
+
+#udp send部分
+udp_send_channel {           #udp包的发送通道 
+  mcast_join = 239.2.11.71   #多播。其中239.2.11.71是保留地址，官方默认要求，无需修改
+  #host = 192.168.0.26       #如果使用单播模式（定点发定点收），不建议
+  #单播需要改为比如 host = 192.168.0.26(指定ganglia客户端 IP地址)，单播模式下也可以配置多个udp_send_channel
+  port = 8649                #监听端口
+  ttl = 1
+}
+
+udp_recv_channel {           #接收udp包配置
+  mcast_join = 239.2.11.71   #同样工作在239.2.11.71通道下
+  port = 8649                #监听端口
+  bind = 239.2.11.71         #绑定
+}
+
+
+tcp_accept_channel {
+  port = 8649               #通过tcp协议监听的端口，远端可以通过链接8649端口得到监控数据
+}
+</code></pre><h4 id="管理ganglia"><a href="#管理ganglia" class="headerlink" title="管理ganglia"></a>管理ganglia</h4><pre><code>所有配置操作完成后，即可启动ganglia服务了，首先在监控管理端启动gmetad服务：
+/etc/init.d/gmetad start
+
+接着启动apache的web服务：
+/etc/init.d/httpd start
+
+最后在每个客户端启动gmond服务：
+/etc/init.d/gmond start
+</code></pre><h4 id="你可能会遇到的问题"><a href="#你可能会遇到的问题" class="headerlink" title="你可能会遇到的问题"></a>你可能会遇到的问题</h4><pre><code>1. 服务器端启动ganglia后，查看状态出现错误
+/etc/init.d/gmetad status
+gmetad dead but subsys locked
+
+cat  /etc/ganglia/gmetad.conf
+setuid_username ganglia 
+该用户名需要与/var/lib/ganglia/rrds/属主保持一致，这样能确保读写没问题。否则启动gmetad会出现：gmetad dead but subsys locked的错误
+</code></pre><pre><code>2. Web访问ganglia: http://10.0.10.25/ganglia/
+出现错误：There was an error collecting ganglia data (127.0.0.1:8652): fsockopen error
+
+关闭selinux！
+关闭selinux！
+关闭selinux！
+重要事情说三遍！！！
+</code></pre><pre><code>3. 由于系统时间不对导致的问题
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+yum install -y ntpdate
+ntpdate time.windows.com
+/etc/init.d/gmetad  restart
+</code></pre><h4 id="debug排错"><a href="#debug排错" class="headerlink" title="debug排错"></a>debug排错</h4><pre><code>善于使用软件自身提供的debug功能来查找原因
+
+vim  /etc/ganglia/gmetad.conf
+
+debug_level 10      //启用该参数，重启服务后会打印运行log到屏幕
+</code></pre><h4 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h4><blockquote>
+<p><a href="http://192.168.0.25/ganglia" target="_blank" rel="noopener">http://192.168.0.25/ganglia</a></p>
+</blockquote>
+<h2 id="Ganglia多个群集-部署（多播模式）"><a href="#Ganglia多个群集-部署（多播模式）" class="headerlink" title="Ganglia多个群集-部署（多播模式）"></a>Ganglia多个群集-部署（多播模式）</h2><blockquote>
+<p>多个群集架构图：<a href="https://jablonskis.org/images/2011-05-19-monitoring-multiple-clusters-using-ganglia/ganglia_multiple_clusters1.png" target="_blank" rel="noopener">图例</a></p>
+</blockquote>
+<blockquote>
+<p>环境：</p>
+<p>ClusterOne节点上有4个节点: node0.c1 , node1.c1 , node2.c1 , node3.c1</p>
+<p>ClusterTwo节点上有4个节点: node0.c2 , node1.c2 , node2.c2 , node3.c2</p>
+<p>ClusterThree节点上有4个节点：node0.c3 , node1.c3 , node2.c3 , node3.c3</p>
+</blockquote>
+<ul>
+<li><p>ClusterOne上面的node0.c1部署（node1.c1 , node2.c1 , node3.c1配置相同）</p>
+<pre><code># /etc/gmond.conf - on ClusterOne
+cluster {
+  name = &quot;ClusterOne&quot;        //这个通道名字不能与其他群集重复，ClusterOne集群端口也要确保唯一，此处是：8661
+  owner = &quot;unspecified&quot;
+  latlong = &quot;unspecified&quot;
+  url = &quot;unspecified&quot;
+}
+
+udp_send_channel {
+  mcast_join = 239.2.11.71
+  port = 8661
+  ttl = 1
+}
+
+udp_recv_channel {
+  mcast_join = 239.2.11.71
+  port = 8661
+  bind = 239.2.11.71
+}
+
+tcp_accept_channel {
+  port = 8661
+}
+</code></pre><p>​</p>
+</li>
+<li><p>ClusterTwo上面的node0.c2部署（node1.c2 , node2.c2 , node3.c2配置相同）</p>
+<pre><code># /etc/gmond.conf - on ClusterTwo
+cluster {
+  name = &quot;ClusterTwo&quot;           //这个通道名字不能与其他群集重复，ClusterOne集群端口也要确保唯一，此处是：8662
+  owner = &quot;unspecified&quot;
+  latlong = &quot;unspecified&quot;
+  url = &quot;unspecified&quot;
+}
+
+udp_send_channel {
+  mcast_join = 239.2.11.71
+  port = 8662
+  ttl = 1
+}
+
+udp_recv_channel {
+  mcast_join = 239.2.11.71
+  port = 8662
+  bind = 239.2.11.71
+}
+
+tcp_accept_channel {
+  port = 8662
+}
+</code></pre><p>​</p>
+</li>
+<li><p>ClusterThree上面的node0.c3部署（node1.c3 , node2.c3 , node3.c3配置相同）</p>
+<pre><code># /etc/gmond.conf - on ClusterThree
+cluster {
+  name = &quot;ClusterThree&quot;     //这个通道名字不能与其他群集重复，ClusterOne集群端口也要确保唯一，此处是：8663
+  owner = &quot;unspecified&quot;
+  latlong = &quot;unspecified&quot;
+  url = &quot;unspecified&quot;
+}
+
+udp_send_channel {
+  mcast_join = 239.2.11.71
+  port = 8663
+  ttl = 1
+}
+
+udp_recv_channel {
+  mcast_join = 239.2.11.71
+  port = 8663
+  bind = 239.2.11.71
+}
+
+tcp_accept_channel {
+  port = 8663
+}
+</code></pre></li>
+<li><p>定义完node节点，最后配置ganglia服务端/etc/ganglia/gmetad.conf</p>
+<pre><code># /etc/gmetad.conf 
+data_source &quot;ClusterOne&quot; 30 node0.c1:8661 node1.c1:8661
+data_source &quot;ClusterTwo&quot; 30 node0.c2:8662 node1.c2:8662
+data_source &quot;ClusterThree&quot; 30 node3.c2:8663 node1.c3:8663
+
+注：后面每个通道至少要写2个node信息，如果一个节点挂掉，另一个节点仍然能够提供本通道（cluster name）的统计信息gmetad，因为gmond节点在配置的UDP通道内交换统计信息。
+</code></pre></li>
+<li><p>最后重启服务端与node节点的服务即可。有问题开启debug</p>
+<!-- more -->
+</li>
+</ul>
+<h2 id="需求：服务器复用，Ganglia分别监控同1台机器"><a href="#需求：服务器复用，Ganglia分别监控同1台机器" class="headerlink" title="需求：服务器复用，Ganglia分别监控同1台机器"></a>需求：服务器复用，Ganglia分别监控同1台机器</h2><blockquote>
+<p>需求：假如一台服务器上面同时安装了HDFS、Yarn和Spark，让Ganglia分别监控这台机器。</p>
+<p>目的：是让大数据人员很清楚每台机器上面具体有什么业务。</p>
+</blockquote>
+<blockquote>
+<p>方案：在客户端启用多个gmond进程。</p>
+<p>比如我的案例：<br>默认配置文件gmond我定义为HDFS群集，复制gmond.conf为gmond-hdfs.conf， name=hdfs  port=8649(默认)<br>Yarn群集：复制gmond.conf并改名为gmond-yarn.conf，name=yarn  port=8650<br>Spark群集：复制gmond.conf并改名为gmond-spark.conf , name=spark  port=8651</p>
+</blockquote>
+<h4 id="实施方案"><a href="#实施方案" class="headerlink" title="实施方案"></a>实施方案</h4><pre><code>客户端启动多个gmond进程：
+
+启动第一个HDFS gmond进程：
+/usr/sbin/gmond -c /etc/ganglia/gmond-hdfs.conf -p /etc/ganglia/gmond-hdfs.pid
+
+启动第二个yarn gmond进程：
+/usr/sbin/gmond -c /etc/ganglia/gmond-yarn.conf -p /etc/ganglia/gmond-yarn.pid
+
+启动第三个spark gmond进程：
+/usr/sbin/gmond -c /etc/ganglia/gmond-spark.conf -p /etc/ganglia/gmond-spark.pid
+
+如果有更多，方法类似，以此类推。
+
+注意：配置文件内多个群集区分，多个群集之间，配置文件的name与port一定要区分，否则就串了
+
+上面的启动命令最好放到脚本里面，开机一次性自启动 :)
+</code></pre><h4 id="维护"><a href="#维护" class="headerlink" title="维护"></a>维护</h4><pre><code>每台机器多个gmond进程难免出现故障，可能某个gmond进程无法启动，总结为如下几点原因：
+1. 检查gmond进程端口是否被其他程序占用， lsof -i:8649
+2. 删除故障的gmond pid文件重新启动对应gmond服务
+3. 检查gmond服务所在服务器是否已经开启selinux或iptables，根据实际情况进行端口开放。
+</code></pre><h6 id="附加：gmond命令帮助"><a href="#附加：gmond命令帮助" class="headerlink" title="附加：gmond命令帮助"></a>附加：gmond命令帮助</h6><pre><code># gmond --help
+
+gmond 3.7.2
+
+The Ganglia Monitoring Daemon (gmond) listens to the cluster
+message channel, stores the data in-memory and when requested
+will output an XML description of the state of the cluster
+
+Usage: gmond [OPTIONS]...
+
+  -h, --help             Print help and exit
+  -V, --version          Print version and exit
+  -c, --conf=STRING      Location of gmond configuration file  
+                           (default=`/etc/ganglia/gmond.conf&#39;)
+  -l, --location=STRING  Location of this host in the cluster 
+                           &#39;rack,rank,plane&#39;.  (default=`0,0,0&#39;)
+  -d, --debug=INT        Debug level. If greater than zero, daemon will stay in 
+                           foreground.  (default=`0&#39;)
+  -f, --foreground       Run in foreground (don&#39;t daemonize)  (default=off)
+  -t, --default_config   Print the default configuration to stdout and exit  
+                           (default=off)
+  -m, --metrics          Print the list of metrics this gmond supports  
+                           (default=off)
+  -b, --bandwidth        Calculate minimum bandwidth use for configuration  
+                           (default=off)
+  -r, --convert=STRING   Convert a 2.5.x configuration file to the new 3.x 
+                           format
+  -p, --pid-file=STRING  Write process-id to file
+</code></pre><blockquote>
+<p>最后的最后，贴下自己的测试环境Ganglia图形界面</p>
+<p>Ganglia1: <a href="http://a1.qpic.cn/psb?/V141ZiIW1jTAHt/go.Os5wzTyNegv1XkdiPtwuU9VnWetf68bP.GvdmWB4!/b/dHUAAAAAAAAA&amp;bo=OwaAAgAAAAADB50!&amp;rf=viewer_4" target="_blank" rel="noopener">图例</a>   </p>
+<p>Gagnlia2: <a href="http://a2.qpic.cn/psb?/V141ZiIW1jTAHt/x4Do9.vFDNa2bZtGue5cg72cNkQIy4QN9lbJ5EBbNiw!/b/dBgBAAAAAAAA&amp;bo=MwSAAgAAAAADB5c!&amp;rf=viewer_4" target="_blank" rel="noopener">图例</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-04T11:02:54.065Z" itemprop="dateUpdated">2017-07-04 19:02:54</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/06/14/大数据Ganglia集群监控-CentOS6/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ganglia/">Ganglia</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/&title=《大数据Ganglia集群监控-CentOS6》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/&title=《大数据Ganglia集群监控-CentOS6》 — Gary Wu&source=Ganglia单群集部署Ganglia集群监控
+Ganglia是由UC Berkeley发起的一个开源监控项目，设计用于监控数以千几的节点。每台服务器都运..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《大数据Ganglia集群监控-CentOS6》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/15/chkconfig自定义开机脚本-实现/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">chkconfig自定义开机脚本-实现</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/14/读无字书-杯子取水/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">读无字书-杯子取水 </h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/&title=《大数据Ganglia集群监控-CentOS6》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/&title=《大数据Ganglia集群监控-CentOS6》 — Gary Wu&source=Ganglia单群集部署Ganglia集群监控
+Ganglia是由UC Berkeley发起的一个开源监控项目，设计用于监控数以千几的节点。每台服务器都运..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《大数据Ganglia集群监控-CentOS6》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/06/14/大数据Ganglia集群监控-CentOS6/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

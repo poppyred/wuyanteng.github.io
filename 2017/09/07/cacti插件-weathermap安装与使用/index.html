@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>cacti插件-weathermap安装与使用 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,cacti,weathermap,plugin">
+    <meta name="description" content="获取安装weathermap  #官网https://network-weathermap.com/#download #weathermap 0.98版本要求(PHP 4.3.x + PHP’s gd module)">
+<meta name="keywords" content="高级运维,cacti,weathermap,plugin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cacti插件-weathermap安装与使用">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="获取安装weathermap  #官网https://network-weathermap.com/#download #weathermap 0.98版本要求(PHP 4.3.x + PHP’s gd module)">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_weathermap.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_web_maps.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_huatu.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_%E6%8B%93%E6%89%91_%E8%83%8C%E6%99%AF.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_maps_addnote.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_map_routers.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_link_bandwidth.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_tuli.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_maps_%E6%B5%81%E9%87%8F%E5%9B%BE.jpg">
+<meta property="og:updated_time" content="2017-09-08T02:47:51.882Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cacti插件-weathermap安装与使用">
+<meta name="twitter:description" content="获取安装weathermap  #官网https://network-weathermap.com/#download #weathermap 0.98版本要求(PHP 4.3.x + PHP’s gd module)">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_weathermap.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">cacti插件-weathermap安装与使用</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">cacti插件-weathermap安装与使用</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-07T06:21:33.000Z" itemprop="datePublished" class="page-time">
+  2017-09-07
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-cacti插件-weathermap安装与使用"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">cacti插件-weathermap安装与使用</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-07 14:21:33" datetime="2017-09-07T06:21:33.000Z"  itemprop="datePublished">2017-09-07</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p> 获取安装weathermap</p>
+</blockquote>
+<pre><code>#官网https://network-weathermap.com/#download
+#weathermap 0.98版本要求(PHP 4.3.x + PHP’s gd module)
+</code></pre><a id="more"></a>
+<pre><code>cd /usr/local/src/cacti_plugins
+wget https://github.com/howardjones/network-weathermap/releases/download/version-0.98/php-weathermap-0.98.zip
+unzip php-weathermap-0.98.zip
+mv weathermap /home/www/data/cacti/plugins
+chown -R www.www /home/www/data/cacti/plugins/weathermap/
+</code></pre><blockquote>
+<p>安装weathermap插件</p>
+</blockquote>
+<pre><code>console ---&gt; Plugin Management ---&gt; 选择weathermap ---&gt;点击安装和激活
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_weathermap.png" alt="php-weathermap" title="">
+                </div>
+                <div class="image-caption">php-weathermap</div>
+            </figure>
+<blockquote>
+<p>插件启用后，如果左侧看不到Weathermaps插件，按照如下方法添加</p>
+</blockquote>
+<pre><code>进入CACTI ----&gt; Console ---&gt; Utilities ---&gt; User Management，选择管理员(也可能是非管理员)用户，在“Realm Permissions”里
+勾选： Plugin --&gt; weathermap:Configure/Manage
+      Plugin --&gt; weathermap:Edit Maps
+      Plugin --&gt; weathermap:View 
+</code></pre><blockquote>
+<p>添加MAPS配置文件</p>
+</blockquote>
+<pre><code>weathermap安装好后, plugins/weathermap/configs目录默认会出现两个文件：index.php和simple.conf，无需改动默认配置文件。
+
+但可以手动添加新文件,比如我创建一个 bjzhaowei.conf, 里面输入三个#，保存退出。并把配置文件属主属组修改为www。【注:如果没有修改属主属性和文件权限的话,会有错误的提示。】
+
+进入cacti的页面，console--&gt;management--&gt;weathermaps点击Add，找到我们刚才新加的bjzhaowei.conf文件--&gt;再次点击add。 
+
+
+</code></pre><p>以上MAP文件配置也可以在Web页面添加，不过需要修改editor.php文件</p>
+<pre><code>cd cacti/plugins/weathermap
+vim editor.php
+将 $ENABLED=false;  改为 $ENABLED=true;   【注意最后的分号】
+
+Web访问：http://IP/cacti/plugins/weathermap/editor.php【如下图所示】
+如果不修改这个配置文件将出现如下错误：
+The editor has not been enabled yet. You need to set ENABLED=true at the top of editor.php
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_web_maps.png" alt="cacti_maps" title="">
+                </div>
+                <div class="image-caption">cacti_maps</div>
+            </figure>
+<blockquote>
+<p>画拓扑</p>
+</blockquote>
+<pre><code>访问cacti -- Management -- weathermaps -- 点击已经添加的bjzhaowei.conf 这个Map文件，就进入了画图模式
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_huatu.png" alt="cacti_huatu"></p>
+<pre><code>【Add Node】               添加节点
+【Add Link】               添加节点间的连接 
+【Position Legend】        添加图例 
+【Position Timestamp】     添加制表时间
+
+如果要修改图片背景点击Map Properties，修改图形属性，在Background image这一栏选择相应的图形。然后点击submit提交。
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_%E6%8B%93%E6%89%91_%E8%83%8C%E6%99%AF.png" alt="拓扑背景" title="">
+                </div>
+                <div class="image-caption">拓扑背景</div>
+            </figure>
+<pre><code>点击Add Node创建节点 ---&gt; 然后再按照相同方法创建第二个节点
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_maps_addnote.png" alt="add_note" title="">
+                </div>
+                <div class="image-caption">add_note</div>
+            </figure>
+<pre><code>第一行position，代表该节点的位置，由（横坐标，纵坐标）表示，原点在图形的 最左上角。
+第二行是内部名称，一般是写一个自己能看懂的名字，例如设备名称，最好修改成与Label相一致。
+第三行是Label，标签是显示在外面，显示在网页的名字，给用户看的。默认不支持中文
+第四行Info URL：此节点代表的设备的流量图的网页连接
+第五行‘Hover’Graph URL：此节点代表的设备的流量图的网页连接，通过Pick from cacti这个按钮来选择节点相应的链接
+最后一行选择该节点的图形，假设是router
+</code></pre><p>Add Link添加链接</p>
+<pre><code>点击链路的起始节点，该节点会变红，然后点击链路的结束节点，该节点会变红
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_map_routers.png" alt="cacti_routers_map" title="">
+                </div>
+                <div class="image-caption">cacti_routers_map</div>
+            </figure>
+<pre><code>点击上图链路中的任意一个箭头，会弹出下方的对话框，查看链路带宽和实际的是否相符，不符要进行修改，然后点击Submit，
+
+注：在地市级的城域网中，1000M对应的箭头宽度Link Width是3，10G对应的是5，100M对应的是1。 这是个协定，只是为了绘图统一
+</code></pre><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_link_bandwidth.png" alt="cacti_bandwith" title="">
+                </div>
+                <div class="image-caption">cacti_bandwith</div>
+            </figure>
+<pre><code>Maximum Bandwidth..：此处填写两节点设备之间的连接的带宽
+Data Source：这里填写cacti上服务器rra目录下的某个文件的绝对路径，RRdtools会把这个连接所使用的网卡上的流量抓出来，在/cacti/rra目录下会创建一个后缀为.rra的文件,我们需要在服务器上找到这个文件，把文件的绝对路径添入，或者点击点击[Pick from Cacti],选择之前已经生成的流量图形即可
+Link Width：这里填写箭头和连接的像素宽度，建议使用“5”
+</code></pre><p>Map Style</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_tuli.png" alt="cacti_tuli" title="">
+                </div>
+                <div class="image-caption">cacti_tuli</div>
+            </figure>
+<pre><code>第一行，链路标签，可以选择显示具体数值或者链路占用率或者无显示。
+第二，三行无需修改
+第四行是节点标签的字体
+第五行是链路标签的字体
+第六行是图例的字体
+</code></pre><p>Position Legend为图像添加图例</p>
+<pre><code>点击Position Legend, 再点击右侧空白处,即可添加图例(如上图右侧)
+</code></pre><p>Position Timestamp</p>
+<pre><code>显示当前日期与时间--&gt;点击Position Timestamp --&gt;再点击右下角空白处
+</code></pre><p>鼠标放在对应的链路上会弹出流量图</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/cacti_maps_%E6%B5%81%E9%87%8F%E5%9B%BE.jpg" alt="cacti_流量图" title="">
+                </div>
+                <div class="image-caption">cacti_流量图</div>
+            </figure>
+<blockquote>
+<p>画图过程中，MAP文件Web界面报错解决</p>
+</blockquote>
+<pre><code>错误：
+WARNING: [Map 6] xxx.conf: OVERLIBGRAPH is used, but HTMLSTYLE is static. This is probably wrong.
+
+解决方法：
+【参考官网】在配置文件的开头部分加入参数 “HTMLSTYLE overlib”  ---&gt;保存文件
+
+注：添加完这个参数后，并不会立即消除告警，继续画图即可，一般10分钟后告警就没了
+</code></pre><blockquote>
+<p>将拓扑图的流量由百分比改成 直接显示接口流量</p>
+</blockquote>
+<pre><code>绘制拓扑图视图 ---&gt; Map Style ---&gt;Link Labels ---&gt;把Percentage改为Bits/sec
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-09-08T02:47:51.882Z" itemprop="dateUpdated">2017-09-08 10:47:51</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/07/cacti插件-weathermap安装与使用/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cacti/">cacti</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/plugin/">plugin</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/weathermap/">weathermap</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/&title=《cacti插件-weathermap安装与使用》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/&title=《cacti插件-weathermap安装与使用》 — Gary Wu&source=
+ 获取安装weathermap
+
+#官网https://network-weathermap.com/#download
+#weathermap 0.9..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cacti插件-weathermap安装与使用》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/08/tmux使用技巧-备忘/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">tmux使用技巧-备忘</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">haproxy_nginx高可用负载均衡</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/&title=《cacti插件-weathermap安装与使用》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/&title=《cacti插件-weathermap安装与使用》 — Gary Wu&source=
+ 获取安装weathermap
+
+#官网https://network-weathermap.com/#download
+#weathermap 0.9..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《cacti插件-weathermap安装与使用》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/07/cacti插件-weathermap安装与使用/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

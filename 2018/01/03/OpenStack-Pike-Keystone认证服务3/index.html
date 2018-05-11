@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OpenStack_Pike-Keystone认证服务3 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,openstack,Keystone">
+    <meta name="description" content="keystone认证服务 功能:  1. 账号管理, admin和user  提供用户管理认证 2. 提供服务目录,然后其他服务来keystone进行注册。用户访问过来通过keystone去找glance/neutron等等。">
+<meta name="keywords" content="高级运维,openstack,Keystone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenStack_Pike-Keystone认证服务3">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="keystone认证服务 功能:  1. 账号管理, admin和user  提供用户管理认证 2. 提供服务目录,然后其他服务来keystone进行注册。用户访问过来通过keystone去找glance/neutron等等。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-03T06:14:18.106Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenStack_Pike-Keystone认证服务3">
+<meta name="twitter:description" content="keystone认证服务 功能:  1. 账号管理, admin和user  提供用户管理认证 2. 提供服务目录,然后其他服务来keystone进行注册。用户访问过来通过keystone去找glance/neutron等等。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OpenStack_Pike-Keystone认证服务3</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OpenStack_Pike-Keystone认证服务3</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-03T12:23:37.000Z" itemprop="datePublished" class="page-time">
+  2018-01-03
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-OpenStack-Pike-Keystone认证服务3"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OpenStack_Pike-Keystone认证服务3</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-03 20:23:37" datetime="2018-01-03T12:23:37.000Z"  itemprop="datePublished">2018-01-03</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>keystone认证服务</p>
+<pre><code>功能: 
+1. 账号管理, admin和user  提供用户管理认证
+2. 提供服务目录,然后其他服务来keystone进行注册。用户访问过来通过keystone去找glance/neutron等等。
+</code></pre><a id="more"></a>
+<p>keystone角色概念</p>
+<pre><code>Role即角色，Roles代表一组用户可以访问的资源权限，例如Nova中的虚拟机、Glance中的镜像
+Users 可以被添加到任意一个全局的或项目内的角色中。
+
+在全局的Role中，用户的Role权限作用于所有的项目，即可以对所有的项目执行Role规定的权限；
+在项目内的Role中,用户仅能在当前租户内执行Role规定的权限。
+</code></pre><p>keystone的service和endpoint端点概念</p>
+<pre><code>Service: 即服务实体，如Nova、Glance、Swift。所有的服务就需要在keystone中创建一个账户
+
+Endpoint，翻译为“端点”，我们可以理解它是一个服务暴露出来的访问点。如果需要访问一个服务，则必须知道它的endpoint。Endpoint的每个URL都对应一个服务实例的访问地址，并且具有三种不同权限：admin，internal和public。其中public url可以被全局访问，internal url只能被内部(局域网)访问，admin url被从常规的访问中分离。
+
+为什么分为三个URL？
+可以试想下，如果机器上有三个IP地址的话，公网可以使用public url,内网地址可以使用internal url, 如果有个网络专门作为管理使用，可以配置为admin url。公有云也有类似的API，公共的即public API等等
+</code></pre><blockquote>
+<p>创建keystone数据库</p>
+</blockquote>
+<pre><code>CREATE DATABASE keystone;
+grant all privileges on keystone.* to &#39;keystone&#39;@&#39;%&#39; identified by &#39;keystone&#39;;
+grant all privileges on keystone.* to &#39;keystone&#39;@localhost identified by &#39;keystone&#39;;
+</code></pre><!-- more -->
+<blockquote>
+<p>安装部署Keystone</p>
+</blockquote>
+<pre><code>yum install -y openstack-keystone httpd mod_wsgi
+</code></pre><blockquote>
+<p>配置keystone</p>
+</blockquote>
+<pre><code>vim /etc/keystone/keystone.conf
+</code></pre><pre><code>配置keystone连接到mysql
+
+[database]
+connection = mysql+pymysql://keystone:keystone@192.168.56.11/keystone
+</code></pre><pre><code>配置令牌提供程序
+
+[token]
+provider = fernet
+</code></pre><p>同步keystone数据库</p>
+<pre><code>su -s /bin/sh -c &quot;keystone-manage db_sync&quot; keystone
+</code></pre><p>初始化Fernet密钥库</p>
+<pre><code>keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+
+初始化完成后，/etc/keystone目录下就会出现“fernet-keys”和“credential-keys”目录
+</code></pre><p>初始化引导身份认证服务</p>
+<pre><code>密码使用admin
+
+keystone-manage bootstrap --bootstrap-password admin \
+  --bootstrap-admin-url http://192.168.56.11:35357/v3/ \
+  --bootstrap-internal-url http://192.168.56.11:5000/v3/ \
+  --bootstrap-public-url http://192.168.56.11:5000/v3/ \
+  --bootstrap-region-id RegionOne
+</code></pre><blockquote>
+<p>配置Apache HTTP服务器</p>
+</blockquote>
+<pre><code>vim  /etc/httpd/conf/httpd.conf   #修改ServerName
+
+ServerName 192.168.56.11
+</code></pre><pre><code>软链配置文件
+ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/
+</code></pre><pre><code>启动Apache
+systemctl enable httpd.service
+systemctl start httpd.service
+</code></pre><p>启动验证</p>
+<pre><code>查看端口
+ss -lntup     #检查是否有keystone的5000和35357端口，是否有memcached的11211端口
+
+查keystone启动日志
+less /var/log/keystone/keystone.log
+tailf /var/log/keystone/keystone.log
+</code></pre><p>故障排查</p>
+<pre><code>如果keystone启动失败，需要修改配置文件/etc/keystone/keystone.conf 开启debug日志输出模式
+将“#debug = false” 改为“debug = true”
+
+注：keystone依赖memcache和mysql,可以根据错误日志输出，查看具体故障并进行修复。
+</code></pre><blockquote>
+<p>创建一个服务项目</p>
+</blockquote>
+<p>配置管理账户(其中密码是刚才定义的admin)</p>
+<pre><code>export OS_USERNAME=admin
+export OS_PASSWORD=admin        
+export OS_PROJECT_NAME=admin
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_AUTH_URL=http://192.168.56.11:35357/v3
+export OS_IDENTITY_API_VERSION=3
+</code></pre><pre><code>创建名为service项目(目的：让所需的glance/nova等服务注册到service项目中)
+openstack project create --domain default --description &quot;Service Project&quot; service
+
+创建名为demo项目(创建虚拟机时使用)
+openstack project create --domain default --description &quot;Demo Project&quot; demo
+
+创建一个demo用户
+openstack user create --domain default --password-prompt demo
+
+创建一个user角色
+openstack role create user
+
+把demo用户同时加入到user角色和demo项目中
+openstack role add --project demo --user demo user
+</code></pre><blockquote>
+<p>验证配置</p>
+</blockquote>
+<pre><code>unset OS_AUTH_URL OS_PASSWORD    临时取消环境变量
+</code></pre><p>使用admin用户来验证token</p>
+<pre><code>openstack --os-auth-url http://192.168.56.11:35357/v3 \
+  --os-project-domain-name Default --os-user-domain-name Default \
+  --os-project-name admin --os-username admin token issue
+
+根据提示输入admin用户密码(密码是上面配置的admin)即可出现token  
+</code></pre><p>使用demo用户来验证token</p>
+<pre><code>openstack --os-auth-url http://192.168.56.11:5000/v3 \
+  --os-project-domain-name Default --os-user-domain-name Default \
+  --os-project-name demo --os-username demo token issue
+
+根据提示输入密码demo即可出现token
+</code></pre><blockquote>
+<p>创建环境变量脚本</p>
+</blockquote>
+<ul>
+<li>创建admin的环境变量脚本</li>
+</ul>
+<p>vim /scripts/admin-openrc</p>
+<pre><code>export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=admin
+export OS_AUTH_URL=http://192.168.56.11:35357/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+</code></pre><ul>
+<li>创建demo的环境变量脚本</li>
+</ul>
+<p>vim /scripts/demo-openrc</p>
+<pre><code>export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=demo
+export OS_USERNAME=demo
+export OS_PASSWORD=demo
+export OS_AUTH_URL=http://192.168.56.11:5000/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+</code></pre><ul>
+<li>使用环境变量脚本</li>
+</ul>
+<pre><code>source /scripts/admin-openrc 
+或
+source /scripts/demo-openrc
+</code></pre><ul>
+<li>验证</li>
+</ul>
+<pre><code>不论使用哪个环境变量，只要出现对应token结果就OK
+openstack token issue
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-03-03T06:14:18.106Z" itemprop="dateUpdated">2018-03-03 14:14:18</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/03/OpenStack-Pike-Keystone认证服务3/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Keystone/">Keystone</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openstack/">openstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/&title=《OpenStack_Pike-Keystone认证服务3》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/&title=《OpenStack_Pike-Keystone认证服务3》 — Gary Wu&source=keystone认证服务
+功能: 
+1. 账号管理, admin和user  提供用户管理认证
+2. 提供服务目录,然后其他服务来keystone进行注册..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack_Pike-Keystone认证服务3》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/03/OpenStack-Pike-Glance镜像服务4/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">OpenStack_Pike-Glance镜像服务4</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/03/OpenStack-Pike-基础服务安装2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OpenStack_Pike-基础服务安装2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/&title=《OpenStack_Pike-Keystone认证服务3》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/&title=《OpenStack_Pike-Keystone认证服务3》 — Gary Wu&source=keystone认证服务
+功能: 
+1. 账号管理, admin和user  提供用户管理认证
+2. 提供服务目录,然后其他服务来keystone进行注册..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OpenStack_Pike-Keystone认证服务3》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/03/OpenStack-Pike-Keystone认证服务3/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

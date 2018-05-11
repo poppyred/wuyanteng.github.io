@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>老男孩-Day11-磁盘管理与AWK数组 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,awk数组,磁盘管理">
+    <meta name="description" content="RIADRIAD0 磁盘容量不浪费，存储性好，读写速度块。至少要有1块物理磁盘才能使用RIAD0  RIAD1 镜像，磁盘容量损失50% ；只能2块盘做1个RIAD1。       应用场景：对数据安全性比较高的情况下使用。  RIAD5 至少需要3块以上物理磁盘才能实现RIAD5. 空间利用率n-1        如果任意1块硬盘坏掉，通过奇偶校验会将数据恢复。  RIAD5+Spare（空闲热">
+<meta name="keywords" content="Linux基础,awk数组,磁盘管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="老男孩-Day11-磁盘管理与AWK数组">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="RIADRIAD0 磁盘容量不浪费，存储性好，读写速度块。至少要有1块物理磁盘才能使用RIAD0  RIAD1 镜像，磁盘容量损失50% ；只能2块盘做1个RIAD1。       应用场景：对数据安全性比较高的情况下使用。  RIAD5 至少需要3块以上物理磁盘才能实现RIAD5. 空间利用率n-1        如果任意1块硬盘坏掉，通过奇偶校验会将数据恢复。  RIAD5+Spare（空闲热">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-12T14:03:33.217Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="老男孩-Day11-磁盘管理与AWK数组">
+<meta name="twitter:description" content="RIADRIAD0 磁盘容量不浪费，存储性好，读写速度块。至少要有1块物理磁盘才能使用RIAD0  RIAD1 镜像，磁盘容量损失50% ；只能2块盘做1个RIAD1。       应用场景：对数据安全性比较高的情况下使用。  RIAD5 至少需要3块以上物理磁盘才能实现RIAD5. 空间利用率n-1        如果任意1块硬盘坏掉，通过奇偶校验会将数据恢复。  RIAD5+Spare（空闲热">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">老男孩-Day11-磁盘管理与AWK数组</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">老男孩-Day11-磁盘管理与AWK数组</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-08T01:39:13.000Z" itemprop="datePublished" class="page-time">
+  2017-07-08
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#RIAD"><span class="post-toc-number">1.</span> <span class="post-toc-text">RIAD</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#dd命令"><span class="post-toc-number">2.</span> <span class="post-toc-text">dd命令</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#分区名称"><span class="post-toc-number">3.</span> <span class="post-toc-text">分区名称</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#fdisk磁盘分区"><span class="post-toc-number">4.</span> <span class="post-toc-text">fdisk磁盘分区</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#Parted磁盘分区"><span class="post-toc-number">5.</span> <span class="post-toc-text">Parted磁盘分区</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#刷新分区表、格式化与挂载"><span class="post-toc-number">6.</span> <span class="post-toc-text">刷新分区表、格式化与挂载</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#企业案例：利用文件来增加swap空间"><span class="post-toc-number">7.</span> <span class="post-toc-text">企业案例：利用文件来增加swap空间</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#AWK数组"><span class="post-toc-number"></span> <span class="post-toc-text">AWK数组</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#awk查找"><span class="post-toc-number">1.</span> <span class="post-toc-text">awk查找</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#AWK"><span class="post-toc-number">2.</span> <span class="post-toc-text">AWK</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#数组"><span class="post-toc-number">3.</span> <span class="post-toc-text">数组</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-老男孩-Day11-磁盘管理与AWK数组"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">老男孩-Day11-磁盘管理与AWK数组</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-08 09:39:13" datetime="2017-07-08T01:39:13.000Z"  itemprop="datePublished">2017-07-08</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h6 id="RIAD"><a href="#RIAD" class="headerlink" title="RIAD"></a>RIAD</h6><pre><code>RIAD0 磁盘容量不浪费，存储性好，读写速度块。至少要有1块物理磁盘才能使用RIAD0
+
+RIAD1 镜像，磁盘容量损失50% ；只能2块盘做1个RIAD1。
+      应用场景：对数据安全性比较高的情况下使用。
+
+RIAD5 至少需要3块以上物理磁盘才能实现RIAD5. 空间利用率n-1 
+      如果任意1块硬盘坏掉，通过奇偶校验会将数据恢复。
+
+RIAD5+Spare（空闲热备盘）
+
+RIAD10 至少需要4块硬盘
+
+</code></pre><a id="more"></a>
+<h6 id="dd命令"><a href="#dd命令" class="headerlink" title="dd命令"></a>dd命令</h6><pre><code>dd if=/dev/sda of=/tmp/mbr.bin  bs=512 count=1
+
+if（input file）输入文件或设备名称，从哪里读取数据
+of (output file) 输出文件或设备名称，把数据放到哪里
+bs(block size) 每次读取数据的大小,单位字节
+count 读取多少次
+</code></pre><h6 id="分区名称"><a href="#分区名称" class="headerlink" title="分区名称"></a>分区名称</h6><pre><code>sata/scsi/sas    以sd开头 
+sata第一块硬盘    sda
+sata第二块硬盘    sdb
+sata磁盘第一块硬盘的第一个分区    sda1
+sata磁盘第一块硬盘的第一个逻辑    sda5
+
+第二块ide磁盘的第一个分区    hdb1
+第三块sas磁盘的第二个分区    sdc2
+第四块sata磁盘的第二个逻辑分区 sdd6
+</code></pre><h6 id="fdisk磁盘分区"><a href="#fdisk磁盘分区" class="headerlink" title="fdisk磁盘分区"></a>fdisk磁盘分区</h6><pre><code>fdisk -cu /dev/sdb       分区
+
+Command (m for help): n                                                                          
++50M   例如分50M空间
+p  查看分区
+w  保存
+
+注：（输入错误的话，ctrl+u 清除）
+</code></pre><h6 id="Parted磁盘分区"><a href="#Parted磁盘分区" class="headerlink" title="Parted磁盘分区"></a>Parted磁盘分区</h6><pre><code>fdisk与Parted区别？
+（1）fdisk用于小于2TB磁盘，大于2TB需要使用parted命令
+（2）fdisk需要使用w命令保存后才能生效，而parted命令配置实时生效。
+
+引导记录
+小于2TB的磁盘引导记录叫做MBR（BIOS）
+大于2TB的磁盘引导记录叫做GPT（UEFI）【它的出现是为了解决主分区最多只能有4个的问题】
+</code></pre><pre><code> parted /dev/sdc
+
+ print 显示磁盘分区信息
+ mklable或mktable   创建磁盘分区表
+ mkpart name exit4 0 50   创建分区,默认单位M （其中，name随意定义; exit4文件系统类型）
+ rm  1   删除第一个分区
+ quit   推出parted状态
+</code></pre><h6 id="刷新分区表、格式化与挂载"><a href="#刷新分区表、格式化与挂载" class="headerlink" title="刷新分区表、格式化与挂载"></a>刷新分区表、格式化与挂载</h6><pre><code>通知系统某个磁盘的分区表改变了
+partprobe /dev/sdb
+
+格式化
+mkfs.ext4 /dev/sdb1         格式化为ext4
+
+挂载
+mount /dev/sdb1 /mnt       把/dev/sdb1分区挂载到/mnt目录下
+
+卸载已挂载的目录
+umount /mnt   
+
+开机自动挂载
+vim /etc/fstab
+/dev/sdb1     /mnt         ext4     defaults     0 0
+ 挂载分区     挂载目录  系统文件类型     参数    是否需要备份
+</code></pre><blockquote>
+<p>注：<br>This filesystem will be automatically checked every 37 mounts or 180 days, whichever comes first.</p>
+<p>这个分区在每挂载37次的时候或每180天进行一次磁盘检查 fsck</p>
+<p>取消fsck磁盘检查功能<br>tune2fs -c 0  -i 0 /dev/sdb1</p>
+</blockquote>
+<h6 id="企业案例：利用文件来增加swap空间"><a href="#企业案例：利用文件来增加swap空间" class="headerlink" title="企业案例：利用文件来增加swap空间"></a>企业案例：利用文件来增加swap空间</h6><pre><code>1. 创建文件块
+   # dd if=/dev/zero of=/tmp/100m bs=1M count=100
+   /dev/zero文件代表一个永远输出 0的设备文件，使用它作输入可以得到全为空的文件。
+
+   # ll /tmp/100m -h
+     -rw-r--r--. 1 root root 100M Jul  4 12:49 /tmp/100m
+
+2. 让这个文件块成为swap
+   [root@oldboy202 ~]# file /tmp/100m   查看类型
+   [root@oldboy202 ~]# mkswap /tmp/100m   让文件块成为swap
+   [root@oldboy202 ~]#file /tmp/100m   再查看类型
+
+3. 给正在使用的swap增加空间
+   free -m      查看目前swap空间
+   swapon /tmp/100m   给正在使用的swap增加空间
+   free -m      再次检验
+
+
+开机自动挂载swap
+vim /etc/fstab
+/dev/sdb1     /mnt         ext4     defaults     0 0
+/tmp/100m     swap         swap     defaults     0 0
+
+注；卸载或删除增加的swap空间   swapoff   /tmp/100m
+swapon -a    挂载所有的swap，也可以作为验证/etc/fstab中关于swap配置的正确性。
+</code></pre><h4 id="AWK数组"><a href="#AWK数组" class="headerlink" title="AWK数组"></a>AWK数组</h4><h6 id="awk查找"><a href="#awk查找" class="headerlink" title="awk查找"></a>awk查找</h6><pre><code>awk &#39;NR==5&#39; passwd    显示第5行（2个等号才表示等于）
+
+awk &#39;条件{动作}&#39; filename
+awk &#39;模式{动作}&#39; filename
+
+awk -F &quot;:&quot; &#39;NR==5{print $NF}&#39; passwd    显示第5行的最后一列
+/sbin/nologin
+
+awk &#39;/^root/&#39; passwd  查找出以root开头的行
+
+
+[root@oldboy202 ~]# awk -F “:” &#39;$6~/home/&#39; passwd   查找第6列中包含home的行
+oldboy:x:500:501::/home/oldboy:/bin/bash
+oldgirl:x:501:501::/home/oldgirl:/bin/bash
+注；波浪线（~）表示包含
+</code></pre><h6 id="AWK"><a href="#AWK" class="headerlink" title="AWK"></a>AWK</h6><pre><code>测试环境
+mkdir -p /server/files/
+cat &gt;&gt;/server/files/reg.txt&lt;&lt;EOF
+Zhang Dandan    41117397   :250:100:175
+Zhang Xiaoyu    390320151  :155:90:201
+Meng  Feixue    80042789   :250:60:50
+Wu    Waiwai    70271111   :250:80:75
+Liu   Bingbing  41117483   :250:100:175
+Wang  Xiaoai    3515064655 :50:95:135
+Zi    Gege      1986787350 :250:168:200
+Li    Youjiu    918391635  :175:75:300
+Lao   Nanhai    918391635  :250:100:175
+EOF
+
+注： &#39;/oldboy/&#39; 就相当于 &#39;$0/oldboy/&#39;    表示整行
+
+（1）显示姓Zhang第二次捐款的金额（并显示姓名）
+[root@oldboy202 files]# awk -F &quot;[ :]+&quot; &#39;$1~/^Zhang/{print $1,$2,$5}&#39; reg.txt 
+Zhang Dandan 100
+Zhang Xiaoyu 90
+[root@oldboy202 files]# awk -F &quot;[ :]+&quot; &#39;$1~/^Zhang/{print $1,$2,$(NF-1)}&#39; reg.txt 
+Zhang Dandan 100
+Zhang Xiaoyu 90
+注；波浪线（~）表示包含.
+    $1~    表示第一列包含XXX
+</code></pre><pre><code>（2）显示Xiaoyu的姓氏和ID号码
+[root@oldboy202 files]# awk &#39;$2~/Xiaoyu/&#39; reg.txt 
+Zhang Xiaoyu    390320151  :155:90:201
+
+[root@oldboy202 files]# awk &#39;$2~/Xiaoyu/{print $1,$3}&#39; reg.txt 
+Zhang 390320151
+</code></pre><pre><code>（3）查找第三列以41开头的行
+[root@oldboy202 files]# awk &#39;$3~/^41/&#39; reg.txt 
+Zhang Dandan    41117397   :250:100:175
+Liu   Bingbing  41117483   :250:100:175
+</code></pre><pre><code>显示所有以41开头的ID号码的人的全名和ID号码
+[root@oldboy202 files]# awk &#39;$3~/^41/{print $1,$2,$3}&#39; reg.txt 
+Zhang Dandan 41117397
+Liu Bingbing 41117483
+</code></pre><pre><code>显示所有以一个D或X开头的人名全名
+[root@oldboy202 files]# awk &#39;$2~/^D|^X/&#39; reg.txt 
+Zhang Dandan    41117397   :250:100:175
+Zhang Xiaoyu    390320151  :155:90:201
+Wang  Xiaoai    3515064655 :50:95:135
+
+[root@oldboy202 files]# awk &#39;$2~/^D|^X/{print $1,$2}&#39; reg.txt 
+Zhang Dandan    41117397   :250:100:175
+Zhang Xiaoyu    390320151  :155:90:201
+Wang  Xiaoai    3515064655 :50:95:135
+
+##################################################################
+
+[root@oldboy202 files]# awk &#39;$2~/^[DX]/&#39; reg.txt 
+Zhang Dandan    41117397   :250:100:175
+Zhang Xiaoyu    390320151  :155:90:201
+Wang  Xiaoai    3515064655 :50:95:135
+
+[root@oldboy202 files]# awk &#39;$2~/^[DX]/{print $1,$2}&#39; reg.txt 
+Zhang Dandan
+Zhang Xiaoyu
+Wang Xiaoai
+</code></pre><pre><code>显示ID号为1或5结尾的人的全名
+
+[root@oldboy202 files]# awk &#39;$3~/[14$]/&#39; reg.txt     方法1
+Zhang Dandan    41117397   :250:100:175
+Zhang Xiaoyu    390320151  :155:90:201
+Meng  Feixue    80042789   :250:60:50
+Wu    Waiwai    70271111   :250:80:75
+
+[root@oldboy202 files]# awk &#39;$3~/1$|5$/&#39; reg.txt     方法2
+Zhang Xiaoyu    390320151  :155:90:201
+Wu    Waiwai    70271111   :250:80:75
+Wang  Xiaoai    3515064655 :50:95:135
+Li    Youjiu    918391635  :175:75:300
+
+</code></pre><pre><code>显示Xiaoyu的捐款，结果每个值都以$开头，如$520$200$135  
+awk &#39;$2~/Xiaoyu/{print $NF}&#39; reg.txt |tr &quot;:&quot; &quot;$&quot;       方法1
+$155$90$201
+
+awk &#39;$2~/Xiaoyu/{gsub(/:/,&quot;$&quot;,$NF);print $NF}&#39; reg.txt   方法2
+$155$90$201
+
+gsub格式：
+gsub(找谁,替换成什么,替换哪一列)
+gsub(找谁,替换成什么)  ==== gsub(找谁,替换成什么,$0)
+echo oldboy|awk &#39;{gsub(/oldboy/,&quot;oldgirl&quot;);print $0}&#39;
+</code></pre><pre><code>显示所有人的全名，以姓,名的格式显示，如Meng,Feixue
+[root@oldboy202 files]# awk &#39;{print $1,$2}&#39; reg.txt 
+Zhang Dandan
+Zhang Xiaoyu
+Meng Feixue
+Wu Waiwai
+Liu Bingbing
+Wang Xiaoai
+Zi Gege
+Li Youjiu
+Lao Nanhai
+</code></pre><pre><code>查找第二列包含Waiwai的列，并替换$3列中的内容70271111改为garywu
+[root@oldboy202 files]# awk -F &quot;[ ]+&quot; &#39;$2~/Waiwai/{gsub(/70271111/,&quot;garywu&quot;,$3);print $3}&#39; reg.txt 
+garywu
+</code></pre><h6 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h6><pre><code>测试环境
+vim html.txt
+http://www.etiantian.org/index.html
+http://www.etiantian.org/1.html
+http://post.etiantian.org/index.html
+http://mp3.etiantian.org/index.html
+http://www.etiantian.org/3.html
+http://post.etiantian.org/2.html
+</code></pre><pre><code>统计第二列内容出现的总次数
+
+[root@oldboy202 ~]# awk -F &quot;[:/.]+&quot; &#39;{print $2}&#39; html.txt
+
+[root@oldboy202 ~]# awk -F &quot;[:/.]+&quot; &#39;{print $2}&#39; html.txt |sort |uniq -c
+      1 mp3
+      2 post
+      3 www
+
+注：sort 是排序，务必先排序
+    uniq -c  统计次数
+</code></pre><p>awk数组</p>
+<pre><code>[root@oldboy202 ~]# awk -F &quot;[/.]+&quot; &#39;{myarr[$2]=myarr[$2]+1}END{for(x in myarr)print x,myarr[x]}&#39; html.txt 
+www 3
+mp3 1
+post 2
+
+注：
+{myarr[$2]=myarr[$2]+1}  意思是给数组赋值，当该赋值语句被执行后，则值为myarr[$2]+1
+END  可以理解为数组赋值定义结束时需要使用
+{for(x in myarr)print x,myarr[x]}  当你使用for循环中的这个in格式时，awk将把数组中的myarr的每一个赋值交给“循环控制变量” X。在本例中，x即为$2的内容，即www或mp3或post。而myarr[x]就等于myarr[$2]+1} 即计算出的次数。所以后半部分我们要打印计算的结果，所以使用print x,myarr[x] 最终显示的结果就是
+www 3
+mp3 1
+post 2
+
+
+[root@oldboy202 ~]# awk -F &quot;[/.]+&quot; &#39;{myarr[$2]++}END{for(x in myarr)print x,myarr[x]}&#39; html.txt 
+www 3
+mp3 1
+post 2
+注： myarr[$2]=myarr[$2]+1 可以简写为myarr[$2]++
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-12T14:03:33.217Z" itemprop="dateUpdated">2017-07-12 22:03:33</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/" target="_blank" rel="external">https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/awk数组/">awk数组</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/&title=《老男孩-Day11-磁盘管理与AWK数组》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/&title=《老男孩-Day11-磁盘管理与AWK数组》 — Gary Wu&source=RIADRIAD0 磁盘容量不浪费，存储性好，读写速度块。至少要有1块物理磁盘才能使用RIAD0
+
+RIAD1 镜像，磁盘容量损失50% ；只能2块盘做1..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-Day11-磁盘管理与AWK数组》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/10/cloudera-manager群集安装报错/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">cloudera manager群集安装报错</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/06/Yarn不能给某些机器分配任务-解决方案/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Yarn不能给某些机器分配任务-解决方案</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/&title=《老男孩-Day11-磁盘管理与AWK数组》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/&title=《老男孩-Day11-磁盘管理与AWK数组》 — Gary Wu&source=RIADRIAD0 磁盘容量不浪费，存储性好，读写速度块。至少要有1块物理磁盘才能使用RIAD0
+
+RIAD1 镜像，磁盘容量损失50% ；只能2块盘做1..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩-Day11-磁盘管理与AWK数组》 — Gary Wu&url=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

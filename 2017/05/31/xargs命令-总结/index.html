@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>xargs命令-总结 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux基础,xargs">
+    <meta name="description" content="find命令查找/oldboy/free目录下以log结尾且大于1M的文件，并拷贝到/tmp/b目录中 xargs方法一： find /oldboy/free -type f -name &amp;quot;*.log&amp;quot; -size +1M |xargs cp -t /tmp/b/   参数说明：-t参数 意思是告诉cp, /tmp/b是一个目录">
+<meta name="keywords" content="Linux基础,xargs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xargs命令-总结">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/05/31/xargs命令-总结/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="find命令查找/oldboy/free目录下以log结尾且大于1M的文件，并拷贝到/tmp/b目录中 xargs方法一： find /oldboy/free -type f -name &amp;quot;*.log&amp;quot; -size +1M |xargs cp -t /tmp/b/   参数说明：-t参数 意思是告诉cp, /tmp/b是一个目录">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-05-31T13:44:46.597Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="xargs命令-总结">
+<meta name="twitter:description" content="find命令查找/oldboy/free目录下以log结尾且大于1M的文件，并拷贝到/tmp/b目录中 xargs方法一： find /oldboy/free -type f -name &amp;quot;*.log&amp;quot; -size +1M |xargs cp -t /tmp/b/   参数说明：-t参数 意思是告诉cp, /tmp/b是一个目录">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">xargs命令-总结</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">xargs命令-总结</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-31T03:04:02.000Z" itemprop="datePublished" class="page-time">
+  2017-05-31
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#find命令"><span class="post-toc-number">1.</span> <span class="post-toc-text">find命令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ss命令"><span class="post-toc-number">2.</span> <span class="post-toc-text">ss命令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#inode"><span class="post-toc-number">3.</span> <span class="post-toc-text">inode</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看每个分区inode节点大小"><span class="post-toc-number">4.</span> <span class="post-toc-text">查看每个分区inode节点大小</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#遇到磁盘空间不足怎么办？"><span class="post-toc-number"></span> <span class="post-toc-text">遇到磁盘空间不足怎么办？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#磁盘空间不足，有三种情况："><span class="post-toc-number">1.</span> <span class="post-toc-text">磁盘空间不足，有三种情况：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#真实案例："><span class="post-toc-number">2.</span> <span class="post-toc-text">真实案例：</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查看文件类型"><span class="post-toc-number"></span> <span class="post-toc-text">查看文件类型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#权限"><span class="post-toc-number"></span> <span class="post-toc-text">权限</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#软硬链接"><span class="post-toc-number"></span> <span class="post-toc-text">软硬链接</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#软连接（又名符号链接）"><span class="post-toc-number">1.</span> <span class="post-toc-text">软连接（又名符号链接）</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#lsof-命令"><span class="post-toc-number"></span> <span class="post-toc-text">lsof 命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#seq命令"><span class="post-toc-number"></span> <span class="post-toc-text">seq命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#du命令-计算文件所占空间"><span class="post-toc-number"></span> <span class="post-toc-text">du命令-计算文件所占空间</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#用户和组"><span class="post-toc-number"></span> <span class="post-toc-text">用户和组</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查看所有shell"><span class="post-toc-number"></span> <span class="post-toc-text">查看所有shell</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#awk"><span class="post-toc-number"></span> <span class="post-toc-text">awk</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Linux三种时间（了解）"><span class="post-toc-number"></span> <span class="post-toc-text">Linux三种时间（了解）</span></a>
+        </nav>
+    </aside>
+
+
+<article id="post-xargs命令-总结"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">xargs命令-总结</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-31 11:04:02" datetime="2017-05-31T03:04:02.000Z"  itemprop="datePublished">2017-05-31</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="find命令"><a href="#find命令" class="headerlink" title="find命令"></a>find命令</h4><p>查找/oldboy/free目录下以log结尾且大于1M的文件，并拷贝到/tmp/b目录中</p>
+<p>xargs方法一：</p>
+<pre><code>find /oldboy/free -type f -name &quot;*.log&quot; -size +1M |xargs cp -t /tmp/b/
+
+
+参数说明：-t参数 意思是告诉cp, /tmp/b是一个目录
+</code></pre><a id="more"></a>
+<p>xargs方法二：</p>
+<pre><code>find  /oldboy/free -type f -name &quot;*.log&quot; -size +1M |xargs -i cp {} /tmp/d  
+
+xargs -i 和{} 结合，中括号可以理解为前面命令执行的结果，作为此命令的输入【-i参数，可以宽泛理解为数据传递】
+</code></pre><p>范例1：</p>
+<pre><code>我要查找/oldboy目录下的“.bak”且大于1M的文件，并全部改名为“*.log”
+
+ find /oldboy -type f -name &quot;*.log&quot; -size +1M |xarg -i mv {} {}.log
+</code></pre><p>范例2：删除当前目录下的所有tmp文件</p>
+<pre><code>find ./ -type f -name &quot;*.tmp&quot; |xargs -i rm -rf {}
+</code></pre><p>范例3：查找当前目录所有包含baidu关键词的json文件</p>
+<pre><code>find ./ -type f -name &quot;*.json&quot; |xargs grep baidu
+</code></pre><p>范例4：删除/oldboy目录下的所有普通文件</p>
+<pre><code>find /oldboy -type f |xargs -i rm -rf {}
+</code></pre><h4 id="ss命令"><a href="#ss命令" class="headerlink" title="ss命令"></a>ss命令</h4><pre><code> ss  -lntup |grep sshd     
+ 查看服务对应端口或端口是否已经启用
+
+ -l  显示监听状态的套接字（sockets）
+ -n  不解析服务名称
+ -t  仅显示tcp套接字
+ -u  仅显示udp套接字
+ -p  显示使用套接字的进程
+</code></pre><h4 id="inode"><a href="#inode" class="headerlink" title="inode"></a>inode</h4><pre><code>一个非空文件至少占用一个inode和一个block
+inode 在一个文件系统分区里面，inode号码唯一
+
+df -h     查看分区磁盘占用情况
+df -i     查看分区inode占用
+
+ls -li /etc/hosts    显示文件inode
+
+
+stat /etc/hosts      查看文件属性(包括inode、block、访问权限、G/Uid和修改时间等信息)
+
+[root@openvpn1 ~]# stat /etc/passwd
+File: `/etc/passwd&#39;
+Size: 1166          Blocks: 8          IO Block: 4096   regular file
+Device: fd00h/64768d    Inode: 1183654     Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2017-05-30 17:37:01.130227361 +0800
+Modify: 2017-03-08 13:42:06.234661626 +0800
+Change: 2017-03-08 13:42:06.235662212 +0800
+</code></pre><p>block用来存储实际数据，每个block的大小一般有1k、2k、4k</p>
+<h4 id="查看每个分区inode节点大小"><a href="#查看每个分区inode节点大小" class="headerlink" title="查看每个分区inode节点大小"></a>查看每个分区inode节点大小</h4><pre><code>dumpe2fs /dev/sda3 |grep &quot;Block size&quot;
+dumpe2fs /dev/sda3 |grep -i &quot;block size&quot;
+
+dumpe2fs /dev/sda3 |grep &quot;Inode size&quot;
+dumpe2fs /dev/sda3 |grep -i&quot;inode size&quot;
+
+假设，/dev/sda3是指系统的根分区
+
+
+附件：grep命令
+
+grep -i 找东西的时候不区分大小写（用法如上）
+</code></pre><h2 id="遇到磁盘空间不足怎么办？"><a href="#遇到磁盘空间不足怎么办？" class="headerlink" title="遇到磁盘空间不足怎么办？"></a>遇到磁盘空间不足怎么办？</h2><pre><code>no-space-left-on-device
+磁盘空间不足
+</code></pre><h4 id="磁盘空间不足，有三种情况："><a href="#磁盘空间不足，有三种情况：" class="headerlink" title="磁盘空间不足，有三种情况："></a>磁盘空间不足，有三种情况：</h4><ul>
+<li>block满了   使用df -h查看剩余空间</li>
+<li>inode满了   使用df -i 查看可用inode</li>
+<li>block进程占用   一般重启对应程序即可 </li>
+</ul>
+<h4 id="真实案例："><a href="#真实案例：" class="headerlink" title="真实案例："></a>真实案例：</h4><pre><code> 在一台配置较低的Linux服务器（内存、硬盘比较小）的/data分区内创建文件时，系统提示磁盘空间不足，用df -h命令查看了一下磁盘使用情况，发现/data分区只使用了66%，还有12G的剩余空间，按理说不会出现这种问题。 后来用df -i查看了一下/data分区的索引节点(inode)，发现已经用满(IUsed=100%)，导致系统无法创建新目录和文件。 
+
+
+ 查找原因：/data/cache目录中存在数量非常多的小字节缓存文件，占用的Block不多，但是占用了大量的inode。 
+
+ 解决方案：  
+   1、删除/data/cache目录中的部分文件，释放出/data分区的一部分inode。
+   2、用软连接将空闲分区/opt中的newcache目录连接到/data/cache，使用/opt分区的inode来缓解/data分区inode不足的问题：
+     ln -s /opt/newcache /data/cache 
+</code></pre><h2 id="查看文件类型"><a href="#查看文件类型" class="headerlink" title="查看文件类型"></a>查看文件类型</h2><pre><code>格式：file  filename
+</code></pre><h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><pre><code>r    read 可读     数字4
+w    write 可写    数字2
+x    execlute可执行 数字1
+-    无权限         数字0
+</code></pre><h2 id="软硬链接"><a href="#软硬链接" class="headerlink" title="软硬链接"></a>软硬链接</h2><pre><code>软链接类似windows下的快捷方式
+命令格式： ln  -s  源文件   软链接文件
+
+
+硬链接（命令不加参数，默认创建硬链接）
+命令格式： ln  -s  源文件   软链接文件
+
+特点：同分区下inode相同，注意是同分区
+
+格式：ln 源文件 硬件链接文件
+
+ls -li filename   //查看文件inode信息
+</code></pre><p>注：硬链接可理解为超市前后门，或者超市有多个出入口。硬链接源文件删除后，硬链接后的文件数据依然存在</p>
+<h4 id="软连接（又名符号链接）"><a href="#软连接（又名符号链接）" class="headerlink" title="软连接（又名符号链接）"></a>软连接（又名符号链接）</h4><pre><code>  格式： ln  -s  源文件  软链接文件
+
+  readlink 软链接文件     查看软链接文件内容
+
+注意：1. 不能对目录创建硬链接，但可以对目录和文件创建软链接
+      2. 软链接可以跨文件系统进行创建
+</code></pre><p>文件被彻底删除条件<br>    硬链接数量为0（删除所有硬链接）<br>    进程调用数量为0（程序进程被调用-解决方案：重启服务）</p>
+<h2 id="lsof-命令"><a href="#lsof-命令" class="headerlink" title="lsof 命令"></a>lsof 命令</h2><pre><code> lsof 显示所有被打开的文件（可看到正在被哪些程序进程占用）
+      解决方法一般是重启相应服务，让进程放弃占用即可
+
+ 删除：  
+ \rm  -rf  /var/log/messages 
+
+ lsof  |grep messages  查看messages文件被哪个程序调用
+ （文件删除后，查找程序调用，文件名称后面会显示deleted）
+
+ /etc/init.d/rsyslog  restart 重启
+</code></pre><h2 id="seq命令"><a href="#seq命令" class="headerlink" title="seq命令"></a>seq命令</h2><pre><code> seq  100000000 &gt;&gt; /var/log/messages
+ 用于生产从某个数到另外一个数之间的所有整数。
+</code></pre><h2 id="du命令-计算文件所占空间"><a href="#du命令-计算文件所占空间" class="headerlink" title="du命令-计算文件所占空间"></a>du命令-计算文件所占空间</h2><pre><code>-s   summary 简介
+-h   人类可读的方式显示大小
+
+du  -sh /*  |grep G   只显示以G为大小的文件
+du  -sh /*  |grep M   只显示以M为大小的文件
+</code></pre><h2 id="用户和组"><a href="#用户和组" class="headerlink" title="用户和组"></a>用户和组</h2><pre><code>root 用户UID和GID都为0
+普通用户 UID从500开始
+/etc/passwd 存放用户信息
+/etc/shadow 存放用户密码
+</code></pre><h2 id="查看所有shell"><a href="#查看所有shell" class="headerlink" title="查看所有shell"></a>查看所有shell</h2><pre><code> cat /etc/shells  
+</code></pre><h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><pre><code> awk -F: &#39;{print $1,$3,$NF}&#39; /etc/passwd
+ 以冒号为菜刀，取首列/第三列和最后一列
+
+ awk -F : &#39;{print $1,$NF}&#39; /etc/passwd    
+以冒号为菜刀，取首列和最后一列
+
+awk -F: &#39;{print $NF}&#39; /etc/passwd
+以冒号为菜刀，取最后一列
+</code></pre><h2 id="Linux三种时间（了解）"><a href="#Linux三种时间（了解）" class="headerlink" title="Linux三种时间（了解）"></a>Linux三种时间（了解）</h2><pre><code> mtime  文件内容修改时间  
+ ctime  属性改变时间
+ atime  访问时间
+
+ stat   filename   使用stat命令查看详细时间
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-05-31T13:44:46.597Z" itemprop="dateUpdated">2017-05-31 21:44:46</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/05/31/xargs命令-总结/" target="_blank" rel="external">https://wuyanteng.github.io/2017/05/31/xargs命令-总结/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xargs/">xargs</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/&title=《xargs命令-总结》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/&title=《xargs命令-总结》 — Gary Wu&source=find命令查找/oldboy/free目录下以log结尾且大于1M的文件，并拷贝到/tmp/b目录中
+xargs方法一：
+find /oldboy/fr..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《xargs命令-总结》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/05/31/OA/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">免费OA/PB/CC部署</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/27/获取最新-中国地区IP段/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">获取最新-中国地区IP段</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/&title=《xargs命令-总结》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/&title=《xargs命令-总结》 — Gary Wu&source=find命令查找/oldboy/free目录下以log结尾且大于1M的文件，并拷贝到/tmp/b目录中
+xargs方法一：
+find /oldboy/fr..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《xargs命令-总结》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/05/31/xargs命令-总结/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

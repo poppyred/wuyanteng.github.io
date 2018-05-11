@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MySQL新增从库-数据量T级 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,MySQL,新增从库,2002,1236,1062">
+    <meta name="description" content="实战新增从库流程，数据量T级别，耗时3-4天，特记录如下：">
+<meta name="keywords" content="高级运维,MySQL,新增从库,2002,1236,1062">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL新增从库-数据量T级">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="实战新增从库流程，数据量T级别，耗时3-4天，特记录如下：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-26T09:28:29.273Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL新增从库-数据量T级">
+<meta name="twitter:description" content="实战新增从库流程，数据量T级别，耗时3-4天，特记录如下：">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MySQL新增从库-数据量T级</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MySQL新增从库-数据量T级</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-13T03:23:19.000Z" itemprop="datePublished" class="page-time">
+  2018-02-13
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#主库准备"><span class="post-toc-number">1.</span> <span class="post-toc-text">主库准备</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#从库流程"><span class="post-toc-number">2.</span> <span class="post-toc-text">从库流程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置主从同步"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置主从同步</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#故障处理"><span class="post-toc-number">4.</span> <span class="post-toc-text">故障处理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#从库优化"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">从库优化</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-MySQL新增从库-数据量T级"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MySQL新增从库-数据量T级</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-13 11:23:19" datetime="2018-02-13T03:23:19.000Z"  itemprop="datePublished">2018-02-13</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>实战新增从库流程，数据量T级别，耗时3-4天，特记录如下：
+</code></pre><a id="more"></a>
+<h4 id="主库准备"><a href="#主库准备" class="headerlink" title="主库准备"></a>主库准备</h4><pre><code>(1)备份之前,查询主库当前binlog名称和position号,并切割生成新的binlog文件
+   mysql&gt; show master status;
+   mysql&gt; flush logs;
+(2)新增或使用原有slave同步账户和密码
+   grant replication slave on *.* to repl@&#39;192.168.1.%&#39; identified by &#39;123&#39;;
+(3)xtrabackup全备主库数据并流式压缩后rsync到从库(目的:确保在某个时间点数据一致) 
+   innobackupex --defaults-file=/etc/my.cnf --user=root --password=123 --use-memory=5G  \        --stream=xbstream /data/A/backup/mysql/allbackup |gzip - &gt; \ /data/A/backup/mysql/allbackup/NewAll31.xbstream.gz
+
+注：--use-memory=5G使用多大内存, 根据实际情况修改，默认100M，慢死如牛。。。   
+</code></pre><h4 id="从库流程"><a href="#从库流程" class="headerlink" title="从库流程"></a>从库流程</h4><p>编译部署MySQL</p>
+<pre><code>部署过程略，强调2点：
+(1)MySQL版本务必与主库一致(否则会报各种plugin找不到错误)
+(2)/etc/my.cnf文件需要与主库参数一致(数据目录可以不一致，这里主要说的是参数)
+
+确保使用(与主库配置一致的my.cnf文件)可以正常启动mysql即可。
+</code></pre><p>全备数据恢复到MySQL数据目录</p>
+<pre><code>开启Tmux解压
+gzip -d NewAll31.xbstream.gz      #第一次解压
+mkdir NewAll31
+xbstream -xC NewAll31 &lt; NewALL31.xbstream  #第二次解压
+</code></pre><p>数据整合</p>
+<pre><code>(1)停止数据库
+/etc/init.d/mysqld stop
+
+(2)并清空（MySQL已初始化产生的文件）数据目录,否则下面步骤会报错
+cd /data/B/mysql/data &amp;&amp; rm -rf ./*
+
+(3)第一次数据整合(--apply-log)
+innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log --use-memory=5G   /data/B/rsync/NewAll31
+
+(4)第二次数据整合(--copy-back)
+innobackupex --defaults-file=/etc/my.cnf --user=root --copy-back  --use-memory=5G  /data/B/rsync/NewAll31
+
+注:第二次数据整合过程会把解压的全备文件拷贝到my.cnf(拷贝方式)写的数据目录里面
+</code></pre><p>修改文件属主属组</p>
+<pre><code>chown -R mysql.mysql /data/B/mysql/data    #改变文件所属
+</code></pre><p>启动MySQL</p>
+<pre><code>/etc/init.d/mysqld start     
+</code></pre><p>连接MySQL</p>
+<pre><code>mysql -uroot -p   #这里输入与登陆主库一样的用户名和密码
+</code></pre><pre><code>故障：如果这里用户名和密码都正确,但登陆提示错误Errir 2002 。。。。/tmp/mysql.sock
+解决方法: 编辑my.cnf 在client模块下指定我们定义的sock路径：
+[client]
+socket=/data/B/mysql/mysql.sock
+重启mysql,重新登录
+</code></pre><h4 id="配置主从同步"><a href="#配置主从同步" class="headerlink" title="配置主从同步"></a>配置主从同步</h4><p>change master to</p>
+<pre><code>CHANGE MASTER TO
+  MASTER_HOST=&#39;192.168.1.5&#39;,
+  MASTER_USER=&#39;repl&#39;,
+  MASTER_PASSWORD=&#39;repl&#39;,
+  MASTER_PORT=3306,
+  MASTER_LOG_FILE=&#39;mysql-bin.003394&#39;,
+  MASTER_LOG_POS=36035455;
+
+注：如果上面的binlog文件和position号忘记，则可以在主库通过以下方式查看
+mysql&gt; show binary logs;     #查看所有binlog文件
+mysql&gt; SHOW BINLOG EVENTS IN &#39;mysql-bin.003394&#39; \G       #查看具体binlog的position号
+</code></pre><p>启动从库同步</p>
+<pre><code>mysql&gt; start slave;
+mysql&gt; show slave status\G      #查看主从同步状态
+</code></pre><h4 id="故障处理"><a href="#故障处理" class="headerlink" title="故障处理"></a>故障处理</h4><ul>
+<li>主从同步错误：1062 主键重复错误</li>
+</ul>
+<pre><code>故障描述：
+Last_SQL_Errno: 1062
+Last_SQL_Error: Error &#39;Duplicate entry &#39;82427&#39; for key &#39;PRIMARY&#39;&#39; on query. Default database: &#39;smartcity&#39;. Query: &#39;INSERT INTO `cpnt_info` ......
+
+解决方法：
+stop slave; 
+set global sql_slave_skip_counter=1; 
+start slave; 
+show slave status\G
+</code></pre><ul>
+<li>主从同步错误: 1236</li>
+</ul>
+<pre><code>如果此时出现1236错误，在主库查看mysql-bin.003394这个binlog的position号这里是36035408，然后从库进行如下操作
+stop slave;
+change master to master_log_file=&#39;mysql-bin.003394&#39;,master_log_pos=36035408;
+start slave;
+show slave status\G
+</code></pre><h5 id="从库优化"><a href="#从库优化" class="headerlink" title="从库优化"></a>从库优化</h5><pre><code>中继日志(relay log)
+relay_log = relay-log         # 开启中继日志(从库默认启用)
+relay_log_info_file = relay-log.info     # 记录中继日志的文件和事件位置以及二进制的文件和事件位置
+relay_log_recovery = ON       # (备库)relaylog自动修复，避免网络等造成损坏，导致主从停止
+relay_log_purge = ON          # (备库)启动自动清除中继日志
+log_slave_updates = OFF       # (备库)是否将接收到的记录到本地binlog，用于级联复制
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-26T09:28:29.273Z" itemprop="dateUpdated">2018-02-26 17:28:29</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/02/13/MySQL新增从库-数据量T级/" target="_blank" rel="external">https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/1062/">1062</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/1236/">1236</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2002/">2002</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/新增从库/">新增从库</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/&title=《MySQL新增从库-数据量T级》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/&title=《MySQL新增从库-数据量T级》 — Gary Wu&source=实战新增从库流程，数据量T级别，耗时3-4天，特记录如下：
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL新增从库-数据量T级》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/14/Shell变量自增/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Shell变量自增</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/11/zabbix自定义shell实现邮件告警/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">zabbix自定义shell实现邮件告警</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/&title=《MySQL新增从库-数据量T级》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/&title=《MySQL新增从库-数据量T级》 — Gary Wu&source=实战新增从库流程，数据量T级别，耗时3-4天，特记录如下：
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL新增从库-数据量T级》 — Gary Wu&url=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/02/13/MySQL新增从库-数据量T级/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

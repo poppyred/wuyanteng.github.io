@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>ssh登陆基于Google Authenticator实现双因素认证 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,ssh,chrony,Google Authenticator">
+    <meta name="description" content="介绍 简单说，就像我们几年前去银行办卡送的口令牌，以及网易游戏中的将军令，在你使用网银或登陆游戏时会再让你输入动态口令的。">
+<meta name="keywords" content="高级运维,ssh,chrony,Google Authenticator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh登陆基于Google Authenticator实现双因素认证">
+<meta property="og:url" content="https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="介绍 简单说，就像我们几年前去银行办卡送的口令牌，以及网易游戏中的将军令，在你使用网银或登陆游戏时会再让你输入动态口令的。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-22T06:06:23.012Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ssh登陆基于Google Authenticator实现双因素认证">
+<meta name="twitter:description" content="介绍 简单说，就像我们几年前去银行办卡送的口令牌，以及网易游戏中的将军令，在你使用网银或登陆游戏时会再让你输入动态口令的。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">ssh登陆基于Google Authenticator实现双因素认证</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">ssh登陆基于Google Authenticator实现双因素认证</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-22T06:02:24.000Z" itemprop="datePublished" class="page-time">
+  2018-01-22
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">部署</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-ssh登陆基于Google-Authenticator实现双因素认证"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">ssh登陆基于Google Authenticator实现双因素认证</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-22 14:02:24" datetime="2018-01-22T06:02:24.000Z"  itemprop="datePublished">2018-01-22</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>介绍</p>
+<pre><code>简单说，就像我们几年前去银行办卡送的口令牌，以及网易游戏中的将军令，在你使用网银或登陆游戏时会再让你输入动态口令的。
+</code></pre><a id="more"></a>
+<pre><code>双因素认证：双因素身份认证就是通过你所知道再加上你所能拥有的这二个要素组合到一起才能发挥作用的身份认证系统。双因素认证是一种采用时间同步技术的系统，采用了基于时间、事件和密钥三变量而产生的一次性密码来代替传统的静态密码。每个动态密码卡都有一个唯一的密钥，该密钥同时存放在服务器端，每次认证时动态密码卡与服务器分别根据同样的密钥，同样的随机参数（时间、事件）和同样的算法计算了认证的动态密码，从而确保密码的一致性，从而实现了用户的认证。因每次认证时的随机参数不同，所以每次产生的动态密码也不同。由于每次计算时参数的随机性保证了每次密码的不可预测性，从而在最基本的密码认证这一环节保证了系统的安全性。
+</code></pre><p>目的</p>
+<pre><code>实现登录Linux 服务器时，除了输入用户名密码外，需要输入一次性的动态口令才能验证成功。当然也可以实现ssh密钥登陆+动态口令
+</code></pre><h4 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h4><ul>
+<li>安装chrony</li>
+</ul>
+<pre><code>生成动态口令的其中一个因素是时间，需要保持终端设备和服务器的系统时间一致，才能生成同一的动态口令
+
+简单说下chrony：chrony 是网络时间协议的（NTP）的另一种实现，与网络时间协议后台程序（ntpd）不同，它可以更快地更准确地同步系统始终。
+</code></pre><p><a href="http://www.pool.ntp.org/zone/cn" target="_blank" rel="noopener">NTP中国授时中心</a></p>
+<pre><code>安装
+yum install -y chrony
+
+配置
+vim /etc/chrony.conf
+server 0.cn.pool.ntp.org iburst
+
+启动
+systemctl restart chronyd
+chronyc sources
+
+验证
+[root@localhost ~]# date
+2016年 12月 31日 星期六 09:30:24 CST
+</code></pre><ul>
+<li>安装依赖组件</li>
+</ul>
+<pre><code>yum install -y git automake libtool pam-devel
+</code></pre><ul>
+<li>下载Google认证模块</li>
+</ul>
+<pre><code>git clone https://github.com/google/google-authenticator-libpam.git
+cd google-authenticator-libpam/
+./bootstrap.sh
+./configure
+make &amp;&amp; make install
+</code></pre><ul>
+<li>修改sshd支持pam</li>
+</ul>
+<pre><code>vim /etc/pam.d/sshd
+
+在首行添加如下:
+auth       required     pam_google_authenticator.so 
+</code></pre><ul>
+<li>配置ssh</li>
+</ul>
+<pre><code>vim /etc/ssh/sshd_config
+
+添加或修改以下内容:
+ChallengeResponseAuthentication yes
+UsePAM yes
+
+systemctl restart sshd
+</code></pre><ul>
+<li>生成Google authenticator配置</li>
+</ul>
+<pre><code>[root@localhost ~]# google-authenticator
+
+Do you want authentication tokens to be time-based (y/n) y
+#你想做的认证令牌是基于时间的吗？
+Warning: pasting the following URL into your browser exposes the OTP secret to Google:
+https://www.google.com/chart?chs=200x200&amp;chld=M|0&amp;cht=qr&amp;chl=otpauth://totp/root@localhost.localdomain%3Fsecret%3DN4HLEJOQHT27VCR6RX66WXB2SY%26issuer%3Dlocalhost.localdomain
+注：上面的URL是生成的二维码链接，稍后客户端需要用到
+
+Your new secret key is: N4HLEJOQHT27VCR6RX66WXB2SY
+Your verification code is 299695
+Your emergency scratch codes are:
+
+  44477086
+  92790948
+  29251218
+  26350870
+  30696065
+注：上面列出的几个字符串是应急码，如果客户端无法使用，可以使用应急码登陆，所以务必妥善保管！
+
+Do you want me to update your &quot;/root/.google_authenticator&quot; file? (y/n) y
+#你希望我更新你的“/root/.google_authenticator”文件吗(y/n)？
+
+Do you want to disallow multiple uses of the same authentication
+token? This restricts you to one login about every 30s, but it increases
+your chances to notice or even prevent man-in-the-middle attacks (y/n) y
+#你希望禁止多次使用同一个验证令牌吗?这限制你每次登录的时间大约是30秒， 但是这加大了发现或甚至防止中间人攻击的可能性(y/n)?
+
+By default, a new token is generated every 30 seconds by the mobile app.
+In order to compensate for possible time-skew between the client and the server,
+we allow an extra token before and after the current time. This allows for a
+time skew of up to 30 seconds between authentication server and client. If you
+experience problems with poor time synchronization, you can increase the window
+from its default size of 3 permitted codes (one previous code, the current
+code, the next code) to 17 permitted codes (the 8 previous codes, the current
+code, and the 8 next codes). This will permit for a time skew of up to 4 minutes
+between client and server.
+Do you want to do so? (y/n) y
+#默认情况下，令牌保持30秒有效;为了补偿客户机与服务器之间可能存在的时滞，
+我们允许在当前时间前后有一个额外令牌。如果你在时间同步方面遇到了问题， 可以增加窗口从默认的3个可通过验证码增加到17个可通过验证码，
+这将允许客户机与服务器之间的时差增加到4分钟。你希望这么做吗(y/n)?
+
+If the computer that you are logging into isn&#39;t hardened against brute-force
+login attempts, you can enable rate-limiting for the authentication module.
+By default, this limits attackers to no more than 3 login attempts every 30s.
+Do you want to enable rate-limiting? (y/n) y
+#如果你登录的那台计算机没有经过固化，以防范运用蛮力的登录企图，可以对验证模块
+启用尝试次数限制。默认情况下，这限制攻击者每30秒试图登录的次数只有3次。 你希望启用尝试次数限制吗(y/n)?
+</code></pre><pre><code>注：创建后在家目录下有个隐藏文件为.google-authenticator的文件，记住第一行私钥，手机客户端会用到
+</code></pre><ul>
+<li>手机安装Google Authenticator客户端</li>
+</ul>
+<pre><code>运行后，添加 --&gt; 手动输入验证码 --&gt; 账户：随意定一个英文名字，最好“见名知意” --&gt;密钥: 复制粘贴$HOME/.google-authenticator隐藏配置文件中的首行密钥
+</code></pre><ul>
+<li>登陆验证</li>
+</ul>
+<pre><code>注意，第一次登录可能会出现登录失败的情况，查看日志信息显示错误如下：
+tail -n10 /var/log/secure
+
+/usr/lib64/security/pam_google_authenticator.so: cannot open shared object file: No such file or directory
+
+解决方法：
+ln -sv /usr/local/lib/security/pam_google_authenticator.so /usr/lib64/security/pam_google_authenticator.so
+</code></pre><pre><code>[root@controler ~]# ssh 10.0.10.24
+Verification code:            #此处输入手机的动态口令
+Password:                     #此处输入服务器密码
+Last login: Mon Jan 22 13:46:31 2018 from 10.0.10.11
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-01-22T06:06:23.012Z" itemprop="dateUpdated">2018-01-22 14:06:23</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Google-Authenticator/">Google Authenticator</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chrony/">chrony</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssh/">ssh</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/&title=《ssh登陆基于Google Authenticator实现双因素认证》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/&title=《ssh登陆基于Google Authenticator实现双因素认证》 — Gary Wu&source=介绍
+简单说，就像我们几年前去银行办卡送的口令牌，以及网易游戏中的将军令，在你使用网银或登陆游戏时会再让你输入动态口令的。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ssh登陆基于Google Authenticator实现双因素认证》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/22/docker入门-基本管理1/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">docker入门-基本管理1</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/22/docker容器运行后为什么立即退出/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">docker容器运行后为什么立即退出</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/&title=《ssh登陆基于Google Authenticator实现双因素认证》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/&title=《ssh登陆基于Google Authenticator实现双因素认证》 — Gary Wu&source=介绍
+简单说，就像我们几年前去银行办卡送的口令牌，以及网易游戏中的将军令，在你使用网银或登陆游戏时会再让你输入动态口令的。
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ssh登陆基于Google Authenticator实现双因素认证》 — Gary Wu&url=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/22/ssh登陆基于Google-Authenticator实现双因素认证/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

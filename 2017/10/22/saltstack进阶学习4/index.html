@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>saltstack进阶学习4 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,mysql,saltstack,salt本地管理,无master架构,include,salt job,cache mariadb,salt-run,mariadb,minion_id">
+    <meta name="description" content="salt jobsalt master每执行一个管理指令就被称为是一个salt job，每个salt job都会生成一个Jid(格式为%Y%m%d%H%M%S%f)。可以通过-v参数在执行命令时查看,如：  salt  \*  cmd.run &amp;#39;uname -a&amp;#39; -v test=True">
+<meta name="keywords" content="高级运维,mysql,saltstack,salt本地管理,无master架构,include,salt job,cache mariadb,salt-run,mariadb,minion_id">
+<meta property="og:type" content="article">
+<meta property="og:title" content="saltstack进阶学习4">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="salt jobsalt master每执行一个管理指令就被称为是一个salt job，每个salt job都会生成一个Jid(格式为%Y%m%d%H%M%S%f)。可以通过-v参数在执行命令时查看,如：  salt  \*  cmd.run &amp;#39;uname -a&amp;#39; -v test=True">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-25T09:02:36.920Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="saltstack进阶学习4">
+<meta name="twitter:description" content="salt jobsalt master每执行一个管理指令就被称为是一个salt job，每个salt job都会生成一个Jid(格式为%Y%m%d%H%M%S%f)。可以通过-v参数在执行命令时查看,如：  salt  \*  cmd.run &amp;#39;uname -a&amp;#39; -v test=True">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">saltstack进阶学习4</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">saltstack进阶学习4</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-22T04:36:40.000Z" itemprop="datePublished" class="page-time">
+  2017-10-22
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#salt-job"><span class="post-toc-number">1.</span> <span class="post-toc-text">salt job</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#salt-job返回值数据存储到mysql"><span class="post-toc-number">2.</span> <span class="post-toc-text">salt job返回值数据存储到mysql</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#状态关系之include用法"><span class="post-toc-number">3.</span> <span class="post-toc-text">状态关系之include用法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#minion-id如何修改"><span class="post-toc-number">4.</span> <span class="post-toc-text">minion_id如何修改</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#salt本地管理（无master架构）"><span class="post-toc-number">5.</span> <span class="post-toc-text">salt本地管理（无master架构）</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-saltstack进阶学习4"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">saltstack进阶学习4</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-22 12:36:40" datetime="2017-10-22T04:36:40.000Z"  itemprop="datePublished">2017-10-22</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="salt-job"><a href="#salt-job" class="headerlink" title="salt job"></a>salt job</h4><pre><code>salt master每执行一个管理指令就被称为是一个salt job，每个salt job都会生成一个Jid(格式为%Y%m%d%H%M%S%f)。可以通过-v参数在执行命令时查看,如：
+
+salt  \*  cmd.run &#39;uname -a&#39; -v test=True 
+</code></pre><a id="more"></a>
+<pre><code>当minion接收到指令开始执行时，会在minion本地/var/cache/salt/minion目录下的proc目录产生该jid命名的文件。指令执行完毕，将结果传送给master后，删除该临时文件。
+
+而master收到该数据后会显示在用户终端，同时也会缓存在/var/cache/salt/master目录下jobs中。默认缓存24小时，由master主配置文件的keepjobs选项来决定
+</code></pre><p>job常用管理–执行模块</p>
+<pre><code>salt \* -b 10 test.ping      -b并发执行
+salt -S 192.168.56.0/24 test.ping   -S指定IP地址
+------------------------------------------------
+salt \* network.active_tcp    #查看活动的tcp连接
+salt \* network.arp           #查看minion arp信息
+salt \* network.netstat       #查看network 网络状态
+salt \* network.connect qq.com 80  #域名访问
+salt \* service.restart &lt;service name&gt;  #重启某个服务
+salt \* state.show_top        #查看top文件
+salt \* state.single pkg.installed name=bind-utils  #安装某个服务
+
+salt-run  manage.status    #输出哪些能连接哪些不能连接
+salt-run  manage.versions  #查看版本
+salt \*  cmd.run &#39;w&#39; test=True  #运行命令之前先测试
+
+参考：
+https://www.unixhot.com/docs/saltstack/ref/modules/all/salt.modules.service.html#module-salt.modules.service
+</code></pre><p>salt命令-v参数</p>
+<pre><code>salt * cmd.run &#39;w&#39;  -v
+
+-v命令会显示salt Job的JID, 例如：
+
+[root@linux-node1 ~]# salt \* test.ping -v
+Executing job with jid 20170917183029893196
+-------------------------------------------
+
+linux-node2:
+    True
+linux-node1.example.com:
+    True
+</code></pre><h4 id="salt-job返回值数据存储到mysql"><a href="#salt-job返回值数据存储到mysql" class="headerlink" title="salt job返回值数据存储到mysql"></a>salt job返回值数据存储到mysql</h4><pre><code>刚才已经知道，minion默认返回值数据会保存在salt master的/var/cache/salt/master/jobs目录中，如何将其存储到mysql数据库中呢？
+
+数据存储到mysql流程实质上是minion直接将数据返回到mysql，而不经过master
+</code></pre><blockquote>
+<p>实现</p>
+</blockquote>
+<pre><code>官方介绍：
+https://www.unixhot.com/docs/saltstack/ref/returners/all/salt.returners.mysql.html#module-salt.returners.mysql
+</code></pre><pre><code>(1) 安装Python插件
+    yum install -y MySQL-python
+
+(2) 安装Mariadb
+    yum install -y mariadb mariadb-server     #安装mariadb
+    systemctl  start mariadb     #启动服务
+    mysql_secure_installation    #初始化数据库,创建密码。默认密码为空
+    mysql -uroot -p    #创建数据库和表
+</code></pre><p>复制如下命令在mysql中创建表</p>
+<pre><code>CREATE DATABASE  `salt`
+  DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE utf8_general_ci;
+
+USE `salt`;
+
+--
+-- Table structure for table `jids`
+--
+
+DROP TABLE IF EXISTS `jids`;
+CREATE TABLE `jids` (
+  `jid` varchar(255) NOT NULL,
+  `load` mediumtext NOT NULL,
+  UNIQUE KEY `jid` (`jid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX jid ON jids(jid) USING BTREE;
+
+--
+-- Table structure for table `salt_returns`
+--
+
+DROP TABLE IF EXISTS `salt_returns`;
+CREATE TABLE `salt_returns` (
+  `fun` varchar(50) NOT NULL,
+  `jid` varchar(255) NOT NULL,
+  `return` mediumtext NOT NULL,
+  `id` varchar(255) NOT NULL,
+  `success` varchar(10) NOT NULL,
+  `full_ret` mediumtext NOT NULL,
+  `alter_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  KEY `id` (`id`),
+  KEY `jid` (`jid`),
+  KEY `fun` (`fun`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `salt_events`
+--
+
+DROP TABLE IF EXISTS `salt_events`;
+CREATE TABLE `salt_events` (
+`id` BIGINT NOT NULL AUTO_INCREMENT,
+`tag` varchar(255) NOT NULL,
+`data` mediumtext NOT NULL,
+`alter_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+`master_id` varchar(255) NOT NULL,
+PRIMARY KEY (`id`),
+KEY `tag` (`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+</code></pre><pre><code>给salt数据库赋权
+grant all on salt.* to salt@192.168.56.11 identified by &#39;salt&#39;;
+
+测试salt数据库-连接
+mysql -h 192.168.56.11 -u salt -p
+</code></pre><pre><code>(3) 配置master
+    编辑/etc/salt/master,添加如下内容：
+
+    master_job_cache: mysql
+    mysql.host: &#39;192.168.56.11&#39;
+    mysql.user: &#39;salt&#39;
+    mysql.pass: &#39;salt&#39;
+    mysql.db: &#39;salt&#39;
+
+(4) 重启master
+    systemctl  restart salt-master
+
+(5) 测试job数据写入mysql
+    mysql -h 192.168.56.11 -u salt -p
+    MariaDB &gt; show databases;
+    MariaDB [salt]&gt; use salt;
+    MariaDB [salt]&gt; select * from salt_returns\G    #第一次没有结果
+
+    新开一个窗口执行命令：salt \* test.ping -v 
+
+    再次查看表内容，已经看到已经有内容了,结果类似如下：
+    MariaDB [salt]&gt; select * from salt_returns\G 
+</code></pre><pre><code>......
+......
+*************************** 74. row ***************************
+       fun: mine.update
+       jid: 20170917210633960983
+    return: true
+        id: linux-node1.example.com
+   success: 0
+  full_ret: {&quot;tgt_type&quot;: &quot;glob&quot;, &quot;jid&quot;: &quot;20170917210633960983&quot;, &quot;return&quot;: true, &quot;tgt&quot;: &quot;linux-node1.example.com&quot;, &quot;schedule&quot;: &quot;__mine_interval&quot;, &quot;cmd&quot;: &quot;_return&quot;, &quot;pid&quot;: 29777, &quot;_stamp&quot;: &quot;2017-09-18T01:06:33.964175&quot;, &quot;arg&quot;: [], &quot;fun&quot;: &quot;mine.update&quot;, &quot;id&quot;: &quot;linux-node1.example.com&quot;}
+alter_time: 2017-09-17 21:06:33
+74 rows in set (0.00 sec)
+</code></pre><h4 id="状态关系之include用法"><a href="#状态关系之include用法" class="headerlink" title="状态关系之include用法"></a>状态关系之include用法</h4><p>源lamp.sls文件内容如下：</p>
+<pre><code>lamp-install:
+  pkg.installed:
+    - pkgs:
+      - httpd
+      - php
+      - php-pdo
+      - php-mysql
+
+apache-config:
+  file.managed:
+    - name: /etc/httpd/conf/httpd.conf
+    - source: salt://web/files/httpd.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
+    - defaults:
+      PORT: 80 
+      IPADDR: {{ grains['fqdn_ip4'][0] }}
+    - require:
+      - pkg: lamp-install
+</code></pre><ul>
+<li>把httpd安装部分摘出来存放到 base/web/httpd.sls</li>
+</ul>
+<pre><code>lamp-install:
+  pkg.installed:
+    - pkgs:
+      - httpd
+      - php
+      - php-pdo
+      - php-mysql
+</code></pre><ul>
+<li><p>修改刚才看到的lamp.sls文件</p>
+<p>引用刚才创建的httpd.sls</p>
+</li>
+</ul>
+<pre><code>include:
+  - web.httpd
+
+apache-config:
+  file.managed:
+    - name: /etc/httpd/conf/httpd.conf
+    - source: salt://web/files/httpd.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
+    - defaults:
+      PORT: 80 
+      IPADDR: {{ grains['fqdn_ip4'][0] }}
+    - require:
+      - pkg: lamp-install
+</code></pre><h4 id="minion-id如何修改"><a href="#minion-id如何修改" class="headerlink" title="minion_id如何修改"></a>minion_id如何修改</h4><pre><code>正确流程：
+1. 停止minion服务
+2. salt-key -d minionid 删除minion
+3. rm -f /etc/salt/minion_id
+4. rm -rf /etc/salt/pki
+5. 修改配置文件id:
+6. 启动minion
+</code></pre><h4 id="salt本地管理（无master架构）"><a href="#salt本地管理（无master架构）" class="headerlink" title="salt本地管理（无master架构）"></a>salt本地管理（无master架构）</h4><pre><code>salt支持单机使用(即没有master)
+
+(1)vim /etc/salt/minion
+   #file_client: remote  #修改该行。默认远程，取消注释并改为local
+   再配置file_roots
+
+(2)systemctl stop minion     #停止服务，不需要启动了
+(3)配置状态执行sls文件
+(4)salt-call --local state.sls web.tomcat    #执行命令
+
+使用场景：本机弱网络或快速部署服务时需要使用，比如：快速在本机部署cobbler服务
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-10-25T09:02:36.920Z" itemprop="dateUpdated">2017-10-25 17:02:36</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/10/22/saltstack进阶学习4/" target="_blank" rel="external">https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cache-mariadb/">cache mariadb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/include/">include</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mariadb/">mariadb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/minion-id/">minion_id</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/salt-job/">salt job</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/salt-run/">salt-run</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/saltstack/">saltstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/salt本地管理/">salt本地管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/无master架构/">无master架构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/&title=《saltstack进阶学习4》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/&title=《saltstack进阶学习4》 — Gary Wu&source=salt jobsalt master每执行一个管理指令就被称为是一个salt job，每个salt job都会生成一个Jid(格式为%Y%m%d%H%M..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《saltstack进阶学习4》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/25/saltstack安装zabbix-agent/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">saltstack安装zabbix_agent</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/21/zabbix-精讲/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">zabbix-精讲</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/&title=《saltstack进阶学习4》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/&title=《saltstack进阶学习4》 — Gary Wu&source=salt jobsalt master每执行一个管理指令就被称为是一个salt job，每个salt job都会生成一个Jid(格式为%Y%m%d%H%M..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《saltstack进阶学习4》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/10/22/saltstack进阶学习4/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

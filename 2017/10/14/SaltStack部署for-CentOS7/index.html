@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>SaltStack部署for CentOS7 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,saltstack,ansible,自动化部署">
+    <meta name="description" content="SaltStack扫盲  SaltStack是一个服务器基础架构集中化管理平台，具备配置管理、远程执行、监控等功能，一般可以理解为简化版的puppet和加强版的func。SaltStack基于Python语言实现，结合轻量级消息队列（ZeroMQ）与Python第三方模块（Pyzmq、PyCrypto、Pyjinjia2、python-msgpack和PyYAML等）构建。">
+<meta name="keywords" content="高级运维,saltstack,ansible,自动化部署">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SaltStack部署for CentOS7">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="SaltStack扫盲  SaltStack是一个服务器基础架构集中化管理平台，具备配置管理、远程执行、监控等功能，一般可以理解为简化版的puppet和加强版的func。SaltStack基于Python语言实现，结合轻量级消息队列（ZeroMQ）与Python第三方模块（Pyzmq、PyCrypto、Pyjinjia2、python-msgpack和PyYAML等）构建。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-22T01:39:01.509Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SaltStack部署for CentOS7">
+<meta name="twitter:description" content="SaltStack扫盲  SaltStack是一个服务器基础架构集中化管理平台，具备配置管理、远程执行、监控等功能，一般可以理解为简化版的puppet和加强版的func。SaltStack基于Python语言实现，结合轻量级消息队列（ZeroMQ）与Python第三方模块（Pyzmq、PyCrypto、Pyjinjia2、python-msgpack和PyYAML等）构建。">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">SaltStack部署for CentOS7</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">SaltStack部署for CentOS7</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-14T10:49:21.000Z" itemprop="datePublished" class="page-time">
+  2017-10-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装"><span class="post-toc-number">1.</span> <span class="post-toc-text">安装</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#一、安装epel-yum源"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">一、安装epel yum源</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#二、安装saltstack-master并配置"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">二、安装saltstack-master并配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#三、安装saltstack-minion并配置"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">三、安装saltstack-minion并配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#四、在master测试saltstack"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">四、在master测试saltstack</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-SaltStack部署for-CentOS7"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">SaltStack部署for CentOS7</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-14 18:49:21" datetime="2017-10-14T10:49:21.000Z"  itemprop="datePublished">2017-10-14</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>SaltStack扫盲</p>
+</blockquote>
+<pre><code>SaltStack是一个服务器基础架构集中化管理平台，具备配置管理、远程执行、监控等功能，一般可以理解为简化版的puppet和加强版的func。SaltStack基于Python语言实现，结合轻量级消息队列（ZeroMQ）与Python第三方模块（Pyzmq、PyCrypto、Pyjinjia2、python-msgpack和PyYAML等）构建。
+</code></pre><a id="more"></a>
+<pre><code>通过部署SaltStack环境，我们可以在成千上万台服务器上做到批量执行命令，根据不同业务特性进行配置集中化管理、分发文件、采集服务器数据、操作系统基础及软件包管理等，SaltStack是运维人员提高工作效率、规范业务配置与操作的利器。
+</code></pre><blockquote>
+<p>saltstack工作原理</p>
+</blockquote>
+<pre><code>salt-master服务启动后会开启两个端口:4505和4506，minion没有端口，通过“双向密钥交换”(可通过tree /etc/salt/pki命令查看)来实现安全管理。salt-master每执行一条命令，所有minion均可收到，但只要指定的minion进行应答。
+
+[root@linux-node1 salt]# lsof -n -i:4505
+COMMAND     PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+salt-mast 11289 root   13u  IPv4  58611      0t0  TCP 192.168.56.11:4505 (LISTEN)
+salt-mast 11289 root   15u  IPv4  61320      0t0  TCP 192.168.56.11:4505-&gt;192.168.56.12:50292 (ESTABLISHED)
+salt-mast 11289 root   16u  IPv4  69915      0t0  TCP 192.168.56.11:4505-&gt;192.168.56.11:59634 (ESTABLISHED)
+salt-mini 14050 root   25u  IPv4  69914      0t0  TCP 192.168.56.11:59634-&gt;192.168.56.11:4505 (ESTABLISHED)
+
+由此可以看到，所有的minion都与master通信，而回复的时候，master则使用4506端口
+
+[root@linux-node1 salt]# lsof -n -i:4506
+COMMAND     PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+salt-mast 11301 root   21u  IPv4  58619      0t0  TCP 192.168.56.11:4506 (LISTEN)
+salt-mast 11301 root   28u  IPv4  61319      0t0  TCP 192.168.56.11:4506-&gt;192.168.56.12:52042 (ESTABLISHED)
+salt-mast 11301 root   29u  IPv4  69847      0t0  TCP 192.168.56.11:4506-&gt;192.168.56.11:35406 (ESTABLISHED)
+salt-mini 14050 root   14u  IPv4  69846      0t0  TCP 192.168.56.11:35406-&gt;192.168.56.11:4506 (ESTABLISHED)
+</code></pre><blockquote>
+<p>saltstack三种运行方式</p>
+</blockquote>
+<pre><code>- local 本地运行
+- Master/Minion  服务端/agent方式
+- Salt SSH 不需要安装agent
+</code></pre><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>系统: CentOS7
+主机：
+saltstack-master 192.168.56.11
+saltstack-minion 192.168.56.12
+</code></pre><h4 id="一、安装epel-yum源"><a href="#一、安装epel-yum源" class="headerlink" title="一、安装epel yum源"></a>一、安装epel yum源</h4><pre><code>yum -y install epel-release 
+yum clean all 
+yum makecache
+</code></pre><h4 id="二、安装saltstack-master并配置"><a href="#二、安装saltstack-master并配置" class="headerlink" title="二、安装saltstack-master并配置"></a>二、安装saltstack-master并配置</h4><pre><code>saltstack-master 安装：yum -y install salt-master salt-minion
+
+1.配置： 修改 salt-master 本身监听地址(注：配置文件内不允许TAB键)
+  vim /etc/salt/master 
+  添加如下行：
+  interface: 192.168.56.11
+
+
+2. 配置：指定salt-master地址(注：配置文件内不允许TAB键)
+   vim /etc/salt/minion
+  添加如下行：
+  master: 192.168.56.11
+  #id: 
+
+3.启动
+  systemctl restart salt-master
+  systemctl status salt-master
+  systemctl enable salt-master
+  systemctl restart salt-minion
+  systemctl status salt-minion
+  systemctl enable salt-minion
+</code></pre><blockquote>
+<p>salt-master配置文件-参考：</p>
+</blockquote>
+<pre><code>salt-master配置文件-参考：
+
+vim /etc/salt/master
+
+    # master的监听地址(注意:冒号后面空格)
+    interface: 1.1.1.11
+
+    # salt运行的用户，影响到salt的执行权限
+    user: root
+
+    # master自动接收客户端的验证
+    auto_accept: True
+
+    # salt的运行线程，开的线程越多一般处理的速度越快，但一般不要超过CPU的个数
+    worker_threads: 8
+
+    # master的管理端口
+    publish_port : 4505
+
+    # master跟minion的通讯端口，用于文件服务，认证，接受返回结果等 
+    ret_port : 4506
+
+    # 如果这个master运行的salt-syndic连接到了一个更高层级的master,那么这个参数需要配置成连接到的这个高层级master的监听端口
+    syndic_master_port : 4506
+
+    # 指定pid文件位置
+    pidfile: /var/run/salt-master.pid
+
+    # saltstack 可以控制的文件系统的开始位置
+    root_dir: /
+
+    # 日志文件地址
+    log_file: /var/log/salt/master.log
+
+    # 分组设置
+    nodegroups:
+      group_all: &#39;*&#39;
+
+    # salt state执行时候的根目录
+    file_roots:
+      base:
+        - /srv/salt/base
+
+    # 设置pillar的根目录
+    pillar_roots:
+      base:
+        - /srv/salt/pillar
+</code></pre><h4 id="三、安装saltstack-minion并配置"><a href="#三、安装saltstack-minion并配置" class="headerlink" title="三、安装saltstack-minion并配置"></a>三、安装saltstack-minion并配置</h4><pre><code>saltstack-minion  安装：yum install -y salt-minion
+
+1.配置： 修改salt-minion配置文件，指定salt-master地址(注：配置文件内不允许TAB键)
+  vim /etc/salt/minion
+  添加如下行：
+  master: 192.168.56.11
+  #id: 
+  注：id: hostname 用来指定主机名
+
+
+2.启动
+  systemctl restart salt-minion
+  systemctl status salt-minion
+  systemctl enable salt-minion
+</code></pre><h4 id="四、在master测试saltstack"><a href="#四、在master测试saltstack" class="headerlink" title="四、在master测试saltstack"></a>四、在master测试saltstack</h4><pre><code>1.查看minion列表（这时候saltstack-minion是红色的）
+[root@linux-node1 ~]# salt-key -L
+Accepted Keys:
+Denied Keys:
+Unaccepted Keys:
+linux-node2
+Rejected Keys:
+</code></pre><pre><code>2.认证所有key。当然也可以通过salt-key -a saltstack-minion指定某台minion进行认证key
+
+[root@linux-node1 ~]# salt-key -A      #同意接管-管理所有minion
+The following keys are going to be accepted:
+Unaccepted Keys:
+linux-node2
+Proceed? [n/Y] Y
+Key for minion linux-node2 accepted.
+</code></pre><pre><code>3. 接着继续查看minion列表（这时候saltstack-minion已经变为绿色，说明key已被添加）
+
+[root@linux-node1 ~]# salt-key -L
+Accepted Keys:
+linux-node2
+Denied Keys:
+Unaccepted Keys:
+Rejected Keys:
+</code></pre><pre><code>4. 简单测试（客户端salt_ping）
+
+[root@linux-node1 ~]# salt &#39;*&#39; test.ping
+[root@linux-node1 ~]# salt \* test.ping
+
+linux-node1.example.com:
+    True
+linux-node2:
+    True
+
+
+注：salt-master使用命令 salt &#39;linux-node2&#39; test.ping  
+linux-node2:
+    True
+此示例中所有的minion均已经收到了此消息，不过只有linux-node2进行了返回    
+</code></pre><blockquote>
+<p>salt缓存文件</p>
+</blockquote>
+<pre><code>目录：/var/cache/salt
+
+cd /var/cache/salt &amp;&amp; tree
+
+注：如果minion目标文件改变，重新salt后，master salt状态文件会覆盖minion节点文件，所以日后修改配置只需修改master salt状态文件即可。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-10-22T01:39:01.509Z" itemprop="dateUpdated">2017-10-22 09:39:01</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/10/14/SaltStack部署for-CentOS7/" target="_blank" rel="external">https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ansible/">ansible</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/saltstack/">saltstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自动化部署/">自动化部署</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/&title=《SaltStack部署for CentOS7》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/&title=《SaltStack部署for CentOS7》 — Gary Wu&source=
+SaltStack扫盲
+
+SaltStack是一个服务器基础架构集中化管理平台，具备配置管理、远程执行、监控等功能，一般可以理解为简化版的puppet和..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SaltStack部署for CentOS7》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/16/ntp漏洞修复/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ntp漏洞修复</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/14/keepalived精讲/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">keepalived精讲</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/&title=《SaltStack部署for CentOS7》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/&title=《SaltStack部署for CentOS7》 — Gary Wu&source=
+SaltStack扫盲
+
+SaltStack是一个服务器基础架构集中化管理平台，具备配置管理、远程执行、监控等功能，一般可以理解为简化版的puppet和..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SaltStack部署for CentOS7》 — Gary Wu&url=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/10/14/SaltStack部署for-CentOS7/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

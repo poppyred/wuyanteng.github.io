@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>LVS精讲 | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,负载均衡,keepalived,lvs,4层负载均衡,DR模式">
+    <meta name="description" content="为什么要学LVS？  当并发超过Nginx上限，就可以使用LVS了。 而日1000-2000W PV或并发请求1万以下都可以考虑用Nginx 大型门户网站电商网站常用LVS">
+<meta name="keywords" content="高级运维,负载均衡,keepalived,lvs,4层负载均衡,DR模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LVS精讲">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/11/25/LVS精讲/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="为什么要学LVS？  当并发超过Nginx上限，就可以使用LVS了。 而日1000-2000W PV或并发请求1万以下都可以考虑用Nginx 大型门户网站电商网站常用LVS">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/LVS%E5%90%8D%E8%AF%8D.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/LVS%20DR%E8%B7%AF%E7%94%B1%E6%A8%A1%E5%BC%8F.png">
+<meta property="og:updated_time" content="2017-11-25T07:31:55.875Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LVS精讲">
+<meta name="twitter:description" content="为什么要学LVS？  当并发超过Nginx上限，就可以使用LVS了。 而日1000-2000W PV或并发请求1万以下都可以考虑用Nginx 大型门户网站电商网站常用LVS">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/LVS%E5%90%8D%E8%AF%8D.png">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.sslforfree.com" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Free SSL
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">LVS精讲</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">LVS精讲</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-25T01:48:03.000Z" itemprop="datePublished" class="page-time">
+  2017-11-25
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LVS集群部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">LVS集群部署</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LVS工作模式"><span class="post-toc-number">2.</span> <span class="post-toc-text">LVS工作模式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LVS（负载均衡）-keepalived（高可用）集群"><span class="post-toc-number">3.</span> <span class="post-toc-text">LVS（负载均衡）+keepalived（高可用）集群</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#写在最后加深印象"><span class="post-toc-number">4.</span> <span class="post-toc-text">写在最后加深印象</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-LVS精讲"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">LVS精讲</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-25 09:48:03" datetime="2017-11-25T01:48:03.000Z"  itemprop="datePublished">2017-11-25</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>为什么要学LVS？</p>
+</blockquote>
+<pre><code>当并发超过Nginx上限，就可以使用LVS了。
+而日1000-2000W PV或并发请求1万以下都可以考虑用Nginx
+大型门户网站电商网站常用LVS
+</code></pre><a id="more"></a>
+<blockquote>
+<p>LVS介绍</p>
+</blockquote>
+<pre><code>LVS是Linux Virtual Server的简写，即Linux虚拟服务器。
+官网：http://linuxvirtualserver.org/
+
+LVS项目介绍           http://www.linuxvirtualserver.org/zh/lvs1.html 
+LVS集群的体系结构     http://www.linuxvirtualserver.org/zh/lvs2.html 
+LVS集群中的IP负载均衡技术  http://www.linuxvirtualserver.org/zh/lvs3.html
+LVS集群的负载调度      http://www.linuxvirtualserver.org/zh/lvs4.html 
+</code></pre><blockquote>
+<p>LVS内核模块ip_vs</p>
+</blockquote>
+<pre><code>LVS无需安装，其管理工具叫做ipvsadm和keepalived。
+区别：ipvsadm是通过命令行管理，而keepalived读取配置文件管理
+
+注：ip_vs内核模块已经集成到了2.6及以后的kernel内核当中，也就意味着发行版自带无需再安装。
+</code></pre><blockquote>
+<p>环境</p>
+</blockquote>
+<pre><code>4台服务器，如下：
+192.168.56.11 LB01
+192.168.56.12 LB02
+192.168.56.13 Web01
+192.168.56.14 Web02
+
+web01和web02部署完成nginx，启动服务并可访问，要求访问结果如下：
+curl http://192.168.56.13/index.html
+web01
+curl http://192.168.56.14/index.html
+web02
+</code></pre><h4 id="LVS集群部署"><a href="#LVS集群部署" class="headerlink" title="LVS集群部署"></a>LVS集群部署</h4><p>lvs01上操作</p>
+<pre><code>#查看lvs模块
+lsmod |grep ip_vs
+
+#默认没有加载模块，所以需要安装管理工具激活
+yum -y install ipvsadm
+
+#查看管理工具ipvsadm状态
+ipvsadm
+
+#再次查看lvs模块
+lsmod |grep ip_vs
+ip_vs                 141092  0 
+nf_conntrack          111302  1 ip_vs
+libcrc32c              12644  2 xfs,ip_vs
+</code></pre><blockquote>
+<p>如下采用DR直接模式</p>
+</blockquote>
+<pre><code>#添加虚拟VIP地址(注意掩码)
+ip addr add 192.168.56.3/24 dev eth0 
+或
+vim /etc/sysconfig/network-scripts/ifcfg-eth0  添加如下行：
+IPADDR1=&quot;192.168.56.10&quot;
+重启网卡
+# ip addr 查看
+
+#清除原有规则
+ipvsadm -C   
+
+#配置超时时间
+ipvsadm --set 30 5 60  
+
+#添加VIP网卡端口
+ipvsadm -A -t 192.168.56.10:80 -s wrr -p 20
+
+#关联后端real server
+ipvsadm -a -t 192.168.56.10:80 -r 192.168.56.13:80 -g -w 1 
+ipvsadm -a -t 192.168.56.10:80 -r 192.168.56.14:80 -g -w 1 
+
+#查看参数帮助
+ipvsadm --help
+
+
+#查看ipvsadm配置
+[root@linux-node1 ~]# ipvsadm -ln
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  192.168.56.10:80 wrr persistent 20
+  -&gt; 192.168.56.13:80             Route   1      0          0         
+  -&gt; 192.168.56.14:80             Route   1      0          0 
+</code></pre><p>分别在web01和web02操作</p>
+<pre><code>步骤1：在lo网卡绑定VIP地址（ip）
+步骤2：修改内核参数抑制ARP响应
+ip addr add 192.168.56.10/32 dev lo
+
+cat &gt;&gt;/etc/sysctl.conf&lt;&lt;EOF
+net.ipv4.conf.all.arp_ignore = 1
+net.ipv4.conf.all.arp_announce = 2
+net.ipv4.conf.lo.arp_ignore = 1
+net.ipv4.conf.lo.arp_announce = 2
+EOF
+sysctl -p
+</code></pre><blockquote>
+<p>浏览器访问测试</p>
+</blockquote>
+<pre><code>http://192.168.56.10/    
+
+访问结果问题如下：
+问题1：负载结果不像nginx负载那么明显
+问题2： 使用抓包工具，发现进行通信的返回IP地址与MAC地址不匹配
+</code></pre><h4 id="LVS工作模式"><a href="#LVS工作模式" class="headerlink" title="LVS工作模式"></a>LVS工作模式</h4><blockquote>
+<p>LVS名词</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/LVS%E5%90%8D%E8%AF%8D.png" alt="LVS名词" title="">
+                </div>
+                <div class="image-caption">LVS名词</div>
+            </figure>
+<blockquote>
+<p>DR直接路由模式</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/LVS%20DR%E8%B7%AF%E7%94%B1%E6%A8%A1%E5%BC%8F.png" alt="LVS DR" title="">
+                </div>
+                <div class="image-caption">LVS DR</div>
+            </figure>
+<pre><code>要求：LB服务器与real server服务器必须在同一局域网。
+
+特点：同一个局域网是通过MAC地址进行数据包发送接收的。
+另,为了解决LVS发送数据包给web01，web01根据IP地址判断不属于发送自己会把该数据包丢弃，所以我们在web01和web02的lo回环网卡配置了VIP地址，来让其接收数据包。
+
+缺点：浪费公网IP地址。但如果不使用公网IP地址而使用网关进行地址转换势必会给网关造成瓶颈压力。
+
+注：
+(1)LVS DR模式工作在2层数据链路层(主要协议：ARP,即MAC地址转发)，DR模式它改不了端口，所以VIP:80后端real server也必须是80端口。
+(2)我们说LVS工作在四层，其实指的是LVS其他的工作模式,而非DR模式。
+</code></pre><blockquote>
+<p>Real Server为什么要修改内核参数抑制ARP响应？</p>
+</blockquote>
+<pre><code>DR模式需要关闭内核arp响应，确保收到的arp信息最为准确。
+除此之外，要保证VIP IP地址孤立，所谓孤立就配置其掩码为32即可。
+</code></pre><pre><code>基础知识：
+
+ARP协议作用是：ARP通过广播方式将IP地址转为MAC地址。为了提升IP转换MAC地址的效率，系统会进行ARP缓存，减少广播风暴。
+
+当LB01宕机切换到LB02时，ARP缓存表MAC地址并没有及时变更会导致服务器无法上网,所以需要及时更新arp缓存。所以需要调用arping命令进行主动更新。
+
+#查看arp缓存命令
+arp -n
+
+#arp ping命令解析MAC地址
+arping -c 1 -I eth0 192.168.56.14
+</code></pre><blockquote>
+<p>LVS集群工作模式</p>
+</blockquote>
+<pre><code>DR(Direct Routing)：直接路由模式
+NAT：NAT模式（LB负载均衡服务器做NAT会成为性能瓶颈）
+TUNNEL：隧道模式
+FULLNAT(淘宝请原作者再次开发的模式)
+</code></pre><h4 id="LVS（负载均衡）-keepalived（高可用）集群"><a href="#LVS（负载均衡）-keepalived（高可用）集群" class="headerlink" title="LVS（负载均衡）+keepalived（高可用）集群"></a>LVS（负载均衡）+keepalived（高可用）集群</h4><blockquote>
+<p>LVS01和web02上操作</p>
+</blockquote>
+<pre><code>#查看lvs模块
+lsmod |grep ip_vs
+
+#默认没有加载模块，所以需要安装管理工具激活
+yum -y install ipvsadm
+
+#查看管理工具ipvsadm状态
+ipvsadm
+
+#再次查看lvs模块
+lsmod |grep ip_vs
+ip_vs                 141092  0 
+nf_conntrack          111302  1 ip_vs
+libcrc32c              12644  2 xfs,ip_vs
+</code></pre><p>分别在lb01和lb02上安装keepalived</p>
+<pre><code>#安装keepalived
+yum install -y keepalived
+</code></pre><pre><code>#配置keepalived
+vim /etc/keepalived/keepalived.conf
+</code></pre><blockquote>
+<p>lb01配置文件</p>
+</blockquote>
+<pre><code>global_defs {
+   router_id LVS_01     #每个配置文件的router_id都不同
+}
+
+vrrp_instance VI_1 {   
+    state MASTER        #配置标识  
+    interface eth0
+    virtual_router_id 51   #同一个LVS集群virtual_router_id相同
+    priority 150           #优先级要比backup高
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {    #配置虚拟VIP
+     192.168.56.10/24
+    }
+}
+
+virtual_server 192.168.56.10 80 {
+    delay_loop 6              
+    lb_algo wrr                
+    lb_kind DR                
+    nat_mask 255.255.255.0
+    persistence_timeout 50     
+    protocol TCP                
+
+    real_server 192.168.56.13 80 {      
+        weight 1              
+        TCP_CHECK {          #配置健康检查，检查失败则将本节点踢出集群
+        connect_timeout 8       
+        nb_get_retry 3
+        delay_before_retry 3
+        connect_port 80
+        }
+    }
+
+    real_server 192.168.56.14 80 {
+        weight 1              
+        TCP_CHECK {         #配置健康检查，检查失败则将本节点踢出集群
+        connect_timeout 8       
+        nb_get_retry 3
+        delay_before_retry 3
+        connect_port 80
+        }
+    }
+}
+</code></pre><blockquote>
+<p>lb02配置文件</p>
+</blockquote>
+<pre><code>global_defs {
+   router_id LVS_02
+}
+
+vrrp_instance VI_1 {
+    state BACKUP
+    interface eth0
+    virtual_router_id 51
+    priority 100
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+     192.168.56.10/24
+    }
+}
+
+#下面的部分与lb01完全一致。
+virtual_server 192.168.56.10 80 {
+    delay_loop 6              
+    lb_algo wrr                
+    lb_kind DR                
+    nat_mask 255.255.255.0
+    persistence_timeout 50     
+    protocol TCP                
+
+    real_server 192.168.56.13 80 {
+        weight 1              
+        TCP_CHECK {
+        connect_timeout 8       
+        nb_get_retry 3
+        delay_before_retry 3
+        connect_port 80
+        }
+    }
+
+    real_server 192.168.56.14 80 {
+        weight 1              
+        TCP_CHECK {
+        connect_timeout 8       
+        nb_get_retry 3
+        delay_before_retry 3
+        connect_port 80
+        }
+    }
+}
+</code></pre><blockquote>
+<p>分别启动</p>
+</blockquote>
+<pre><code>&gt;/etc/keepalived/keepalived.conf 
+vim /etc/keepalived/keepalived.conf
+systemctl start keepalived
+systemctl status keepalived
+ip addr   #查看VIP地址是否存在
+</code></pre><blockquote>
+<p>Web服务器配置</p>
+</blockquote>
+<p>web01和web02配置如下：</p>
+<pre><code>步骤1：在lo网卡绑定VIP地址（ip）
+步骤2：修改内核参数抑制ARP响应
+ip addr add 192.168.56.10/32 dev lo
+
+cat &gt;&gt;/etc/sysctl.conf&lt;&lt;EOF
+net.ipv4.conf.all.arp_ignore = 1
+net.ipv4.conf.all.arp_announce = 2
+net.ipv4.conf.lo.arp_ignore = 1
+net.ipv4.conf.lo.arp_announce = 2
+EOF
+sysctl -p
+</code></pre><blockquote>
+<p>检查集群</p>
+</blockquote>
+<pre><code>ipvsadm -ln
+</code></pre><blockquote>
+<p>关于排错</p>
+</blockquote>
+<pre><code>LVS集成到了kernel内核中，无日志可以查看，所以需要按照正确的部署方式逐一排查。
+</code></pre><h4 id="写在最后加深印象"><a href="#写在最后加深印象" class="headerlink" title="写在最后加深印象"></a>写在最后加深印象</h4><pre><code>注：
+(1)LVS DR模式工作在2层数据链路层(主要协议：ARP,即MAC地址转发)，DR模式它改不了端口，所以VIP:80后端real server也必须是80端口。
+(2)我们说LVS工作在四层，其实指的是LVS其他的工作模式,而非DR模式。
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-25T07:31:55.875Z" itemprop="dateUpdated">2017-11-25 15:31:55</time>
+</span><br>
+
+
+        
+        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/25/LVS精讲/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/25/LVS精讲/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/4层负载均衡/">4层负载均衡</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DR模式/">DR模式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/keepalived/">keepalived</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lvs/">lvs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/负载均衡/">负载均衡</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/25/LVS精讲/&title=《LVS精讲》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/25/LVS精讲/&title=《LVS精讲》 — Gary Wu&source=
+为什么要学LVS？
+
+当并发超过Nginx上限，就可以使用LVS了。
+而日1000-2000W PV或并发请求1万以下都可以考虑用Nginx
+大型门户网..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/25/LVS精讲/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《LVS精讲》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/25/LVS精讲/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/25/LVS精讲/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/25/shell高级编程-进阶1/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">shell高级编程-进阶1</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/24/企业IM聊天系统-Rocket-Chat/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">企业IM聊天系统-Rocket.Chat</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/11/25/LVS精讲/&title=《LVS精讲》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/11/25/LVS精讲/&title=《LVS精讲》 — Gary Wu&source=
+为什么要学LVS？
+
+当并发超过Nginx上限，就可以使用LVS了。
+而日1000-2000W PV或并发请求1万以下都可以考虑用Nginx
+大型门户网..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/11/25/LVS精讲/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《LVS精讲》 — Gary Wu&url=https://wuyanteng.github.io/2017/11/25/LVS精讲/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/11/25/LVS精讲/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/25/LVS精讲/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
