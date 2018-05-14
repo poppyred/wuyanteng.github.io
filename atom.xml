@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Gary Wu</title>
+  
+  <subtitle>运维架构师 - 从入门到放弃</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://wuyanteng.github.io/"/>
+  <updated>2018-05-10T10:34:03.375Z</updated>
+  <id>https://wuyanteng.github.io/</id>
+  
+  <author>
+    <name>Gary Wu</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>shell if小数判断</title>
+    <link href="https://wuyanteng.github.io/2018/05/10/shell-if%E5%B0%8F%E6%95%B0%E5%88%A4%E6%96%AD/"/>
+    <id>https://wuyanteng.github.io/2018/05/10/shell-if小数判断/</id>
+    <published>2018-05-10T10:27:18.000Z</published>
+    <updated>2018-05-10T10:34:03.375Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>由于程序需要，我要判断一个小数是否大于另一个值。即一个浮点数是否大于另一个浮点数。</code></pre><a id="more"></a><pre><code>加入$mya变量是一个浮点数，按照正常思路执行：# if [ $mya -le 4 ]; then echo &quot;ok&quot;;else echo &quot;fail&quot;; fi  -bash: [: 5.7: integer expression expected  shell报错：提示integer expression expected意思就是shell默认只能判断整数，而不是浮点数</code></pre><pre><code>参考了大牛的方案，改为了如下：# if [ $(echo &quot;$mya &lt;= 4&quot;|bc) = 1 ]; then echo &quot;ok&quot;;else echo &quot;fail&quot;;fi  </code></pre><pre><code>测试：# if [ $(echo &quot;0.5 &lt;= 4&quot;|bc) = 1 ]; then echo &quot;ok&quot;;else echo &quot;fail&quot;;fi  ok# if [ $(echo &quot;0.5 &gt;= 4&quot;|bc) = 1 ]; then echo &quot;ok&quot;;else echo &quot;fail&quot;;fi  fail# if [ $(echo &quot;5.5 &gt;= 4&quot;|bc) = 1 ]; then echo &quot;ok&quot;;else echo &quot;fail&quot;;fi  ok# if [ $(echo &quot;4.1 &gt;= 4&quot;|bc) = 1 ]; then echo &quot;ok&quot;;else echo &quot;fail&quot;;fi ok</code></pre><pre><code>接下来终于可以愉快的写脚本了...</code></pre><p>参考：<a href="http://nigelzeng.iteye.com/blog/1604640" target="_blank" rel="noopener">nigelzeng</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;由于程序需要，我要判断一个小数是否大于另一个值。即一个浮点数是否大于另一个浮点数。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="shell" scheme="https://wuyanteng.github.io/tags/shell/"/>
+    
+      <category term="小数判断" scheme="https://wuyanteng.github.io/tags/%E5%B0%8F%E6%95%B0%E5%88%A4%E6%96%AD/"/>
+    
+      <category term="if判断" scheme="https://wuyanteng.github.io/tags/if%E5%88%A4%E6%96%AD/"/>
+    
+      <category term="浮点数判断" scheme="https://wuyanteng.github.io/tags/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%88%A4%E6%96%AD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>curl命令详解</title>
+    <link href="https://wuyanteng.github.io/2018/05/09/curl%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/"/>
+    <id>https://wuyanteng.github.io/2018/05/09/curl命令详解/</id>
+    <published>2018-05-09T06:17:40.000Z</published>
+    <updated>2018-05-09T07:30:28.103Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>curl是一个利用URL规则在命令行下工作的强大文件传输工具。语法：# curl [option] [url]</code></pre><a id="more"></a><h5 id="常见参数"><a href="#常见参数" class="headerlink" title="常见参数"></a>常见参数</h5><pre><code>-A/--user-agent &lt;string&gt;          设置用户代理发送给服务器-b/--cookie &lt;name=string/file&gt;    cookie字符串或文件读取位置-c/--cookie-jar &lt;file&gt;            操作结束后把cookie写入到这个文件中-C/--continue-at &lt;offset&gt;         断点续转-D/--dump-header &lt;file&gt;           把header信息写入到该文件中-e/--referer                      来源网址-f/--fail                         连接失败时不显示http错误-o/--output                       把输出写到该文件中-O/--remote-name                  把输出写到该文件中，保留远程文件的文件名-r/--range &lt;range&gt;                检索来自HTTP/1.1或FTP服务器字节范围-s/--silent                       静音模式。不输出任何东西-T/--upload-file &lt;file&gt;          上传文件-u/--user &lt;user[:password]&gt;      设置服务器的用户和密码-w/--write-out [format]          什么输出完成后-x/--proxy &lt;host[:port]&gt;         在给定的端口上使用HTTP代理-#/--progress-bar                进度条显示当前的传送状态</code></pre><h5 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h5><pre><code>curl  http://www.baidu.com</code></pre><h5 id="保存访问的网页"><a href="#保存访问的网页" class="headerlink" title="保存访问的网页"></a>保存访问的网页</h5><pre><code>使用重定向功能保存curl http://www.baidu.com &gt;baidu.html</code></pre><pre><code>使用内置option选项保存curl -o qq.html http://www.qq.com</code></pre><h5 id="测试网页返回值"><a href="#测试网页返回值" class="headerlink" title="测试网页返回值"></a>测试网页返回值</h5><pre><code>curl -o /dev/null -s -w %{http_code} www.qq.com在脚本中，这是很常见的测试网站是否正常的用法</code></pre><h5 id="指定proxy服务器以及端口"><a href="#指定proxy服务器以及端口" class="headerlink" title="指定proxy服务器以及端口"></a>指定proxy服务器以及端口</h5><pre><code>通过-x 选项来支持设置http代理curl -x 10.10.10.100:1080 http://www.google.com</code></pre><h5 id="保存http的response里面的header信息"><a href="#保存http的response里面的header信息" class="headerlink" title="保存http的response里面的header信息"></a>保存http的response里面的header信息</h5><pre><code>curl -D header.txt http://www.qq.com</code></pre><h5 id="模仿浏览器User-agent"><a href="#模仿浏览器User-agent" class="headerlink" title="模仿浏览器User-agent"></a>模仿浏览器User-agent</h5><pre><code>curl -A &quot;Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/48 (like Gecko) Safari/48&quot; http://www.qq.com &gt; qq.html</code></pre><p>参考：<a href="https://youruseragent.info/commonua.en.htm" target="_blank" rel="noopener">所有版本User-agent列表</a></p><h5 id="伪造referer-盗链"><a href="#伪造referer-盗链" class="headerlink" title="伪造referer-盗链"></a>伪造referer-盗链</h5><pre><code>很多服务器会检查http访问的referer从而来控制访问。比如：你是先访问首页，然后再访问首页中的邮箱页面。其中这里访问邮箱的referer地址就是访问首页成功后的页面地址，如果服务器发现对邮箱页面访问的referer地址不是首页的地址，就断定那是个盗连了</code></pre><pre><code>curl中内置-e 选项可以自定义referercurl -e &quot;www.qq.com&quot; https://mail.qq.com</code></pre><h5 id="下载显示进度条"><a href="#下载显示进度条" class="headerlink" title="下载显示进度条"></a>下载显示进度条</h5><pre><code>curl -# -O https://codeload.github.com/shadowsocks/shadowsocks-windows/zip/master注：-#表示显示进度条</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;curl是一个利用URL规则在命令行下工作的强大文件传输工具。
+
+语法：
+# curl [option] [url]
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="curl" scheme="https://wuyanteng.github.io/tags/curl/"/>
+    
+      <category term="cookie" scheme="https://wuyanteng.github.io/tags/cookie/"/>
+    
+      <category term="POST" scheme="https://wuyanteng.github.io/tags/POST/"/>
+    
+      <category term="response" scheme="https://wuyanteng.github.io/tags/response/"/>
+    
+      <category term="模拟浏览器" scheme="https://wuyanteng.github.io/tags/%E6%A8%A1%E6%8B%9F%E6%B5%8F%E8%A7%88%E5%99%A8/"/>
+    
+      <category term="伪造referer" scheme="https://wuyanteng.github.io/tags/%E4%BC%AA%E9%80%A0referer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>让mongo的从库支持读操作</title>
+    <link href="https://wuyanteng.github.io/2018/04/28/%E8%AE%A9mongo%E7%9A%84%E4%BB%8E%E5%BA%93%E6%94%AF%E6%8C%81%E8%AF%BB%E6%93%8D%E4%BD%9C/"/>
+    <id>https://wuyanteng.github.io/2018/04/28/让mongo的从库支持读操作/</id>
+    <published>2018-04-28T03:41:26.000Z</published>
+    <updated>2018-04-28T03:52:04.562Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>对于replica set 中的secondary 节点默认是不可读的。通过在连接时指定或者在主库指定slaveOk，由Secondary来分担读的压力，Primary只承担写操作。</code></pre><a id="more"></a><pre><code>如果通过shell访问mongo，要在secondary进行查询。会出现如下错误：#mongo 192.168.10.10:27017SECONDARY&gt; show dbs;2018-04-28T11:28:17.596+0800 E QUERY    Error: listDatabases failed:{ &quot;note&quot; : &quot;from execCommand&quot;, &quot;ok&quot; : 0, &quot;errmsg&quot; : &quot;not master&quot; }    at Error (&lt;anonymous&gt;)    at Mongo.getDBs (src/mongo/shell/mongo.js:47:15)    at shellHelper.show (src/mongo/shell/utils.js:630:33)    at shellHelper (src/mongo/shell/utils.js:524:36)    at (shellhelp2):1:1 at src/mongo/shell/mongo.js:47SECONDARY&gt; </code></pre><h4 id="有两种方法实现从机的查询："><a href="#有两种方法实现从机的查询：" class="headerlink" title="有两种方法实现从机的查询："></a>有两种方法实现从机的查询：</h4><h5 id="第一种方法："><a href="#第一种方法：" class="headerlink" title="第一种方法："></a>第一种方法：</h5><pre><code>db.getMongo().setSlaveOk();</code></pre><h5 id="第二种方法："><a href="#第二种方法：" class="headerlink" title="第二种方法："></a>第二种方法：</h5><pre><code>rs.slaveOk();</code></pre><pre><code>但是这种方式有一个缺点就是，下次再通过mongo进入实例的时候，查询仍然会报错，为此可以通过下列方式vi ~/.mongorc.js增加一行rs.slaveOk();这样的话以后每次通过mongo命令进入都可以查询了</code></pre><h5 id="第三种方法"><a href="#第三种方法" class="headerlink" title="第三种方法:"></a>第三种方法:</h5><pre><code>在配置mongo的时候增加slave-ok=&quot;true&quot;  来实现从secondary中进行读操作。</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;对于replica set 中的secondary 节点默认是不可读的。通过在连接时指定或者在主库指定slaveOk，由Secondary来分担读的压力，Primary只承担写操作。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="mongodb" scheme="https://wuyanteng.github.io/tags/mongodb/"/>
+    
+      <category term="mongo" scheme="https://wuyanteng.github.io/tags/mongo/"/>
+    
+      <category term="rs.slaveOk()" scheme="https://wuyanteng.github.io/tags/rs-slaveOk/"/>
+    
+      <category term="mongodb从库读操作" scheme="https://wuyanteng.github.io/tags/mongodb%E4%BB%8E%E5%BA%93%E8%AF%BB%E6%93%8D%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Parted给大容量硬盘分区格式化与挂载</title>
+    <link href="https://wuyanteng.github.io/2018/04/27/Parted%E7%BB%99%E5%A4%A7%E5%AE%B9%E9%87%8F%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%8C%82%E8%BD%BD/"/>
+    <id>https://wuyanteng.github.io/2018/04/27/Parted给大容量硬盘分区格式化与挂载/</id>
+    <published>2018-04-27T10:06:10.000Z</published>
+    <updated>2018-04-27T10:15:55.690Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>使用parted给大于2T的硬盘分区</code></pre><a id="more"></a><pre><code>查看现有设备fdisk -l使用parted分区#parted(parted) select /dev/sdb      //选择磁盘sdbUsing /dev/sdb(parted) mklabel gpt          //将MBR磁盘格式化为GPT(parted) mkpart primary 0 -1  //将整块磁盘分成一个分区(parted) printquit###################################或者创建多个分区mkpart primary 0 3Gmkpart primary 3G 10Gmkpart primary 10G -1###################################快速格式化mkfs.ext4 -T largefile /dev/sdb1 对/dev/sdb1添加（修改）标签为/data1e2label /dev/sdb1 /data1 查看分区的标签e2label /dev/sdb1 在/分区下创建一个配额的挂载点mkdir /data/B对该分区进行手动挂载mount /dev/sdb1 /data/B 查看挂载的分区df -h 最后只需在fstab中添加如下一行或使用UUID，就能完成分区的自动挂载[root@server ~]# vim /etc/fstab/dev/sdb1 /data1 ext3 defaults 0 0</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;使用parted给大于2T的硬盘分区
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="parted" scheme="https://wuyanteng.github.io/tags/parted/"/>
+    
+      <category term="fdisk" scheme="https://wuyanteng.github.io/tags/fdisk/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MongoDB数据导出命令mongoexport和导入命令mongoimport</title>
+    <link href="https://wuyanteng.github.io/2018/04/26/MongoDB%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA%E5%91%BD%E4%BB%A4mongoexport/"/>
+    <id>https://wuyanteng.github.io/2018/04/26/MongoDB数据导出命令mongoexport/</id>
+    <published>2018-04-26T03:08:11.000Z</published>
+    <updated>2018-04-26T04:33:45.967Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>MongoDB数据导出命令mongoexport和导入命令mongoimport</code></pre><a id="more"></a><h5 id="数据导出命令mongoexport"><a href="#数据导出命令mongoexport" class="headerlink" title="数据导出命令mongoexport"></a>数据导出命令mongoexport</h5><pre><code>Mongodb中的mongoexport工具可以把一个collection导出成JSON格式或CSV格式的文件。可以通过参数指定导出的数据项，也可以根据指定的条件导出数据。</code></pre><pre><code>mongoexport具体用法如下:查看帮助/bin/mongoexport --help  参数说明：-h:指明数据库宿主机的IP-u:指明数据库的用户名-p:指明数据库的密码-d:指明数据库的名字-c:指明collection(集合)的名字--type: 指明输出的格式,默认为json-f:指明要导出列(如果--type为csv，则需要加上-f &quot;字段名&quot;)-o:指明到要导出的文件名-q:指明导出数据的过滤条件(以json字符串作为查询条件)实例(导出json格式-默认输出为json格式)：/bin/mongoexport -h x.x.x.x:27017 -d online -c logs --type json -o /data/logs.json实例（导出CSV格式）：/bin/mongoexport -h x.x.x.x:27017 -d test -c students --type csv -f classid,name,age -o /data/students_csv.dat  </code></pre><h5 id="数据导入命令mongoimport"><a href="#数据导入命令mongoimport" class="headerlink" title="数据导入命令mongoimport"></a>数据导入命令mongoimport</h5><pre><code>语法：mongoimport -d dbname -c collectionname --file filename --headerline --type json/csv -f field</code></pre><pre><code>参数说明：-h:指明数据库宿主机的IP-u:指明数据库的用户名-p:指明数据库的密码-d: 数据库名-c: collection--type: 导入的格式默认json-f ：导入的字段名--headerline ：如果导入的格式是csv，则可以使用第一行的标题作为导入的字段--file ：要导入的文件</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;MongoDB数据导出命令mongoexport和导入命令mongoimport
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="mongodb" scheme="https://wuyanteng.github.io/tags/mongodb/"/>
+    
+      <category term="mongo" scheme="https://wuyanteng.github.io/tags/mongo/"/>
+    
+      <category term="mongoexport" scheme="https://wuyanteng.github.io/tags/mongoexport/"/>
+    
+      <category term="mongoimport" scheme="https://wuyanteng.github.io/tags/mongoimport/"/>
+    
+      <category term="json" scheme="https://wuyanteng.github.io/tags/json/"/>
+    
+      <category term="csv" scheme="https://wuyanteng.github.io/tags/csv/"/>
+    
+      <category term="mongo导出命令" scheme="https://wuyanteng.github.io/tags/mongo%E5%AF%BC%E5%87%BA%E5%91%BD%E4%BB%A4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hadoop常用命令</title>
+    <link href="https://wuyanteng.github.io/2018/04/23/hadoop%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <id>https://wuyanteng.github.io/2018/04/23/hadoop常用命令/</id>
+    <published>2018-04-23T02:47:58.000Z</published>
+    <updated>2018-04-23T03:59:35.497Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>作为hadoop运维,常用命令还是要牢记下的，与linux稍有区别，来总结下</code></pre><a id="more"></a><h4 id="Hadoop常用命令"><a href="#Hadoop常用命令" class="headerlink" title="Hadoop常用命令"></a>Hadoop常用命令</h4><h5 id="hadoop命令格式"><a href="#hadoop命令格式" class="headerlink" title="hadoop命令格式"></a>hadoop命令格式</h5><pre><code>hadoop  fs  -cmd  &lt;args&gt;</code></pre><h5 id="ls命令"><a href="#ls命令" class="headerlink" title="ls命令"></a>ls命令</h5><pre><code>列出hdfs文件系统根目录下的目录和文件hadoop fs -ls /</code></pre><pre><code>列出hdfs文件系统所有的目录和文件(含子目录和文件)hadoop fs -ls -R /  </code></pre><h5 id="mkdir命令"><a href="#mkdir命令" class="headerlink" title="mkdir命令"></a>mkdir命令</h5><pre><code>创建多级目录,即使父目录不存在hadoop fs -mkdir -p [hdfs dir]</code></pre><h5 id="rm命令"><a href="#rm命令" class="headerlink" title="rm命令"></a>rm命令</h5><pre><code>删除文件hadoop fs -rm [hdfs file]删除目录hadoop fs -rm -r [hdfs dir]</code></pre><h5 id="touchz命令"><a href="#touchz命令" class="headerlink" title="touchz命令"></a>touchz命令</h5><pre><code>在hadoop指定目录下新建空文件hadoop fs -ls -touchz [hdfs dir]/new.txt</code></pre><h5 id="cp命令"><a href="#cp命令" class="headerlink" title="cp命令"></a>cp命令</h5><pre><code>hadoop fs -cp [hdfs file] [hdfs file]</code></pre><h5 id="mv命令"><a href="#mv命令" class="headerlink" title="mv命令"></a>mv命令</h5><pre><code>重命名hdfs上的文件名hadoop fs -mv /user/new.txt /user/ok.txt</code></pre><h5 id="put命令"><a href="#put命令" class="headerlink" title="put命令"></a>put命令</h5><pre><code>文件上传到hdfshadoop fs -put [local file] [hdfs dir]</code></pre><pre><code>目录上传到hdfshadoop fs -ls -put [local dir] [hdfs dir]</code></pre><h5 id="get命令"><a href="#get命令" class="headerlink" title="get命令"></a>get命令</h5><pre><code>从hdfs下载文件到本地目录hadoop fs -get [hdfs file] [local dir]</code></pre><pre><code>从hdfs下载目录到本地目录hadoop fs -get [hdfs dir] [local dir]</code></pre><pre><code>将hdfs指定目录下所有文件排序后合并到local指定的文件中，若指定的local文件不存在则自动创建，若文件存在则会覆盖原文件内容。hadoop fs -getmerge [hdfs dir] [local file]</code></pre><h5 id="du命令"><a href="#du命令" class="headerlink" title="du命令"></a>du命令</h5><pre><code>显示hdfs对应目录下每个目录或文件的大小hadoop fs -du [hdfs path]以人类可读的方式显示每个目录或文件的大小hadoop fs -du -h [hdfs path]</code></pre><h5 id="tail命令"><a href="#tail命令" class="headerlink" title="tail命令"></a>tail命令</h5><pre><code>hadoop fs -tail [hdfs file]</code></pre><h5 id="count命令"><a href="#count命令" class="headerlink" title="count命令"></a>count命令</h5><pre><code>统计hdfs对应路径下的目录个数 + 文件格式 + 文件总大小等hadoop fs -count /serverdata</code></pre><h5 id="stat命令"><a href="#stat命令" class="headerlink" title="stat命令"></a>stat命令</h5><pre><code>hdoop fs -stat [format]  [hdfs path]返回对应路径的状态信息其中，[format]可选参数有：%b（文件大小），%o（Block大小），%n（文件名），%r（副本个数），%y（最后一次修改日期和时间）hadoop fs -stat %b%o%n [hdfs path]</code></pre><h5 id="setrep命令"><a href="#setrep命令" class="headerlink" title="setrep命令"></a>setrep命令</h5><pre><code>改变一个文件在hdfs中的副本个数。hadoop fs setrep -R 3 [hdfs file or hdfs dir]上述命令中数字3为设置的副本个数，-R选项可以对一个目录下的所有目录和文件递归执行改变副本的个数。</code></pre><h5 id="balancer命令"><a href="#balancer命令" class="headerlink" title="balancer命令"></a>balancer命令</h5><pre><code>hdfs balancer 如果管理员发现某些DataNode保存数据过多，某些DataNode保存数据相对较少，可以使用上述命令手动启动内部的均衡过程</code></pre><h5 id="dfsadmin命令"><a href="#dfsadmin命令" class="headerlink" title="dfsadmin命令"></a>dfsadmin命令</h5><pre><code>管理员可以通过dfsadmin管理HDFS查看帮助hdfs dfsadmin -help显示文件系统的基本数据hdfs dfsadmin -safemode &lt; enter | leave | get | wait &gt;enter：进入安全模式；leave：离开安全模式；get：获知是否开启安全模式；wait：等待离开安全模式</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;作为hadoop运维,常用命令还是要牢记下的，与linux稍有区别，来总结下
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="hadoop" scheme="https://wuyanteng.github.io/tags/hadoop/"/>
+    
+      <category term="hdfs" scheme="https://wuyanteng.github.io/tags/hdfs/"/>
+    
+      <category term="fs" scheme="https://wuyanteng.github.io/tags/fs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>cacti接入微信告警功能</title>
+    <link href="https://wuyanteng.github.io/2018/04/20/cacti%E6%8E%A5%E5%85%A5%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6%E5%8A%9F%E8%83%BD/"/>
+    <id>https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/</id>
+    <published>2018-04-20T08:04:56.000Z</published>
+    <updated>2018-04-20T11:22:08.608Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>cacti接入微信告警功能</code></pre><a id="more"></a><h5 id="插件安装"><a href="#插件安装" class="headerlink" title="插件安装"></a>插件安装</h5><pre><code>需要cacti安装thold与settings插件并启用插件</code></pre><p>参考：<a href="https://wuyanteng.github.io/2017/04/13/cacti%E9%85%8D%E7%BD%AE%E9%82%AE%E4%BB%B6%E5%91%8A%E8%AD%A6/">插件安装</a></p><h5 id="配置微信告警代码"><a href="#配置微信告警代码" class="headerlink" title="配置微信告警代码"></a>配置微信告警代码</h5><pre><code>vi /var/www/cacti/plugins/thold/thold_functions.php</code></pre><pre><code> $message = str_replace(&#39;&lt;GRAPH&gt;&#39;, &quot;&lt;br&gt;&lt;img src=&#39;&quot; . $val[&#39;file&#39;] . &quot;&#39;&gt;&lt;br&gt;Could not open!&lt;br&gt;&quot; . $val[&#39;file&#39;], $message);          }     }}########## 在这个位置添加如下代码 ###############$msg_wx = strip_tags(str_replace(&#39;&lt;br&gt;&#39;, &quot;\n&quot;, $message));$msg_wx = trim($msg_wx);$msg_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $msg_wx);$sub_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $subject);$file_title  = &#39;/tmp/wechat.txt&#39;;$file_message  = &#39;/tmp/wechat_message.txt&#39;;if($f  = file_put_contents($file_title, $sub_wx))   if($f  = file_put_contents($file_message,  $msg_wx))shell_exec(&quot;/etc/wechat.sh&quot;);########## 代码添加-结束 #######################$text = array(&#39;text&#39; =&gt; &#39;&#39;, &#39;html&#39; =&gt; &#39;&#39;);   if ($filename == &#39;&#39;) {        $message = str_replace(&#39;&lt;br&gt;&#39;,  &quot;\n&quot;, $message);        $message = str_replace(&#39;&lt;BR&gt;&#39;,  &quot;\n&quot;, $message);        $message = str_replace(&#39;&lt;/BR&gt;&#39;, &quot;\n&quot;, $message);</code></pre><pre><code>上面添加代码注释：//删除message中的html标签,并将&lt;br&gt;替换为换行符\n$msg_wx = strip_tags(str_replace(&#39;&lt;br&gt;&#39;, &quot;\n&quot;, $message));    //整理msg_wx字符串$msg_wx = trim($msg_wx); //转换编码为utf-8，防止乱码 $msg_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $msg_wx);//转换编码为utf-8，防止乱码$sub_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $subject);  //要写入文件的文件名（可以是任意文件名），如果文件不存在，将会创建一个$file_title  = &#39;/tmp/wechat.txt&#39;;       //要写入文件的文件名（可以是任意文件名），如果文件不存在，将会创建一个$file_message  = &#39;/tmp/wechat_message.txt&#39;;  //将subject参数的值保存到file_title中if($f  = file_put_contents($file_title, $sub_wx))   //将msg_wx参数的值保存到file_message中if($f  = file_put_contents($file_message,  $msg_wx))//运行wechat.sh文件，进行微信报警操作。shell_exec(&quot;/etc/wechat.sh&quot;);                       </code></pre><h5 id="配置触发消息脚本"><a href="#配置触发消息脚本" class="headerlink" title="配置触发消息脚本"></a>配置触发消息脚本</h5><pre><code># vi /etc/wechat.sh#微信企业号的CropIDCropID=&#39;xxxxxxxxxxxx&#39;#企业号应用SecretSecret=&#39;xxxxxxxxxxxxxxxxxxxxxx&#39;GURL=&quot;https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$CropID&amp;corpsecret=$Secret&quot;Gtoken=$(/usr/bin/curl -s -G $GURL |  awk -F &quot;[\&quot;:,]&quot; &#39;{print $15}&#39;)PURL=&quot;https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=$Gtoken&quot;function body() {#Appid 填写企业号中建立的报警APP的IDlocal int AppID=1#此处填写报警接收用户，全部报警可留空local UserID=&quot;@all&quot;local PartyID=&quot;@all&quot;local TagID=&quot;@all&quot;Ent=$&#39;\n&#39;#应cactifans群内要求，添加Cacti微信报警日期参数Date=$(date &#39;+%Y年%m月%d日 %H:%M:%S\n\n&#39;)#读取/tmp/wechat.txt文件中内容到变量TitTit=$(cat /tmp/wechat.txt)#拼接msg主体文件,包含日期,主题,报警内容.并删除报警内容中的&#39;%&#39;号.Msg=$Date$Tit$Ent$(cat /tmp/wechat_message.txt|sed &#39;s/%//g&#39;)#获取wechat_message.txt中的url行内容Url=$(grep  &quot;http&quot; /tmp/wechat_message.txt|sed  &#39;s/URL: //g&#39;)Pic_tmp=$(grep  &quot;http&quot; /tmp/wechat_message.txt|sed  &#39;s/URL: //g&#39;|sed &#39;s/\/graph.php/\/graph_image.php/g&#39;)#在此修改图片大小，防止图像显示不全,并判断图片文件是否存在。防止宕机出现图片报警if [ ! -n &quot;$Pic_tmp&quot; ] ;then    Pic=&quot;&quot;else    Pic=$Pic_tmp$&#39;&amp;graph_height=215&amp;graph_width=424&#39;fiprintf &#39;{\n&#39;printf &#39;\t&quot;touser&quot;: &quot;&#39;&quot;$UserID&quot;\&quot;&quot;,\n&quot;printf &#39;\t&quot;toparty&quot;: &quot;&#39;&quot;$PartyID&quot;\&quot;&quot;,\n&quot;printf &#39;\t&quot;totag&quot;: &quot;&#39;&quot;$TagID&quot;\&quot;&quot;,\n&quot;printf &#39;\t&quot;msgtype&quot;: &quot;news&quot;,\n&#39;printf &#39;\t&quot;agentid&quot;: &quot;&#39;&quot; $AppID &quot;\&quot;&quot;,\n&quot;printf &#39;\t&quot;news&quot;: {\n&#39;printf &#39;\t&quot;articles&quot;: [\n&#39;printf &#39;{\n&#39;printf &#39;\t\t&quot;title&quot;: &quot;&#39;&quot;$Tit&quot;\&quot;,&quot;\n&quot;printf &#39;\t\t&quot;description&quot;: &quot;&#39;&quot;$Msg&quot;\&quot;,&quot;\n&quot;printf &#39;\t\t&quot;url&quot;: &quot;&#39;&quot;$Url&quot;\&quot;,&quot;\n&quot;printf &#39;\t\t&quot;picurl&quot;: &quot;&#39;&quot;$Pic&quot;\&quot;,&quot;\n&quot;printf &#39;\t}\n&#39;printf &#39;\t]\n&#39;printf &#39;\t}\n&#39;printf &#39;}\n&#39;}curl -l -H &quot;Content-type: application/json&quot; -X POST -d &quot;$(body )&quot; $PURL</code></pre><h5 id="测试微信脚本是否可用"><a href="#测试微信脚本是否可用" class="headerlink" title="测试微信脚本是否可用"></a>测试微信脚本是否可用</h5><pre><code>在/tmp/wechat.txt和/tmp/wechat_message.txt中随便填写一些内容，然后运行微信脚本echo &quot;主题123&quot; &gt; /tmp/wechat.txtecho &quot;主体内容-测试456&quot; &gt; /tmp/wechat_message.txtsh  /etc/wechat.shchmod +x /etc/wechat.sh注:测试完成后,需要删除/tmp/wechat* 文件，否则会出现权限问题导致数据无法写入</code></pre><h5 id="配置告警阈值并测试微信收取"><a href="#配置告警阈值并测试微信收取" class="headerlink" title="配置告警阈值并测试微信收取"></a>配置告警阈值并测试微信收取</h5><pre><code>略</code></pre><h5 id="故障处理-流量图不能显示"><a href="#故障处理-流量图不能显示" class="headerlink" title="故障处理:流量图不能显示"></a>故障处理:流量图不能显示</h5><pre><code>注意：如果流量告警中无法显示流量图，可以做如下修改#取消cacti的图像验证配置# vi /var/www/cacti/graph_image.php#include(&quot;./include/auth.php&quot;);         #添加注释include_once(&quot;./lib/rrd.php&quot;);include(&quot;./include/global.php&quot;);        #添加这一行</code></pre><p>参考: <a href="http://blog.51cto.com/icenycmh/1940443" target="_blank" rel="noopener">51CTO</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;cacti接入微信告警功能
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="cacti" scheme="https://wuyanteng.github.io/tags/cacti/"/>
+    
+      <category term="微信" scheme="https://wuyanteng.github.io/tags/%E5%BE%AE%E4%BF%A1/"/>
+    
+      <category term="微信告警" scheme="https://wuyanteng.github.io/tags/%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>查看占用内存或CPU最多的进程</title>
+    <link href="https://wuyanteng.github.io/2018/04/20/%E6%9F%A5%E7%9C%8B%E5%8D%A0%E7%94%A8%E5%86%85%E5%AD%98%E6%88%96CPU%E6%9C%80%E5%A4%9A%E7%9A%84%E8%BF%9B%E7%A8%8B/"/>
+    <id>https://wuyanteng.github.io/2018/04/20/查看占用内存或CPU最多的进程/</id>
+    <published>2018-04-20T01:52:33.000Z</published>
+    <updated>2018-05-10T09:14:12.728Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>快速定位占用内存或占用CPU最多的进程，并对其排序。</code></pre><a id="more"></a><h5 id="查看占用内存最多的进程"><a href="#查看占用内存最多的进程" class="headerlink" title="查看占用内存最多的进程"></a>查看占用内存最多的进程</h5><pre><code>ps -aux |sort -k4nr |head -10或top界面，按下（大写的）M</code></pre><p>查看占用CPU较高的进程</p><pre><code>ps -aux |sort -k3nr|head -10或top界面, 按下（大写的）P</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;快速定位占用内存或占用CPU最多的进程，并对其排序。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="CPU" scheme="https://wuyanteng.github.io/tags/CPU/"/>
+    
+      <category term="内存" scheme="https://wuyanteng.github.io/tags/%E5%86%85%E5%AD%98/"/>
+    
+      <category term="使用率" scheme="https://wuyanteng.github.io/tags/%E4%BD%BF%E7%94%A8%E7%8E%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx状态码499-错误分析</title>
+    <link href="https://wuyanteng.github.io/2018/04/11/Nginx%E7%8A%B6%E6%80%81%E7%A0%81499-%E9%94%99%E8%AF%AF%E5%88%86%E6%9E%90/"/>
+    <id>https://wuyanteng.github.io/2018/04/11/Nginx状态码499-错误分析/</id>
+    <published>2018-04-11T07:50:03.000Z</published>
+    <updated>2018-04-11T08:14:52.385Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>nginx日志大量499报错,分析与处理。</code></pre><a id="more"></a><h5 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h5><pre><code>220.181.165.136 - - [18/May/2015:10:31:02 +0800] &quot;POST /v1/jobsHTTP/1.1&quot; 499 0 &quot;&quot; &quot;bdHttpRequest/1.0.0&quot;115.239.212.7 - - [18/May/2015:10:31:03 +0800] &quot;GET /v1/job/643309e3-dc73-4025-aa69-c9405c1d818fHTTP/1.1&quot; 499 0&quot;http://www.baidu.com/?tn=91638679_hao_pg&amp;s_j=1&quot;&quot;Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko&quot;140.207.202.187 - - [18/May/2015:10:30:58 +0800] &quot;POST/v3/violations HTTP/1.1&quot; 499 0 &quot;-&quot; &quot;-&quot;</code></pre><h5 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h5><pre><code>499 CLIENT CLOSED REQUEST A non-standard status code introduced by nginx for the case when a client closes the connection while nginx is processing the request.499  客户端关闭请求Nginx在处理请求时，客户端关闭了连接，故nginx抛出了499这个状态代码。</code></pre><pre><code>大牛分析源码-摘录/** HTTP does notdefine the code for the case when a client closed* the connectionwhile we are processing its request so we introduce* own code to logsuch situation when a client has closed the connection* before we even tryto send the HTTP header to it*/意思是服务器在返回HTTP头之前，客户端就已经关闭了当前连接。很可能是因为服务器端处理的时间过长，客户端&quot;不耐烦&quot;了...</code></pre><pre><code>Nginx upstream在以下情况下会返回499状态码：(1)upstream 在收到读写事件处理之前时，会检查连接是否可用，当连接错误时会返回499。(2)server处理请求未结束，而client提前关闭了连接，此时也会返回499。总之，这个错误的比例升高可能表明服务器upstream处理过慢，导致用户提前关闭连接。</code></pre><pre><code>为什么服务端处理时间过长？可能的原因是：(1)后台python程序处理请求时间过长(2)mysql慢查询尝试去验证结论：(1)查看CPU和内存使用, 是否在正常范围(2)后台程序访问是否正常(3)验证mysql是否有慢查询</code></pre><pre><code>如果以上结论都正常，可以使用如下参数来优化proxy_ignore_client_abort  on;  #让代理服务端不要主动关闭客户端的连接。如果使用了 proxy_ignore_client_abort on ;那么客户端主动断掉连接之后，Nginx 会等待后端处理完(或者超时)，然后记录「后端的返回信息」到日志。所以，如果后端返回200，就记录200 ；如果后端放回 5XX ，那么就记录 5XX.如果超时(默认60s，可以用 proxy_read_timeout 设置)，Nginx会主动断开连接，记录504注：建议只在做反向代理的时候使用。最好关闭这一选项。</code></pre><p>参考: <a href="http://blog.51cto.com/yucanghai/1713803" target="_blank" rel="noopener">51CTO</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;nginx日志大量499报错,分析与处理。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="499" scheme="https://wuyanteng.github.io/tags/499/"/>
+    
+      <category term="nginx upstream" scheme="https://wuyanteng.github.io/tags/nginx-upstream/"/>
+    
+      <category term="proxy_ignore_client_abort" scheme="https://wuyanteng.github.io/tags/proxy-ignore-client-abort/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux网卡限速</title>
+    <link href="https://wuyanteng.github.io/2018/04/11/Linux%E7%BD%91%E5%8D%A1%E9%99%90%E9%80%9F/"/>
+    <id>https://wuyanteng.github.io/2018/04/11/Linux网卡限速/</id>
+    <published>2018-04-11T06:19:23.000Z</published>
+    <updated>2018-04-11T06:48:10.962Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>罗列几种linux网卡限速方案，运行结果已实际为准，不对以下工具限速结果负责。</code></pre><a id="more"></a><h4 id="MB-s与Mbit-s概念"><a href="#MB-s与Mbit-s概念" class="headerlink" title="MB/s与Mbit/s概念"></a>MB/s与Mbit/s概念</h4><pre><code>Mbit/s意思是 兆比特/秒，俗称:小b, 是指每秒传输的比特位数，即家里使用的10M或50M宽带或者speedtest测速结果再或者Cacti监控看到的带宽峰值就是这个小b的概念。MB/s意思是 兆字节/秒,俗称:大B，是指每秒传输的字节数量，也是实际下载文件看到的网络速度。8Mbit/s(运营商网络带宽)=1MB/s(实际文件下载速度)</code></pre><h4 id="限速方案"><a href="#限速方案" class="headerlink" title="限速方案"></a>限速方案</h4><h5 id="简单粗暴之ethtool命令"><a href="#简单粗暴之ethtool命令" class="headerlink" title="简单粗暴之ethtool命令"></a>简单粗暴之ethtool命令</h5><pre><code>以CentOS为例，系统默认自带ethtool命令，使用方法如下：(1) 查看网卡信息      ethtool em1(2) 使用ethtool命令把千兆网卡降为百兆网卡并关闭自协商    ethtool -s em1 speed 100 duplex full autoneg off(3) 恢复千兆速度并启用自协商    ethtool -s em1 speed 1000 duplex full autoneg on注：此命令会导致服务器em1临时断网,后自恢复，请谨慎操作。注: 此操作在ESXI虚拟机中无效</code></pre><h5 id="最便捷之wondershaper"><a href="#最便捷之wondershaper" class="headerlink" title="最便捷之wondershaper"></a>最便捷之wondershaper</h5><pre><code>(1)google搜索wondershaper rpm下载对应安装包并通过rpm -ivh命令安装（不需要依赖）(2)命令格式（单位:Kbps）：   wondershaper 网卡名称 下载速度 上传速度(3)例如: 我限制em1网卡下载速度为10Mbit/s,上传速度为15Mbit/s   wondershaper em1  10000 15000(4)取消限速   wondershaper clear em1</code></pre><h5 id="最稳妥限速之交换机端口限速"><a href="#最稳妥限速之交换机端口限速" class="headerlink" title="最稳妥限速之交换机端口限速"></a>最稳妥限速之交换机端口限速</h5><pre><code>对此不进行赘述</code></pre><h4 id="限速后测速"><a href="#限速后测速" class="headerlink" title="限速后测速"></a>限速后测速</h4><pre><code>linux下限速后如何测速？下载speedtest测速脚本wget -O speedtest-cli https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py &amp;&amp; chmod +x speedtest-cli执行如下命令等待结果即可./speedtest-cli</code></pre><p>更多speedtest安装方式-<a href="https://github.com/sivel/speedtest-cli" target="_blank" rel="noopener">参考</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;罗列几种linux网卡限速方案，运行结果已实际为准，不对以下工具限速结果负责。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="限速方案" scheme="https://wuyanteng.github.io/tags/%E9%99%90%E9%80%9F%E6%96%B9%E6%A1%88/"/>
+    
+      <category term="Linux限速" scheme="https://wuyanteng.github.io/tags/Linux%E9%99%90%E9%80%9F/"/>
+    
+      <category term="wondershaper" scheme="https://wuyanteng.github.io/tags/wondershaper/"/>
+    
+      <category term="tc" scheme="https://wuyanteng.github.io/tags/tc/"/>
+    
+      <category term="ethtool" scheme="https://wuyanteng.github.io/tags/ethtool/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux下route路由配置梳理</title>
+    <link href="https://wuyanteng.github.io/2018/04/07/Linux%E4%B8%8Broute%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E6%A2%B3%E7%90%86/"/>
+    <id>https://wuyanteng.github.io/2018/04/07/Linux下route路由配置梳理/</id>
+    <published>2018-04-07T02:48:37.000Z</published>
+    <updated>2018-04-07T04:11:30.003Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>在日常运维作业中，经常会碰到路由表的操作。下面就相关操作进行梳理</code></pre><a id="more"></a><h4 id="路由基础知识"><a href="#路由基础知识" class="headerlink" title="路由基础知识"></a>路由基础知识</h4><h5 id="路由概念"><a href="#路由概念" class="headerlink" title="路由概念"></a>路由概念</h5><pre><code>路由：  跨越从源主机到目标主机的一个互联网络来转发数据包的过程路由器：能够将数据包转发到正确的目的地，并在转发过程中选择最佳路径的设备路由表：在路由器中维护的路由条目，路由器根据路由表做路径选择直连路由：当在路由器上配置了接口的IP地址，并且接口状态为up的时候，路由表中就出现直连路由项静态路由：是由管理员手工配置的，是单向的。默认路由：当路由器在路由表中找不到目标网络的路由条目时，路由器把请求转发到默认路由接口 。</code></pre><h5 id="静态路由和默认路由的特点"><a href="#静态路由和默认路由的特点" class="headerlink" title="静态路由和默认路由的特点"></a>静态路由和默认路由的特点</h5><pre><code>静态路由特点:路由表是手工设置的,除非网络管理员干预，否则静态路由不会发生变化；路由表的形成不需要占用网络资源；适用环境：一般用于网络规模很小、拓扑结构固定的网络中。</code></pre><pre><code>默认路由特点:在所有路由类型中，默认路由的优先级最低适用环境：一般应用在只有一个出口的末端网络中或作为其他路由的补充</code></pre><pre><code>浮动静态路由：路由表中存在相同目标网络的路由条目时，根据路由条目优先级的高低，将请求转发到相应端口；链路冗余的作用；</code></pre><h5 id="路由器转发数据包时的封装过程"><a href="#路由器转发数据包时的封装过程" class="headerlink" title="路由器转发数据包时的封装过程"></a>路由器转发数据包时的封装过程</h5><pre><code>源IP和目标IP不发生变化，在网络的每一段传输时，源和目标MAC发生变化，进行重新封装，分别是每一段的源和目标地址</code></pre><h5 id="要完成对数据包的路由，一个路由器必须至少了解以下内容"><a href="#要完成对数据包的路由，一个路由器必须至少了解以下内容" class="headerlink" title="要完成对数据包的路由，一个路由器必须至少了解以下内容"></a>要完成对数据包的路由，一个路由器必须至少了解以下内容</h5><pre><code>a）目的地址b）相连路由器，并可以从哪里获得远程网络的信息c）到所有远程网络的可能路由d）到达每个远程网络的最佳路由e）如何维护并验证路由信息f）路由和交换的对比路由工作在网络层   a)根据“路由表”转发数据   b)路由选择   c)路由转发交换工作在数据链路层   d)根据“MAC地址表”转发数据   e)硬件转发</code></pre><h4 id="路由相关操作"><a href="#路由相关操作" class="headerlink" title="路由相关操作"></a>路由相关操作</h4><h5 id="使用route-n命令查看Linux内核路由表"><a href="#使用route-n命令查看Linux内核路由表" class="headerlink" title="使用route -n命令查看Linux内核路由表"></a>使用route -n命令查看Linux内核路由表</h5><pre><code>[root@repo100 ~]# route -nKernel IP routing tableDestination     Gateway      Genmask         Flags Metric Ref    Use    Iface0.0.0.0         10.0.10.1    0.0.0.0         UG    100    0      0    eno1678003210.0.10.0       0.0.0.0      255.255.255.0   U     100    0      0    eno16780032Destination:目标网段或主机Gateway: 网关地址Genmask：网络掩码Flags: 标记       U -- 表示路由是活动的       H -- 表示目标是一个主机       G -- 表示路由指向网关       R -- 表示恢复动态路由产生的表项       D -- 由路由的后台程序动态的安装       M -- 由路由的后台程序修改       ！-- 拒绝路由Metric: 路由距离Ref: 路由项引用次数Use: 此路由项被路由软件查找的次数Iface: 该路由表项对应的输出接口</code></pre><h5 id="三种路由类型说明"><a href="#三种路由类型说明" class="headerlink" title="三种路由类型说明"></a>三种路由类型说明</h5><pre><code>(1)主机路由主机路由是路由选择表中指向单个IP地址或主机名的路由记录。主机路由的Flags字段为H。例如，在下面的示例中，本地主机通过IP地址192.168.1.1的路由器到达IP地址为10.0.0.10的主机。Destination    Gateway       Genmask        Flags     Metric    Ref    Use    Iface-----------    -------     -------            -----     ------    ---    ---    -----10.0.0.10     192.168.1.1    255.255.255.255   UH       0    0      0    eth0</code></pre><pre><code>(2)网络路由网络路由是代表主机可以到达的网络。网络路由的Flags字段为N。例如，在下面的示例中，本地主机将发送到网络192.19.12的数据包转发到IP地址为192.168.1.1的路由器。Destination    Gateway       Genmask      Flags    Metric    Ref     Use    Iface-----------    -------     -------         -----    -----   ---    ---    -----192.19.12     192.168.1.1    255.255.255.0      UN      0       0     0    eth0</code></pre><pre><code>(3)默认路由当主机不能在路由表中查找到目标主机的IP地址或网络路由时，数据包就被发送到默认路由（默认网关）上。默认路由的Flags字段为G。例如，在下面的示例中，默认路由是IP地址为192.168.1.1的路由器。Destination    Gateway       Genmask    Flags     Metric    Ref    Use    Iface-----------    -------     ------- -----      ------    ---    ---    -----default       192.168.1.1     0.0.0.0    UG       0        0     0    eth0</code></pre><h5 id="route命令格式详解"><a href="#route命令格式详解" class="headerlink" title="route命令格式详解"></a>route命令格式详解</h5><pre><code>设置和查看路由表都可以用 route 命令，设置内核路由表的命令格式是：route  [add|del] [-net|-host] target [netmask Nm] [gw Gw] [[dev] If]参数解释：add        添加一条路由规则del        删除一条路由规则-net       目的地址是一个网络-host      目的地址是一个主机target     目的网络或主机netmask    目的地址的网络掩码gw         路由数据包通过的网关dev        为路由指定的网络接口</code></pre><h5 id="route命令使用举例"><a href="#route命令使用举例" class="headerlink" title="route命令使用举例"></a>route命令使用举例</h5><pre><code>添加到主机的路由route add -host 192.168.1.2 dev eth0:0route add -host 10.20.30.148 gw 10.20.30.40</code></pre><pre><code>添加到网络的路由route add -net 10.20.30.40 netmask 255.255.255.248 eth0route add -net 10.20.30.48 netmask 255.255.255.248 gw 10.20.30.41route add -net 192.168.1.0/24 eth1</code></pre><pre><code>添加默认路由route add default gw 192.168.1.1</code></pre><pre><code>删除路由route del -host 192.168.1.2 dev eth0:0route del -host 10.20.30.148 gw 10.20.30.40route del -host 10.20.30.40 netmask 255.255.255.248 eth0route del -net 10.20.30.48 netmask 255.255.255.248 gw 10.20.30.41route del -net 192.168.1.0/24 eth1route del default gw 192.168.1.1注：route del default命令会删除所有默认路由,操作需谨慎</code></pre><h6 id="添加一条默认路由"><a href="#添加一条默认路由" class="headerlink" title="添加一条默认路由"></a>添加一条默认路由</h6><pre><code>添加一条默认路由route add default gw 10.0.0.1    //默认只在内存中生效永久生效：追加到/etc/rc.local文件里（CentOS7需要给文件执行权限）echo &quot;route add default gw 10.0.0.1&quot; &gt;&gt;/etc/rc.local</code></pre><h6 id="添加一条静态路由"><a href="#添加一条静态路由" class="headerlink" title="添加一条静态路由"></a>添加一条静态路由</h6><pre><code>添加一条静态路由route add -net 192.168.2.0/24 gw 192.168.2.254永久生效：echo &quot;any net 192.168.2.0/24 gw 192.168.2.254&quot; &gt;&gt;/etc/sysconfig/static-routes</code></pre><h6 id="添加到一台主机的静态路由"><a href="#添加到一台主机的静态路由" class="headerlink" title="添加到一台主机的静态路由"></a>添加到一台主机的静态路由</h6><pre><code>route add -host 192.168.2.2 gw 192.168.2.254永久生效：echo &quot;any host 192.168.2.2 gw 192.168.2.254&quot; &gt;&gt;/etc/sysconfig/static-routes 注：Linux 默认没有此文件,该命令会自动创建。</code></pre><h5 id="开启linux内核的包转发功能"><a href="#开启linux内核的包转发功能" class="headerlink" title="开启linux内核的包转发功能"></a>开启linux内核的包转发功能</h5><pre><code>在Linux中默认的内核配置已经包含了路由功能，但默认并没有在系统启动时启用此功能永久开启路由功能 # vim /etc/sysctl.confnet.ipv4.ip_forward = 1配置生效sysctl -p</code></pre><h5 id="使用ip-route命令配置静态路由"><a href="#使用ip-route命令配置静态路由" class="headerlink" title="使用ip route命令配置静态路由"></a>使用ip route命令配置静态路由</h5><pre><code>添加静态路由到路由表的语法如下：ip route [destination_network] [mask] [next-hop_address] administrative_distance]参数解析：ip route              用于创建静态路由的命令。Destination_network   需要发布到路由表中的网段。Mask                  在这一网络上使用的子网掩码。Next-hop_address      下一跳路由器的地址。administrative_distance    默认时，静态路由有一个取值为1 的管理性距离。在这个命令的尾部添加管理权来修改这个默认值。</code></pre><pre><code>例如ip route 172.16.1.0 255.255.255.0 172.16.2.1</code></pre><pre><code>查看路由表除了使用route -n命令外，还可以使用ip route[root@repo100 ~]# ip routedefault via 10.0.10.1 dev eno16780032 proto static metric 100 10.0.10.0/24 dev eno16780032 proto kernel scope link src 10.0.10.100 metric 100 </code></pre><h4 id="实例1"><a href="#实例1" class="headerlink" title="实例1"></a>实例1</h4><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/route_sl1.png" alt="route_sl1" title="">                </div>                <div class="image-caption">route_sl1</div>            </figure><pre><code>如上图所示, PC0机器和PC1机器之间经过两个路由器，要想使这两台机器通信，路由设置如下：</code></pre><pre><code>(1)Route0路由器设置：ip add 192.168.1.1 255.255.255.0ip add 192.168.2.1 255.255.255.0ip route 192.168.3.0 255.255.255.0 192.168.2.2</code></pre><pre><code>(2)Route1路由器设置：ip add 192.168.2.2 255.255.255.0ip add 192.168.3.1 255.255.255.0ip route 192.168.1.0 255.255.255.0 192.168.2.1</code></pre><h4 id="实例2"><a href="#实例2" class="headerlink" title="实例2"></a>实例2</h4><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/route_sl2.png" alt="route_sl2" title="">                </div>                <div class="image-caption">route_sl2</div>            </figure><pre><code>如上图所示，使用A主机192.168.1.2能够ping通E主机192.168.4.2，这两台机能够通信。操作思路：1）在主机B上设置默认路由下一跳为192.168.2.2，并开启路由转发功能；2）在主机C上设置2条静态路由，分别去192.168.1.0/24网段的下一跳为192.168.2.1，去192.168.4.0/24网段的下一跳为192.168.3.2，并开启路由转发功能；3）在主机D上设置默认路由下一跳为192.168.3.1，并开启路由转发功能。</code></pre><pre><code>操作纪录：1）A主机上操作：ip为192.168.1.2，设置网关为192.168.1.1   route add default gw 192.168.1.12）B主机上操作：第一块网卡为192.168.1.1，第二块网卡为192.168.2.1   (2.1)B主机设置默认路由，下一跳为192.168.2.2     route add default gw 192.168.2.2   (2.2)B主机开启路由转发功能     echo 1 &gt; /proc/sys/net/ipv4/ip_forward3）C主机上操作：第一块网卡为192.168.2.2，第二块网卡为192.168.3.1   (3.1)C主机设置2条默认路由        route add -net 192.168.1.0/24 gw 192.168.2.1        route add -net 192.168.4.0/24 gw 192.168.3.2   (3.2)C主机开启路由转发功能        echo 1 &gt; /proc/sys/net/ipv4/ip_forward4）D主机上操作：第一块网卡为192.168.3.2，第二块网卡为192.168.4.1   (4.1)D主机设置默认路由，下一跳为192.168.3.1        route add default gw 192.168.3.1   (4.2)D主机开启路由转发功能        echo 1 &gt; /proc/sys/net/ipv4/ip_forward 5）E主机上操作：ip为192.168.4.2，设置网关为192.168.4.1   route add default gw 192.168.4.1</code></pre><p>参考: <a href="https://cloud.tencent.com/developer/article/1027213" target="_blank" rel="noopener">腾讯云社区</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;在日常运维作业中，经常会碰到路由表的操作。下面就相关操作进行梳理
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Linux" scheme="https://wuyanteng.github.io/tags/Linux/"/>
+    
+      <category term="Route" scheme="https://wuyanteng.github.io/tags/Route/"/>
+    
+      <category term="静态路由" scheme="https://wuyanteng.github.io/tags/%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1/"/>
+    
+      <category term="默认路由" scheme="https://wuyanteng.github.io/tags/%E9%BB%98%E8%AE%A4%E8%B7%AF%E7%94%B1/"/>
+    
+      <category term="路由配置" scheme="https://wuyanteng.github.io/tags/%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>strace命令-追踪指定pid进程</title>
+    <link href="https://wuyanteng.github.io/2018/04/04/strace%E5%91%BD%E4%BB%A4-%E8%BF%BD%E8%B8%AA%E6%8C%87%E5%AE%9Apid%E8%BF%9B%E7%A8%8B/"/>
+    <id>https://wuyanteng.github.io/2018/04/04/strace命令-追踪指定pid进程/</id>
+    <published>2018-04-04T07:41:25.000Z</published>
+    <updated>2018-04-04T08:07:43.511Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>适用场景：生产环境中，人为定位到某个业务某个进程可能存在问题时,就需要使用strace命令，对指定进程进行跟踪与调试，查找出罪魁祸首。</code></pre><a id="more"></a><pre><code>说到strace命令, 先来聊聊ps -ef命令的内容输出及其代表的含义.</code></pre><pre><code># ps -ef|grep phproot     10498  2978  0 Mar19 ?  00:20:54 php-fpm: master process (/etc/php-fpm.conf)root     20559  2978  0 Mar31 ?  00:00:05 php-fpm: master process (/etc/php-fpm.conf)www   20560 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20561 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20562 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20563 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20564 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20565 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20566 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20567 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20568 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20569 20559  0 Mar31 ?        00:00:01 php-fpm: pool www</code></pre><pre><code>在上面的结果中,可以看到有两个php的父级进程(php-fpm和php-fpm7),我们也可以通过grep取到具体的php版本的进程进行显示。这里说下结果中的具体含义。从左往右依次是：用户UID--子进程ID--父进程ID--CPU占用率--STIME开始时间--TTY--进程运行的总时间--命令/进程名称</code></pre><p>当进程处理出现问题时,某个“进程运行的总时间”普遍较长,这时候就需要使用strace命令去查看详细</p><pre><code>作为运维，这个命令最常用的用法是【完成跟踪时，按ctrl + C结束strace】:strace -p 子进程pid其他常用参数：-o xxx.txt 输出结果到文档-e execve  只记录execve这类调用-f 跟踪由fork调用所产生的子进程.</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;适用场景：生产环境中，人为定位到某个业务某个进程可能存在问题时,就需要使用strace命令，对指定进程进行跟踪与调试，查找出罪魁祸首。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="strace" scheme="https://wuyanteng.github.io/tags/strace/"/>
+    
+      <category term="pid" scheme="https://wuyanteng.github.io/tags/pid/"/>
+    
+      <category term="ps" scheme="https://wuyanteng.github.io/tags/ps/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>X-Forward-For详解</title>
+    <link href="https://wuyanteng.github.io/2018/04/03/Nginx%E4%BF%A1%E6%81%AF%E5%A4%B4%E9%85%8D%E7%BD%AE-proxy-set-header/"/>
+    <id>https://wuyanteng.github.io/2018/04/03/Nginx信息头配置-proxy-set-header/</id>
+    <published>2018-04-03T07:51:36.000Z</published>
+    <updated>2018-04-03T08:16:26.424Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>当nginx作为反向代理功能时，转发请求到后端服务器。通常需要使用如下命令为转发的请求增加请求头 X-Forwarded-For</code></pre><a id="more"></a><pre><code>X-Forwarded-For请求头格式: X-Forwarded-For:client, proxy1, proxy2如果一个 HTTP 请求到达服务器之前，经过了三个代理 Proxy1、Proxy2、Proxy3，IP分别为 IP1、IP2、IP3，用户真实 IP 为IP0，那么按照 XFF 标准，服务端最终会收到以下信息：X-Forwarded-For: IP0, IP1, IP2</code></pre><p>所以nginx做负载均衡的时候，想要获取用户真实IP地址怎么办？</p><pre><code>在nginx反向代理服务器-配置文件中【一般是location字段】添加如下配置proxy set header X-Forwarded-For $remote_addr;</code></pre><p>所以nginx做负载均衡的时候，同时支持后端配置多个虚拟主机？</p><pre><code>在nginx反向代理服务器-配置文件中【一般是location字段】添加如下配置Proxy set header Host $host;</code></pre><h5 id="最新版-内置变量-配置"><a href="#最新版-内置变量-配置" class="headerlink" title="最新版(内置变量)配置"></a>最新版(内置变量)配置</h5><pre><code>proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</code></pre><p>最新版(内置变量)配置-参考官方：<a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html#.24proxy_add_x_forwarded_for" target="_blank" rel="noopener">X-Forwarded-For</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;当nginx作为反向代理功能时，转发请求到后端服务器。通常需要使用如下命令为转发的请求增加请求头 
+X-Forwarded-For
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Nginx" scheme="https://wuyanteng.github.io/tags/Nginx/"/>
+    
+      <category term="proxy-set-header" scheme="https://wuyanteng.github.io/tags/proxy-set-header/"/>
+    
+      <category term="Host" scheme="https://wuyanteng.github.io/tags/Host/"/>
+    
+      <category term="X-Forward-For" scheme="https://wuyanteng.github.io/tags/X-Forward-For/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux文件句柄以及空间释放问题</title>
+    <link href="https://wuyanteng.github.io/2018/04/03/Linux%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84%E4%BB%A5%E5%8F%8A%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE%E9%97%AE%E9%A2%98/"/>
+    <id>https://wuyanteng.github.io/2018/04/03/Linux文件句柄以及空间释放问题/</id>
+    <published>2018-04-03T07:09:29.000Z</published>
+    <updated>2018-04-03T07:16:51.638Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>在生产环境中,经常遇到这样的问题。另一个程序正在运行，而你把它的运行所相关的文件给删除了，导致空间并未被真正释放</code></pre><a id="more"></a><h5 id="正式使用lsof命令排查"><a href="#正式使用lsof命令排查" class="headerlink" title="正式使用lsof命令排查"></a>正式使用lsof命令排查</h5><pre><code>第一种情况: 如果知道相关文件或进程名称，则lsof |grep rsyncd</code></pre><pre><code>如果不知道是哪个程序在占用，则需要使用如下命令lsof |grep deleted注：这个deleted表示已经删除了的文件，但是文件句柄未释放,这个命令会把所有的未释放文件句柄的进程列出来</code></pre><pre><code>查找出结果后, 如果是一个服务在占用，则reload或重启服务即可释放；如果是文件进程,则直接 kill+进程号即可</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;在生产环境中,经常遇到这样的问题。另一个程序正在运行，而你把它的运行所相关的文件给删除了，导致空间并未被真正释放
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Linux" scheme="https://wuyanteng.github.io/tags/Linux/"/>
+    
+      <category term="文件句柄" scheme="https://wuyanteng.github.io/tags/%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84/"/>
+    
+      <category term="lsof" scheme="https://wuyanteng.github.io/tags/lsof/"/>
+    
+      <category term="空间释放" scheme="https://wuyanteng.github.io/tags/%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL慢查询mysqldumpslow</title>
+    <link href="https://wuyanteng.github.io/2018/04/03/MySQL%E6%85%A2%E6%9F%A5%E8%AF%A2mysqldumpslow/"/>
+    <id>https://wuyanteng.github.io/2018/04/03/MySQL慢查询mysqldumpslow/</id>
+    <published>2018-04-03T06:17:23.000Z</published>
+    <updated>2018-04-03T07:04:01.551Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="认识mysqldumpslow"><a href="#认识mysqldumpslow" class="headerlink" title="认识mysqldumpslow"></a>认识mysqldumpslow</h5><pre><code>mysqldumpslow 是一个针对于 MySQL 慢查询的命令行程序。在配置 MySQL 相关参数后，可以通过 mysqldumpslow 查找出查询较慢的 SQL 语句。</code></pre><a id="more"></a><h5 id="查看是否开启慢查询"><a href="#查看是否开启慢查询" class="headerlink" title="查看是否开启慢查询"></a>查看是否开启慢查询</h5><pre><code class="mysql">mysql&gt; show variables like &quot;%quer%&quot; ;+---------------------------------------+------------------------------------+| Variable_name                         | Value                              |+---------------------------------------+------------------------------------+| binlog_rows_query_log_events          | OFF                                || ft_query_expansion_limit              | 20                                 || have_query_cache                      | YES                                || log_queries_not_using_indexes         | OFF                                || log_throttle_queries_not_using_indexes| 0                                  || long_query_time                       | 10.000000                          || query_alloc_block_size                | 8192                               || query_cache_limit                     | 1048576                            || query_cache_min_res_unit              | 4096                               || query_cache_size                      | 1048576                            || query_cache_type                      | OFF                                || query_cache_wlock_invalidate          | OFF                                || query_prealloc_size                   | 8192                               || slow_query_log                        | OFF                                || slow_query_log_file                   | /usr/local/var/mysql/mysql-slow.log|+---------------------------------------+------------------------------------+15 rows in set (0.01 sec)</code></pre><pre><code>与 mysqldumpslow 相关的配置变量:slow_query_log：是否开启慢查询日志long_query_time：是否设置慢查询的 SQL 执行规定时间slow_query_log_file：设置慢查询日志记录位置log_queries_not_using_indexes：是否设置了把没有索引的记录到慢查询日志</code></pre><h5 id="配置文件启用慢查询"><a href="#配置文件启用慢查询" class="headerlink" title="配置文件启用慢查询"></a>配置文件启用慢查询</h5><pre><code>#开启慢查询日志slow_query_log=on;#设置没有索引的记录到慢查询日志log_queries_not_using_indexes=on;#设置到慢查询日志的 SQL 执行时间（1 代表 1 秒）long_query_time=1;#设置慢查询日志的存放位置slow_query_log_file=&quot;/Users/LuisEdware/Code/output/mysql-slow.log&quot;;重启mysql</code></pre><h5 id="mysqldumpslow使用"><a href="#mysqldumpslow使用" class="headerlink" title="mysqldumpslow使用"></a>mysqldumpslow使用</h5><pre><code>格式：-s, 是表示按照何种方式排序，    c: 出现次数    l: 锁定时间    r: 返回记录    t: 查询时间    al:平均锁定时间    ar:平均返回记录数    at:平均查询时间-t, 是top n的意思，即为返回前面多少条的数据；-g, 后边可以写一个正则匹配模式</code></pre><pre><code>只需分析处理速度最慢的10条sql：mysqldumpslow -t 10 /database/mysql/mysql06_slow.log分析出使用频率最高的前50条慢sql：mysqldumpslow -s c -t 50 /database/mysql/mysql06_slow.log得到访问次数最多的10个SQLmysqldumpslow -s c -t 10 /database/mysql/mysql06_slow.log得到返回记录集最多的10个SQL。mysqldumpslow -s r -t 10 /database/mysql/mysql06_slow.log得到按照时间排序的前10条里面含有左连接的查询语句。mysqldumpslow -s t -t 10 -g “left join” /database/mysql/mysql06_slow.log另外建议在使用这些命令时结合 | 和more 使用 ，否则有可能出现刷屏的情况。mysqldumpslow -s r -t 20 /mysqldata/mysql/mysql06-slow.log | more根据返回结果，进行进一步建立索引等优化即可。</code></pre><p>参考：<a href="https://github.com/luisedware" target="_blank" rel="noopener">luisedware</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h5 id=&quot;认识mysqldumpslow&quot;&gt;&lt;a href=&quot;#认识mysqldumpslow&quot; class=&quot;headerlink&quot; title=&quot;认识mysqldumpslow&quot;&gt;&lt;/a&gt;认识mysqldumpslow&lt;/h5&gt;&lt;pre&gt;&lt;code&gt;mysqldumpslow 是一个针对于 MySQL 慢查询的命令行程序。在配置 MySQL 相关参数后，可以通过 mysqldumpslow 查找出查询较慢的 SQL 语句。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
+    
+      <category term="慢查询" scheme="https://wuyanteng.github.io/tags/%E6%85%A2%E6%9F%A5%E8%AF%A2/"/>
+    
+      <category term="mysqldumpslow" scheme="https://wuyanteng.github.io/tags/mysqldumpslow/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HTTP状态码301和302的区别</title>
+    <link href="https://wuyanteng.github.io/2018/04/03/HTTP%E7%8A%B6%E6%80%81%E7%A0%81301%E5%92%8C302%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <id>https://wuyanteng.github.io/2018/04/03/HTTP状态码301和302的区别/</id>
+    <published>2018-04-03T04:17:03.000Z</published>
+    <updated>2018-04-04T07:39:32.310Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>简单理解：301是永久重定向，而302是临时重定向。 当然，他们之间也是有共同点的，就是用户都可以看到url替换为了一个新的，然后发出请求。</code></pre><a id="more"></a><h5 id="301适合永久重定向"><a href="#301适合永久重定向" class="headerlink" title="301适合永久重定向"></a>301适合永久重定向</h5><pre><code>301比较常用的场景是: 使用域名跳转。比如，我们访问 http://www.baidu.com 会跳转到 https://www.baidu.com，发送请求之后，就会返回301状态码，然后返回一个location，提示新的地址，浏览器就会拿着这个新的地址去访问。 注意： 301请求是可以缓存的，即通过看status code，可以发现后面写着from cache。或者你把你的网页的名称从php修改为了html，这个过程中，也会发生永久重定向。</code></pre><h5 id="302用来做临时跳转"><a href="#302用来做临时跳转" class="headerlink" title="302用来做临时跳转"></a>302用来做临时跳转</h5><pre><code>比如未登陆的用户访问用户中心重定向到登录页面。访问404页面会重新定向到首页。 </code></pre><h5 id="Nginx-301-302配置"><a href="#Nginx-301-302配置" class="headerlink" title="Nginx 301/302配置"></a>Nginx 301/302配置</h5><pre><code>rewrite后面接上permanent就代表301跳转, 例如://把来自veryyoung.me的请求301跳到 www.veryyoung.meif ($host != &#39;veryyoung.me&#39;) {    rewrite ^/(.*)$ http://www.veryyoung.me/$1 permanent;}</code></pre><pre><code>接上redirect就代表302跳转//把来自veryyoung.me的请求302跳到 www.veryyoung.meif ($host != &#39;veryyoung.me&#39;) {    rewrite ^/(.*)$ http://www.veryyoung.me/$1 redirect;}</code></pre><h5 id="301与302的区别"><a href="#301与302的区别" class="headerlink" title="301与302的区别"></a>301与302的区别</h5><pre><code>302重定向只是暂时的重定向，搜索引擎会抓取新的内容而保留旧的地址，因为服务器返回302，所以，搜索搜索引擎认为新的网址是暂时的。而301重定向是永久的重定向，搜索引擎在抓取新的内容的同时也将旧的网址替换为了重定向之后的网址。</code></pre><p>参考：<a href="https://www.cnblogs.com/zhuzhenwei918/p/7582620.html" target="_blank" rel="noopener">Wayne Zhu</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;简单理解：301是永久重定向，而302是临时重定向。 当然，他们之间也是有共同点的，就是用户都可以看到url替换为了一个新的，然后发出请求。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="HTTP状态码" scheme="https://wuyanteng.github.io/tags/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/"/>
+    
+      <category term="301" scheme="https://wuyanteng.github.io/tags/301/"/>
+    
+      <category term="302" scheme="https://wuyanteng.github.io/tags/302/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx upstream模块配置-官方翻译版</title>
+    <link href="https://wuyanteng.github.io/2018/04/03/Nginx-upstream%E6%A8%A1%E5%9D%97%E9%85%8D%E7%BD%AE-%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91%E7%89%88/"/>
+    <id>https://wuyanteng.github.io/2018/04/03/Nginx-upstream模块配置-官方翻译版/</id>
+    <published>2018-04-03T03:50:27.000Z</published>
+    <updated>2018-04-03T04:11:18.293Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>ngx_http_upstream_module 模块用于定义可以被proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass和memcached_pass指令引用的服务器集群。</code></pre><a id="more"></a><h5 id="配置范例"><a href="#配置范例" class="headerlink" title="配置范例"></a>配置范例</h5><pre><code>upstream backend {    server backend1.example.com       weight=5;    server backend2.example.com:8080;    server unix:/tmp/backend3;    server backup1.example.com:8080   backup;    server backup2.example.com:8080   backup;}server {    location / {        proxy_pass http://backend;    }}</code></pre><h5 id="upstream指令"><a href="#upstream指令" class="headerlink" title="upstream指令"></a>upstream指令</h5><pre><code>upstream指令用于定义服务器集群。服务器可以监听在不同端口。另外，监听在TCP和UNIX-domain socket的服务器可以混合使用</code></pre><h5 id="upstream范例"><a href="#upstream范例" class="headerlink" title="upstream范例"></a>upstream范例</h5><pre><code>upstream backend {    server backend1.example.com weight=5;    server 127.0.0.1:8080       max_fails=3 fail_timeout=30s;    server unix:/tmp/backend3;    server backup1.example.com  backup;}</code></pre><pre><code>默认，使用带权重的round-robin平衡算法将请求分派到服务器。在上面的例子中， 每7个请求将被如下分配：5个请求去backend1.example.com1个请求去127.0.0.1:80801个请求去unix:/tmp/backend3在和某台服务器通讯的过程中，如果发生错误， 请求将被分派给下一个服务器， 以此类推直到所有可用服务器都被尝试。如果没有任何一个服务器可以可以返回成功的应答，则客户端将会收到和最后一台机器的通讯结果。</code></pre><h5 id="server指令"><a href="#server指令" class="headerlink" title="server指令"></a>server指令</h5><pre><code>server指令用于定义一台服务器的地址和其他参数。地址可以是域名或者IP地址，端口可选，或者是以&quot;unix:&quot;前缀指定的UNIX-domain socket路径。如果端口没有指定，将使用80端口。可以解析为多个IP地址的域名将一次性定义多台服务器。</code></pre><pre><code>下面是可用的参数列表:weight=number设置服务器的权重，默认为1.max_fails=number定义在参数fail_timeout定义的时间内，与服务器通讯的不成功的数量。默认情况，不成功尝试次数被设置为1.如果设置为0则关闭尝试计数。fail_timeout=time在此时间段期间与服务器通讯的不成功尝试，以判断服务器是否不可到达和服务器被判定为不可到达的时间注：如果设置为max_fails=5;fail_timeout=30s，表示如果有5次请求失败，则该服务器被断定为不可到达，之后30s之内将不再尝试这台机器。再之后的每30s，都将进行最多5次尝试，如果继续失败则继续判断为不可到达并不再尝试。backup标记当前服务器为备用服务器。当主服务器(注：应该是没有标记为backup和down的服务器)都不能达到时,请求将被分派到backup服务器上。down将当前服务器标记为永久不可到达。</code></pre><h5 id="ip-hash指令"><a href="#ip-hash指令" class="headerlink" title="ip-hash指令"></a>ip-hash指令</h5><pre><code>指定集群使用的负载均衡算法，基于客户端IP地址将请求分派给服务器。这个算法保证从同一个客户端来的请求总是被分派到同样的服务器，除非这个服务器不可达到。后面这种情况下客户端请求将被分派到其他服务器。大多数情况，请求总是被分派到同一个服务器。如果某台服务器需要被永久移除，那么应该将它标记为down以便保持当前的客户端IP地址的哈希。</code></pre><pre><code>例如：upstream backend {    ip_hash;    server backend1.example.com;    server backend2.example.com;    server backend3.example.com down;    server backend4.example.com;}</code></pre><h5 id="least-conn指令"><a href="#least-conn指令" class="headerlink" title="least_conn指令"></a>least_conn指令</h5><pre><code>指定集群应该使用的负载均衡方法，分派请求到活动连接数量最少的服务器。如果有多台这样的服务器，这些服务器将尝试轮流使用带权重的round-robin平衡算法。</code></pre><pre><code>例如：upstream backend {    least_conn;    server backend1.example.com;    server backend2.example.com;    server backend3.example.com down;    server backend4.example.com;}</code></pre><p>参考：<a href="https://skyao.gitbooks.io/learning-nginx/content/documentation/upstream_doc.html" target="_blank" rel="noopener">敖小剑的博客</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;ngx_http_upstream_module 模块用于定义可以被proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass和memcached_pass指令引用的服务器集群。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="nginx" scheme="https://wuyanteng.github.io/tags/nginx/"/>
+    
+      <category term="upstream" scheme="https://wuyanteng.github.io/tags/upstream/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TIME_WAIT过多-问题处理</title>
+    <link href="https://wuyanteng.github.io/2018/04/03/TIME-WAIT%E8%BF%87%E5%A4%9A-%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86/"/>
+    <id>https://wuyanteng.github.io/2018/04/03/TIME-WAIT过多-问题处理/</id>
+    <published>2018-04-03T02:18:02.000Z</published>
+    <updated>2018-04-03T02:48:36.350Z</updated>
+    
+    <content type="html"><![CDATA[<p>TIME_WAIT状态原理</p><pre><code>当客户端主动关闭连接时，会发送最后一个ack，然后会进入TIME_WAIT状态，再停留2个MSL时间(约1-4分钟)，进入CLOSED状态。</code></pre><a id="more"></a><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.png" alt="四次挥手过程-参考" title="">                </div>                <div class="image-caption">四次挥手过程-参考</div>            </figure><p>如何获取TCP/IP四个状态？</p><pre><code># netstat -a  命令可以获取以下四个状态LISTENING CLOSE_WAITTIME_WAITESTABLISHED统计TIME_WAIT状态数量netstat -a|grep TIME_WAIT|wc -l</code></pre><p>【php环境】如果TIME_WAIT数量过多，如何处理？</p><pre><code>修改内核配置，编辑文件，加入以下内容：net.ipv4.tcp_syncookies = 1net.ipv4.tcp_tw_reuse = 1net.ipv4.tcp_tw_recycle = 1net.ipv4.tcp_fin_timeout = 30然后执行 /sbin/sysctl -p 让参数生效。参数:net.ipv4.tcp_syncookies = 1 表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击，默认为0，表示关闭；net.ipv4.tcp_tw_reuse = 1 表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接，默认为0，表示关闭；net.ipv4.tcp_tw_recycle = 1 表示开启TCP连接中TIME-WAIT sockets的快速回收，默认为0，表示关闭。net.ipv4.tcp_fin_timeout 修改系統默认的 TIMEOUT 时间</code></pre><p>【JAVA环境】如果TIME_WAIT数量过多，如何处理？</p><pre><code>找开发！找开发！找开发！基本都是代码问题导致</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;TIME_WAIT状态原理&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;当客户端主动关闭连接时，会发送最后一个ack，然后会进入TIME_WAIT状态，再停留2个MSL时间(约1-4分钟)，进入CLOSED状态。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="TCP/IP" scheme="https://wuyanteng.github.io/tags/TCP-IP/"/>
+    
+      <category term="TIME_WAIT过多" scheme="https://wuyanteng.github.io/tags/TIME-WAIT%E8%BF%87%E5%A4%9A/"/>
+    
+      <category term="内核" scheme="https://wuyanteng.github.io/tags/%E5%86%85%E6%A0%B8/"/>
+    
+      <category term="net.ipv4" scheme="https://wuyanteng.github.io/tags/net-ipv4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>部署openstack各版本-本地yum源</title>
+    <link href="https://wuyanteng.github.io/2018/03/27/%E9%83%A8%E7%BD%B2openstack%E6%9C%AC%E5%9C%B0yum%E6%BA%90/"/>
+    <id>https://wuyanteng.github.io/2018/03/27/部署openstack本地yum源/</id>
+    <published>2018-03-27T06:50:29.000Z</published>
+    <updated>2018-03-28T11:28:42.639Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>部署本地openstack yum源，原因主要是我想安装老版本，比如N版(newton),而由于官方新版本的发布，官方取消了老版本的yum源。其次是部署本地yum源，安装速度更快。</code></pre><p>访问：<a href="http://mirror.centos.org/centos/7/cloud/x86_64/" target="_blank" rel="noopener">老版本CentOS openstack yum源</a></p><a id="more"></a><h4 id="1-使用apache提供yum服务"><a href="#1-使用apache提供yum服务" class="headerlink" title="1. 使用apache提供yum服务"></a>1. 使用apache提供yum服务</h4><pre><code>yum install -y httpdmkdir /var/www/html/newton   创建本地yum源目录cd /vaw/www/html/newton</code></pre><p>优化Apache目录浏览</p><pre><code>vim /etc/httpd/conf/httpd.conf&lt;Directory &quot;/vaw/www/html/newton&quot;&gt;    Options Indexes FollowSymLinks     IndexOptions NameWidth=80 Charset=UTF-8     AllowOverride None    Order allow,deny    Allow from all&lt;/Directory&gt;</code></pre><h4 id="2-同步远程仓库到本地"><a href="#2-同步远程仓库到本地" class="headerlink" title="2. 同步远程仓库到本地"></a>2. 同步远程仓库到本地</h4><pre><code>同步方式很原始，把源站所有rpm包及repodata目录wget到本地即可在根目录下载即可wget -c -r -np -k -L -p http://mirror.centos.org/centos/7/cloud/x86_64/openstack-newton/cd mirror.centos.org/centos/7/cloud/x86_64/openstack-newtonrm -f index.html*   #删除无关文件mv ./* /var/www/html/newton/</code></pre><h4 id="3-启动httpd服务"><a href="#3-启动httpd服务" class="headerlink" title="3. 启动httpd服务"></a>3. 启动httpd服务</h4><pre><code>然后启动httpd服务，其他机器通过httpd服务来访问yum源systemctl start httpdsystemctl enable httpd</code></pre><h4 id="4-openstack所有节点配置"><a href="#4-openstack所有节点配置" class="headerlink" title="4. openstack所有节点配置"></a>4. openstack所有节点配置</h4><pre><code>vim /etc/yum.repos.d/openstack-newtron.repo[openstack-local]name=openstack-newtronbaseurl=http://10.0.10.100/newtonenabled=1         gpgcheck=0注：enabled=1  说明启用这个更新库，0表示不启用。    gpgcheck=0 表示不使用gpg文件来检查软件包的签名更新yum缓存yum clean all &amp; yum makecache</code></pre><p>注：其他版本方法类似,不再赘述。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;部署本地openstack yum源，原因主要是我想安装老版本，比如N版(newton),而由于官方新版本的发布，官方取消了老版本的yum源。其次是部署本地yum源，安装速度更快。
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;访问：&lt;a href=&quot;http://mirror.centos.org/centos/7/cloud/x86_64/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;老版本CentOS openstack yum源&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="openstack" scheme="https://wuyanteng.github.io/tags/openstack/"/>
+    
+      <category term="yum" scheme="https://wuyanteng.github.io/tags/yum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mysql从库自动清理relay_log</title>
+    <link href="https://wuyanteng.github.io/2018/03/22/mysql%E4%BB%8E%E5%BA%93%E8%87%AA%E5%8A%A8%E6%B8%85%E7%90%86relay-log/"/>
+    <id>https://wuyanteng.github.io/2018/03/22/mysql从库自动清理relay-log/</id>
+    <published>2018-03-22T07:10:29.000Z</published>
+    <updated>2018-03-27T11:39:26.344Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>生产环境部署有MySQL从库, 但一段时间后发现，SQL线程执行后的relay log一直堆积并未自动删除。</code></pre><a id="more"></a><pre><code>正常情况下, 这些日志是可以被自动清理的。但实际上这些文件并没有被清理,原因可能是版本bug导致。</code></pre><pre><code>另一种方法是修改my.cnf文件, 添加如下两个参数vim /etc/my.cnf#clean relay logrelay-log-purge=1  relay-log-space-limit=10G第一个参数值为1表示启用relay log清理；第二个参数设置relay log保留的最大限制为10G, 当超过这个限制, 从库IO线程暂停同步, 直到SQL清理完relay log后IO线程才继续同步。</code></pre><pre><code>安装mha，使用自带工具purge_relay_logsyum install -y perl-DBD-MySQLwget https://raw.githubusercontent.com/yyueshui/mysql-master-ha-rpm/master/mha4mysql-node-0.56-0.el6.noarch.rpmrpm -ivh mha4mysql-node-0.56-0.el6.noarch.rpmwhich  purge_relay_logs重启mysql服务,观察</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;生产环境部署有MySQL从库, 但一段时间后发现，SQL线程执行后的relay log一直堆积并未自动删除。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
+    
+      <category term="mysql slave" scheme="https://wuyanteng.github.io/tags/mysql-slave/"/>
+    
+      <category term="relay log" scheme="https://wuyanteng.github.io/tags/relay-log/"/>
+    
+  </entry>
+  
+</feed>

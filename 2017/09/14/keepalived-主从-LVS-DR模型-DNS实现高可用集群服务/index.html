@@ -19,9 +19,9 @@
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="高级运维,高可用,keepalived,lvs,dns,dr,dns主从,集群,VRRP">
+    <meta name="keywords" content="高级运维,高可用,lvs,keepalived,dns,dr,dns主从,集群,VRRP">
     <meta name="description" content="keeplived+LVS+DNS三者之间的关系  LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了解决LVS的单点故障">
-<meta name="keywords" content="高级运维,高可用,keepalived,lvs,dns,dr,dns主从,集群,VRRP">
+<meta name="keywords" content="高级运维,高可用,lvs,keepalived,dns,dr,dns主从,集群,VRRP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务">
 <meta property="og:url" content="https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/index.html">
@@ -32,6 +32,8 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务">
 <meta name="twitter:description" content="keeplived+LVS+DNS三者之间的关系  LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了解决LVS的单点故障">
+    
+        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
     
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
     <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
@@ -93,9 +95,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="https://www.sslforfree.com" target="_blank" >
+              <a href="https://t.me/om_china" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                Free SSL
+                Telegram讨论组
               </a>
             </li>
         
@@ -1001,7 +1003,7 @@ dig www.test.org @192.168.56.100 +tcp【可以解析】 卧槽，tcp可以解析
 
 
         
-        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/</a>
+        转载文章请注明出处！  <br>文章永久链接：<a href="/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/</a><br><br>欢迎加入"运维中国"-Telegram讨论组：<a href="target="_blank" rel="external"">https://t.me/om_china</a>
         
     </div>
     
@@ -1155,6 +1157,8 @@ LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了�
 
         <p>
             
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
             <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
         </p>
     </div>
@@ -1217,7 +1221,7 @@ LVS负责负载均衡，根据算法调度DNS集群；而keeplived则是为了�
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/14/keepalived-主从-LVS-DR模型-DNS实现高可用集群服务/" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADJklEQVR42u3a0W7jMAwEwP7/T+deCxRxd0n3kCijJyNWbY0ClCGpr694PJ6M67vf5zybef3597s/Z/68e/PAxsbGfhN2suh8zrOltFuQXG++AGxsbOzz2M/+wydzfnlBEEFmb2z/ChsbGxt7Rn0EY7ZBeVqCjY2NjZ0XepIkJH9OUk7CxsbGxm4LRnmYSebn6USeitxcS8PGxsZ+efZdS3yF6z/pb2NjY2O/MPtRjjbBaFOF/zOwsbGxT2Jv0ozrn/htOpEEzvyT6I3Y2NjYR7A3xxyvZ+Zb07aQrw9xRmvDxsbGPoidJA9tuMqP1+TN2ry5m286NjY29hnspPQzawDvS1E5ow5d2NjY2Aex9yGkjZP3HgOabS42Njb2Sex9C3ZzTiYvFeXvjdoV2NjY2Aex9w3atlifl4dmxayv2cDGxsZ+c3b+c38f5PI0ZraqYluxsbGxD2LPDt8k1/vlzt5bBEJsbGzsg9j74zvtYZ0k+G2SkFVygo2Njf1W7FnRP1lo0gzIeW3jOeqNYGNjY785O1/0rHDfLihPM1bJCTY2Nvah7Lsaw237dt8qqFMabGxs7I9h70NXmzzkwSnf0NVhHWxsbOy3Ys9K87OwlLd1Z6v9ZQ42Njb2cezZMZcZo23cbjboqQUbGxv7IHbbds3Zm7J+ewwoXwk2Njb2eexZ+Cl2dNFyaNsGReKEjY2NfRw7Kb7Pij6zxsAsXSlSKWxsbOyD2LOyfs6YHbJs27fDLwwbGxv7UHYe3vIA1uI3Rz+Lp2FjY2Mfx94ANk/Lm837Ehg2Njb2Z7LzcJU/Jy8bzbYpCsDY2NjYx7Hbkk1eykmC36w4NXsmNjY29tns/NHt3TZM5oFqOLCxsbGPYD/KMSsGtW/MC0ZtCQwbGxv7PPY+yLWl/OtGb1LinxWShpuCjY2N/SbsPJzMEonZtrbUNgRiY2Njn8fOyzpJopIX/TfHdJKtrG9jY2NjfwC7heWL25SKisM62NjY2B/PbpF5qGsTlXw7bk5FsLGxsV+S3bZd2zQgaf22M9vQhY2NjX0qu00Y2oRk1n7ImwF5moSNjY19HPsf+54rJu4gizoAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 

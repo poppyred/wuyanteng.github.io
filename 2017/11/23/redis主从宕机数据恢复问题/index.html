@@ -33,6 +33,8 @@
 <meta name="twitter:title" content="redis主从宕机数据恢复问题">
 <meta name="twitter:description" content="今天对redis在生产使用过程中的数据恢复问题做个剖析。  前提：  适用于: redis持久化没有采用AOF的持久化方式，而是采用的RDB方式。因为AOF的方式会对硬盘io造成很大压力。  既然采用RDB方式持久化，那么数据会根据自定义save策略自动进行持久化，并保存数据到指定目录中，文件以rdb结尾。">
     
+        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
+    
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
     <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
     <script>window.lazyScripts=[]</script>
@@ -93,9 +95,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="https://www.sslforfree.com" target="_blank" >
+              <a href="https://t.me/om_china" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                Free SSL
+                Telegram讨论组
               </a>
             </li>
         
@@ -244,7 +246,7 @@ Background saving started
 
 
         
-        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/11/23/redis主从宕机数据恢复问题/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/</a>
+        转载文章请注明出处！  <br>文章永久链接：<a href="/2017/11/23/redis主从宕机数据恢复问题/" target="_blank" rel="external">https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/</a><br><br>欢迎加入"运维中国"-Telegram讨论组：<a href="target="_blank" rel="external"">https://t.me/om_china</a>
         
     </div>
     
@@ -398,6 +400,8 @@ Background saving started
 
         <p>
             
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
             <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
         </p>
     </div>
@@ -460,7 +464,7 @@ Background saving started
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/11/23/redis主从宕机数据恢复问题/" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrUlEQVR42u3aQY7bMAwF0Nz/0tMDFLI/STGdAs+rwLEcPS0khuTnE18/h+v0zN/3T59Po/JnLlx4eHh4l6Z+mspp6tU7yXTzpTm+Ew8PD2+N13t1dWfu7dvP83mx4OHh4f0CXjJqsukn78TDw8P7v3j5xp0E6M8B9/Mc8PDw8P4tL5lQ8vzzQuRL2Vs+PDw8vO/w8oTC7/m8Ut/Dw8PDG1fVe8WwXlo2CY7Ls8XDw8Nb4OUbbp5WqC5EdQ7lYhseHh7eAi9PDfQ2+t6BMVlEPDw8vG3eRtNVkg7OGxR6zQ14eHh4G7xkcFJe6gXWe8uBh4eHt827W+avLkePESUp8PDw8BZ41QA6x0yOgTzlUe4sw8PDw7vKmzQ/9Q6D6the6gQPDw/vLq/66mq8Wh3VS+kex+Lh4eEt8PKwuNooMEny9loHojIYHh4e3piXD+gFu73wOi+bvRw5eHh4eGu8W9t98pOTUcl8PuWH8PDw8Ka83vZdDaar5bFeggMPDw9vg5cHsnk6oLcz5wdA3uiAh4eHt8HLE6a9tqqkQFVNghSSuXh4eHhrvHnxPg/KJ01dl4NpPDw8vBavl0TIk6rzY2aS6sXDw8Pb4+Xbca8VYNKUMG/hwsPDw9vgVVMSyaj5MVMdhYeHh/d93qTF6sIkiqF5IezGw8PDW+b1Ck55GJ3cqSZtX96Ph4eHt8bLw+Xepv+cjJikcUf/GPDw8PCKvJ/i1WPkCdzeEXX8Fg8PD2+B19twq9S8cJWHztUQHA8PD+8ur9cUVe5NKBbDkrA+WmI8PDy8NV51U85/vrd81UOr/DUeHh7eF3nVov4kMVF9w4WDAQ8PD2+ZN9nW80UZHS14eHh4a7x5aiA/PJJgPT9aXu7j4eHhLfAmf/gnLVPJAuWJ4wv1PTw8PLx33h/oR5xxQXfwEQAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 

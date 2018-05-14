@@ -33,6 +33,8 @@
 <meta name="twitter:title" content="问题汇总-openstack计算节点无法调度及热迁移调度">
 <meta name="twitter:description" content="由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：">
     
+        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
+    
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
     <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
     <script>window.lazyScripts=[]</script>
@@ -93,9 +95,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="https://www.sslforfree.com" target="_blank" >
+              <a href="https://t.me/om_china" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                Free SSL
+                Telegram讨论组
               </a>
             </li>
         
@@ -270,7 +272,7 @@ Error oslo_message.rpc.server ...... Exception during message handling
 
 
         
-        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" target="_blank" rel="external">https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/</a>
+        转载文章请注明出处！  <br>文章永久链接：<a href="/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" target="_blank" rel="external">https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/</a><br><br>欢迎加入"运维中国"-Telegram讨论组：<a href="target="_blank" rel="external"">https://t.me/om_china</a>
         
     </div>
     
@@ -420,6 +422,8 @@ Error oslo_message.rpc.server ...... Exception during message handling
 
         <p>
             
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
             <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
         </p>
     </div>
@@ -478,7 +482,7 @@ Error oslo_message.rpc.server ...... Exception during message handling
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADKElEQVR42u3awU4jQQwEUP7/p1lpTysBocrdrBLz5oRQpmdeH+LY1W9v8fX+9/rq//9eyQrJJz+u+fGu5LlHFzY2NvaLsN8fXsmLJlsze267frEmNjY29jp2vlzysPPS1W5cvfXY2NjYv5L9uEi0m9W2E8m92NjY2NjtT/yThuTuxmFjY2NjJ2WpbRVmyHwr/9MsDRsbG/vp2W3Q+8x//2C+jY2Njf2U7PfyyleYjfIfF85rCmxsbOxF7GRM0wYGeTCcrHPSinxzLzY2NvYi9skP/VvDprwc5o1HdC82Njb2IvYssm1blDwkzuOKC2UMGxsbex07KSGzZuOk8MwaoSLoxcbGxn5Z9q1DkLMtS56YRw556cXGxsbewZ4tmr/ibDg128Q8MMDGxsbeym67lmTccxLo5od78u3AxsbG3s1uW4WT4z4tLC97UfuEjY2NvY49O15z/op5QbrVrmBjY2NvZddDmbhtaO9q49v2uA82Njb2Pnb+sz4Pa1vk3YakbXiwsbGxX52df+nnj69LyPG4Km+Z6hfFxsbGfhF20gbcaj9mTUgbCXyzHdjY2Njr2LMC1pa3vLCdx8zRIAkbGxt7Ebsd5eTHembrnLQ90WALGxsbezW7DVZPitwskGibnE8+iY2Njb2I3Y7yZ48/GQblW5mXNGxsbOx97Dw0bYdQeQBw8qKXwdjY2Ngvxc6LSl7eZnP4fCzVbs0n74yNjY29iJ3f8BPlrR0J5TFDsiY2Njb2Dnb7mFtHbdpwIh9pRUUUGxsbex27DXTPY+C8IM0ih2+aHGxsbOxF7PNQNulpTkpROxIqSjI2Njb2CnbSNuQNQ9uKzArhLH4oeiBsbGzsF2SfLNQWtlsJRlvMvowHsLGxsVew2wFQS0rGQ3k5TIpofYoHGxsb+2XZ+TU7XnMS4uaA9inY2NjY+9izojWLbPNS1G56HkJgY2Njb2UnhaEND2ZxQp1U32ozsLGxsX8Bu/1MW9hm7U1eSrGxsbGxZ83D3Xtn23GhgGFjY2M/PTsZKuVLt6Ulb1dOjg0N4wFsbGzsp2efBL3tQP8cP2tysLGxsZey/wBcxJa6n10HTAAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 

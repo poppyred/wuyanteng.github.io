@@ -19,9 +19,9 @@
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="Nginx,upstream,负载均衡,pass_proxy,keepalived">
+    <meta name="keywords" content="Nginx,负载均衡,keepalived,upstream,pass_proxy">
     <meta name="description" content="集群分类  1.负载均衡集群LB    硬件实现负载：F5硬件设备、A10硬件设备    软件实现负载：LVS（4层负载均衡）/ HAproxy(4层/7层负载均衡)  2. 高可用集群HA 3. 网络集群">
-<meta name="keywords" content="Nginx,upstream,负载均衡,pass_proxy,keepalived">
+<meta name="keywords" content="Nginx,负载均衡,keepalived,upstream,pass_proxy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx负载均衡">
 <meta property="og:url" content="https://wuyanteng.github.io/2017/09/23/Nginx负载均衡/index.html">
@@ -34,6 +34,8 @@
 <meta name="twitter:title" content="Nginx负载均衡">
 <meta name="twitter:description" content="集群分类  1.负载均衡集群LB    硬件实现负载：F5硬件设备、A10硬件设备    软件实现负载：LVS（4层负载均衡）/ HAproxy(4层/7层负载均衡)  2. 高可用集群HA 3. 网络集群">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%BD%AC%E5%8F%91%E7%9A%84%E5%8C%BA%E5%88%AB.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
     
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
     <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
@@ -95,9 +97,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="https://www.sslforfree.com" target="_blank" >
+              <a href="https://t.me/om_china" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                Free SSL
+                Telegram讨论组
               </a>
             </li>
         
@@ -475,7 +477,7 @@ curl -A &quot;djfljlfjsljf&quot; www.etiantian.org/nana.html    #默认匹配的
 
 
         
-        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/23/Nginx负载均衡/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/23/Nginx负载均衡/</a>
+        转载文章请注明出处！  <br>文章永久链接：<a href="/2017/09/23/Nginx负载均衡/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/23/Nginx负载均衡/</a><br><br>欢迎加入"运维中国"-Telegram讨论组：<a href="target="_blank" rel="external"">https://t.me/om_china</a>
         
     </div>
     
@@ -630,6 +632,8 @@ curl -A &quot;djfljlfjsljf&quot; www.etiantian.org/nana.html    #默认匹配的
 
         <p>
             
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
             <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
         </p>
     </div>
@@ -693,7 +697,7 @@ curl -A &quot;djfljlfjsljf&quot; www.etiantian.org/nana.html    #默认匹配的
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/23/Nginx负载均衡/" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3a207DQAxF0f7/T4dXpNJkH3uKNOM9TwhokhUk49vrhc/165CfXm/n06f4XRYcGTJkbMu4bk/KeP8U+R3+qY9PIkOGjAGM+4DIH4iE4PQ7JFjLkCFDBgm+q0KnDBkyZKxi8GK1XwzLkCFDBi9ieTma8u5f3+JaXIYMGRsyapf+n6+/Mt+QIUPGVowrPLyI5Y+YBu4/7iJDhoyjGTzA1RJHslqBClRSDMuQIeNQBr9ZJ/imTT0ODt6QDBkyNmd0BgCk+cUxfJz5McOVIUPGcYxvFJN8SEka/a3WmwwZMo5g1MIfD8S1rv7ibREZMmQcxOivWZAELg3HKAGVIUPG0YxazypN4NJClxfAQRErQ4aMbRm1oNkJ0B3MQ9dQhgwZAxi1ENkZLawiyZAhYxqjMwaoNf1rLTYZMmTMYaSTwdrlOgkoaQ7KkCFjAoO0tHiznix4cV68LSJDhoxDGfzSfNqQNunShY8HsAwZMgYwVmFa7X5QWrdWLmTIkLEVI03meCjsFKVpeSxDhowJDH5pXvSmRXInTZQhQ8YEBkm/0lDbWebg6x0yZMg4m3GFpxaIUwxZOAv+DjJkyNic0Ql2/Gb9AUNrZ0SGDBlHMNKHqzXR0kQzbdjJkCFjAoMvXpAELm2i8f8AD6WsDBkyZOABJ79yaxjAdzpkyJAxjFFrewUPVEs3ZciQMYDBhwHpYkRtSECuI0OGjDmMTrjk4NpLWRz6ZciQsR/jB+mSS6mY/QPHAAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 

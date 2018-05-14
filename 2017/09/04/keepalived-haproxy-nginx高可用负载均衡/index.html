@@ -19,9 +19,9 @@
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="高级运维,nginx,负载均衡,keepalived,haproxy,lvs">
+    <meta name="keywords" content="高级运维,nginx,lvs,负载均衡,keepalived,haproxy">
     <meta name="description" content="目录：  实验环境 Nginx预安装配置 haproxy原理、编译安装与配置">
-<meta name="keywords" content="高级运维,nginx,负载均衡,keepalived,haproxy,lvs">
+<meta name="keywords" content="高级运维,nginx,lvs,负载均衡,keepalived,haproxy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="haproxy_nginx高可用负载均衡">
 <meta property="og:url" content="https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/index.html">
@@ -35,6 +35,8 @@
 <meta name="twitter:title" content="haproxy_nginx高可用负载均衡">
 <meta name="twitter:description" content="目录：  实验环境 Nginx预安装配置 haproxy原理、编译安装与配置">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ha%E6%8B%93%E6%89%91%E5%9B%BE.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
     
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
     <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
@@ -96,9 +98,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="https://www.sslforfree.com" target="_blank" >
+              <a href="https://t.me/om_china" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                Free SSL
+                Telegram讨论组
               </a>
             </li>
         
@@ -479,7 +481,7 @@ http://10.0.10.26:8888/haproxy-status
 
 
         
-        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/</a>
+        转载文章请注明出处！  <br>文章永久链接：<a href="/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/</a><br><br>欢迎加入"运维中国"-Telegram讨论组：<a href="target="_blank" rel="external"">https://t.me/om_china</a>
         
     </div>
     
@@ -636,6 +638,8 @@ haproxy原理、编译安装与配置
 
         <p>
             
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
             <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
         </p>
     </div>
@@ -701,7 +705,7 @@ haproxy原理、编译安装与配置
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/09/04/keepalived-haproxy-nginx高可用负载均衡/" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADLUlEQVR42u3aQXIaUQwEUO5/abJNKmXcLY1dzOfNygUDw/uLKGrp8Yiv5xfX3+9+dedX97R///+d/9958YWNjY19E/bz5ZXf8/qn5Hd+9W5+uNHvxMbGxj6OnT/y2lfaz76+szhcbGxs7A9mtwUjb0tmYGxsbGzsPbstfpvoKj9QbGxs7E9j7wcAbXFqjzIvhxdnadjY2Nhvz85Ly/v//SPzbWxsbOw3Zj/LKwl9NvH971zY2NjYJ7HzAjBb0EmQeeFsh8ffPBEbGxv7IHbSeCSj1jysT+L+pBy2R1b3W9jY2Ng3YW9i9H0AlLc6s+FuMRXBxsbGviF7VpY2LcdVQ9y8OcHGxsb+BHbCaFdkNoUnbyeGZRIbGxv7IHY+ZH39n/t85TH5hvygZyMHbGxs7JPY7apNXk5+J+4fNjnY2NjYx7GTkH22atMWuXwlqG2THu1pYWNjY9+QfdUD2lFBftybcfI/r2NjY2Mfx55FSHkhbAOgdoVouFuKjY2NfQT72iFr3ki07GSQMIu9sLGxse/OzldtNvjn6GoHD8URY2NjYx/ETkKfWTMza07yY2obGGxsbOxPYCf4vJDMxgmzp7eja2xsbOxT2ZtmIP/R+SrPrFjm4RQ2Njb2Gex8zSWP/vPlm9mCzr5kYmNjY5/Ezgel+9dnQ4i84LXjYWxsbOzz2PuWY7ZGk+c8Vw0esLGxsU9lz6L2nxgMbNqV1bIONjY29m3ZbSS0HwYX0U8JuKyUYmNjY9+K/RPhThvWb4YQbUOCjY2NfR47j5PaT+Wj2byitpFT1IdhY2Nj35zdBvF5wUgKW96E7Fd/vhkPYGNjYx/KzgP9fdg0K5BJBBYNerGxsbFvzr42YGrXaPLPJjFT1DhhY2NjH8F+llfyo9vmoT2a2fj50eZe2NjY2Ddht//0J2HQrBzm+FmQVG8qYWNjY9+KvSlabWuRd0izUXHxLjY2NvZx7NXQtCx+b9RmYGNjY38kexYD7QtY+2ujVgQbGxv7g9mzQjL7nnYM/COtCDY2Nvbbs2erlvuS9vpZLb4outjY2NgHsTeFp20D9gs9+dR63xphY2Njvz37D2PYXclxq5zHAAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 

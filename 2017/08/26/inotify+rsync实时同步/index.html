@@ -19,9 +19,9 @@
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="高级运维,sersync,inotify,实时同步">
+    <meta name="keywords" content="高级运维,sersync,实时同步,inotify">
     <meta name="description" content="实时同步原理">
-<meta name="keywords" content="高级运维,sersync,inotify,实时同步">
+<meta name="keywords" content="高级运维,sersync,实时同步,inotify">
 <meta property="og:type" content="article">
 <meta property="og:title" content="inotify+rsync实时同步">
 <meta property="og:url" content="https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/index.html">
@@ -36,6 +36,8 @@
 <meta name="twitter:title" content="inotify+rsync实时同步">
 <meta name="twitter:description" content="实时同步原理">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/inotify%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5-%E5%8E%9F%E7%90%86.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
     
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
     <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
@@ -97,9 +99,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="https://www.sslforfree.com" target="_blank" >
+              <a href="https://t.me/om_china" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                Free SSL
+                Telegram讨论组
               </a>
             </li>
         
@@ -367,7 +369,7 @@ done
 
 
         
-        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2017/08/26/inotify+rsync实时同步/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/</a>
+        转载文章请注明出处！  <br>文章永久链接：<a href="/2017/08/26/inotify+rsync实时同步/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/</a><br><br>欢迎加入"运维中国"-Telegram讨论组：<a href="target="_blank" rel="external"">https://t.me/om_china</a>
         
     </div>
     
@@ -519,6 +521,8 @@ done
 
         <p>
             
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
             <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
         </p>
     </div>
@@ -579,7 +583,7 @@ done
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2017/08/26/inotify+rsync实时同步/" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACu0lEQVR42u3aS3IbMQwFQN3/0s7WKUfyeyAhO1U9K5U+M2wuCAjA4xFfH1+uz+8n38y/8/X+r+924cLDw8M7XnrOeP26fSfZjnzNeHh4eNu8ZzdNXuefzpaebOLT9/Hw8PB+GS+5T3LnJFTg4eHh/Y+8WVKbH/0/HBjw8PDwSl5SjLhVRDhJ3xdrLXh4eHgxb5YE/+zrlf4eHh4e3nFXPQkS+XDArISRB4N/PAsPDw9vgTcbHWjLB8mBft42e7pleHh4eFd57Y3aLcgXPSsHf7NZeHh4eG/knTelku+3KXU9poCHh4e3wMsT4ltLPD/682YbHh4e3h7v1qJn4wIn4wXF6AAeHh7eJV6eTLelirtZbrutfxUj8PDw8NZ4s4XOjvK8THyUauPh4eGt8fLSQLsFbbsrX0NUzMXDw8Nb4yUl0dmQQbIpJ0MG34QfPDw8vAVevqxZSywvbdxNtfHw8PDew6uHmUaDAu325QNeRcUFDw8P74A3e/zsKM+bbW2Z45vRATw8PLyrvLwxPxuZyu/QhqW8VIGHh4e3wUuS2ln5dTaM1Y4gRGVcPDw8vEu89g9/m3bPigh58bcYusLDw8Nb4LXhYTZQNWxixUl23dnDw8PDG/HaRn5bnpilyK/Z0abj4eHhLfBmw1X5cd8OBCShoi2I4OHh4b2Hlzer2vZ/UV0OtiZKvvHw8PDWeO0hftISOwkzdakCDw8Pb42XFGdPAkneVDtpfRVtMDw8PLwR76O8klLFrHSbh6Ui/ODh4eEt8E4a87eO/jwHzlPzR3vh4eHhlU85CQZtEnxyuA9/i4eHh7fGm41GtY+fBZi8GIGHh4f3O3l5Gt022GYpflSlxsPDw/tR3kky3YaQPOl/tMvCw8PDO+bdSnzzReSLbptneHh4eNu89g//raGBtmCxl6Dj4eHhxb/6A1CVZOFbaNAkAAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 

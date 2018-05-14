@@ -33,6 +33,8 @@
 <meta name="twitter:title" content="深入理解OpenStack-手动制作qcow2镜像">
 <meta name="twitter:description" content="手动制作镜像官方虽提供qcow2系统镜像，但对于有需求的企业来说，还是定制镜像比较靠谱，下面就手动定制一个镜像">
     
+        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
+    
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
     <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
     <script>window.lazyScripts=[]</script>
@@ -93,9 +95,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="https://www.sslforfree.com" target="_blank" >
+              <a href="https://t.me/om_china" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                Free SSL
+                Telegram讨论组
               </a>
             </li>
         
@@ -363,7 +365,7 @@ virsh undefine name  #彻底删除KVM虚拟机,不可逆,如果想找回来,需�
 
 
         
-        转载文章请注明出处，否则我会竖中指的！  <br>文章永久链接：<a href="/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/</a>
+        转载文章请注明出处！  <br>文章永久链接：<a href="/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" target="_blank" rel="external">https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/</a><br><br>欢迎加入"运维中国"-Telegram讨论组：<a href="target="_blank" rel="external"">https://t.me/om_china</a>
         
     </div>
     
@@ -514,6 +516,8 @@ virsh undefine name  #彻底删除KVM虚拟机,不可逆,如果想找回来,需�
 
         <p>
             
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
             <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu</span>
         </p>
     </div>
@@ -573,7 +577,7 @@ virsh undefine name  #彻底删除KVM虚拟机,不可逆,如果想找回来,需�
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wuyanteng.github.io/2018/01/18/深入理解OpenStack-手动制作qcow2镜像/" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADNElEQVR42u3awaoiUQwE0Pf/P+3AMIuBh1qVKNjX0ytRbPtkE1O5Pz/xdft7/f/69zu/P22/9fv1vWdI3n/BhY2NjX0R9u3h1VLvPUpbmk3JHluwsbGxT2W3Tattb+9rS8Pmh42Njf2V7LbhPf7//7iJJkVsfxcbGxsbuy1NGx4lxcrHEmxsbOxvY7eNIYmN8ga2KdzbszRsbGzsj2dvgptPe/32/TY2Njb2h7Fv5TVb07ZDQtJ+bosLGxsb+yR2wtg86GZZm5QvuX8xgWFjY2NfnN0+0H5xmxe6bW/Y2NjY38yeLX1nMX3Lnh0hejKKYGNjYx/H3qx+XztyJIvhpHx3v4uNjY39Ney2UeUjR7tImA1I2NjY2N/DbptWGy21IX7+DLPiYmNjY5/KftzS8qaVrAraAzqzeOtuU8TGxsY+iD07fJM3s/ZuyfgxW05gY2Njn8duD77k69hZZJ83v1mo9O81NjY29kHsVz16G0W1S+JZXFX0bWxsbOzLsl/1EK9ax24OCRXFxcbGxj6UXR95GUVReUiUryXyEjyZwLCxsbEvyG7jntnIkQ8zs7LOio6NjY19Krv9x5486OwwzezgTlFWbGxs7CPYxRI0jpBm1Had0N4ZGxsb+xvYycp2s1rIQ/+WXR8SwsbGxj6I/bJpJojvk08fN8LNrxcDCTY2Nval2EkDyFtF3pw2R4Xyozx3i4uNjY19HDtpG23w9I7VQh5dPSkQNjY29qHsNqyflaltQq9qb0+yNGxsbOyLs/N4PVke5D9/K698ORE1MGxsbOwj2HkQ044lsyImy4BZUPWkQWJjY2Nflt2OBO0BmmS8mQ0Vm1UxNjY29qnsel26PuKzD7Dy7/7sGz02Njb2R7Jb3mw90B6v2TS/tq1iY2NjX529CejziL8t3P4ZilAJGxsb++Ls9kBMO1rk380Xupv7Y2NjY5/K3rSWtqUlUf5sOKkP92BjY2Mfx94HPZvmNFset6ESNjY2Nnby85vjOO9bVNxN1LCxsbG/kj2LmdpRJL9b3g5XDQwbGxv749ltqDR7fwNry/rkDtjY2NgHsTeL3jYYyu8/a5a5AhsbG/sI9h+Xv0oVgS7O8AAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
