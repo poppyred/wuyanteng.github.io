@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Gentoo编译内核-NFS | Gary Wu | 运维架构师 - 从入门到放弃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="高级运维,Gentoo,编译内核,NFS">
+    <meta name="description" content="Gentoo版本较老，部署NFS过程中启动NFS服务报错，提示缺少内核模块，接下来编译内核">
+<meta name="keywords" content="高级运维,Gentoo,编译内核,NFS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gentoo编译内核-NFS">
+<meta property="og:url" content="https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/index.html">
+<meta property="og:site_name" content="Gary Wu">
+<meta property="og:description" content="Gentoo版本较老，部署NFS过程中启动NFS服务报错，提示缺少内核模块，接下来编译内核">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-14T10:01:19.484Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gentoo编译内核-NFS">
+<meta name="twitter:description" content="Gentoo版本较老，部署NFS过程中启动NFS服务报错，提示缺少内核模块，接下来编译内核">
+    
+        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Gary Wu</h5>
+          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                所有文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags/高级运维"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wuyanteng" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://t.me/om_china" target="_blank" >
+                <i class="icon icon-lg icon-link"></i>
+                Telegram讨论组
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Gentoo编译内核-NFS</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Gentoo编译内核-NFS</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-14T08:35:11.000Z" itemprop="datePublished" class="page-time">
+  2017-05-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#错误"><span class="post-toc-number">1.</span> <span class="post-toc-text">错误</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#添加kernel选项-以支持NFS"><span class="post-toc-number">2.</span> <span class="post-toc-text">添加kernel选项,以支持NFS</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#编译和替换kernel"><span class="post-toc-number">3.</span> <span class="post-toc-text">编译和替换kernel</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署NFS-服务端"><span class="post-toc-number"></span> <span class="post-toc-text">部署NFS-服务端</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#安装NFS-Server-and-Client"><span class="post-toc-number">1.</span> <span class="post-toc-text">安装NFS Server and Client</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#编辑配置文件"><span class="post-toc-number">2.</span> <span class="post-toc-text">编辑配置文件</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#启动"><span class="post-toc-number">3.</span> <span class="post-toc-text">启动</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#服务检查"><span class="post-toc-number">4.</span> <span class="post-toc-text">服务检查</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#NFS客户端"><span class="post-toc-number"></span> <span class="post-toc-text">NFS客户端</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#安装NFS"><span class="post-toc-number">1.</span> <span class="post-toc-text">安装NFS</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#客户端挂载"><span class="post-toc-number">2.</span> <span class="post-toc-text">客户端挂载</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#注意事项"><span class="post-toc-number">3.</span> <span class="post-toc-text">注意事项</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#NFS共享参数"><span class="post-toc-number"></span> <span class="post-toc-text">NFS共享参数</span></a>
+        </nav>
+    </aside>
+
+
+<article id="post-Gentoo编译内核-NFS"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Gentoo编译内核-NFS</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-14 16:35:11" datetime="2017-05-14T08:35:11.000Z"  itemprop="datePublished">2017-05-14</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <pre><code>Gentoo版本较老，部署NFS过程中启动NFS服务报错，提示缺少内核模块，接下来编译内核
+</code></pre><a id="more"></a>
+<h5 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h5><pre><code>错误：
+# /etc/init.d/nfs start 
+ * Exporting NFS directories ...                                          [ ok ] 
+ * Starting NFS mountd ...                                                [ !! ] 
+ * Starting NFS daemon ... 
+rpc.nfsd: Unable to access /proc/fs/nfsd errno 2 (No such file or directory). 
+Please try, as root, &#39;mount -t nfsd nfsd /proc/fs/nfsd&#39; and then restart rpc.nfsd to correct the problem                                                  [ !! ] 
+ * Starting NFS smnotify ...     
+</code></pre><h5 id="添加kernel选项-以支持NFS"><a href="#添加kernel选项-以支持NFS" class="headerlink" title="添加kernel选项,以支持NFS"></a>添加kernel选项,以支持NFS</h5><p>官网：<a href="https://wiki.gentoo.org/wiki/Nfs-utils" target="_blank" rel="noopener">https://wiki.gentoo.org/wiki/Nfs-utils</a></p>
+<pre><code># cd /usr/src/linux
+# make menuconfig
+</code></pre><pre><code>File systems ---&gt;
+  [*] Dnotify support
+  [*] Network File Systems ---&gt;
+        &lt;*&gt;   NFS client support
+        &lt;*&gt;     NFS client support for NFS version 3
+        &lt;*&gt;     NFS client support for NFS version 4
+        [*]   NFS client support for NFSv4.1
+        &lt;*&gt;   NFS server support
+        [*]     NFS server support for NFS version 3
+        [*]     NFS server support for NFS version 4
+        [*]       NFSv4.1 server support for Parallel NFS (pNFS)
+</code></pre><pre><code>保存配置：把配置写入保存到一个文件中。CONFIG文件存放目录: /usr/src/linux
+</code></pre><pre><code># grep -i &quot;nfsd&quot; /usr/src/linux/.config 
+CONFIG_NFSD=y
+CONFIG_NFSD_V2_ACL=y
+CONFIG_NFSD_V3=y
+CONFIG_NFSD_V3_ACL=y
+CONFIG_NFSD_V4=y
+CONFIG_NFSD_PNFS=y
+
+确认NFS所需模块已存在就进行下一步
+</code></pre><h5 id="编译和替换kernel"><a href="#编译和替换kernel" class="headerlink" title="编译和替换kernel"></a>编译和替换kernel</h5><pre><code># cd /usr/src/linux
+
+编译
+# make &amp;&amp; make modules_install
+# make install
+注意看输出信息：Kernel: arch/x86/boot/bzImage is ready(#4)
+</code></pre><pre><code>mount /boot/ 或 mount /dev/sda1 /boot/
+
+查看确认新内核文件
+ls -lh /usr/src/linux/arch/x86/boot/bzImage
+
+确认引用的配置文件名称,假如是kernel-0808
+cat /boot/grub/grub.conf
+
+备份内核
+cp /boot/kernel-0808 /boot/kernel-0808.bak
+
+替换内核
+cp /usr/src/linux/arch/x86/boot/bzImage /boot/kernel-0808
+</code></pre><pre><code>确认无误后reboot重启
+</code></pre><h4 id="部署NFS-服务端"><a href="#部署NFS-服务端" class="headerlink" title="部署NFS-服务端"></a>部署NFS-服务端</h4><h5 id="安装NFS-Server-and-Client"><a href="#安装NFS-Server-and-Client" class="headerlink" title="安装NFS Server and Client"></a>安装NFS Server and Client</h5><pre><code>emerge --ask net-fs/nfs-utils
+</code></pre><h5 id="编辑配置文件"><a href="#编辑配置文件" class="headerlink" title="编辑配置文件"></a>编辑配置文件</h5><pre><code>cat /etc/exports
+
+/data/B/data  192.168.0.*(rw,sync,all_squash,anonuid=8080,anongid=8080,no_subtree_check)
+</code></pre><pre><code> 注：id为8080的用户需存在,否则客户端会报权限拒绝。
+
+ mkdir -p /data/B/data
+ chown -R mx-www:mx-www /data/B/data
+</code></pre><h5 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h5><pre><code>/etc/init.d/rpcbind start
+rc-update add rpcbind default
+
+/etc/init.d/nfs start
+rc-update add rpcbind default
+</code></pre><h5 id="服务检查"><a href="#服务检查" class="headerlink" title="服务检查"></a>服务检查</h5><pre><code>rpcinfo -p
+</code></pre><h4 id="NFS客户端"><a href="#NFS客户端" class="headerlink" title="NFS客户端"></a>NFS客户端</h4><h5 id="安装NFS"><a href="#安装NFS" class="headerlink" title="安装NFS"></a>安装NFS</h5><pre><code>emerge --ask net-fs/nfs-utils
+</code></pre><h5 id="客户端挂载"><a href="#客户端挂载" class="headerlink" title="客户端挂载"></a>客户端挂载</h5><pre><code>mount -t nfs 192.168.0.200:/data/B/data /data/NFS
+</code></pre><h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><pre><code>由于NFS的特性，当NFS服务器宕机后，客户端容易变成夯住状态，所以客户端禁止配置开机自动挂载。
+</code></pre><h4 id="NFS共享参数"><a href="#NFS共享参数" class="headerlink" title="NFS共享参数"></a>NFS共享参数</h4><pre><code>ro 只读访问 
+rw 读写访问 
+sync 所有数据在请求时写入共享 
+async NFS在写入数据前可以相应请求 
+secure NFS通过1024以下的安全TCP/IP端口发送 
+insecure NFS通过1024以上的端口发送 
+wdelay 如果多个用户要写入NFS目录，则归组写入（默认） 
+no_wdelay 如果多个用户要写入NFS目录，则立即写入，当使用async时，无需此设置 
+hide 在NFS共享目录中不共享其子目录 
+no_hide 共享NFS目录的子目录 
+subtree_check 如果共享/usr/bin之类的子目录时，强制NFS检查父目录的权限（默认） 
+no_subtree_check 和上面相对，不检查父目录权限 
+all_squash 共享文件的UID和GID映射匿名用户anonymous，适合公用目录 
+no_all_squash 保留共享文件的UID和GID（默认） 
+root_squash root 用户的所有请求映射成如anonymous用户一样的权限（默认） 
+no_root_squash root用户具有根目录的完全管理访问权限 
+anonuid=xxx 指定NFS服务器/etc/passwd文件中匿名用户的UID 
+anongid=xxx 指定NFS服务器/etc/passwd文件中匿名用户的GID
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-05-14T10:01:19.484Z" itemprop="dateUpdated">2018-05-14 18:01:19</time>
+</span><br>
+
+
+        
+        转载文章请注明出处！<br>文章永久链接：<a href="/2017/05/14/Gentoo编译内核-NFS/" target="_blank" rel="external">https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://wuyanteng.github.io">
+            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
+            Gary Wu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gentoo/">Gentoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NFS/">NFS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译内核/">编译内核</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/&title=《Gentoo编译内核-NFS》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/&title=《Gentoo编译内核-NFS》 — Gary Wu&source=Gentoo版本较老，部署NFS过程中启动NFS服务报错，提示缺少内核模块，接下来编译内核
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Gentoo编译内核-NFS》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/05/24/Hexo搭建GitHub Blog/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hexo搭建GitHub Blog</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/08/Linux数据恢复工具extundelete/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Linux数据恢复工具extundelete</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们不一样
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Gary Wu &copy; 2015 - 2018</span>
+            <span>
+                
+                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/&title=《Gentoo编译内核-NFS》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/&title=《Gentoo编译内核-NFS》 — Gary Wu&source=Gentoo版本较老，部署NFS过程中启动NFS服务报错，提示缺少内核模块，接下来编译内核
+" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Gentoo编译内核-NFS》 — Gary Wu&url=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/&via=https://wuyanteng.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/05/14/Gentoo编译内核-NFS/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3ay47iMBAF0P7/n2a2SM2Ee8uhJeyTFYIk9mFRqod/fuLr8XQ9f3P96+/vf7/zepWbLwwMjK9lPC6vdqMJdf2pF1QMDIwDGNcBcQb4X0jNA24erDEwMDCSLV5vbpYyYmBgYMwYSVp5bzGMgYGBkRexyf15aL7ewwdrcQwMjC9k5F33v//8kfkGBgbGVzEe5ZWXpvkW21D+YhUMDIytGXmAy5OzpNytC9TgbRgYGLsylgJcfMCrHQNcB+UbUkMMDIwvZOStsST5mz3VHs54EXAxMDAOYLQPrxz5ujdNxMDA2JvRHq24LkfXh6DtX4yBgXEaoz36sL6hlXUxMDDOYbTp3ayVlpfHxTTj+SkMDIytGXmYy4PpynuS0vfNJBYDA2NTRnIYIl9+9qe0ReybNBEDA2NTxkr7fpYUrowHMDAwzmHk4TX5vBIo2xD85swIBgbGpoxhk2vUXJvdX58ZwcDA2I7RHh6dtcPaVaL7MTAwtma0ieCs+ZWwV/AYGBjnMPKG16wBN8voktIXAwPjNMYsLBaLlZhihICBgXEAY6XFP4O1wbo+LYKBgbEF41FeCbs9onHDezAwMLZmrAS7ldZ/nkq2YwMMDIxdGXmQbcvLlcMc7cgBAwPjBEYb+JLll9pnAR4DAwMjT9ESRhuU2yYgBgYGRluI3ltJR6tjYGAcwMiHAXmhOxsq5OUxBgbGOYw25M0C4ufGAxgYGFsz/gHGBQPxJ0WYKAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '经检测,你已离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎回来...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
