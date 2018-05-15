@@ -1,0 +1,5885 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+    
+    <entry>
+      <title>shell if小数判断</title>
+      <link href="/2018/05/10/shell-if%E5%B0%8F%E6%95%B0%E5%88%A4%E6%96%AD/"/>
+      <url>/2018/05/10/shell-if%E5%B0%8F%E6%95%B0%E5%88%A4%E6%96%AD/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> 小数判断 </tag>
+            
+            <tag> if判断 </tag>
+            
+            <tag> 浮点数判断 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>curl命令详解</title>
+      <link href="/2018/05/09/curl%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/"/>
+      <url>/2018/05/09/curl%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> curl </tag>
+            
+            <tag> cookie </tag>
+            
+            <tag> POST </tag>
+            
+            <tag> response </tag>
+            
+            <tag> 模拟浏览器 </tag>
+            
+            <tag> 伪造referer </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>让mongo的从库支持读操作</title>
+      <link href="/2018/04/28/%E8%AE%A9mongo%E7%9A%84%E4%BB%8E%E5%BA%93%E6%94%AF%E6%8C%81%E8%AF%BB%E6%93%8D%E4%BD%9C/"/>
+      <url>/2018/04/28/%E8%AE%A9mongo%E7%9A%84%E4%BB%8E%E5%BA%93%E6%94%AF%E6%8C%81%E8%AF%BB%E6%93%8D%E4%BD%9C/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mongodb </tag>
+            
+            <tag> mongo </tag>
+            
+            <tag> rs.slaveOk() </tag>
+            
+            <tag> mongodb从库读操作 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Parted给大容量硬盘分区格式化与挂载</title>
+      <link href="/2018/04/27/Parted%E7%BB%99%E5%A4%A7%E5%AE%B9%E9%87%8F%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%8C%82%E8%BD%BD/"/>
+      <url>/2018/04/27/Parted%E7%BB%99%E5%A4%A7%E5%AE%B9%E9%87%8F%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%8C%82%E8%BD%BD/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> parted </tag>
+            
+            <tag> fdisk </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MongoDB数据导出命令mongoexport和导入命令mongoimport</title>
+      <link href="/2018/04/26/MongoDB%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA%E5%91%BD%E4%BB%A4mongoexport/"/>
+      <url>/2018/04/26/MongoDB%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA%E5%91%BD%E4%BB%A4mongoexport/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> mongodb </tag>
+            
+            <tag> mongo </tag>
+            
+            <tag> mongoexport </tag>
+            
+            <tag> mongoimport </tag>
+            
+            <tag> json </tag>
+            
+            <tag> csv </tag>
+            
+            <tag> mongo导出命令 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>hadoop常用命令</title>
+      <link href="/2018/04/23/hadoop%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2018/04/23/hadoop%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> hadoop </tag>
+            
+            <tag> hdfs </tag>
+            
+            <tag> fs </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cacti接入微信告警功能</title>
+      <link href="/2018/04/20/cacti%E6%8E%A5%E5%85%A5%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6%E5%8A%9F%E8%83%BD/"/>
+      <url>/2018/04/20/cacti%E6%8E%A5%E5%85%A5%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6%E5%8A%9F%E8%83%BD/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> cacti </tag>
+            
+            <tag> 微信 </tag>
+            
+            <tag> 微信告警 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>查看占用内存或CPU最多的进程</title>
+      <link href="/2018/04/20/%E6%9F%A5%E7%9C%8B%E5%8D%A0%E7%94%A8%E5%86%85%E5%AD%98%E6%88%96CPU%E6%9C%80%E5%A4%9A%E7%9A%84%E8%BF%9B%E7%A8%8B/"/>
+      <url>/2018/04/20/%E6%9F%A5%E7%9C%8B%E5%8D%A0%E7%94%A8%E5%86%85%E5%AD%98%E6%88%96CPU%E6%9C%80%E5%A4%9A%E7%9A%84%E8%BF%9B%E7%A8%8B/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> CPU </tag>
+            
+            <tag> 内存 </tag>
+            
+            <tag> 使用率 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Nginx状态码499-错误分析</title>
+      <link href="/2018/04/11/Nginx%E7%8A%B6%E6%80%81%E7%A0%81499-%E9%94%99%E8%AF%AF%E5%88%86%E6%9E%90/"/>
+      <url>/2018/04/11/Nginx%E7%8A%B6%E6%80%81%E7%A0%81499-%E9%94%99%E8%AF%AF%E5%88%86%E6%9E%90/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 499 </tag>
+            
+            <tag> nginx upstream </tag>
+            
+            <tag> proxy_ignore_client_abort </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Linux网卡限速</title>
+      <link href="/2018/04/11/Linux%E7%BD%91%E5%8D%A1%E9%99%90%E9%80%9F/"/>
+      <url>/2018/04/11/Linux%E7%BD%91%E5%8D%A1%E9%99%90%E9%80%9F/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 限速方案 </tag>
+            
+            <tag> Linux限速 </tag>
+            
+            <tag> wondershaper </tag>
+            
+            <tag> tc </tag>
+            
+            <tag> ethtool </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Linux下route路由配置梳理</title>
+      <link href="/2018/04/07/Linux%E4%B8%8Broute%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E6%A2%B3%E7%90%86/"/>
+      <url>/2018/04/07/Linux%E4%B8%8Broute%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E6%A2%B3%E7%90%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Linux </tag>
+            
+            <tag> Route </tag>
+            
+            <tag> 静态路由 </tag>
+            
+            <tag> 默认路由 </tag>
+            
+            <tag> 路由配置 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>strace命令-追踪指定pid进程</title>
+      <link href="/2018/04/04/strace%E5%91%BD%E4%BB%A4-%E8%BF%BD%E8%B8%AA%E6%8C%87%E5%AE%9Apid%E8%BF%9B%E7%A8%8B/"/>
+      <url>/2018/04/04/strace%E5%91%BD%E4%BB%A4-%E8%BF%BD%E8%B8%AA%E6%8C%87%E5%AE%9Apid%E8%BF%9B%E7%A8%8B/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> strace </tag>
+            
+            <tag> pid </tag>
+            
+            <tag> ps </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>X-Forward-For详解</title>
+      <link href="/2018/04/03/Nginx%E4%BF%A1%E6%81%AF%E5%A4%B4%E9%85%8D%E7%BD%AE-proxy-set-header/"/>
+      <url>/2018/04/03/Nginx%E4%BF%A1%E6%81%AF%E5%A4%B4%E9%85%8D%E7%BD%AE-proxy-set-header/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> proxy-set-header </tag>
+            
+            <tag> Host </tag>
+            
+            <tag> X-Forward-For </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Linux文件句柄以及空间释放问题</title>
+      <link href="/2018/04/03/Linux%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84%E4%BB%A5%E5%8F%8A%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE%E9%97%AE%E9%A2%98/"/>
+      <url>/2018/04/03/Linux%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84%E4%BB%A5%E5%8F%8A%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Linux </tag>
+            
+            <tag> 文件句柄 </tag>
+            
+            <tag> lsof </tag>
+            
+            <tag> 空间释放 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MySQL慢查询mysqldumpslow</title>
+      <link href="/2018/04/03/MySQL%E6%85%A2%E6%9F%A5%E8%AF%A2mysqldumpslow/"/>
+      <url>/2018/04/03/MySQL%E6%85%A2%E6%9F%A5%E8%AF%A2mysqldumpslow/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> 慢查询 </tag>
+            
+            <tag> mysqldumpslow </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>HTTP状态码301和302的区别</title>
+      <link href="/2018/04/03/HTTP%E7%8A%B6%E6%80%81%E7%A0%81301%E5%92%8C302%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+      <url>/2018/04/03/HTTP%E7%8A%B6%E6%80%81%E7%A0%81301%E5%92%8C302%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> HTTP状态码 </tag>
+            
+            <tag> 301 </tag>
+            
+            <tag> 302 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Nginx upstream模块配置-官方翻译版</title>
+      <link href="/2018/04/03/Nginx-upstream%E6%A8%A1%E5%9D%97%E9%85%8D%E7%BD%AE-%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91%E7%89%88/"/>
+      <url>/2018/04/03/Nginx-upstream%E6%A8%A1%E5%9D%97%E9%85%8D%E7%BD%AE-%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91%E7%89%88/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> upstream </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>TIME_WAIT过多-问题处理</title>
+      <link href="/2018/04/03/TIME-WAIT%E8%BF%87%E5%A4%9A-%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86/"/>
+      <url>/2018/04/03/TIME-WAIT%E8%BF%87%E5%A4%9A-%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> TCP/IP </tag>
+            
+            <tag> TIME_WAIT过多 </tag>
+            
+            <tag> 内核 </tag>
+            
+            <tag> net.ipv4 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>部署openstack各版本-本地yum源</title>
+      <link href="/2018/03/27/%E9%83%A8%E7%BD%B2openstack%E6%9C%AC%E5%9C%B0yum%E6%BA%90/"/>
+      <url>/2018/03/27/%E9%83%A8%E7%BD%B2openstack%E6%9C%AC%E5%9C%B0yum%E6%BA%90/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> openstack </tag>
+            
+            <tag> yum </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>mysql从库自动清理relay_log</title>
+      <link href="/2018/03/22/mysql%E4%BB%8E%E5%BA%93%E8%87%AA%E5%8A%A8%E6%B8%85%E7%90%86relay-log/"/>
+      <url>/2018/03/22/mysql%E4%BB%8E%E5%BA%93%E8%87%AA%E5%8A%A8%E6%B8%85%E7%90%86relay-log/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> mysql slave </tag>
+            
+            <tag> relay log </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>问题汇总:openstack可用域availablitiy_zone配置</title>
+      <link href="/2018/03/22/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%E5%8F%AF%E7%94%A8%E5%9F%9Favailablitiy-zone%E9%85%8D%E7%BD%AE/"/>
+      <url>/2018/03/22/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%E5%8F%AF%E7%94%A8%E5%9F%9Favailablitiy-zone%E9%85%8D%E7%BD%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 可用域 </tag>
+            
+            <tag> availablitiy_zone </tag>
+            
+            <tag> aggregate host </tag>
+            
+            <tag> nova schedule </tag>
+            
+            <tag> az </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>云计算三种服务模式:IaaS和PaaS及SaaS</title>
+      <link href="/2018/03/21/%E4%BA%91%E8%AE%A1%E7%AE%97%E4%B8%89%E7%A7%8D%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%BC%8F-IaaS%E5%92%8CPaaS%E5%8F%8ASaaS/"/>
+      <url>/2018/03/21/%E4%BA%91%E8%AE%A1%E7%AE%97%E4%B8%89%E7%A7%8D%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%BC%8F-IaaS%E5%92%8CPaaS%E5%8F%8ASaaS/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> IaaS </tag>
+            
+            <tag> PaaS </tag>
+            
+            <tag> SaaS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>rsync同步时导致服务器重启-故障记录</title>
+      <link href="/2018/03/20/rsync%E5%90%8C%E6%AD%A5%E6%97%B6%E5%AF%BC%E8%87%B4%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%87%8D%E5%90%AF-%E6%95%85%E9%9A%9C%E8%AE%B0%E5%BD%95/"/>
+      <url>/2018/03/20/rsync%E5%90%8C%E6%AD%A5%E6%97%B6%E5%AF%BC%E8%87%B4%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%87%8D%E5%90%AF-%E6%95%85%E9%9A%9C%E8%AE%B0%E5%BD%95/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> rsync </tag>
+            
+            <tag> 自重启 </tag>
+            
+            <tag> 磁盘坏道 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>gentoo emerge编译nginx</title>
+      <link href="/2018/03/17/gentoo-emerge%E7%BC%96%E8%AF%91nginx/"/>
+      <url>/2018/03/17/gentoo-emerge%E7%BC%96%E8%AF%91nginx/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> emerge </tag>
+            
+            <tag> gentoo </tag>
+            
+            <tag> 编译nginx </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MongoDB集群节点-添加移除管理维护</title>
+      <link href="/2018/03/16/MongoDB%E9%9B%86%E7%BE%A4%E8%8A%82%E7%82%B9%E6%B7%BB%E5%8A%A0%E7%A7%BB%E9%99%A4%E7%AE%A1%E7%90%86%E7%BB%B4%E6%8A%A4/"/>
+      <url>/2018/03/16/MongoDB%E9%9B%86%E7%BE%A4%E8%8A%82%E7%82%B9%E6%B7%BB%E5%8A%A0%E7%A7%BB%E9%99%A4%E7%AE%A1%E7%90%86%E7%BB%B4%E6%8A%A4/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MongoDB </tag>
+            
+            <tag> MongoDB集群 </tag>
+            
+            <tag> mongo集群管理维护 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>问题汇总: VM热迁移live migration</title>
+      <link href="/2018/03/16/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-VM%E7%83%AD%E8%BF%81%E7%A7%BBlive-migration/"/>
+      <url>/2018/03/16/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-VM%E7%83%AD%E8%BF%81%E7%A7%BBlive-migration/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> nova </tag>
+            
+            <tag> libvert </tag>
+            
+            <tag> 热迁移 live migration </tag>
+            
+            <tag> 动态迁移 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>问题汇总-openstack如何将VM分配到固定计算节点</title>
+      <link href="/2018/03/15/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%E5%A6%82%E4%BD%95%E5%B0%86VM%E5%88%86%E9%85%8D%E5%88%B0%E5%9B%BA%E5%AE%9A%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B9/"/>
+      <url>/2018/03/15/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%E5%A6%82%E4%BD%95%E5%B0%86VM%E5%88%86%E9%85%8D%E5%88%B0%E5%9B%BA%E5%AE%9A%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B9/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> VM </tag>
+            
+            <tag> 主机聚合 Host Aggregates </tag>
+            
+            <tag> 可用域 Availability Zones </tag>
+            
+            <tag> schedule </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>问题汇总-OpenStack VM随计算节点自启动</title>
+      <link href="/2018/03/14/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-OpenStack-VM%E9%9A%8F%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B9%E8%87%AA%E5%90%AF%E5%8A%A8/"/>
+      <url>/2018/03/14/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-OpenStack-VM%E9%9A%8F%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B9%E8%87%AA%E5%90%AF%E5%8A%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> openstack </tag>
+            
+            <tag> vm </tag>
+            
+            <tag> autostart </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>问题汇总-给openstack VM创建静态IP</title>
+      <link href="/2018/03/14/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-%E7%BB%99openstack%20VM%E5%88%9B%E5%BB%BA%E9%9D%99%E6%80%81IP/"/>
+      <url>/2018/03/14/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-%E7%BB%99openstack%20VM%E5%88%9B%E5%BB%BA%E9%9D%99%E6%80%81IP/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> openstack </tag>
+            
+            <tag> neutron </tag>
+            
+            <tag> VM </tag>
+            
+            <tag> static IP </tag>
+            
+            <tag> 静态IP </tag>
+            
+            <tag> port-update </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>记一次线上服务器频繁宕机</title>
+      <link href="/2018/02/27/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%91%E7%B9%81%E5%AE%95%E6%9C%BA/"/>
+      <url>/2018/02/27/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%91%E7%B9%81%E5%AE%95%E6%9C%BA/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Kernel </tag>
+            
+            <tag> ACPI Error </tag>
+            
+            <tag> no hander </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>mysql主从复制错误-错误号1236</title>
+      <link href="/2018/02/26/mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E9%94%99%E8%AF%AF-%E9%94%99%E8%AF%AF%E5%8F%B71236/"/>
+      <url>/2018/02/26/mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E9%94%99%E8%AF%AF-%E9%94%99%E8%AF%AF%E5%8F%B71236/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> 1236 </tag>
+            
+            <tag> 主从复制错误 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Linux之Gentoo编译安装</title>
+      <link href="/2018/02/24/Linux%E4%B9%8BGentoo%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"/>
+      <url>/2018/02/24/Linux%E4%B9%8BGentoo%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Linux </tag>
+            
+            <tag> Gentoo </tag>
+            
+            <tag> Kernel </tag>
+            
+            <tag> 内核编译 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MongoDB之用户授权管理</title>
+      <link href="/2018/02/23/MongoDB%E4%B9%8B%E7%94%A8%E6%88%B7%E6%8E%88%E6%9D%83%E7%AE%A1%E7%90%86/"/>
+      <url>/2018/02/23/MongoDB%E4%B9%8B%E7%94%A8%E6%88%B7%E6%8E%88%E6%9D%83%E7%AE%A1%E7%90%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Mongo </tag>
+            
+            <tag> Mongodb </tag>
+            
+            <tag> 用户管理 </tag>
+            
+            <tag> 授权管理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MongoDB之数据库管理</title>
+      <link href="/2018/02/23/MongoDB%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86/"/>
+      <url>/2018/02/23/MongoDB%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Mongo </tag>
+            
+            <tag> MongoDB </tag>
+            
+            <tag> 数据库管理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>高可用MongoDB集群</title>
+      <link href="/2018/02/22/%E9%AB%98%E5%8F%AF%E7%94%A8MongoDB%E9%9B%86%E7%BE%A4/"/>
+      <url>/2018/02/22/%E9%AB%98%E5%8F%AF%E7%94%A8MongoDB%E9%9B%86%E7%BE%A4/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 高可用 </tag>
+            
+            <tag> Mongo </tag>
+            
+            <tag> MongoDB </tag>
+            
+            <tag> 路由 </tag>
+            
+            <tag> 分片 </tag>
+            
+            <tag> 副本集 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>gentoo rc-update启动项管理</title>
+      <link href="/2018/02/16/gentoo-rc-update%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%AE%A1%E7%90%86/"/>
+      <url>/2018/02/16/gentoo-rc-update%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%AE%A1%E7%90%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> gentoo </tag>
+            
+            <tag> rc-update </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Shell变量自增</title>
+      <link href="/2018/02/14/Shell%E5%8F%98%E9%87%8F%E8%87%AA%E5%A2%9E/"/>
+      <url>/2018/02/14/Shell%E5%8F%98%E9%87%8F%E8%87%AA%E5%A2%9E/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> expr </tag>
+            
+            <tag> 变量自增 </tag>
+            
+            <tag> shell基础 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MySQL新增从库-数据量T级</title>
+      <link href="/2018/02/13/MySQL%E6%96%B0%E5%A2%9E%E4%BB%8E%E5%BA%93-%E6%95%B0%E6%8D%AE%E9%87%8FT%E7%BA%A7/"/>
+      <url>/2018/02/13/MySQL%E6%96%B0%E5%A2%9E%E4%BB%8E%E5%BA%93-%E6%95%B0%E6%8D%AE%E9%87%8FT%E7%BA%A7/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MySQL </tag>
+            
+            <tag> 新增从库 </tag>
+            
+            <tag> 2002 </tag>
+            
+            <tag> 1236 </tag>
+            
+            <tag> 1062 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zabbix自定义shell实现邮件告警</title>
+      <link href="/2018/02/11/zabbix%E8%87%AA%E5%AE%9A%E4%B9%89shell%E5%AE%9E%E7%8E%B0%E9%82%AE%E4%BB%B6%E5%91%8A%E8%AD%A6/"/>
+      <url>/2018/02/11/zabbix%E8%87%AA%E5%AE%9A%E4%B9%89shell%E5%AE%9E%E7%8E%B0%E9%82%AE%E4%BB%B6%E5%91%8A%E8%AD%A6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> mailx </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>jumpserver连接登陆时间隔天的问题</title>
+      <link href="/2018/02/11/jumpserver%E8%BF%9E%E6%8E%A5%E7%99%BB%E9%99%86%E6%97%B6%E9%97%B4%E9%9A%94%E5%A4%A9%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+      <url>/2018/02/11/jumpserver%E8%BF%9E%E6%8E%A5%E7%99%BB%E9%99%86%E6%97%B6%E9%97%B4%E9%9A%94%E5%A4%A9%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> jumpserver </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>iptables网络防火墙</title>
+      <link href="/2018/02/10/iptables%E7%BD%91%E7%BB%9C%E9%98%B2%E7%81%AB%E5%A2%99/"/>
+      <url>/2018/02/10/iptables%E7%BD%91%E7%BB%9C%E9%98%B2%E7%81%AB%E5%A2%99/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> iptables </tag>
+            
+            <tag> 防火墙 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zabbix自定义key监控mysql主从</title>
+      <link href="/2018/02/09/zabbix%E8%87%AA%E5%AE%9A%E4%B9%89key%E7%9B%91%E6%8E%A7mysql%E4%B8%BB%E4%BB%8E/"/>
+      <url>/2018/02/09/zabbix%E8%87%AA%E5%AE%9A%E4%B9%89key%E7%9B%91%E6%8E%A7mysql%E4%B8%BB%E4%BB%8E/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> slave </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>postfix邮件发送服务器</title>
+      <link href="/2018/02/09/postfix%E9%82%AE%E4%BB%B6%E5%8F%91%E9%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+      <url>/2018/02/09/postfix%E9%82%AE%E4%BB%B6%E5%8F%91%E9%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> postfix </tag>
+            
+            <tag> mail </tag>
+            
+            <tag> from </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>xtrabackup连接不上MySQL的问题</title>
+      <link href="/2018/02/08/xtrabackup%E8%BF%9E%E6%8E%A5%E4%B8%8D%E4%B8%8AMySQL%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+      <url>/2018/02/08/xtrabackup%E8%BF%9E%E6%8E%A5%E4%B8%8D%E4%B8%8AMySQL%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> innobackupex </tag>
+            
+            <tag> xtrabackup </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>查询MySQL表占用空间空间排序</title>
+      <link href="/2018/02/08/%E6%9F%A5%E8%AF%A2MySQL%E5%8D%A0%E7%94%A8%E7%A9%BA%E9%97%B4%E7%A9%BA%E9%97%B4%E6%8E%92%E5%BA%8F/"/>
+      <url>/2018/02/08/%E6%9F%A5%E8%AF%A2MySQL%E5%8D%A0%E7%94%A8%E7%A9%BA%E9%97%B4%E7%A9%BA%E9%97%B4%E6%8E%92%E5%BA%8F/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>xtrabackup单表备份与还原</title>
+      <link href="/2018/02/08/xtrabackup%E5%8D%95%E8%A1%A8%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/"/>
+      <url>/2018/02/08/xtrabackup%E5%8D%95%E8%A1%A8%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> innobackupex </tag>
+            
+            <tag> xtrabackup </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>深入理解zabbix权限及业务分类告警</title>
+      <link href="/2018/02/08/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3zabbix%E6%9D%83%E9%99%90%E5%8F%8A%E4%B8%9A%E5%8A%A1%E5%88%86%E7%B1%BB%E5%91%8A%E8%AD%A6/"/>
+      <url>/2018/02/08/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3zabbix%E6%9D%83%E9%99%90%E5%8F%8A%E4%B8%9A%E5%8A%A1%E5%88%86%E7%B1%BB%E5%91%8A%E8%AD%A6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>emerge USE标记介绍-gentoo</title>
+      <link href="/2018/02/06/emerge-USE%E6%A0%87%E8%AE%B0%E4%BB%8B%E7%BB%8D-gentoo/"/>
+      <url>/2018/02/06/emerge-USE%E6%A0%87%E8%AE%B0%E4%BB%8B%E7%BB%8D-gentoo/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Gentoo </tag>
+            
+            <tag> Funtoo </tag>
+            
+            <tag> emerge </tag>
+            
+            <tag> USE标记 </tag>
+            
+            <tag> emerge命令 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>supervisor安装与管理-Gentoo</title>
+      <link href="/2018/02/06/supervisor%E5%AE%89%E8%A3%85%E4%B8%8E%E7%AE%A1%E7%90%86-Gentoo/"/>
+      <url>/2018/02/06/supervisor%E5%AE%89%E8%A3%85%E4%B8%8E%E7%AE%A1%E7%90%86-Gentoo/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> gentoo </tag>
+            
+            <tag> supervisor </tag>
+            
+            <tag> supervisorctl </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MySQL MHA高可用架构与实现</title>
+      <link href="/2018/02/03/MySQL-MHA%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%AE%9E%E7%8E%B0/"/>
+      <url>/2018/02/03/MySQL-MHA%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%AE%9E%E7%8E%B0/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MySQL </tag>
+            
+            <tag> Failover </tag>
+            
+            <tag> binlog server </tag>
+            
+            <tag> 异步复制 </tag>
+            
+            <tag> 半同步复制 </tag>
+            
+            <tag> MHA </tag>
+            
+            <tag> VIP </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MySQL主从管理与维护</title>
+      <link href="/2018/01/31/MySQL%E4%B8%BB%E4%BB%8E%E7%AE%A1%E7%90%86%E4%B8%8E%E7%BB%B4%E6%8A%A4/"/>
+      <url>/2018/01/31/MySQL%E4%B8%BB%E4%BB%8E%E7%AE%A1%E7%90%86%E4%B8%8E%E7%BB%B4%E6%8A%A4/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MySQL </tag>
+            
+            <tag> 主从同步 </tag>
+            
+            <tag> 主从复制监控 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MySQL主从原理与部署</title>
+      <link href="/2018/01/31/MySQL%E4%B8%BB%E4%BB%8E%E5%8E%9F%E7%90%86%E4%B8%8E%E9%83%A8%E7%BD%B2/"/>
+      <url>/2018/01/31/MySQL%E4%B8%BB%E4%BB%8E%E5%8E%9F%E7%90%86%E4%B8%8E%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MySQL主从复制 </tag>
+            
+            <tag> 全备还原 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Dell远控卡iDRAC6固件升级</title>
+      <link href="/2018/01/30/Dell%E8%BF%9C%E6%8E%A7%E5%8D%A1iDRAC6%E5%9B%BA%E4%BB%B6%E5%8D%87%E7%BA%A7/"/>
+      <url>/2018/01/30/Dell%E8%BF%9C%E6%8E%A7%E5%8D%A1iDRAC6%E5%9B%BA%E4%BB%B6%E5%8D%87%E7%BA%A7/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> iDRAC6 </tag>
+            
+            <tag> 远控卡 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Dell RAID控制卡使用-说明</title>
+      <link href="/2018/01/30/Dell%20RAID%E6%8E%A7%E5%88%B6%E5%8D%A1%E4%BD%BF%E7%94%A8-%E8%AF%B4%E6%98%8E/"/>
+      <url>/2018/01/30/Dell%20RAID%E6%8E%A7%E5%88%B6%E5%8D%A1%E4%BD%BF%E7%94%A8-%E8%AF%B4%E6%98%8E/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> RAID </tag>
+            
+            <tag> RAID控制卡 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MongoDB 备份(mongodump)与恢复(mongorestore)</title>
+      <link href="/2018/01/26/MongoDB%20%E5%A4%87%E4%BB%BD(mongodump)%E4%B8%8E%E6%81%A2%E5%A4%8D(mongorestore)/"/>
+      <url>/2018/01/26/MongoDB%20%E5%A4%87%E4%BB%BD(mongodump)%E4%B8%8E%E6%81%A2%E5%A4%8D(mongorestore)/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mongodb </tag>
+            
+            <tag> mongodump </tag>
+            
+            <tag> mongorestore </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>chrony时间同步</title>
+      <link href="/2018/01/26/chrony%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5/"/>
+      <url>/2018/01/26/chrony%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ntp </tag>
+            
+            <tag> chrony </tag>
+            
+            <tag> 时间同步 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Linux下压缩百G目录问题</title>
+      <link href="/2018/01/25/Linux%E4%B8%8B%E5%8E%8B%E7%BC%A9%E7%99%BEG%E7%9B%AE%E5%BD%95%E9%97%AE%E9%A2%98/"/>
+      <url>/2018/01/25/Linux%E4%B8%8B%E5%8E%8B%E7%BC%A9%E7%99%BEG%E7%9B%AE%E5%BD%95%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zip </tag>
+            
+            <tag> xz </tag>
+            
+            <tag> gzip </tag>
+            
+            <tag> 压缩 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>给shell脚本加锁</title>
+      <link href="/2018/01/23/%E7%BB%99shell%E8%84%9A%E6%9C%AC%E5%8A%A0%E9%94%81/"/>
+      <url>/2018/01/23/%E7%BB%99shell%E8%84%9A%E6%9C%AC%E5%8A%A0%E9%94%81/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> shell编程 </tag>
+            
+            <tag> flock </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>php-fpm.conf配置优化</title>
+      <link href="/2018/01/23/php-fpm-conf%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96/"/>
+      <url>/2018/01/23/php-fpm-conf%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> php-fpm </tag>
+            
+            <tag> php </tag>
+            
+            <tag> php优化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MySql xtrabackup大数据量备份与还原</title>
+      <link href="/2018/01/23/MySql-xtrabackup%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/"/>
+      <url>/2018/01/23/MySql-xtrabackup%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MySQL </tag>
+            
+            <tag> 备份与还原 </tag>
+            
+            <tag> innobackupex </tag>
+            
+            <tag> xtrabackup </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>docker进阶4-ELK日志收集</title>
+      <link href="/2018/01/22/docker%E8%BF%9B%E9%98%B64-ELK%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/"/>
+      <url>/2018/01/22/docker%E8%BF%9B%E9%98%B64-ELK%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> docker </tag>
+            
+            <tag> ELK </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>docker高级进阶3-创建docker网络</title>
+      <link href="/2018/01/22/docker%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B63-%E5%88%9B%E5%BB%BAdocker%E7%BD%91%E7%BB%9C/"/>
+      <url>/2018/01/22/docker%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B63-%E5%88%9B%E5%BB%BAdocker%E7%BD%91%E7%BB%9C/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>docker高级进阶2</title>
+      <link href="/2018/01/22/docker%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B62/"/>
+      <url>/2018/01/22/docker%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B62/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>docker入门-基本管理1</title>
+      <link href="/2018/01/22/docker%E5%85%A5%E9%97%A8-%E5%9F%BA%E6%9C%AC%E7%AE%A1%E7%90%861/"/>
+      <url>/2018/01/22/docker%E5%85%A5%E9%97%A8-%E5%9F%BA%E6%9C%AC%E7%AE%A1%E7%90%861/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ssh登陆基于Google Authenticator实现双因素认证</title>
+      <link href="/2018/01/22/ssh%E7%99%BB%E9%99%86%E5%9F%BA%E4%BA%8EGoogle-Authenticator%E5%AE%9E%E7%8E%B0%E5%8F%8C%E5%9B%A0%E7%B4%A0%E8%AE%A4%E8%AF%81/"/>
+      <url>/2018/01/22/ssh%E7%99%BB%E9%99%86%E5%9F%BA%E4%BA%8EGoogle-Authenticator%E5%AE%9E%E7%8E%B0%E5%8F%8C%E5%9B%A0%E7%B4%A0%E8%AE%A4%E8%AF%81/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ssh </tag>
+            
+            <tag> chrony </tag>
+            
+            <tag> Google Authenticator </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>docker容器运行后为什么立即退出</title>
+      <link href="/2018/01/22/docker%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E5%90%8E%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AB%8B%E5%8D%B3%E9%80%80%E5%87%BA/"/>
+      <url>/2018/01/22/docker%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E5%90%8E%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AB%8B%E5%8D%B3%E9%80%80%E5%87%BA/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> docker </tag>
+            
+            <tag> docker机制 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>深入理解OpenStack-高级优化</title>
+      <link href="/2018/01/18/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OpenStack-%E9%AB%98%E7%BA%A7%E4%BC%98%E5%8C%96/"/>
+      <url>/2018/01/18/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OpenStack-%E9%AB%98%E7%BA%A7%E4%BC%98%E5%8C%96/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 高级优化 </tag>
+            
+            <tag> nova </tag>
+            
+            <tag> CPU超配 </tag>
+            
+            <tag> neutron防火墙 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>深入理解OpenStack-手动制作qcow2镜像</title>
+      <link href="/2018/01/18/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OpenStack-%E6%89%8B%E5%8A%A8%E5%88%B6%E4%BD%9Cqcow2%E9%95%9C%E5%83%8F/"/>
+      <url>/2018/01/18/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OpenStack-%E6%89%8B%E5%8A%A8%E5%88%B6%E4%BD%9Cqcow2%E9%95%9C%E5%83%8F/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Glance </tag>
+            
+            <tag> openstack </tag>
+            
+            <tag> qcow2 </tag>
+            
+            <tag> 制作镜像 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>nginx生产环境-案例2</title>
+      <link href="/2018/01/16/nginx%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83-%E6%A1%88%E4%BE%8B2/"/>
+      <url>/2018/01/16/nginx%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83-%E6%A1%88%E4%BE%8B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> upstream </tag>
+            
+            <tag> 80 </tag>
+            
+            <tag> 443 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>深入理解OpenStack-虚拟机存放目录</title>
+      <link href="/2018/01/15/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OpenStack-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%98%E6%94%BE%E7%9B%AE%E5%BD%95/"/>
+      <url>/2018/01/15/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OpenStack-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%98%E6%94%BE%E7%9B%AE%E5%BD%95/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> OpenStack </tag>
+            
+            <tag> 虚拟机 </tag>
+            
+            <tag> 云主机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>深入理解OpenStack-虚拟机元数据metadata</title>
+      <link href="/2018/01/15/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OpenStack-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%85%83%E6%95%B0%E6%8D%AEmetadata/"/>
+      <url>/2018/01/15/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OpenStack-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%85%83%E6%95%B0%E6%8D%AEmetadata/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> OpenStack </tag>
+            
+            <tag> 元数据 </tag>
+            
+            <tag> metadata </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack-Pike-Horizen Web管理10</title>
+      <link href="/2018/01/14/OpenStack-Pike-Horizen-Web%E7%AE%A1%E7%90%8610/"/>
+      <url>/2018/01/14/OpenStack-Pike-Horizen-Web%E7%AE%A1%E7%90%8610/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Horizon </tag>
+            
+            <tag> Dashboard </tag>
+            
+            <tag> OpenStack </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack-Pike-创建第1台云主机9</title>
+      <link href="/2018/01/10/OpenStack-Pike-%E5%88%9B%E5%BB%BA%E7%AC%AC1%E5%8F%B0%E4%BA%91%E4%B8%BB%E6%9C%BA9/"/>
+      <url>/2018/01/10/OpenStack-Pike-%E5%88%9B%E5%BB%BA%E7%AC%AC1%E5%8F%B0%E4%BA%91%E4%B8%BB%E6%9C%BA9/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> OpenStack </tag>
+            
+            <tag> 创建云主机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>批量测试HTTP代理成功率脚本</title>
+      <link href="/2018/01/10/%E6%89%B9%E9%87%8F%E6%B5%8B%E8%AF%95HTTP%E4%BB%A3%E7%90%86%E6%88%90%E5%8A%9F%E7%8E%87%E8%84%9A%E6%9C%AC/"/>
+      <url>/2018/01/10/%E6%89%B9%E9%87%8F%E6%B5%8B%E8%AF%95HTTP%E4%BB%A3%E7%90%86%E6%88%90%E5%8A%9F%E7%8E%87%E8%84%9A%E6%9C%AC/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> HTTP代理 </tag>
+            
+            <tag> Shell脚本 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack-Pike-Neutron网络服务-计算节点8</title>
+      <link href="/2018/01/09/OpenStack-Pike-Neutron%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1-%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B98/"/>
+      <url>/2018/01/09/OpenStack-Pike-Neutron%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1-%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> openstack </tag>
+            
+            <tag> neutron </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack-Pike-Neutron网络服务-控制节点7</title>
+      <link href="/2018/01/09/OpenStack-Pike-Neutron%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1-%E6%8E%A7%E5%88%B6%E8%8A%82%E7%82%B97/"/>
+      <url>/2018/01/09/OpenStack-Pike-Neutron%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1-%E6%8E%A7%E5%88%B6%E8%8A%82%E7%82%B97/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> OpenStack </tag>
+            
+            <tag> Neutron </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MySQL数据库用户与权限管理3</title>
+      <link href="/2018/01/08/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%863/"/>
+      <url>/2018/01/08/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%863/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack各服务端口号汇总</title>
+      <link href="/2018/01/07/OpenStack%E5%90%84%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%A3%E5%8F%B7%E6%B1%87%E6%80%BB/"/>
+      <url>/2018/01/07/OpenStack%E5%90%84%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%A3%E5%8F%B7%E6%B1%87%E6%80%BB/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> OpenStack </tag>
+            
+            <tag> 服务端口号汇总 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Mysql主从库同步错误：1062 Error &#39;Duplicate entry &#39;1438019&#39;</title>
+      <link href="/2018/01/06/Mysql%E4%B8%BB%E4%BB%8E%E5%BA%93%E5%90%8C%E6%AD%A5%E9%94%99%E8%AF%AF%EF%BC%9A1062-Error-Duplicate-entry-1438019/"/>
+      <url>/2018/01/06/Mysql%E4%B8%BB%E4%BB%8E%E5%BA%93%E5%90%8C%E6%AD%A5%E9%94%99%E8%AF%AF%EF%BC%9A1062-Error-Duplicate-entry-1438019/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> MySQL主从库同步错误 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack-Pike-Nova计算服务-计算节点6</title>
+      <link href="/2018/01/05/OpenStack-Pike-Nova%E8%AE%A1%E7%AE%97%E6%9C%8D%E5%8A%A1-%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B96/"/>
+      <url>/2018/01/05/OpenStack-Pike-Nova%E8%AE%A1%E7%AE%97%E6%9C%8D%E5%8A%A1-%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B96/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> OpenStack </tag>
+            
+            <tag> Nova </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>RabbitMQ集群部署</title>
+      <link href="/2018/01/05/RabbitMQ%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
+      <url>/2018/01/05/RabbitMQ%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> rabbitmq </tag>
+            
+            <tag> rabbitmq集群 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>RabbitMQ原理与单机部署</title>
+      <link href="/2018/01/04/RabbitMQ%E5%8E%9F%E7%90%86%E4%B8%8E%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/"/>
+      <url>/2018/01/04/RabbitMQ%E5%8E%9F%E7%90%86%E4%B8%8E%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> RabbitMQ </tag>
+            
+            <tag> openssl </tag>
+            
+            <tag> Erlang </tag>
+            
+            <tag> 消息队列 </tag>
+            
+            <tag> RabbitMQ集群部署 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ESXI虚拟机开启CPU虚拟化</title>
+      <link href="/2018/01/04/ESXI%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%BC%80%E5%90%AFCPU%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
+      <url>/2018/01/04/ESXI%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%BC%80%E5%90%AFCPU%E8%99%9A%E6%8B%9F%E5%8C%96/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> CPU </tag>
+            
+            <tag> ESXI </tag>
+            
+            <tag> 虚拟化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack_Pike-Nova计算服务-控制节点5</title>
+      <link href="/2018/01/03/OpenStack-Pike-Nova%E8%AE%A1%E7%AE%97%E6%9C%8D%E5%8A%A1-%E6%8E%A7%E5%88%B6%E8%8A%82%E7%82%B95/"/>
+      <url>/2018/01/03/OpenStack-Pike-Nova%E8%AE%A1%E7%AE%97%E6%9C%8D%E5%8A%A1-%E6%8E%A7%E5%88%B6%E8%8A%82%E7%82%B95/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> OpenStack </tag>
+            
+            <tag> Nova </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack_Pike-Glance镜像服务4</title>
+      <link href="/2018/01/03/OpenStack-Pike-Glance%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A14/"/>
+      <url>/2018/01/03/OpenStack-Pike-Glance%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A14/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Glance </tag>
+            
+            <tag> openstack </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack_Pike-Keystone认证服务3</title>
+      <link href="/2018/01/03/OpenStack-Pike-Keystone%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A13/"/>
+      <url>/2018/01/03/OpenStack-Pike-Keystone%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A13/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> openstack </tag>
+            
+            <tag> Keystone </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack_Pike-基础服务安装2</title>
+      <link href="/2018/01/03/OpenStack-Pike-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%AE%89%E8%A3%852/"/>
+      <url>/2018/01/03/OpenStack-Pike-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%AE%89%E8%A3%852/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> openstack </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OpenStack_Pike-实验环境准备1</title>
+      <link href="/2018/01/03/OpenStack-Pike-%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%871/"/>
+      <url>/2018/01/03/OpenStack-Pike-%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%871/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> openstack </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>细说-LVS中ActiveConn和InActConn</title>
+      <link href="/2018/01/02/%E7%BB%86%E8%AF%B4-LVS%E4%B8%ADActiveConn%E5%92%8CInActConn/"/>
+      <url>/2018/01/02/%E7%BB%86%E8%AF%B4-LVS%E4%B8%ADActiveConn%E5%92%8CInActConn/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> LVS </tag>
+            
+            <tag> LVS连接数监控 </tag>
+            
+            <tag> ipvsadm </tag>
+            
+            <tag> ActiveConn </tag>
+            
+            <tag> InActConn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zabbix监控web页面url状态</title>
+      <link href="/2017/12/27/zabbix%E7%9B%91%E6%8E%A7web%E9%A1%B5%E9%9D%A2url%E7%8A%B6%E6%80%81/"/>
+      <url>/2017/12/27/zabbix%E7%9B%91%E6%8E%A7web%E9%A1%B5%E9%9D%A2url%E7%8A%B6%E6%80%81/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> web监控 </tag>
+            
+            <tag> URL监控 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>nginx匹配屏蔽uri接口</title>
+      <link href="/2017/12/25/nginx%E5%8C%B9%E9%85%8D%E5%B1%8F%E8%94%BDuri%E6%8E%A5%E5%8F%A3/"/>
+      <url>/2017/12/25/nginx%E5%8C%B9%E9%85%8D%E5%B1%8F%E8%94%BDuri%E6%8E%A5%E5%8F%A3/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> uri </tag>
+            
+            <tag> 屏蔽接口 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>tail统计日志字段百分比</title>
+      <link href="/2017/12/25/tail%E7%BB%9F%E8%AE%A1%E6%97%A5%E5%BF%97%E5%AD%97%E6%AE%B5%E7%99%BE%E5%88%86%E6%AF%94/"/>
+      <url>/2017/12/25/tail%E7%BB%9F%E8%AE%A1%E6%97%A5%E5%BF%97%E5%AD%97%E6%AE%B5%E7%99%BE%E5%88%86%E6%AF%94/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> log </tag>
+            
+            <tag> tail </tag>
+            
+            <tag> tailf </tag>
+            
+            <tag> 日志统计 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>不一样的云计算解释</title>
+      <link href="/2017/12/24/%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BA%91%E8%AE%A1%E7%AE%97%E8%A7%A3%E9%87%8A/"/>
+      <url>/2017/12/24/%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BA%91%E8%AE%A1%E7%AE%97%E8%A7%A3%E9%87%8A/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 虚拟化 </tag>
+            
+            <tag> 随笔 </tag>
+            
+            <tag> 云计算 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>云计算OpenStack与KVM虚拟化</title>
+      <link href="/2017/12/24/%E4%BA%91%E8%AE%A1%E7%AE%97OpenStack%E4%B8%8EKVM%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
+      <url>/2017/12/24/%E4%BA%91%E8%AE%A1%E7%AE%97OpenStack%E4%B8%8EKVM%E8%99%9A%E6%8B%9F%E5%8C%96/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> OpenStack </tag>
+            
+            <tag> 云计算 </tag>
+            
+            <tag> virsh </tag>
+            
+            <tag> oVirt </tag>
+            
+            <tag> KVM虚拟化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>MySQL多实例部署2</title>
+      <link href="/2017/12/23/MySQL%E5%A4%9A%E5%AE%9E%E4%BE%8B%E9%83%A8%E7%BD%B22/"/>
+      <url>/2017/12/23/MySQL%E5%A4%9A%E5%AE%9E%E4%BE%8B%E9%83%A8%E7%BD%B22/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> dba </tag>
+            
+            <tag> MariaDB </tag>
+            
+            <tag> PerconaDB </tag>
+            
+            <tag> Oracle </tag>
+            
+            <tag> MySQL多实例 </tag>
+            
+            <tag> MySQL多实例远程登陆 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Mysql单节点部署1</title>
+      <link href="/2017/12/23/Mysql%E5%8D%95%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B21/"/>
+      <url>/2017/12/23/Mysql%E5%8D%95%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B21/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> dba </tag>
+            
+            <tag> MariaDB </tag>
+            
+            <tag> PerconaDB </tag>
+            
+            <tag> Oracle </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>分布式消息系统MQ之kafka部署</title>
+      <link href="/2017/12/22/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9FMQ%E4%B9%8Bkafka%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/12/22/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9FMQ%E4%B9%8Bkafka%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> kafka </tag>
+            
+            <tag> zookeeper </tag>
+            
+            <tag> producer </tag>
+            
+            <tag> consumer </tag>
+            
+            <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> logstash </tag>
+            
+            <tag> RbbitMQ </tag>
+            
+            <tag> topic </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>logstash测试输出</title>
+      <link href="/2017/12/19/logstash%E6%B5%8B%E8%AF%95%E8%BE%93%E5%87%BA/"/>
+      <url>/2017/12/19/logstash%E6%B5%8B%E8%AF%95%E8%BE%93%E5%87%BA/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> elasticsearch </tag>
+            
+            <tag> kibana </tag>
+            
+            <tag> logstash </tag>
+            
+            <tag> elk </tag>
+            
+            <tag> output </tag>
+            
+            <tag> codec </tag>
+            
+            <tag> rubydebug </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Logstash收集Nginx日志</title>
+      <link href="/2017/12/19/Logstash%E6%94%B6%E9%9B%86Nginx%E6%97%A5%E5%BF%97/"/>
+      <url>/2017/12/19/Logstash%E6%94%B6%E9%9B%86Nginx%E6%97%A5%E5%BF%97/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ELK </tag>
+            
+            <tag> elasticsearch </tag>
+            
+            <tag> kibana </tag>
+            
+            <tag> logstash </tag>
+            
+            <tag> Nginx </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zabbix监控https_ssl证书是否过期</title>
+      <link href="/2017/12/18/zabbix%E7%9B%91%E6%8E%A7https-ssl%E8%AF%81%E4%B9%A6%E6%98%AF%E5%90%A6%E8%BF%87%E6%9C%9F/"/>
+      <url>/2017/12/18/zabbix%E7%9B%91%E6%8E%A7https-ssl%E8%AF%81%E4%B9%A6%E6%98%AF%E5%90%A6%E8%BF%87%E6%9C%9F/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> https </tag>
+            
+            <tag> ssl </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Git分布式版本控制</title>
+      <link href="/2017/12/16/Git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/"/>
+      <url>/2017/12/16/Git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Gitlab </tag>
+            
+            <tag> Git </tag>
+            
+            <tag> svn </tag>
+            
+            <tag> 版本控制 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>logstash收集java日志</title>
+      <link href="/2017/12/14/logstash%E6%94%B6%E9%9B%86java%E6%97%A5%E5%BF%97/"/>
+      <url>/2017/12/14/logstash%E6%94%B6%E9%9B%86java%E6%97%A5%E5%BF%97/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ELK </tag>
+            
+            <tag> elasticsearch </tag>
+            
+            <tag> kibana </tag>
+            
+            <tag> Tomcat </tag>
+            
+            <tag> Logstash </tag>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>通过Logstash收集Tomcat日志</title>
+      <link href="/2017/12/13/%E9%80%9A%E8%BF%87Logstash%E6%94%B6%E9%9B%86Tomcat%E6%97%A5%E5%BF%97/"/>
+      <url>/2017/12/13/%E9%80%9A%E8%BF%87Logstash%E6%94%B6%E9%9B%86Tomcat%E6%97%A5%E5%BF%97/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ELK </tag>
+            
+            <tag> elasticsearch </tag>
+            
+            <tag> kibana </tag>
+            
+            <tag> Tomcat </tag>
+            
+            <tag> Logstash </tag>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>通过Logstash收集日志</title>
+      <link href="/2017/12/12/%E9%80%9A%E8%BF%87Logstash%E6%94%B6%E9%9B%86%E6%97%A5%E5%BF%97/"/>
+      <url>/2017/12/12/%E9%80%9A%E8%BF%87Logstash%E6%94%B6%E9%9B%86%E6%97%A5%E5%BF%97/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ELK </tag>
+            
+            <tag> elasticsearch </tag>
+            
+            <tag> kibana </tag>
+            
+            <tag> Logstash </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ELK日志分析平台部署</title>
+      <link href="/2017/12/10/ELK%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/12/10/ELK%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ELK </tag>
+            
+            <tag> elasticsearch </tag>
+            
+            <tag> kibana </tag>
+            
+            <tag> logstash </tag>
+            
+            <tag> kopf </tag>
+            
+            <tag> ELK安全设置 </tag>
+            
+            <tag> elasticsearch集群监控 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>shell高级编程-进阶3</title>
+      <link href="/2017/12/09/shell%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E9%98%B63/"/>
+      <url>/2017/12/09/shell%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E9%98%B63/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> break </tag>
+            
+            <tag> DDos </tag>
+            
+            <tag> shell DDos </tag>
+            
+            <tag> continue </tag>
+            
+            <tag> exit </tag>
+            
+            <tag> return </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>部署Gitlab+maven+jenkins持续集成环境-进阶1</title>
+      <link href="/2017/12/05/%E9%83%A8%E7%BD%B2Gitlab-maven-jenkins%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E7%8E%AF%E5%A2%83-%E8%BF%9B%E9%98%B61/"/>
+      <url>/2017/12/05/%E9%83%A8%E7%BD%B2Gitlab-maven-jenkins%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E7%8E%AF%E5%A2%83-%E8%BF%9B%E9%98%B61/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Gitlab </tag>
+            
+            <tag> 持续集成 </tag>
+            
+            <tag> 持续交付 </tag>
+            
+            <tag> java </tag>
+            
+            <tag> jdk </tag>
+            
+            <tag> maven </tag>
+            
+            <tag> jenkins </tag>
+            
+            <tag> 自动构建 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Gitlab部署-CentOS7</title>
+      <link href="/2017/12/05/Gitlab%E9%83%A8%E7%BD%B2CentOS7/"/>
+      <url>/2017/12/05/Gitlab%E9%83%A8%E7%BD%B2CentOS7/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> CentOS7 </tag>
+            
+            <tag> Gitlab </tag>
+            
+            <tag> Git服务器 </tag>
+            
+            <tag> Docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Jenkins安装初始化</title>
+      <link href="/2017/12/04/Jenkins%E5%AE%89%E8%A3%85%E5%88%9D%E5%A7%8B%E5%8C%96/"/>
+      <url>/2017/12/04/Jenkins%E5%AE%89%E8%A3%85%E5%88%9D%E5%A7%8B%E5%8C%96/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> docker </tag>
+            
+            <tag> Gitlab </tag>
+            
+            <tag> Jenkins </tag>
+            
+            <tag> 持续集成 </tag>
+            
+            <tag> 持续交付 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>shell高级编程-进阶2</title>
+      <link href="/2017/12/02/shell%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E9%98%B62/"/>
+      <url>/2017/12/02/shell%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E9%98%B62/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Codis3.2.0集群部署</title>
+      <link href="/2017/11/28/Codis3.2%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/11/28/Codis3.2%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> codis </tag>
+            
+            <tag> codis集群 </tag>
+            
+            <tag> memcache </tag>
+            
+            <tag> redis </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zookeeper集群部署</title>
+      <link href="/2017/11/28/zookeeper%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/11/28/zookeeper%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> codis </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Docker安装-CentOS7</title>
+      <link href="/2017/11/27/Docker%E5%AE%89%E8%A3%85-CentOS7/"/>
+      <url>/2017/11/27/Docker%E5%AE%89%E8%A3%85-CentOS7/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> docker </tag>
+            
+            <tag> CentOS7 </tag>
+            
+            <tag> docker-ce </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>shell高级编程-进阶1</title>
+      <link href="/2017/11/25/shell%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E9%98%B61/"/>
+      <url>/2017/11/25/shell%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E9%98%B61/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> SHELL </tag>
+            
+            <tag> .vimrc自动添加shell注释 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>LVS精讲</title>
+      <link href="/2017/11/25/LVS%E7%B2%BE%E8%AE%B2/"/>
+      <url>/2017/11/25/LVS%E7%B2%BE%E8%AE%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> lvs </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+            <tag> keepalived </tag>
+            
+            <tag> 4层负载均衡 </tag>
+            
+            <tag> DR模式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>企业IM聊天系统-Rocket.Chat</title>
+      <link href="/2017/11/24/%E4%BC%81%E4%B8%9AIM%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F-Rocket-Chat/"/>
+      <url>/2017/11/24/%E4%BC%81%E4%B8%9AIM%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F-Rocket-Chat/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> IM </tag>
+            
+            <tag> 企业IM </tag>
+            
+            <tag> 开源IM </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>redis主从宕机数据恢复问题</title>
+      <link href="/2017/11/23/redis%E4%B8%BB%E4%BB%8E%E5%AE%95%E6%9C%BA%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E9%97%AE%E9%A2%98/"/>
+      <url>/2017/11/23/redis%E4%B8%BB%E4%BB%8E%E5%AE%95%E6%9C%BA%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> redis </tag>
+            
+            <tag> rdb </tag>
+            
+            <tag> aof </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Kafka Broker HA机制-进阶2</title>
+      <link href="/2017/11/20/Kafka-Broker-HA%E6%9C%BA%E5%88%B6-%E8%BF%9B%E9%98%B62/"/>
+      <url>/2017/11/20/Kafka-Broker-HA%E6%9C%BA%E5%88%B6-%E8%BF%9B%E9%98%B62/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> kafka </tag>
+            
+            <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> HA </tag>
+            
+            <tag> Producer </tag>
+            
+            <tag> HA缓存 </tag>
+            
+            <tag> leader Partition </tag>
+            
+            <tag> follow partitions </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Apache Kafka原理详解-进阶1</title>
+      <link href="/2017/11/20/Apache-Kafka%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3-%E8%BF%9B%E9%98%B61/"/>
+      <url>/2017/11/20/Apache-Kafka%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3-%E8%BF%9B%E9%98%B61/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> kafka </tag>
+            
+            <tag> zookeeper </tag>
+            
+            <tag> producer </tag>
+            
+            <tag> consumer </tag>
+            
+            <tag> broker </tag>
+            
+            <tag> Topic </tag>
+            
+            <tag> MQ </tag>
+            
+            <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Tomcat部署实例集群监控</title>
+      <link href="/2017/11/18/Tomcat%E9%83%A8%E7%BD%B2%E5%AE%9E%E4%BE%8B%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7/"/>
+      <url>/2017/11/18/Tomcat%E9%83%A8%E7%BD%B2%E5%AE%9E%E4%BE%8B%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Tomcat </tag>
+            
+            <tag> Tomcat多实例 </tag>
+            
+            <tag> Tomcat集群 </tag>
+            
+            <tag> java war打包解压 </tag>
+            
+            <tag> Tomcat反向代理集群 </tag>
+            
+            <tag> 部署Jpress博客站点 </tag>
+            
+            <tag> Tomcat zabbix监控 </tag>
+            
+            <tag> Tomcat降权启动 </tag>
+            
+            <tag> Tomcat普通用户启动 </tag>
+            
+            <tag> jstack </tag>
+            
+            <tag> jps </tag>
+            
+            <tag> Tomcat优化 </tag>
+            
+            <tag> Tomcat安全优化 </tag>
+            
+            <tag> Tomcat性能优化 </tag>
+            
+            <tag> JVM调优 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>分布式消息队列RocketMQ部署-进阶2</title>
+      <link href="/2017/11/16/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97RocketMQ%E9%83%A8%E7%BD%B2-%E8%BF%9B%E9%98%B62/"/>
+      <url>/2017/11/16/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97RocketMQ%E9%83%A8%E7%BD%B2-%E8%BF%9B%E9%98%B62/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 消息队列 </tag>
+            
+            <tag> RocketMQ </tag>
+            
+            <tag> 分布式消息队列 </tag>
+            
+            <tag> nameserver </tag>
+            
+            <tag> brokerserver </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>批量删除100w+文件或目录-Linux</title>
+      <link href="/2017/11/16/%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A41w-%E6%96%87%E4%BB%B6%E6%88%96%E7%9B%AE%E5%BD%95-Linux/"/>
+      <url>/2017/11/16/%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A41w-%E6%96%87%E4%BB%B6%E6%88%96%E7%9B%AE%E5%BD%95-Linux/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Argument list too long </tag>
+            
+            <tag> SHELL编程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>CentOS6.X安装Python2.7</title>
+      <link href="/2017/11/16/CentOS6-X%E5%AE%89%E8%A3%85Python2-7/"/>
+      <url>/2017/11/16/CentOS6-X%E5%AE%89%E8%A3%85Python2-7/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Python </tag>
+            
+            <tag> CentOS6 </tag>
+            
+            <tag> Python2.7 </tag>
+            
+            <tag> SCL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>分布式消息队列RocketMQ原理-进阶1</title>
+      <link href="/2017/11/14/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97RocketMQ%E5%8E%9F%E7%90%86-%E8%BF%9B%E9%98%B61/"/>
+      <url>/2017/11/14/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97RocketMQ%E5%8E%9F%E7%90%86-%E8%BF%9B%E9%98%B61/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Producer </tag>
+            
+            <tag> RocketMQ </tag>
+            
+            <tag> Consumer </tag>
+            
+            <tag> TOPIC </tag>
+            
+            <tag> Name Server </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Redis代理Twemproxy安装配置使用</title>
+      <link href="/2017/11/13/Redis%E4%BB%A3%E7%90%86Twemproxy%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8/"/>
+      <url>/2017/11/13/Redis%E4%BB%A3%E7%90%86Twemproxy%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> redis代理 </tag>
+            
+            <tag> memcache代理 </tag>
+            
+            <tag> Twitter </tag>
+            
+            <tag> redis-benchmark </tag>
+            
+            <tag> Twemproxy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zabbix监控高级-进阶2</title>
+      <link href="/2017/11/12/zabbix%E7%9B%91%E6%8E%A7%E9%AB%98%E7%BA%A7-%E8%BF%9B%E9%98%B62/"/>
+      <url>/2017/11/12/zabbix%E7%9B%91%E6%8E%A7%E9%AB%98%E7%BA%A7-%E8%BF%9B%E9%98%B62/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> zabbix-server </tag>
+            
+            <tag> zabbix-agent </tag>
+            
+            <tag> zabbix-proxy </tag>
+            
+            <tag> zabbix windows </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Redis Cluster集群部署-实战1</title>
+      <link href="/2017/11/07/Redis-Cluster%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2-%E5%AE%9E%E6%88%981/"/>
+      <url>/2017/11/07/Redis-Cluster%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2-%E5%AE%9E%E6%88%981/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Redis </tag>
+            
+            <tag> redis集群 </tag>
+            
+            <tag> cluster </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>DNS加密代理之shadowDNS</title>
+      <link href="/2017/11/04/DNS%E5%8A%A0%E5%AF%86%E4%BB%A3%E7%90%86%E4%B9%8BshadowDNS/"/>
+      <url>/2017/11/04/DNS%E5%8A%A0%E5%AF%86%E4%BB%A3%E7%90%86%E4%B9%8BshadowDNS/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shadowsocks </tag>
+            
+            <tag> shadowdns </tag>
+            
+            <tag> 加密代理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>redis入门及使用</title>
+      <link href="/2017/11/04/redis%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/"/>
+      <url>/2017/11/04/redis%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> NoSQL </tag>
+            
+            <tag> redis </tag>
+            
+            <tag> web缓存 </tag>
+            
+            <tag> 非关系型数据库 </tag>
+            
+            <tag> Redis主从 </tag>
+            
+            <tag> redis-server </tag>
+            
+            <tag> redis-cli </tag>
+            
+            <tag> redis持久化 </tag>
+            
+            <tag> RDB </tag>
+            
+            <tag> AOF </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zabbix监控高级-进阶1</title>
+      <link href="/2017/10/29/zabbix%E7%9B%91%E6%8E%A7%E9%AB%98%E7%BA%A7-%E8%BF%9B%E9%98%B61/"/>
+      <url>/2017/10/29/zabbix%E7%9B%91%E6%8E%A7%E9%AB%98%E7%BA%A7-%E8%BF%9B%E9%98%B61/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> snmp </tag>
+            
+            <tag> agent </tag>
+            
+            <tag> 自定义key监控 </tag>
+            
+            <tag> 图形乱码 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>saltstack安装redis</title>
+      <link href="/2017/10/25/saltstack%E5%AE%89%E8%A3%85redis/"/>
+      <url>/2017/10/25/saltstack%E5%AE%89%E8%A3%85redis/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> redis </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> saltenv=prod </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>saltstack安装keepalived</title>
+      <link href="/2017/10/25/saltstack%E5%AE%89%E8%A3%85keepalived/"/>
+      <url>/2017/10/25/saltstack%E5%AE%89%E8%A3%85keepalived/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> keepalived </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> salt主机名判断 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>saltstack进阶学习5</title>
+      <link href="/2017/10/25/saltstack%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A05/"/>
+      <url>/2017/10/25/saltstack%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A05/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> keepalived </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> salt-master高可用 </tag>
+            
+            <tag> salt-API </tag>
+            
+            <tag> salt-ssh </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>saltstack安装zabbix_agent</title>
+      <link href="/2017/10/25/saltstack%E5%AE%89%E8%A3%85zabbix-agent/"/>
+      <url>/2017/10/25/saltstack%E5%AE%89%E8%A3%85zabbix-agent/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> zabbix_agent </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>saltstack进阶学习4</title>
+      <link href="/2017/10/22/saltstack%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A04/"/>
+      <url>/2017/10/22/saltstack%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A04/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> salt本地管理 </tag>
+            
+            <tag> 无master架构 </tag>
+            
+            <tag> include </tag>
+            
+            <tag> salt job </tag>
+            
+            <tag> cache mariadb </tag>
+            
+            <tag> salt-run </tag>
+            
+            <tag> mariadb </tag>
+            
+            <tag> minion_id </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zabbix-精讲</title>
+      <link href="/2017/10/21/zabbix-%E7%B2%BE%E8%AE%B2/"/>
+      <url>/2017/10/21/zabbix-%E7%B2%BE%E8%AE%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> 编译安装zabbix </tag>
+            
+            <tag> 自定义脚本监控 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>saltstack-jinja2模板-进阶3</title>
+      <link href="/2017/10/19/saltstack-jinja2%E6%A8%A1%E6%9D%BF-%E8%BF%9B%E9%98%B63/"/>
+      <url>/2017/10/19/saltstack-jinja2%E6%A8%A1%E6%9D%BF-%E8%BF%9B%E9%98%B63/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> jinja2 </tag>
+            
+            <tag> 模板 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>saltstack进阶学习2</title>
+      <link href="/2017/10/18/saltstack%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A02/"/>
+      <url>/2017/10/18/saltstack%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A02/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> salt命令格式 </tag>
+            
+            <tag> salt执行模块 </tag>
+            
+            <tag> salt状态模块 </tag>
+            
+            <tag> YAML格式规范 </tag>
+            
+            <tag> cmd.run </tag>
+            
+            <tag> top.sls </tag>
+            
+            <tag> require </tag>
+            
+            <tag> watch </tag>
+            
+            <tag> sls </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>CentOS7 安装及破解confluence</title>
+      <link href="/2017/10/17/CentOS7-%E5%AE%89%E8%A3%85%E5%8F%8A%E7%A0%B4%E8%A7%A3confluence/"/>
+      <url>/2017/10/17/CentOS7-%E5%AE%89%E8%A3%85%E5%8F%8A%E7%A0%B4%E8%A7%A3confluence/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> confluence </tag>
+            
+            <tag> mysql二进制安装 </tag>
+            
+            <tag> jdk二进制安装 </tag>
+            
+            <tag> 团队协作 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ntp漏洞修复</title>
+      <link href="/2017/10/16/ntp%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D/"/>
+      <url>/2017/10/16/ntp%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ntp漏洞 </tag>
+            
+            <tag> 肉鸡 </tag>
+            
+            <tag> 漏洞修复 </tag>
+            
+            <tag> 补丁升级 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>SaltStack部署for CentOS7</title>
+      <link href="/2017/10/14/SaltStack%E9%83%A8%E7%BD%B2for-CentOS7/"/>
+      <url>/2017/10/14/SaltStack%E9%83%A8%E7%BD%B2for-CentOS7/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> ansible </tag>
+            
+            <tag> 自动化部署 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>keepalived精讲</title>
+      <link href="/2017/10/14/keepalived%E7%B2%BE%E8%AE%B2/"/>
+      <url>/2017/10/14/keepalived%E7%B2%BE%E8%AE%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> keepalived </tag>
+            
+            <tag> LVS </tag>
+            
+            <tag> 多实例 </tag>
+            
+            <tag> 双主 </tag>
+            
+            <tag> 脑裂 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>在生产环境中-P2P分发大软件包的应用-Murder</title>
+      <link href="/2017/10/12/%E5%9C%A8%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%ADP2P%E5%88%86%E5%8F%91%E5%A4%A7%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%9A%84%E5%BA%94%E7%94%A8-Murder/"/>
+      <url>/2017/10/12/%E5%9C%A8%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%ADP2P%E5%88%86%E5%8F%91%E5%A4%A7%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%9A%84%E5%BA%94%E7%94%A8-Murder/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Twitter </tag>
+            
+            <tag> murder </tag>
+            
+            <tag> 软件分发 </tag>
+            
+            <tag> P2P分发 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Nginx配置文件-用法详解</title>
+      <link href="/2017/09/28/Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/"/>
+      <url>/2017/09/28/Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> php-fpm </tag>
+            
+            <tag> FastCGI </tag>
+            
+            <tag> php </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>SSDB-NoSQL数据库部署</title>
+      <link href="/2017/09/26/SSDB-NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/09/26/SSDB-NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> NoSQL </tag>
+            
+            <tag> redis </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+            <tag> ssdb </tag>
+            
+            <tag> LevelDB </tag>
+            
+            <tag> 主从复制 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>fstab磁盘自动挂载问题</title>
+      <link href="/2017/09/24/fstab%E7%A3%81%E7%9B%98%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD%E9%97%AE%E9%A2%98/"/>
+      <url>/2017/09/24/fstab%E7%A3%81%E7%9B%98%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 磁盘挂载 </tag>
+            
+            <tag> fstab </tag>
+            
+            <tag> 开机挂载 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>CentOS7-创建网卡子接口</title>
+      <link href="/2017/09/24/CentOS7-%E5%88%9B%E5%BB%BA%E7%BD%91%E5%8D%A1%E5%AD%90%E6%8E%A5%E5%8F%A3/"/>
+      <url>/2017/09/24/CentOS7-%E5%88%9B%E5%BB%BA%E7%BD%91%E5%8D%A1%E5%AD%90%E6%8E%A5%E5%8F%A3/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 网卡 </tag>
+            
+            <tag> 子接口 </tag>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>GlusterFS存储</title>
+      <link href="/2017/09/24/GlusterFS%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/"/>
+      <url>/2017/09/24/GlusterFS%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> GlusterFS </tag>
+            
+            <tag> SAN </tag>
+            
+            <tag> NAS </tag>
+            
+            <tag> 分布式存储 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Nginx负载均衡</title>
+      <link href="/2017/09/23/Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
+      <url>/2017/09/23/Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Nginx </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+            <tag> keepalived </tag>
+            
+            <tag> upstream </tag>
+            
+            <tag> pass_proxy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>redis-Cluster集群部署</title>
+      <link href="/2017/09/20/Redis-Cluster%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/09/20/Redis-Cluster%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> redis </tag>
+            
+            <tag> PHP </tag>
+            
+            <tag> ruby </tag>
+            
+            <tag> redis cluster </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Give root password for maintenance系统修复</title>
+      <link href="/2017/09/20/Give-root-password-for-maintenance%E7%B3%BB%E7%BB%9F%E4%BF%AE%E5%A4%8D/"/>
+      <url>/2017/09/20/Give-root-password-for-maintenance%E7%B3%BB%E7%BB%9F%E4%BF%AE%E5%A4%8D/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> give </tag>
+            
+            <tag> maintenance </tag>
+            
+            <tag> Control </tag>
+            
+            <tag> 系统修复 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>使用taskset命令-让程序在指定CPU上运行</title>
+      <link href="/2017/09/19/%E4%BD%BF%E7%94%A8taskset%E5%91%BD%E4%BB%A4-%E8%AE%A9%E7%A8%8B%E5%BA%8F%E5%9C%A8%E6%8C%87%E5%AE%9ACPU%E4%B8%8A%E8%BF%90%E8%A1%8C/"/>
+      <url>/2017/09/19/%E4%BD%BF%E7%94%A8taskset%E5%91%BD%E4%BB%A4-%E8%AE%A9%E7%A8%8B%E5%BA%8F%E5%9C%A8%E6%8C%87%E5%AE%9ACPU%E4%B8%8A%E8%BF%90%E8%A1%8C/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> cpu </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> taskset </tag>
+            
+            <tag> PID </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Nginx忽略favicon.ico访问记录</title>
+      <link href="/2017/09/19/Nginx%E5%BF%BD%E7%95%A5favicon-ico%E8%AE%BF%E9%97%AE%E8%AE%B0%E5%BD%95/"/>
+      <url>/2017/09/19/Nginx%E5%BF%BD%E7%95%A5favicon-ico%E8%AE%BF%E9%97%AE%E8%AE%B0%E5%BD%95/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> favicon.ico </tag>
+            
+            <tag> access </tag>
+            
+            <tag> log </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Opcache让PHP性能加速</title>
+      <link href="/2017/09/19/Opcache%E8%AE%A9PHP%E6%80%A7%E8%83%BD%E5%8A%A0%E9%80%9F/"/>
+      <url>/2017/09/19/Opcache%E8%AE%A9PHP%E6%80%A7%E8%83%BD%E5%8A%A0%E9%80%9F/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> PHP </tag>
+            
+            <tag> opcache </tag>
+            
+            <tag> 性能加速 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>深入理解tmpfs内存文件系统</title>
+      <link href="/2017/09/19/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3tmpfs%E5%86%85%E5%AD%98%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"/>
+      <url>/2017/09/19/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3tmpfs%E5%86%85%E5%AD%98%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> PHP </tag>
+            
+            <tag> 内存 </tag>
+            
+            <tag> tmpfs </tag>
+            
+            <tag> VM </tag>
+            
+            <tag> RM </tag>
+            
+            <tag> Mysql </tag>
+            
+            <tag> swap </tag>
+            
+            <tag> 内存文件系统 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>RAID阵列卡缓存机制</title>
+      <link href="/2017/09/19/RAID%E9%98%B5%E5%88%97%E5%8D%A1%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/"/>
+      <url>/2017/09/19/RAID%E9%98%B5%E5%88%97%E5%8D%A1%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> RAID </tag>
+            
+            <tag> 阵列卡 </tag>
+            
+            <tag> 缓存 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>buffer与cache的深入理解</title>
+      <link href="/2017/09/19/buffer%E4%B8%8Ecache%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/"/>
+      <url>/2017/09/19/buffer%E4%B8%8Ecache%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> buffer </tag>
+            
+            <tag> cache </tag>
+            
+            <tag> 读缓存 </tag>
+            
+            <tag> 写缓冲 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>使用Nginx反向代理做cache缓存-实现CDN功能</title>
+      <link href="/2017/09/17/%E4%BD%BF%E7%94%A8Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%81%9Acache%E7%BC%93%E5%AD%98-%E5%AE%9E%E7%8E%B0CDN%E5%8A%9F%E8%83%BD/"/>
+      <url>/2017/09/17/%E4%BD%BF%E7%94%A8Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%81%9Acache%E7%BC%93%E5%AD%98-%E5%AE%9E%E7%8E%B0CDN%E5%8A%9F%E8%83%BD/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> curl </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> cache </tag>
+            
+            <tag> CDN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>LNMP架构-部署与配置</title>
+      <link href="/2017/09/16/LNMP%E6%9E%B6%E6%9E%84%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/09/16/LNMP%E6%9E%B6%E6%9E%84%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> LNMP </tag>
+            
+            <tag> LAMP </tag>
+            
+            <tag> LNMP编译 </tag>
+            
+            <tag> linux </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> wordpress </tag>
+            
+            <tag> mysql数据库迁移 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Nginx精讲</title>
+      <link href="/2017/09/16/Nginx%E7%B2%BE%E8%AE%B2/"/>
+      <url>/2017/09/16/Nginx%E7%B2%BE%E8%AE%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> curl </tag>
+            
+            <tag> htpasswd </tag>
+            
+            <tag> 日志切割 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>keepalived(主从)+LVS(DR模型)+DNS实现高可用集群服务</title>
+      <link href="/2017/09/14/keepalived-%E4%B8%BB%E4%BB%8E-LVS-DR%E6%A8%A1%E5%9E%8B-DNS%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1/"/>
+      <url>/2017/09/14/keepalived-%E4%B8%BB%E4%BB%8E-LVS-DR%E6%A8%A1%E5%9E%8B-DNS%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 高可用 </tag>
+            
+            <tag> lvs </tag>
+            
+            <tag> keepalived </tag>
+            
+            <tag> dns </tag>
+            
+            <tag> dr </tag>
+            
+            <tag> dns主从 </tag>
+            
+            <tag> 集群 </tag>
+            
+            <tag> VRRP </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>HTTP_Web之Nginx详解</title>
+      <link href="/2017/09/14/HTTP-Web%E4%B9%8BNginx%E8%AF%A6%E8%A7%A3/"/>
+      <url>/2017/09/14/HTTP-Web%E4%B9%8BNginx%E8%AF%A6%E8%A7%A3/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> http </tag>
+            
+            <tag> https </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> URL </tag>
+            
+            <tag> URI </tag>
+            
+            <tag> web </tag>
+            
+            <tag> curl </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>tmux使用技巧-备忘</title>
+      <link href="/2017/09/08/tmux%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7-%E5%A4%87%E5%BF%98/"/>
+      <url>/2017/09/08/tmux%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7-%E5%A4%87%E5%BF%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> tmux </tag>
+            
+            <tag> 会话 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cacti插件-weathermap安装与使用</title>
+      <link href="/2017/09/07/cacti%E6%8F%92%E4%BB%B6-weathermap%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/"/>
+      <url>/2017/09/07/cacti%E6%8F%92%E4%BB%B6-weathermap%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> cacti </tag>
+            
+            <tag> weathermap </tag>
+            
+            <tag> plugin </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>haproxy_nginx高可用负载均衡</title>
+      <link href="/2017/09/04/keepalived-haproxy-nginx%E9%AB%98%E5%8F%AF%E7%94%A8%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
+      <url>/2017/09/04/keepalived-haproxy-nginx%E9%AB%98%E5%8F%AF%E7%94%A8%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> lvs </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+            <tag> keepalived </tag>
+            
+            <tag> haproxy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>PHP分布式Redis实现session</title>
+      <link href="/2017/09/03/PHP%E5%88%86%E5%B8%83%E5%BC%8FRedis%E5%AE%9E%E7%8E%B0session/"/>
+      <url>/2017/09/03/PHP%E5%88%86%E5%B8%83%E5%BC%8FRedis%E5%AE%9E%E7%8E%B0session/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> redis </tag>
+            
+            <tag> php </tag>
+            
+            <tag> cookie </tag>
+            
+            <tag> memcached </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ITIL v3凸显IT服务价值</title>
+      <link href="/2017/09/03/ITIL-v3%E5%87%B8%E6%98%BEIT%E6%9C%8D%E5%8A%A1%E4%BB%B7%E5%80%BC/"/>
+      <url>/2017/09/03/ITIL-v3%E5%87%B8%E6%98%BEIT%E6%9C%8D%E5%8A%A1%E4%BB%B7%E5%80%BC/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+            <tag> IT </tag>
+            
+            <tag> ITIL </tag>
+            
+            <tag> PPT </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ansible自动化-实现(较全)</title>
+      <link href="/2017/09/02/ansible%E8%87%AA%E5%8A%A8%E5%8C%96-%E5%AE%9E%E7%8E%B0-%E8%BE%83%E5%85%A8/"/>
+      <url>/2017/09/02/ansible%E8%87%AA%E5%8A%A8%E5%8C%96-%E5%AE%9E%E7%8E%B0-%E8%BE%83%E5%85%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 自动化 </tag>
+            
+            <tag> saltstack </tag>
+            
+            <tag> ansible </tag>
+            
+            <tag> 剧本 </tag>
+            
+            <tag> playbooks </tag>
+            
+            <tag> ssh </tag>
+            
+            <tag> 批量自动化管理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ssh基于密钥的安全认证</title>
+      <link href="/2017/09/02/ssh%E5%9F%BA%E4%BA%8E%E5%AF%86%E9%92%A5%E7%9A%84%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/"/>
+      <url>/2017/09/02/ssh%E5%9F%BA%E4%BA%8E%E5%AF%86%E9%92%A5%E7%9A%84%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ssh </tag>
+            
+            <tag> dsa </tag>
+            
+            <tag> 密钥 </tag>
+            
+            <tag> 认证 </tag>
+            
+            <tag> 免密登陆 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cobbler ks参数-详解</title>
+      <link href="/2017/09/01/cobbler-ks%E5%8F%82%E6%95%B0-%E8%AF%A6%E8%A7%A3/"/>
+      <url>/2017/09/01/cobbler-ks%E5%8F%82%E6%95%B0-%E8%AF%A6%E8%A7%A3/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 自动化 </tag>
+            
+            <tag> cobbler </tag>
+            
+            <tag> kickstart </tag>
+            
+            <tag> ks </tag>
+            
+            <tag> 系统批量安装 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>nginx优化</title>
+      <link href="/2017/08/31/nginx%E4%BC%98%E5%8C%96/"/>
+      <url>/2017/08/31/nginx%E4%BC%98%E5%8C%96/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> http </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> TCP </tag>
+            
+            <tag> socket </tag>
+            
+            <tag> 优化 </tag>
+            
+            <tag> ulimit </tag>
+            
+            <tag> tcp_nopush </tag>
+            
+            <tag> tcp_nodelay </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Cacti网卡流量达到100M后-流量图不准问题</title>
+      <link href="/2017/08/30/Cacti%E7%BD%91%E5%8D%A1%E6%B5%81%E9%87%8F%E8%BE%BE%E5%88%B0100M%E5%90%8E-%E6%B5%81%E9%87%8F%E5%9B%BE%E4%B8%8D%E5%87%86%E9%97%AE%E9%A2%98/"/>
+      <url>/2017/08/30/Cacti%E7%BD%91%E5%8D%A1%E6%B5%81%E9%87%8F%E8%BE%BE%E5%88%B0100M%E5%90%8E-%E6%B5%81%E9%87%8F%E5%9B%BE%E4%B8%8D%E5%87%86%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> cacti </tag>
+            
+            <tag> 100M </tag>
+            
+            <tag> 流量不准 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> 监控 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>深入理解TCP Socket</title>
+      <link href="/2017/08/28/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3TCP-Socket/"/>
+      <url>/2017/08/28/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3TCP-Socket/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> HTTP </tag>
+            
+            <tag> socket </tag>
+            
+            <tag> 套接字 </tag>
+            
+            <tag> firebug </tag>
+            
+            <tag> 五元组 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>OSI7层网络模型</title>
+      <link href="/2017/08/28/OSI7%E5%B1%82%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/"/>
+      <url>/2017/08/28/OSI7%E5%B1%82%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> OSI7层网络模型 </tag>
+            
+            <tag> OSI </tag>
+            
+            <tag> TCP </tag>
+            
+            <tag> UDP </tag>
+            
+            <tag> 网络模型 </tag>
+            
+            <tag> 底层核心 </tag>
+            
+            <tag> 三次握手 </tag>
+            
+            <tag> 四次挥手 </tag>
+            
+            <tag> HTTP </tag>
+            
+            <tag> socket </tag>
+            
+            <tag> 套接字 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ssh命令</title>
+      <link href="/2017/08/26/ssh%E5%91%BD%E4%BB%A4/"/>
+      <url>/2017/08/26/ssh%E5%91%BD%E4%BB%A4/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ssh </tag>
+            
+            <tag> sftp </tag>
+            
+            <tag> telnet </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>sersync+rsync实时同步</title>
+      <link href="/2017/08/26/sersync+rsync%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5/"/>
+      <url>/2017/08/26/sersync+rsync%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> sersync </tag>
+            
+            <tag> 实时同步 </tag>
+            
+            <tag> sync </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>inotify+rsync实时同步</title>
+      <link href="/2017/08/26/inotify+rsync%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5/"/>
+      <url>/2017/08/26/inotify+rsync%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> sersync </tag>
+            
+            <tag> inotify </tag>
+            
+            <tag> 实时同步 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ceph分布式存储</title>
+      <link href="/2017/08/25/ceph%E5%AD%98%E5%82%A8/"/>
+      <url>/2017/08/25/ceph%E5%AD%98%E5%82%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 分布式存储 </tag>
+            
+            <tag> ceph </tag>
+            
+            <tag> 对象存储 </tag>
+            
+            <tag> 块存储 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>nginx生产环境-案例1</title>
+      <link href="/2017/08/24/nginx%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83-%E6%A1%88%E4%BE%8B1/"/>
+      <url>/2017/08/24/nginx%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83-%E6%A1%88%E4%BE%8B1/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> https </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> 80 </tag>
+            
+            <tag> 443 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>mysql故障处理之匿名登陆问题</title>
+      <link href="/2017/08/22/MySQL%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E4%B9%8B%E5%8C%BF%E5%90%8D%E7%99%BB%E9%99%86%E9%97%AE%E9%A2%98/"/>
+      <url>/2017/08/22/MySQL%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E4%B9%8B%E5%8C%BF%E5%90%8D%E7%99%BB%E9%99%86%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> Error1044 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>单用户模式下mount -o remount,rw / 用途</title>
+      <link href="/2017/08/19/%E5%8D%95%E7%94%A8%E6%88%B7%E6%A8%A1%E5%BC%8F%E4%B8%8Bmount-o-remount-rw-%E7%94%A8%E9%80%94/"/>
+      <url>/2017/08/19/%E5%8D%95%E7%94%A8%E6%88%B7%E6%A8%A1%E5%BC%8F%E4%B8%8Bmount-o-remount-rw-%E7%94%A8%E9%80%94/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 单用户模式 </tag>
+            
+            <tag> 只读模式 </tag>
+            
+            <tag> fatab </tag>
+            
+            <tag> mount </tag>
+            
+            <tag> remount </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>NFS文件存储系统-部署</title>
+      <link href="/2017/08/19/NFS%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F-%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/08/19/NFS%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F-%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 分布式存储 </tag>
+            
+            <tag> fastdfs </tag>
+            
+            <tag> nfs </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>exit退出状态码的另类应用</title>
+      <link href="/2017/08/18/exit%E9%80%80%E5%87%BA%E7%8A%B6%E6%80%81%E7%A0%81%E7%9A%84%E5%8F%A6%E7%B1%BB%E5%BA%94%E7%94%A8/"/>
+      <url>/2017/08/18/exit%E9%80%80%E5%87%BA%E7%8A%B6%E6%80%81%E7%A0%81%E7%9A%84%E5%8F%A6%E7%B1%BB%E5%BA%94%E7%94%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> exit退出码 </tag>
+            
+            <tag> shell编程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>关于apache大文件下载的坑</title>
+      <link href="/2017/08/18/%E5%85%B3%E4%BA%8Eapache%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E7%9A%84%E5%9D%91/"/>
+      <url>/2017/08/18/%E5%85%B3%E4%BA%8Eapache%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E7%9A%84%E5%9D%91/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
+            
+            <tag> nginx </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ip自动配置脚本</title>
+      <link href="/2017/08/18/ip%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E8%84%9A%E6%9C%AC/"/>
+      <url>/2017/08/18/ip%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E8%84%9A%E6%9C%AC/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell脚本 </tag>
+            
+            <tag> ip自动配置 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Cobbler自动化系统部署</title>
+      <link href="/2017/08/15/Cobbler%E8%87%AA%E5%8A%A8%E5%8C%96%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/08/15/Cobbler%E8%87%AA%E5%8A%A8%E5%8C%96%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> PXE </tag>
+            
+            <tag> Cobbler </tag>
+            
+            <tag> 自动化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>rsync-全网备份项目</title>
+      <link href="/2017/08/12/rsync-%E5%85%A8%E7%BD%91%E5%A4%87%E4%BB%BD%E9%A1%B9%E7%9B%AE/"/>
+      <url>/2017/08/12/rsync-%E5%85%A8%E7%BD%91%E5%A4%87%E4%BB%BD%E9%A1%B9%E7%9B%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> rsync </tag>
+            
+            <tag> tar </tag>
+            
+            <tag> crontab </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Apache目录浏览功能-部署</title>
+      <link href="/2017/08/10/Apache%E7%9B%AE%E5%BD%95%E6%B5%8F%E8%A7%88%E5%8A%9F%E8%83%BD-%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/08/10/Apache%E7%9B%AE%E5%BD%95%E6%B5%8F%E8%A7%88%E5%8A%9F%E8%83%BD-%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
+            
+            <tag> 目录浏览 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>flume跨机房拉取内网kafka消息的问题</title>
+      <link href="/2017/08/07/flume%E8%B7%A8%E6%9C%BA%E6%88%BF%E6%8B%89%E5%8F%96%E5%86%85%E7%BD%91kafka%E6%B6%88%E6%81%AF%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+      <url>/2017/08/07/flume%E8%B7%A8%E6%9C%BA%E6%88%BF%E6%8B%89%E5%8F%96%E5%86%85%E7%BD%91kafka%E6%B6%88%E6%81%AF%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> kafka </tag>
+            
+            <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> NAT </tag>
+            
+            <tag> flume </tag>
+            
+            <tag> kafka生产消费 </tag>
+            
+            <tag> lua nginx </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>vmware虚拟机-Linux多网卡配置</title>
+      <link href="/2017/08/05/vmware%E8%99%9A%E6%8B%9F%E6%9C%BA-Linux%E5%A4%9A%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/"/>
+      <url>/2017/08/05/vmware%E8%99%9A%E6%8B%9F%E6%9C%BA-Linux%E5%A4%9A%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> vmware </tag>
+            
+            <tag> 虚拟机克隆 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>rsync备份</title>
+      <link href="/2017/08/05/%E6%9C%9F%E4%B8%AD%E6%9E%B6%E6%9E%84-rsync%E5%A4%87%E4%BB%BD/"/>
+      <url>/2017/08/05/%E6%9C%9F%E4%B8%AD%E6%9E%B6%E6%9E%84-rsync%E5%A4%87%E4%BB%BD/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> rsync </tag>
+            
+            <tag> 备份 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>使用nginx实现HTTP负载均衡-官网翻译版</title>
+      <link href="/2017/08/03/%E4%BD%BF%E7%94%A8nginx%E5%AE%9E%E7%8E%B0HTTP%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E5%AE%98%E7%BD%91%E7%BF%BB%E8%AF%91%E7%89%88/"/>
+      <url>/2017/08/03/%E4%BD%BF%E7%94%A8nginx%E5%AE%9E%E7%8E%B0HTTP%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E5%AE%98%E7%BD%91%E7%BF%BB%E8%AF%91%E7%89%88/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+            <tag> HTTP </tag>
+            
+            <tag> round-robin轮询 </tag>
+            
+            <tag> least-connected最少连接 </tag>
+            
+            <tag> ip-hash </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>HA高可用之Heartbeat-部署</title>
+      <link href="/2017/08/03/HA%E9%AB%98%E5%8F%AF%E7%94%A8%E4%B9%8BHeartbeat-%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/08/03/HA%E9%AB%98%E5%8F%AF%E7%94%A8%E4%B9%8BHeartbeat-%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> HA </tag>
+            
+            <tag> 高可用 </tag>
+            
+            <tag> 双机热备 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Cacti实战-交换机接口显示错误以及流量断图</title>
+      <link href="/2017/08/02/Cacti%E5%AE%9E%E6%88%98-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%8E%A5%E5%8F%A3%E6%98%BE%E7%A4%BA%E9%94%99%E8%AF%AF%E4%BB%A5%E5%8F%8A%E6%B5%81%E9%87%8F%E6%96%AD%E5%9B%BE/"/>
+      <url>/2017/08/02/Cacti%E5%AE%9E%E6%88%98-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%8E%A5%E5%8F%A3%E6%98%BE%E7%A4%BA%E9%94%99%E8%AF%AF%E4%BB%A5%E5%8F%8A%E6%B5%81%E9%87%8F%E6%96%AD%E5%9B%BE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Cacti </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>HA高可用之Heartbeat[理论]</title>
+      <link href="/2017/08/02/HA%E9%AB%98%E5%8F%AF%E7%94%A8%E4%B9%8BHeartbeat-%E7%90%86%E8%AE%BA/"/>
+      <url>/2017/08/02/HA%E9%AB%98%E5%8F%AF%E7%94%A8%E4%B9%8BHeartbeat-%E7%90%86%E8%AE%BA/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> HA </tag>
+            
+            <tag> 高可用 </tag>
+            
+            <tag> 双机热备 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zabbix添加收取邮件/短信等告警权限</title>
+      <link href="/2017/08/02/zabbix%E6%B7%BB%E5%8A%A0%E6%94%B6%E5%8F%96%E9%82%AE%E4%BB%B6-%E7%9F%AD%E4%BF%A1%E7%AD%89%E5%91%8A%E8%AD%A6%E6%9D%83%E9%99%90/"/>
+      <url>/2017/08/02/zabbix%E6%B7%BB%E5%8A%A0%E6%94%B6%E5%8F%96%E9%82%AE%E4%BB%B6-%E7%9F%AD%E4%BF%A1%E7%AD%89%E5%91%8A%E8%AD%A6%E6%9D%83%E9%99%90/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> 告警 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩-期中架构-Linux[路由转发]跨网段通信</title>
+      <link href="/2017/08/01/%E8%80%81%E7%94%B7%E5%AD%A9-%E6%9C%9F%E4%B8%AD%E6%9E%B6%E6%9E%84-Linux-%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91-%E8%B7%A8%E7%BD%91%E6%AE%B5%E9%80%9A%E4%BF%A1/"/>
+      <url>/2017/08/01/%E8%80%81%E7%94%B7%E5%AD%A9-%E6%9C%9F%E4%B8%AD%E6%9E%B6%E6%9E%84-Linux-%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91-%E8%B7%A8%E7%BD%91%E6%AE%B5%E9%80%9A%E4%BF%A1/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 期中架构 </tag>
+            
+            <tag> Linux路由转发 </tag>
+            
+            <tag> 跨网段通信 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩-网络讲解</title>
+      <link href="/2017/08/01/%E8%80%81%E7%94%B7%E5%AD%A9-%E7%BD%91%E7%BB%9C%E8%AE%B2%E8%A7%A3/"/>
+      <url>/2017/08/01/%E8%80%81%E7%94%B7%E5%AD%A9-%E7%BD%91%E7%BB%9C%E8%AE%B2%E8%A7%A3/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> 网络 </tag>
+            
+            <tag> IP划分 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>期中架构-流程图</title>
+      <link href="/2017/07/29/%E6%9C%9F%E4%B8%AD%E6%9E%B6%E6%9E%84-%E6%B5%81%E7%A8%8B%E5%9B%BE/"/>
+      <url>/2017/07/29/%E6%9C%9F%E4%B8%AD%E6%9E%B6%E6%9E%84-%E6%B5%81%E7%A8%8B%E5%9B%BE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 期中架构 </tag>
+            
+            <tag> 备份服务 </tag>
+            
+            <tag> web服务 </tag>
+            
+            <tag> 批量管理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Shell编程之Bash循环</title>
+      <link href="/2017/07/24/Shell%E7%BC%96%E7%A8%8B%E4%B9%8BBash%E5%BE%AA%E7%8E%AF/"/>
+      <url>/2017/07/24/Shell%E7%BC%96%E7%A8%8B%E4%B9%8BBash%E5%BE%AA%E7%8E%AF/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> for循环 </tag>
+            
+            <tag> while循环 </tag>
+            
+            <tag> until循环 </tag>
+            
+            <tag> select循环 </tag>
+            
+            <tag> break </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>shell if语句-条件执行</title>
+      <link href="/2017/07/19/shell%20if%E8%AF%AD%E5%8F%A5-%E6%9D%A1%E4%BB%B6%E6%89%A7%E8%A1%8C/"/>
+      <url>/2017/07/19/shell%20if%E8%AF%AD%E5%8F%A5-%E6%9D%A1%E4%BB%B6%E6%89%A7%E8%A1%8C/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩-day12-shell</title>
+      <link href="/2017/07/15/%E8%80%81%E7%94%B7%E5%AD%A9-day12-shell%E7%BC%96%E7%A8%8B/"/>
+      <url>/2017/07/15/%E8%80%81%E7%94%B7%E5%AD%A9-day12-shell%E7%BC%96%E7%A8%8B/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>shell变量类型</title>
+      <link href="/2017/07/15/shell%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B/"/>
+      <url>/2017/07/15/shell%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> shell </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Ansible常用模块</title>
+      <link href="/2017/07/11/Ansible%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/"/>
+      <url>/2017/07/11/Ansible%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Ansible </tag>
+            
+            <tag> 模块 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Ansible自动化入门</title>
+      <link href="/2017/07/11/Ansible%E8%87%AA%E5%8A%A8%E5%8C%96%E5%85%A5%E9%97%A8/"/>
+      <url>/2017/07/11/Ansible%E8%87%AA%E5%8A%A8%E5%8C%96%E5%85%A5%E9%97%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Ansible </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Cloudera_Manager-CDH5.2.0部署</title>
+      <link href="/2017/07/10/Cloudera-Manager-CDH5-2-0%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/07/10/Cloudera-Manager-CDH5-2-0%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> CDH </tag>
+            
+            <tag> 大数据 </tag>
+            
+            <tag> Hadoop </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cloudera manager群集安装报错</title>
+      <link href="/2017/07/10/cloudera-manager%E7%BE%A4%E9%9B%86%E5%AE%89%E8%A3%85%E6%8A%A5%E9%94%99/"/>
+      <url>/2017/07/10/cloudera-manager%E7%BE%A4%E9%9B%86%E5%AE%89%E8%A3%85%E6%8A%A5%E9%94%99/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> CDH </tag>
+            
+            <tag> 大数据 </tag>
+            
+            <tag> cloudera </tag>
+            
+            <tag> socket.gaierror </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩-Day11-磁盘管理与AWK数组</title>
+      <link href="/2017/07/08/%E8%80%81%E7%94%B7%E5%AD%A9-Day11-%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86%E4%B8%8EAWK%E6%95%B0%E7%BB%84/"/>
+      <url>/2017/07/08/%E8%80%81%E7%94%B7%E5%AD%A9-Day11-%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86%E4%B8%8EAWK%E6%95%B0%E7%BB%84/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> awk数组 </tag>
+            
+            <tag> 磁盘管理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Yarn不能给某些机器分配任务-解决方案</title>
+      <link href="/2017/07/06/Yarn%E4%B8%8D%E8%83%BD%E7%BB%99%E6%9F%90%E4%BA%9B%E6%9C%BA%E5%99%A8%E5%88%86%E9%85%8D%E4%BB%BB%E5%8A%A1-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"/>
+      <url>/2017/07/06/Yarn%E4%B8%8D%E8%83%BD%E7%BB%99%E6%9F%90%E4%BA%9B%E6%9C%BA%E5%99%A8%E5%88%86%E9%85%8D%E4%BB%BB%E5%8A%A1-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 大数据 </tag>
+            
+            <tag> YARN </tag>
+            
+            <tag> NodeManager </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>hadoop-角色划分</title>
+      <link href="/2017/07/06/hadoop-%E8%A7%92%E8%89%B2%E5%88%92%E5%88%86/"/>
+      <url>/2017/07/06/hadoop-%E8%A7%92%E8%89%B2%E5%88%92%E5%88%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 大数据 </tag>
+            
+            <tag> hadoop </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>NTP服务器-部署</title>
+      <link href="/2017/07/06/NTP%E6%9C%8D%E5%8A%A1%E5%99%A8-%E9%83%A8%E7%BD%B2/"/>
+      <url>/2017/07/06/NTP%E6%9C%8D%E5%8A%A1%E5%99%A8-%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ntp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>CDH集群调优：内存、Vcores和DRF</title>
+      <link href="/2017/07/05/CDH%E9%9B%86%E7%BE%A4%E8%B0%83%E4%BC%98%EF%BC%9A%E5%86%85%E5%AD%98%E3%80%81Vcores%E5%92%8CDRF/"/>
+      <url>/2017/07/05/CDH%E9%9B%86%E7%BE%A4%E8%B0%83%E4%BC%98%EF%BC%9A%E5%86%85%E5%AD%98%E3%80%81Vcores%E5%92%8CDRF/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> CDH </tag>
+            
+            <tag> Vcores </tag>
+            
+            <tag> DRF </tag>
+            
+            <tag> 大数据 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ansible基本用法</title>
+      <link href="/2017/07/04/ansible%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/"/>
+      <url>/2017/07/04/ansible%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Ansible </tag>
+            
+            <tag> 高级运维 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>切换用户错误:This account is currently not available</title>
+      <link href="/2017/07/01/%E5%88%87%E6%8D%A2%E7%94%A8%E6%88%B7%E9%94%99%E8%AF%AF-This-account-is-currently-not-available/"/>
+      <url>/2017/07/01/%E5%88%87%E6%8D%A2%E7%94%A8%E6%88%B7%E9%94%99%E8%AF%AF-This-account-is-currently-not-available/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩-Day10之用户管理与磁盘</title>
+      <link href="/2017/07/01/%E8%80%81%E7%94%B7%E5%AD%A9-Day10%E4%B9%8B%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E4%B8%8E%E7%A3%81%E7%9B%98/"/>
+      <url>/2017/07/01/%E8%80%81%E7%94%B7%E5%AD%A9-Day10%E4%B9%8B%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E4%B8%8E%E7%A3%81%E7%9B%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> 用户管理 </tag>
+            
+            <tag> 磁盘 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Apache账号密码登陆验证-配置</title>
+      <link href="/2017/06/29/Apache%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86%E9%AA%8C%E8%AF%81-%E9%85%8D%E7%BD%AE/"/>
+      <url>/2017/06/29/Apache%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86%E9%AA%8C%E8%AF%81-%E9%85%8D%E7%BD%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Apache </tag>
+            
+            <tag> web认证 </tag>
+            
+            <tag> Linux基础 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>DELL cpu0000 cpu1 internal error (IERR)</title>
+      <link href="/2017/06/26/DELL-cpu0000-cpu1-internal-error-IERR/"/>
+      <url>/2017/06/26/DELL-cpu0000-cpu1-internal-error-IERR/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> cpu </tag>
+            
+            <tag> Dell </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>crontab与/tmp-相爱相守</title>
+      <link href="/2017/06/25/umount%E4%B8%8E-tmp-%E7%9B%B8%E7%88%B1%E7%9B%B8%E5%AE%88/"/>
+      <url>/2017/06/25/umount%E4%B8%8E-tmp-%E7%9B%B8%E7%88%B1%E7%9B%B8%E5%AE%88/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> umount </tag>
+            
+            <tag> tmp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩-Day9之crontab定时任务-精讲</title>
+      <link href="/2017/06/24/%E8%80%81%E7%94%B7%E5%AD%A9-Day9%E4%B9%8Bcrontab%E7%B2%BE%E8%AE%B2/"/>
+      <url>/2017/06/24/%E8%80%81%E7%94%B7%E5%AD%A9-Day9%E4%B9%8Bcrontab%E7%B2%BE%E8%AE%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> crontab </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>RAID5工作原理</title>
+      <link href="/2017/06/23/RAID5%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/"/>
+      <url>/2017/06/23/RAID5%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> RAID5 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Shadowsocks-翻墙利器</title>
+      <link href="/2017/06/21/Shadowsocks-%E7%BF%BB%E5%A2%99%E5%88%A9%E5%99%A8/"/>
+      <url>/2017/06/21/Shadowsocks-%E7%BF%BB%E5%A2%99%E5%88%A9%E5%99%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩37期-Day8-往期知识点-回顾</title>
+      <link href="/2017/06/17/%E8%80%81%E7%94%B7%E5%AD%A937%E6%9C%9F-Day8-%E5%BE%80%E6%9C%9F%E7%9F%A5%E8%AF%86%E7%82%B9-%E5%9B%9E%E9%A1%BE/"/>
+      <url>/2017/06/17/%E8%80%81%E7%94%B7%E5%AD%A937%E6%9C%9F-Day8-%E5%BE%80%E6%9C%9F%E7%9F%A5%E8%AF%86%E7%82%B9-%E5%9B%9E%E9%A1%BE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> 知识点回顾 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>正则表达式egrep/sed/awk-整理总结</title>
+      <link href="/2017/06/16/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8Fegrep-sed-awk-%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93/"/>
+      <url>/2017/06/16/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8Fegrep-sed-awk-%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> egrep </tag>
+            
+            <tag> sed </tag>
+            
+            <tag> awk </tag>
+            
+            <tag> 正则表达式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>搭建在线Yum源-CentOS6</title>
+      <link href="/2017/06/16/%E6%90%AD%E5%BB%BA%E5%9C%A8%E7%BA%BFYum%E6%BA%90/"/>
+      <url>/2017/06/16/%E6%90%AD%E5%BB%BA%E5%9C%A8%E7%BA%BFYum%E6%BA%90/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> CentOS6 </tag>
+            
+            <tag> Yum源 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>chkconfig自定义开机脚本-实现</title>
+      <link href="/2017/06/15/chkconfig%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%80%E6%9C%BA%E8%84%9A%E6%9C%AC-%E5%AE%9E%E7%8E%B0/"/>
+      <url>/2017/06/15/chkconfig%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%80%E6%9C%BA%E8%84%9A%E6%9C%AC-%E5%AE%9E%E7%8E%B0/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> 脚本 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>大数据Ganglia集群监控-CentOS6</title>
+      <link href="/2017/06/14/%E5%A4%A7%E6%95%B0%E6%8D%AEGanglia%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7-CentOS6/"/>
+      <url>/2017/06/14/%E5%A4%A7%E6%95%B0%E6%8D%AEGanglia%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7-CentOS6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 大数据 </tag>
+            
+            <tag> hadoop </tag>
+            
+            <tag> Ganglia </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>读无字书-杯子取水 </title>
+      <link href="/2017/06/14/%E8%AF%BB%E6%97%A0%E5%AD%97%E4%B9%A6-%E6%9D%AF%E5%AD%90%E5%8F%96%E6%B0%B4/"/>
+      <url>/2017/06/14/%E8%AF%BB%E6%97%A0%E5%AD%97%E4%B9%A6-%E6%9D%AF%E5%AD%90%E5%8F%96%E6%B0%B4/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+            <tag> 无字书 </tag>
+            
+            <tag> 杯子取水 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩37期-第7节课-系统权限</title>
+      <link href="/2017/06/10/%E8%80%81%E7%94%B7%E5%AD%A937%E6%9C%9F-%E7%AC%AC7%E8%8A%82%E8%AF%BE-%E7%B3%BB%E7%BB%9F%E6%9D%83%E9%99%90/"/>
+      <url>/2017/06/10/%E8%80%81%E7%94%B7%E5%AD%A937%E6%9C%9F-%E7%AC%AC7%E8%8A%82%E8%AF%BE-%E7%B3%BB%E7%BB%9F%E6%9D%83%E9%99%90/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> 系统权限 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>nginx中防止SQL注入规则</title>
+      <link href="/2017/06/08/%E9%98%B2%E6%AD%A2403-SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/"/>
+      <url>/2017/06/08/%E9%98%B2%E6%AD%A2403-SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> SQL注入 </tag>
+            
+            <tag> 403漏洞 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Typora For MarkDown-语法总结</title>
+      <link href="/2017/06/08/Typora-For-MarkDown-%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/"/>
+      <url>/2017/06/08/Typora-For-MarkDown-%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+            <tag> Typora </tag>
+            
+            <tag> MarkDown </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>lsof命令-总结</title>
+      <link href="/2017/06/07/lsof%E5%91%BD%E4%BB%A4-%E6%80%BB%E7%BB%93/"/>
+      <url>/2017/06/07/lsof%E5%91%BD%E4%BB%A4-%E6%80%BB%E7%BB%93/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> lsof </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>logrotate日志管家</title>
+      <link href="/2017/06/07/logrotate%E6%97%A5%E5%BF%97%E7%AE%A1%E5%AE%B6/"/>
+      <url>/2017/06/07/logrotate%E6%97%A5%E5%BF%97%E7%AE%A1%E5%AE%B6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> log </tag>
+            
+            <tag> logrotate </tag>
+            
+            <tag> 日志 </tag>
+            
+            <tag> 切割 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>RouterOS多线NAT问题处理</title>
+      <link href="/2017/06/05/RouterOS%E5%A4%9A%E7%BA%BFNAT%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86/"/>
+      <url>/2017/06/05/RouterOS%E5%A4%9A%E7%BA%BFNAT%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> RouterOS </tag>
+            
+            <tag> NAT </tag>
+            
+            <tag> 双线 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>老男孩37期-第6节课-正则表达式和通配符</title>
+      <link href="/2017/06/03/%E8%80%81%E7%94%B7%E5%AD%A937%E6%9C%9F-%E7%AC%AC6%E8%8A%82%E8%AF%BE-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8C%E9%80%9A%E9%85%8D%E7%AC%A6/"/>
+      <url>/2017/06/03/%E8%80%81%E7%94%B7%E5%AD%A937%E6%9C%9F-%E7%AC%AC6%E8%8A%82%E8%AF%BE-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8C%E9%80%9A%E9%85%8D%E7%AC%A6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> egrep </tag>
+            
+            <tag> sed </tag>
+            
+            <tag> awk </tag>
+            
+            <tag> 正则表达式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>mysql备份脚本-rsync上传</title>
+      <link href="/2017/06/01/mysql%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC-rsync%E4%B8%8A%E4%BC%A0/"/>
+      <url>/2017/06/01/mysql%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC-rsync%E4%B8%8A%E4%BC%A0/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> 脚本 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>免费OA/PB/CC部署</title>
+      <link href="/2017/05/31/OA/"/>
+      <url>/2017/05/31/OA/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> OA </tag>
+            
+            <tag> PB </tag>
+            
+            <tag> CC </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>xargs命令-总结</title>
+      <link href="/2017/05/31/xargs%E5%91%BD%E4%BB%A4-%E6%80%BB%E7%BB%93/"/>
+      <url>/2017/05/31/xargs%E5%91%BD%E4%BB%A4-%E6%80%BB%E7%BB%93/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> xargs </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>获取最新-中国地区IP段</title>
+      <link href="/2017/05/27/%E8%8E%B7%E5%8F%96%E6%9C%80%E6%96%B0-%E4%B8%AD%E5%9B%BD%E5%9C%B0%E5%8C%BAIP%E6%AE%B5/"/>
+      <url>/2017/05/27/%E8%8E%B7%E5%8F%96%E6%9C%80%E6%96%B0-%E4%B8%AD%E5%9B%BD%E5%9C%B0%E5%8C%BAIP%E6%AE%B5/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> Linux基础 </tag>
+            
+            <tag> APNIC </tag>
+            
+            <tag> IP </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>SoftEther VPN</title>
+      <link href="/2017/05/27/SoftEther-VPN/"/>
+      <url>/2017/05/27/SoftEther-VPN/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> L2TP/PPTP/OVPN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>高性能递归DNS服务器-部署</title>
+      <link href="/2017/05/27/%E9%AB%98%E6%80%A7%E8%83%BD%E9%80%92%E5%BD%92DNS%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+      <url>/2017/05/27/%E9%AB%98%E6%80%A7%E8%83%BD%E9%80%92%E5%BD%92DNS%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> DNS </tag>
+            
+            <tag> 递归DNS服务器 </tag>
+            
+            <tag> DNScrypts </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>zookeeper和kafka那点儿事儿</title>
+      <link href="/2017/05/27/flume%E4%B8%8Ekafka%E9%82%A3%E7%82%B9%E5%84%BF%E4%BA%8B%E5%84%BF/"/>
+      <url>/2017/05/27/flume%E4%B8%8Ekafka%E9%82%A3%E7%82%B9%E5%84%BF%E4%BA%8B%E5%84%BF/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> kafka </tag>
+            
+            <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 大数据 </tag>
+            
+            <tag> flume </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>生活</title>
+      <link href="/2017/05/26/%E7%94%9F%E6%B4%BB/"/>
+      <url>/2017/05/26/%E7%94%9F%E6%B4%BB/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+            <tag> 生活 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Hexo搭建GitHub Blog</title>
+      <link href="/2017/05/24/Hexo%E6%90%AD%E5%BB%BAGitHub%20Blog/"/>
+      <url>/2017/05/24/Hexo%E6%90%AD%E5%BB%BAGitHub%20Blog/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> GitHub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Gentoo编译内核-NFS</title>
+      <link href="/2017/05/14/Gentoo%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8-NFS/"/>
+      <url>/2017/05/14/Gentoo%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8-NFS/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Gentoo </tag>
+            
+            <tag> 编译内核 </tag>
+            
+            <tag> NFS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Linux数据恢复工具extundelete</title>
+      <link href="/2017/05/08/Linux%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E5%B7%A5%E5%85%B7extundelete/"/>
+      <url>/2017/05/08/Linux%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E5%B7%A5%E5%85%B7extundelete/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 数据恢复 </tag>
+            
+            <tag> inode </tag>
+            
+            <tag> extundelete </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>运维利器-学会使用strace诊断问题</title>
+      <link href="/2017/05/04/%E8%BF%90%E7%BB%B4%E5%88%A9%E5%99%A8-%E5%AD%A6%E4%BC%9A%E4%BD%BF%E7%94%A8strace%E8%AF%8A%E6%96%AD%E9%97%AE%E9%A2%98/"/>
+      <url>/2017/05/04/%E8%BF%90%E7%BB%B4%E5%88%A9%E5%99%A8-%E5%AD%A6%E4%BC%9A%E4%BD%BF%E7%94%A8strace%E8%AF%8A%E6%96%AD%E9%97%AE%E9%A2%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> strace </tag>
+            
+            <tag> 运维利器 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>使用jq命令行处理json数据</title>
+      <link href="/2017/04/27/%E4%BD%BF%E7%94%A8jq%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A4%84%E7%90%86json%E6%95%B0%E6%8D%AE/"/>
+      <url>/2017/04/27/%E4%BD%BF%E7%94%A8jq%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A4%84%E7%90%86json%E6%95%B0%E6%8D%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> json </tag>
+            
+            <tag> jq </tag>
+            
+            <tag> 筛选大于某个值的数据到文件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cobbler使用DTK自动化升级BIOS</title>
+      <link href="/2017/04/17/cobbler%E4%BD%BF%E7%94%A8DTK%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8D%87%E7%BA%A7BIOS/"/>
+      <url>/2017/04/17/cobbler%E4%BD%BF%E7%94%A8DTK%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8D%87%E7%BA%A7BIOS/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 自动化 </tag>
+            
+            <tag> cobbler </tag>
+            
+            <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cacti配置邮件短信告警</title>
+      <link href="/2017/04/13/cacti%E9%85%8D%E7%BD%AE%E9%82%AE%E4%BB%B6%E5%91%8A%E8%AD%A6/"/>
+      <url>/2017/04/13/cacti%E9%85%8D%E7%BD%AE%E9%82%AE%E4%BB%B6%E5%91%8A%E8%AD%A6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> cacti </tag>
+            
+            <tag> 邮件告警 </tag>
+            
+            <tag> 短信告警 </tag>
+            
+            <tag> 将Bites转换为Mbits </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cobbler使用DTK自动化做RAID</title>
+      <link href="/2017/04/12/cobbler%E4%BD%BF%E7%94%A8DTK%E8%87%AA%E5%8A%A8%E5%8C%96%E5%81%9ARAID/"/>
+      <url>/2017/04/12/cobbler%E4%BD%BF%E7%94%A8DTK%E8%87%AA%E5%8A%A8%E5%8C%96%E5%81%9ARAID/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> RAID </tag>
+            
+            <tag> cobbler </tag>
+            
+            <tag> DTK </tag>
+            
+            <tag> raidcfg </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>dingo反代Goolge DNS</title>
+      <link href="/2017/04/03/Dingo%E5%8F%8D%E4%BB%A3Google-DNS/"/>
+      <url>/2017/04/03/Dingo%E5%8F%8D%E4%BB%A3Google-DNS/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> dingo </tag>
+            
+            <tag> Google DNS </tag>
+            
+            <tag> DNS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>问题汇总-openstack计算节点无法调度及热迁移调度</title>
+      <link href="/2017/03/22/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B9%E6%97%A0%E6%B3%95%E8%B0%83%E5%BA%A6%E5%8F%8A%E7%83%AD%E8%BF%81%E7%A7%BB%E8%B0%83%E5%BA%A6/"/>
+      <url>/2017/03/22/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B9%E6%97%A0%E6%B3%95%E8%B0%83%E5%BA%A6%E5%8F%8A%E7%83%AD%E8%BF%81%E7%A7%BB%E8%B0%83%E5%BA%A6/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 计算节点 </tag>
+            
+            <tag> nova_schedule调度 </tag>
+            
+            <tag> nova_schedule </tag>
+            
+            <tag> 热迁移调度 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>使用光盘搭建本地yum源</title>
+      <link href="/2017/03/20/%E4%BD%BF%E7%94%A8%E5%85%89%E7%9B%98%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0yum%E6%BA%90/"/>
+      <url>/2017/03/20/%E4%BD%BF%E7%94%A8%E5%85%89%E7%9B%98%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0yum%E6%BA%90/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 光盘 </tag>
+            
+            <tag> 本地Yum </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>问题汇总-openstack-VM冷迁移</title>
+      <link href="/2017/03/14/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack-VM%E5%86%B7%E8%BF%81%E7%A7%BB/"/>
+      <url>/2017/03/14/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack-VM%E5%86%B7%E8%BF%81%E7%A7%BB/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> openstack </tag>
+            
+            <tag> VM </tag>
+            
+            <tag> compute </tag>
+            
+            <tag> 计算节点 </tag>
+            
+            <tag> VM迁移 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>问题汇总-openstack VM高可用</title>
+      <link href="/2017/03/04/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%20VM%E9%AB%98%E5%8F%AF%E7%94%A8/"/>
+      <url>/2017/03/04/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB-openstack%20VM%E9%AB%98%E5%8F%AF%E7%94%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> keepalived </tag>
+            
+            <tag> openstack </tag>
+            
+            <tag> neutron </tag>
+            
+            <tag> LVS </tag>
+            
+            <tag> openstack keepalived </tag>
+            
+            <tag> allow address pairs地址对 </tag>
+            
+            <tag> neutron 高可用 </tag>
+            
+            <tag> 虚拟机启用VIP </tag>
+            
+            <tag> allow_address_pairs实现虚拟机高可用 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>BeansDB豆瓣开源Key/Value分布式NoSQL</title>
+      <link href="/2017/03/02/BeansDB%E8%B1%86%E7%93%A3%E5%BC%80%E6%BA%90Key-Value%E5%88%86%E5%B8%83%E5%BC%8FNoSQL/"/>
+      <url>/2017/03/02/BeansDB%E8%B1%86%E7%93%A3%E5%BC%80%E6%BA%90Key-Value%E5%88%86%E5%B8%83%E5%BC%8FNoSQL/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> BeansDB </tag>
+            
+            <tag> NoSQL </tag>
+            
+            <tag> Key/Value </tag>
+            
+            <tag> 图片存储 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+  
+  
+</search>
