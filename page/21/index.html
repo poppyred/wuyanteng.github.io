@@ -1,26 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    <title>Gary Wu | 运维架构师 - 从入门到放弃</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="">
-    <meta name="description" content="GaryWu Blog">
+  <meta charset="utf-8">
+  
+  <title>Gary Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  
+  <meta name="description" content="GaryWu Blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Gary Wu">
 <meta property="og:url" content="https://wuyanteng.github.io/page/21/index.html">
@@ -30,297 +19,371 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gary Wu">
 <meta name="twitter:description" content="GaryWu Blog">
-    
-        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+    <link rel="alternate" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
+  
 
-    <!-- custom head -->
-    
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/home.css" >
+  
+
+  
+
+  
+
+  
+  
+  
 
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
 
-    <aside id="menu"  >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Gary Wu</h5>
-          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
-        </hgroup>
-      </div>
-    </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
+
+  <body>
+
+
+  
+    <header id="header">
+
+	<!-- 背景图模式 -->
+	
+
+    
+      <div id="intrologo" class="intro-logo">
+    
+ 
+
+
+    <canvas width="100%" height="100%"></canvas>
+    <script>
+      var c = document.getElementsByTagName('canvas')[0],
+          x = c.getContext('2d'),
+          w = window.innerWidth,
+          h = window.innerHeight,
+          pr = window.devicePixelRatio || 1,
+          f = 90,
+          q,
+          m = Math,
+          r = 0,
+          u = m.PI*2,
+          v = m.cos,
+          z = m.random
+      c.width = w*pr
+      c.height = h*pr
+      x.scale(pr, pr)
+      x.globalAlpha = 0.6
+
+      <!-- 折线Polyline背景 -->
+      
+        function i(){
+            x.clearRect(0,0,w,h)
+            q=[{x:0,y:h*.7+f},{x:0,y:h*.7-f}]
+            while(q[1].x<w+f) d(q[0], q[1])
+        }
+        function d(i,j){   
+            x.beginPath()
+            x.moveTo(i.x, i.y)
+            x.lineTo(j.x, j.y)
+            var k = j.x + (z()*2-0.25)*f,
+                n = y(j.y)
+            x.lineTo(k, n)
+            x.closePath()
+            r-=u/-50
+            x.fillStyle = '#'+(v(r)*127+128<<16 | v(r+u/3)*127+128<<8 | v(r+u/3*2)*127+128).toString(16)
+            x.fill()
+            q[0] = q[1]
+            q[1] = {x:k,y:n}
+        }
+        function y(p){
+            var t = p + (z()*2-1.1)*f
+            return (t>h||t<0) ? y(p) : t
+        }
+        document.getElementById("intrologo").onclick = i
+        document.getElementById("intrologo").ontouchstart = i
+        i()
+
+      <!-- 多边形trianglify背景 -->
+      
+    </script>
+    
+
+    
+      <div id="homelogo" class="homelogo"> 
+    
+
         
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
+          <div class="homelogoback" >
+            <h1><a href="#content" id="logo">Gary Wu</a></h1>
+            <h3>GaryWu Blog</h3>
+            <h5>Gary Wu</h5>
+            <!-- <p><a href="https://github.com/iTimeTraveler" target="_blank">Github</a></p> -->
+          </div>
         
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                所有文章
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags/高级运维"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/wuyanteng" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://t.me/om_china" target="_blank" >
-                <i class="icon icon-lg icon-link"></i>
-                Telegram讨论组
-              </a>
-            </li>
-        
-      </ul>
+    
     </div>
   </div>
-</aside>
 
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Gary Wu</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header index-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Gary Wu</h1>
-        <h5 class="subtitle">
-            
-                运维架构师 - 从入门到放弃
-            
-        </h5>
-    </div>
-
-    
-
-
-</header>
-
-<div class="container body-wrap">
-
-    <ul class="post-list">
-    
-        <li class="post-list-item fade">
-            <article id="post-shell if语句-条件执行"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-19 21:46:06" datetime="2017-07-19T13:46:06.000Z"  itemprop="datePublished">2017-07-19</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/19/shell if语句-条件执行/">shell if语句-条件执行</a>
-    </h3>
+  <!-- 自适应主页背景大图 -->
   
 
+ <!-- home_logo_image居中 -->
+ 
+    <script>
+        var homelogodiv = document.getElementById("homelogo");
+        if (document.all.homelogo.offsetWidth > document.body.clientWidth) {
+          homelogodiv.style.width = document.body.clientWidth + "px";
+          homelogodiv.style.marginLeft = document.body.clientWidth * -0.5 + "px";
+        } else {
+          homelogodiv.style.width = homelogodiv.clientWidth  + "px";
+          homelogodiv.style.marginLeft = (homelogodiv.clientWidth)  * -0.5 + "px";
+        }
+    </script>
+  
 
+  <div class="intro-navigate">
+      <p class="navigater-list">
+        
+          <a id="beautifont" class="main-nav-link" href="/">首页</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/archives">归档</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/categories">分类</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/tags">标签</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/about">关于</a>
+        
+      </p>
+  </div>
 
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
+</header>
+  
+  <div id="container">
+    <div id="wrap">
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;">
+  
+    <article id="post-shell if语句-条件执行"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/19/shell if语句-条件执行/">shell if语句-条件执行</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/19/shell if语句-条件执行/" class="article-date">
+	  <time datetime="2017-07-19T13:46:06.000Z" itemprop="datePublished">2017-07-19</time>
+	</a>
+
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
         <blockquote>
 <p>逻辑与（&amp;&amp;）只有当前一个命令执行成功时，才会执行后一个命令</p>
 <p>逻辑或（||）只有当前一个命令执行失败时，才会执行后一个命令</p>
 </blockquote>
-    
+        <!-- 
+逻辑与（&amp;&amp;）只有当前一个命令执行成功时，才会执行后一个命令
+逻辑或（||）只有当前一个命令执行失败时，才会执行后一个命令
 
-        <a href="/2017/07/19/shell if语句-条件执行/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
+实例：逻辑与（&amp;&amp;）也可以使用“逻辑与”操作符&amp;&amp;，将if语句中多个test命令连接在一起, 比如下面的例子
+if [ -n $var ] &amp;&amp; [ -e $var ];then 
+   echo &......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/19/shell if语句-条件执行/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-老男孩-day12-shell编程"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-老男孩-day12-shell编程"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-15 09:41:43" datetime="2017-07-15T01:41:43.000Z"  itemprop="datePublished">2017-07-15</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/15/老男孩-day12-shell编程/">老男孩-day12-shell</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/15/老男孩-day12-shell编程/" class="article-date">
+	  <time datetime="2017-07-15T01:41:43.000Z" itemprop="datePublished">2017-07-15</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/15/老男孩-day12-shell编程/">老男孩-day12-shell</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h4 id="什么是shell？"><a href="#什么是shell？" class="headerlink" title="什么是shell？"></a>什么是shell？</h4><pre><code>shell, 即命令解释器.由命令、变量和流程控制语句有机的结合
 
 CentOS默认shell是/bin/bash
 </code></pre>
-    
+        <!-- 什么是shell？shell, 即命令解释器.由命令、变量和流程控制语句有机的结合
 
-        <a href="/2017/07/15/老男孩-day12-shell编程/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+CentOS默认shell是/bin/bash
 
+echo &quot;df -h&quot;
+echo &quot;df -h&quot; |bash
+把字符交给bash去执行，然后返回结果。
+脚本统一目录：mkdir -p /server/scripts
+$ vim oldboyedu.sh
+# 第一部......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/15/老男孩-day12-shell编程/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-shell变量类型"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-shell变量类型"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-15 09:27:12" datetime="2017-07-15T01:27:12.000Z"  itemprop="datePublished">2017-07-15</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/15/shell变量类型/">shell变量类型</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/15/shell变量类型/" class="article-date">
+	  <time datetime="2017-07-15T01:27:12.000Z" itemprop="datePublished">2017-07-15</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/15/shell变量类型/">shell变量类型</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h5 id="初识Shell"><a href="#初识Shell" class="headerlink" title="初识Shell"></a>初识Shell</h5><h4 id="Shell中的变量类型"><a href="#Shell中的变量类型" class="headerlink" title="Shell中的变量类型"></a>Shell中的变量类型</h4><pre><code>shell中的变量有两种类型：
 
 (1) 系统变量（环境变量）
 (2) 用户自定义的变量，即由用户创建和维护的变量
 </code></pre>
-    
+        <!-- 初识ShellShell中的变量类型shell中的变量有两种类型：
 
-        <a href="/2017/07/15/shell变量类型/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
+(1) 系统变量（环境变量）
+(2) 用户自定义的变量，即由用户创建和维护的变量
 
+常用的系统变量BASH_VERSION         Bash版本
+DISPLAY              设置X display名字
+EDITOR               设置默认的文本编辑器
+HISTFILE          ......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/15/shell变量类型/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-Ansible常用模块"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-Ansible常用模块"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-11 18:51:32" datetime="2017-07-11T10:51:32.000Z"  itemprop="datePublished">2017-07-11</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/11/Ansible常用模块/">Ansible常用模块</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/11/Ansible常用模块/" class="article-date">
+	  <time datetime="2017-07-11T10:51:32.000Z" itemprop="datePublished">2017-07-11</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/11/Ansible常用模块/">Ansible常用模块</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <p>查看某个模块的帮助</p>
 <p>ansible-doc -s 模块名称，例如：</p>
 <pre><code>ansible-doc -s group
@@ -333,50 +396,58 @@ CentOS默认shell是/bin/bash
       system            # If `yes&#39;, indicates that the group created is a system group.
 </code></pre><pre><code>ansible -i命令用于指定自定义的外部hosts文件
 </code></pre>
-    
+        <!-- 查看某个模块的帮助
+ansible-doc -s 模块名称，例如：
+ansible-doc -s group
 
-        <a href="/2017/07/11/Ansible常用模块/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+- name: Add or remove groups
+  action: group
+      gid               # Optional `GID&#39; to set for the group.
+      name=             # Nam......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/11/Ansible常用模块/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模块/">模块</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模块/">模块</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-Ansible自动化入门"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-Ansible自动化入门"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-11 18:51:21" datetime="2017-07-11T10:51:21.000Z"  itemprop="datePublished">2017-07-11</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/11/Ansible自动化入门/">Ansible自动化入门</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/11/Ansible自动化入门/" class="article-date">
+	  <time datetime="2017-07-11T10:51:21.000Z" itemprop="datePublished">2017-07-11</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/11/Ansible自动化入门/">Ansible自动化入门</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <blockquote>
 <p>Ansible特性：</p>
 <ul>
@@ -385,149 +456,179 @@ CentOS默认shell是/bin/bash
 <li>可以使用自定义模块，也可以使用其他语言编写模块，基于模块可以完成各种任务</li>
 </ul>
 </blockquote>
-    
+        <!-- 
+Ansible特性：
 
-        <a href="/2017/07/11/Ansible自动化入门/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
+ansible基于Python实现，有Paramiko、PyYAML、Jinjia2主要模块
+使用SSH连接主机，部署简单
+可以使用自定义模块，也可以使用其他语言编写模块，基于模块可以完成各种任务
 
+
+
+安装Ansible管理机 yum install -y epel-release 
+ yum install -y ansible
+ ansible --versi......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/11/Ansible自动化入门/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-Cloudera-Manager-CDH5-2-0部署"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-Cloudera-Manager-CDH5-2-0部署"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-10 17:36:15" datetime="2017-07-10T09:36:15.000Z"  itemprop="datePublished">2017-07-10</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/10/Cloudera-Manager-CDH5-2-0部署/">Cloudera_Manager-CDH5.2.0部署</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" class="article-date">
+	  <time datetime="2017-07-10T09:36:15.000Z" itemprop="datePublished">2017-07-10</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/10/Cloudera-Manager-CDH5-2-0部署/">Cloudera_Manager-CDH5.2.0部署</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <blockquote>
 <p>hadoop 体系衍生了许多商业发行版，目前Hadoop比较流行的主要有2个版本，Apache和Cloudera版本。</p>
 <p>Apache Hadoop：维护人员比较多，更新频率比较快，但是稳定性比较差。<br>Cloudera Hadoop（CDH）：Cloudera公司的发行版本，基于Apache Hadoop的二次开发，优化了组件兼容和交互接口、简化安装配置、增加Cloudera兼容特性。</p>
 <p>下载链接：<a href="http://www.cloudera.com/downloads/manager/5-7-1.html" target="_blank" rel="noopener">Download Cloudera Manager</a></p>
 </blockquote>
-    
-
-        <a href="/2017/07/10/Cloudera-Manager-CDH5-2-0部署/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+        <!-- 
+hadoop 体系衍生了许多商业发行版，目前Hadoop比较流行的主要有2个版本，Apache和Cloudera版本。
+Apache Hadoop：维护人员比较多，更新频率比较快，但是稳定性比较差。Cloudera Hadoop（CDH）：Cloudera公司的发行版本，基于Apache Hadoop的二次开发，优化了组件兼容和交互接口、简化安装配置、增加Cloudera兼容特性。
+下载链......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/10/Cloudera-Manager-CDH5-2-0部署/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CDH/">CDH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CDH/">CDH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-cloudera-manager群集安装报错"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-cloudera-manager群集安装报错"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-10 14:06:46" datetime="2017-07-10T06:06:46.000Z"  itemprop="datePublished">2017-07-10</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/10/cloudera-manager群集安装报错/">cloudera manager群集安装报错</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/10/cloudera-manager群集安装报错/" class="article-date">
+	  <time datetime="2017-07-10T06:06:46.000Z" itemprop="datePublished">2017-07-10</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/10/cloudera-manager群集安装报错/">cloudera manager群集安装报错</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <blockquote>
 <p>[cloudera Web第4步安装过程中报错: socket.gaierror: [Errno -2] Name or service not known</p>
 </blockquote>
 <blockquote>
 <p>CDH版本：5.2.0</p>
 </blockquote>
-    
+        <!-- 
+[cloudera Web第4步安装过程中报错: socket.gaierror: [Errno -2] Name or service not known
 
-        <a href="/2017/07/10/cloudera-manager群集安装报错/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CDH/">CDH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cloudera/">cloudera</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/socket-gaierror/">socket.gaierror</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
 
+CDH版本：5.2.0
+
+
+
+原因：群集安装时, agent会使用host命令反向解析获取cloudera manager server 主机名
+
+
+
+不优雅解决方案：删除/usr/bin/host 命令文件
+mv /usr/bi......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/10/cloudera-manager群集安装报错/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CDH/">CDH</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cloudera/">cloudera</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/socket-gaierror/">socket.gaierror</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-老男孩-Day11-磁盘管理与AWK数组"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-老男孩-Day11-磁盘管理与AWK数组"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-08 09:39:13" datetime="2017-07-08T01:39:13.000Z"  itemprop="datePublished">2017-07-08</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/">老男孩-Day11-磁盘管理与AWK数组</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/" class="article-date">
+	  <time datetime="2017-07-08T01:39:13.000Z" itemprop="datePublished">2017-07-08</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/">老男孩-Day11-磁盘管理与AWK数组</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h6 id="RIAD"><a href="#RIAD" class="headerlink" title="RIAD"></a>RIAD</h6><pre><code>RIAD0 磁盘容量不浪费，存储性好，读写速度块。至少要有1块物理磁盘才能使用RIAD0
 
 RIAD1 镜像，磁盘容量损失50% ；只能2块盘做1个RIAD1。
@@ -541,286 +642,316 @@ RIAD5+Spare（空闲热备盘）
 RIAD10 至少需要4块硬盘
 
 </code></pre>
-    
+        <!-- RIADRIAD0 磁盘容量不浪费，存储性好，读写速度块。至少要有1块物理磁盘才能使用RIAD0
 
-        <a href="/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/awk数组/">awk数组</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li></ul>
+RIAD1 镜像，磁盘容量损失50% ；只能2块盘做1个RIAD1。
+      应用场景：对数据安全性比较高的情况下使用。
 
+RIAD5 至少需要3块以上物理磁盘才能实现RIAD5. 空间利用率n-1 
+      如果任意1块硬盘坏掉，通过奇偶校验会将数据恢复。
+
+RIAD5+Spare（......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/08/老男孩-Day11-磁盘管理与AWK数组/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/awk数组/">awk数组</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-Yarn不能给某些机器分配任务-解决方案"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-Yarn不能给某些机器分配任务-解决方案"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-06 18:53:41" datetime="2017-07-06T10:53:41.000Z"  itemprop="datePublished">2017-07-06</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/06/Yarn不能给某些机器分配任务-解决方案/">Yarn不能给某些机器分配任务-解决方案</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/06/Yarn不能给某些机器分配任务-解决方案/" class="article-date">
+	  <time datetime="2017-07-06T10:53:41.000Z" itemprop="datePublished">2017-07-06</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/06/Yarn不能给某些机器分配任务-解决方案/">Yarn不能给某些机器分配任务-解决方案</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h6 id="YARN健康检测"><a href="#YARN健康检测" class="headerlink" title="YARN健康检测"></a>YARN健康检测</h6><pre><code>NodeManager 还提供了检测磁盘好坏的机制。
 
 检测的磁盘目录主要是 yarn.nodemanager.local-dirs 和 yarn.nodemanager.log-dirs 参数指定的目录，这两个目录分别用于存储应用程序运行的中间结果，比如MapReduce作业中Map Task的中间输出结果）和日志文件存放目录列表。这两个参数都可以配置多个目录，多个目录之间使用逗号分隔。如果这两个参数配置的目录不可用的比例达到一定的设置，则认为该节点不健康。
 </code></pre>
-    
+        <!-- YARN健康检测NodeManager 还提供了检测磁盘好坏的机制。
 
-        <a href="/2017/07/06/Yarn不能给某些机器分配任务-解决方案/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+检测的磁盘目录主要是 yarn.nodemanager.local-dirs 和 yarn.nodemanager.log-dirs 参数指定的目录，这两个目录分别用于存储应用程序运行的中间结果，比如MapReduce作业中Map Task的中间输出结果）和日志文件存放目录列表。这两个参数都可以配置多个目录，多个目录之间......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/06/Yarn不能给某些机器分配任务-解决方案/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NodeManager/">NodeManager</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/YARN/">YARN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NodeManager/">NodeManager</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/YARN/">YARN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-hadoop-角色划分"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-hadoop-角色划分"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-07-06 14:30:52" datetime="2017-07-06T06:30:52.000Z"  itemprop="datePublished">2017-07-06</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/07/06/hadoop-角色划分/">hadoop-角色划分</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/06/hadoop-角色划分/" class="article-date">
+	  <time datetime="2017-07-06T06:30:52.000Z" itemprop="datePublished">2017-07-06</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/07/06/hadoop-角色划分/">hadoop-角色划分</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h4 id="Hadoop分别从三个角度将主机划分为两种角色"><a href="#Hadoop分别从三个角度将主机划分为两种角色" class="headerlink" title="Hadoop分别从三个角度将主机划分为两种角色"></a>Hadoop分别从三个角度将主机划分为两种角色</h4>
-    
+        <!-- Hadoop分别从三个角度将主机划分为两种角色
 
-        <a href="/2017/07/06/hadoop-角色划分/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+第一：最基本的划分为：Master和Slave, 即主人与奴隶
+第二：从HDFS的角度，将主机划分为NameNode和DataNode
+​            NameNode负责调度分配，DataNode负责数据存储
+第三：从MapReduce的角度，将主机划分为 JobTracker和TaskTracker
+​            一......  -->
+        <p class="article-more-link">
+          <a href="/2017/07/06/hadoop-角色划分/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+
+
+  <nav id="page-nav">
     
-    </ul>
+    <a class="extend prev" rel="prev" href="/page/20/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><a class="page-number" href="/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/22/">下一页 &raquo;</a>
+  </nav>
 
-    
-<nav id="page-nav">
-    <div class="inner">
-    <a class="extend prev" rel="prev" href="/page/20/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><a class="page-number" href="/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/22/">下一页</a>
-    </div>
-</nav>
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
+</section>
         
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      </div>
+      
+        <div align="center" style="margin-top: 30px;"><hr class="hr" style="margin:0px; height:3px;"></div>
+      
+      <footer id="footer">
+  
 
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 Gary Wu All Rights Reserved.</p>
+	      
+	      
+  		   	<p id="copyRightCn">Gary Wu 保留所有权利</p>
+  		   
+		</div>
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Gary Wu &copy; 2015 - 2018</span>
-            <span>
-                
-                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
-            </span>
-        </p>
-    </div>
+		
+  </div>
 </footer>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
+<!-- min height -->
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/page/21/&title=Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/page/21/&title=Gary Wu&source=GaryWu Blog" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/page/21/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Gary Wu&url=https://wuyanteng.github.io/page/21/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/page/21/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABvElEQVR42u3aS27DMAwFQN//0i7QbVHnkZRUAx2tjCSORhtC/FxXvO7v9fz5z+dkXTsWLi7umJv83fMGvXfz4+Hi4v4VNwlSvY2fD5YbcHFx38lNiPm7uLi4/4H7fPV5XSDDxcUNuEkC0ztMUmrZkqvh4uIOuNWC6Y7njfVdXFzcIvcursn2yXXnw+64uLhHuL2EpFpCzVu2z8fDxcU9z50XQ/OUaVlig4uLe4SbB6Z8s8XDW7i4uJu5SRjKw1b+eTOVwsXFPcKdNz573FEjBxcXdzO32uYsDEkUDzNKe3BxcZdydw9MrLow4eLinuQmP0pKnEni1JuyiL7AxcVdyp28kP+mmkpV2724uLg7uMnIVK8gMmmyRgVTXFzcDdzeaMXaMc0FIQwXF3cbN094emNbvSJLob2Ki4u7iDu5PyT/Mx/nKt/LcHFxx9y7uKoljxwUhVFcXNwj3PmgRr7xvJyKi4t7kpsPUsyh80Pi4uKe5OaBJh/hmlyDPpRNcXFxX8NNBrOSxmresPn1ioOLi/tibjJs0WvfRhEOFxd3M3dV8pMEu1HTBRcX9wi3mopULz3VdGieOOHi4g64X4Tzw0J7JbnEAAAAAElFTkSuQmCC" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
+  });
 </script>
 
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
 
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '经检测,你已离开...';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '欢迎回来...';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-})();
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
+
+<script src="/js/scripts.js"></script>
+
+
+  <script src="/js/home.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Gary Wu
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Gary Wu All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
 </body>
 </html>

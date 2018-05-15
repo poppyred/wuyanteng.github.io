@@ -1,26 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    <title>Gary Wu | 运维架构师 - 从入门到放弃</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="">
-    <meta name="description" content="GaryWu Blog">
+  <meta charset="utf-8">
+  
+  <title>Gary Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  
+  <meta name="description" content="GaryWu Blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Gary Wu">
 <meta property="og:url" content="https://wuyanteng.github.io/index.html">
@@ -30,758 +19,897 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gary Wu">
 <meta name="twitter:description" content="GaryWu Blog">
-    
-        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+    <link rel="alternate" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
+  
 
-    <!-- custom head -->
-    
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/home.css" >
+  
+
+  
+
+  
+
+  
+  
+  
 
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
 
-    <aside id="menu"  >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Gary Wu</h5>
-          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
-        </hgroup>
-      </div>
-    </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
+
+  <body>
+
+
+  
+    <header id="header">
+
+	<!-- 背景图模式 -->
+	
+
+    
+      <div id="intrologo" class="intro-logo">
+    
+ 
+
+
+    <canvas width="100%" height="100%"></canvas>
+    <script>
+      var c = document.getElementsByTagName('canvas')[0],
+          x = c.getContext('2d'),
+          w = window.innerWidth,
+          h = window.innerHeight,
+          pr = window.devicePixelRatio || 1,
+          f = 90,
+          q,
+          m = Math,
+          r = 0,
+          u = m.PI*2,
+          v = m.cos,
+          z = m.random
+      c.width = w*pr
+      c.height = h*pr
+      x.scale(pr, pr)
+      x.globalAlpha = 0.6
+
+      <!-- 折线Polyline背景 -->
+      
+        function i(){
+            x.clearRect(0,0,w,h)
+            q=[{x:0,y:h*.7+f},{x:0,y:h*.7-f}]
+            while(q[1].x<w+f) d(q[0], q[1])
+        }
+        function d(i,j){   
+            x.beginPath()
+            x.moveTo(i.x, i.y)
+            x.lineTo(j.x, j.y)
+            var k = j.x + (z()*2-0.25)*f,
+                n = y(j.y)
+            x.lineTo(k, n)
+            x.closePath()
+            r-=u/-50
+            x.fillStyle = '#'+(v(r)*127+128<<16 | v(r+u/3)*127+128<<8 | v(r+u/3*2)*127+128).toString(16)
+            x.fill()
+            q[0] = q[1]
+            q[1] = {x:k,y:n}
+        }
+        function y(p){
+            var t = p + (z()*2-1.1)*f
+            return (t>h||t<0) ? y(p) : t
+        }
+        document.getElementById("intrologo").onclick = i
+        document.getElementById("intrologo").ontouchstart = i
+        i()
+
+      <!-- 多边形trianglify背景 -->
+      
+    </script>
+    
+
+    
+      <div id="homelogo" class="homelogo"> 
+    
+
         
-            <li class="waves-block waves-effect active">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
+          <div class="homelogoback" >
+            <h1><a href="#content" id="logo">Gary Wu</a></h1>
+            <h3>GaryWu Blog</h3>
+            <h5>Gary Wu</h5>
+            <!-- <p><a href="https://github.com/iTimeTraveler" target="_blank">Github</a></p> -->
+          </div>
         
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                所有文章
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags/高级运维"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/wuyanteng" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://t.me/om_china" target="_blank" >
-                <i class="icon icon-lg icon-link"></i>
-                Telegram讨论组
-              </a>
-            </li>
-        
-      </ul>
+    
     </div>
   </div>
-</aside>
 
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Gary Wu</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header index-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Gary Wu</h1>
-        <h5 class="subtitle">
-            
-                运维架构师 - 从入门到放弃
-            
-        </h5>
-    </div>
-
-    
-
-
-</header>
-
-<div class="container body-wrap">
-
-    <ul class="post-list">
-    
-        <li class="post-list-item fade">
-            <article id="post-shell-if小数判断"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-10 18:27:18" datetime="2018-05-10T10:27:18.000Z"  itemprop="datePublished">2018-05-10</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/10/shell-if小数判断/">shell if小数判断</a>
-    </h3>
+  <!-- 自适应主页背景大图 -->
   
 
+ <!-- home_logo_image居中 -->
+ 
+    <script>
+        var homelogodiv = document.getElementById("homelogo");
+        if (document.all.homelogo.offsetWidth > document.body.clientWidth) {
+          homelogodiv.style.width = document.body.clientWidth + "px";
+          homelogodiv.style.marginLeft = document.body.clientWidth * -0.5 + "px";
+        } else {
+          homelogodiv.style.width = homelogodiv.clientWidth  + "px";
+          homelogodiv.style.marginLeft = (homelogodiv.clientWidth)  * -0.5 + "px";
+        }
+    </script>
+  
 
+  <div class="intro-navigate">
+      <p class="navigater-list">
+        
+          <a id="beautifont" class="main-nav-link" href="/">首页</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/archives">归档</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/categories">分类</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/tags">标签</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/about">关于</a>
+        
+      </p>
+  </div>
 
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
+</header>
+  
+  <div id="container">
+    <div id="wrap">
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;">
+  
+    <article id="post-shell-if小数判断"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/05/10/shell-if小数判断/">shell if小数判断</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/05/10/shell-if小数判断/" class="article-date">
+	  <time datetime="2018-05-10T10:27:18.000Z" itemprop="datePublished">2018-05-10</time>
+	</a>
+
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>由于程序需要，我要判断一个小数是否大于另一个值。即一个浮点数是否大于另一个浮点数。
 </code></pre>
-    
+        <!-- 由于程序需要，我要判断一个小数是否大于另一个值。即一个浮点数是否大于另一个浮点数。
 
-        <a href="/2018/05/10/shell-if小数判断/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/if判断/">if判断</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小数判断/">小数判断</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/浮点数判断/">浮点数判断</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+加入$mya变量是一个浮点数，按照正常思路执行：
 
+# if [ $mya -le 4 ]; then echo &quot;ok&quot;;else echo &quot;fail&quot;; fi  
+-bash: [: 5.7: integer expression expected  
+
+she......  -->
+        <p class="article-more-link">
+          <a href="/2018/05/10/shell-if小数判断/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/if判断/">if判断</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小数判断/">小数判断</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/浮点数判断/">浮点数判断</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-curl命令详解"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-curl命令详解"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-09 14:17:40" datetime="2018-05-09T06:17:40.000Z"  itemprop="datePublished">2018-05-09</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/05/09/curl命令详解/">curl命令详解</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/05/09/curl命令详解/" class="article-date">
+	  <time datetime="2018-05-09T06:17:40.000Z" itemprop="datePublished">2018-05-09</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/09/curl命令详解/">curl命令详解</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>curl是一个利用URL规则在命令行下工作的强大文件传输工具。
 
 语法：
 # curl [option] [url]
 </code></pre>
-    
+        <!-- curl是一个利用URL规则在命令行下工作的强大文件传输工具。
 
-        <a href="/2018/05/09/curl命令详解/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/POST/">POST</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cookie/">cookie</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/response/">response</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/伪造referer/">伪造referer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模拟浏览器/">模拟浏览器</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+语法：
+# curl [option] [url]
 
+常见参数-A/--user-agent &lt;string&gt;          设置用户代理发送给服务器
+-b/--cookie &lt;name=string/file&gt;    cookie字符串或文件读取位置
+-c/--cookie-jar &lt;fil......  -->
+        <p class="article-more-link">
+          <a href="/2018/05/09/curl命令详解/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/POST/">POST</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cookie/">cookie</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/response/">response</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/伪造referer/">伪造referer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模拟浏览器/">模拟浏览器</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-让mongo的从库支持读操作"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-让mongo的从库支持读操作"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-28 11:41:26" datetime="2018-04-28T03:41:26.000Z"  itemprop="datePublished">2018-04-28</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/04/28/让mongo的从库支持读操作/">让mongo的从库支持读操作</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/28/让mongo的从库支持读操作/" class="article-date">
+	  <time datetime="2018-04-28T03:41:26.000Z" itemprop="datePublished">2018-04-28</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/28/让mongo的从库支持读操作/">让mongo的从库支持读操作</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>对于replica set 中的secondary 节点默认是不可读的。通过在连接时指定或者在主库指定slaveOk，由Secondary来分担读的压力，Primary只承担写操作。
 </code></pre>
-    
+        <!-- 对于replica set 中的secondary 节点默认是不可读的。通过在连接时指定或者在主库指定slaveOk，由Secondary来分担读的压力，Primary只承担写操作。
 
-        <a href="/2018/04/28/让mongo的从库支持读操作/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo/">mongo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb从库读操作/">mongodb从库读操作</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rs-slaveOk/">rs.slaveOk()</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+如果通过shell访问mongo，要在secondary进行查询。会出现如下错误：
 
+#mongo 192.168.10.10:27017
+SECONDARY&gt; show dbs;
+2018-04-28......  -->
+        <p class="article-more-link">
+          <a href="/2018/04/28/让mongo的从库支持读操作/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo/">mongo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb从库读操作/">mongodb从库读操作</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rs-slaveOk/">rs.slaveOk()</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-Parted给大容量硬盘分区格式化与挂载"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-Parted给大容量硬盘分区格式化与挂载"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-27 18:06:10" datetime="2018-04-27T10:06:10.000Z"  itemprop="datePublished">2018-04-27</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/04/27/Parted给大容量硬盘分区格式化与挂载/">Parted给大容量硬盘分区格式化与挂载</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/27/Parted给大容量硬盘分区格式化与挂载/" class="article-date">
+	  <time datetime="2018-04-27T10:06:10.000Z" itemprop="datePublished">2018-04-27</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/27/Parted给大容量硬盘分区格式化与挂载/">Parted给大容量硬盘分区格式化与挂载</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>使用parted给大于2T的硬盘分区
 </code></pre>
-    
+        <!-- 使用parted给大于2T的硬盘分区
 
-        <a href="/2018/04/27/Parted给大容量硬盘分区格式化与挂载/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fdisk/">fdisk</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/parted/">parted</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+查看现有设备
+fdisk -l
 
+使用parted分区
+#parted
+(parted) select /dev/sdb      //选择磁盘sdb
+Using /dev/sdb
+(parted) mklabel gpt          //将MBR磁盘格式化为GPT
+(parted) mkpart primary 0 -1  //将整块磁盘分成一......  -->
+        <p class="article-more-link">
+          <a href="/2018/04/27/Parted给大容量硬盘分区格式化与挂载/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fdisk/">fdisk</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/parted/">parted</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-MongoDB数据导出命令mongoexport"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-MongoDB数据导出命令mongoexport"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-26 11:08:11" datetime="2018-04-26T03:08:11.000Z"  itemprop="datePublished">2018-04-26</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/04/26/MongoDB数据导出命令mongoexport/">MongoDB数据导出命令mongoexport和导入命令mongoimport</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/26/MongoDB数据导出命令mongoexport/" class="article-date">
+	  <time datetime="2018-04-26T03:08:11.000Z" itemprop="datePublished">2018-04-26</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/26/MongoDB数据导出命令mongoexport/">MongoDB数据导出命令mongoexport和导入命令mongoimport</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>MongoDB数据导出命令mongoexport和导入命令mongoimport
 </code></pre>
-    
+        <!-- MongoDB数据导出命令mongoexport和导入命令mongoimport
 
-        <a href="/2018/04/26/MongoDB数据导出命令mongoexport/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/csv/">csv</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/json/">json</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo/">mongo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongoexport/">mongoexport</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongoimport/">mongoimport</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo导出命令/">mongo导出命令</a></li></ul>
+数据导出命令mongoexportMongodb中的mongoexport工具可以把一个collection导出成JSON格式或CSV格式的文件。
+可以通过参数指定导出的数据项，也可以根据指定的条件导出数据。
+mongoexport具体用法如下:
 
+查看帮助
+/bin/mongoexport --help  ......  -->
+        <p class="article-more-link">
+          <a href="/2018/04/26/MongoDB数据导出命令mongoexport/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/csv/">csv</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/json/">json</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo/">mongo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongoexport/">mongoexport</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongoimport/">mongoimport</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo导出命令/">mongo导出命令</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-hadoop常用命令"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-hadoop常用命令"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-23 10:47:58" datetime="2018-04-23T02:47:58.000Z"  itemprop="datePublished">2018-04-23</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/04/23/hadoop常用命令/">hadoop常用命令</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/23/hadoop常用命令/" class="article-date">
+	  <time datetime="2018-04-23T02:47:58.000Z" itemprop="datePublished">2018-04-23</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/23/hadoop常用命令/">hadoop常用命令</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>作为hadoop运维,常用命令还是要牢记下的，与linux稍有区别，来总结下
 </code></pre>
-    
+        <!-- 作为hadoop运维,常用命令还是要牢记下的，与linux稍有区别，来总结下
 
-        <a href="/2018/04/23/hadoop常用命令/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+Hadoop常用命令hadoop命令格式hadoop  fs  -cmd  &lt;args&gt;
+ls命令列出hdfs文件系统根目录下的目录和文件
+hadoop fs -ls /
+列出hdfs文件系统所有的目录和文件(含子目录和文件)
+hadoop fs -ls -R /  
+mkdir命令创建多级目录,即使......  -->
+        <p class="article-more-link">
+          <a href="/2018/04/23/hadoop常用命令/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fs/">fs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hdfs/">hdfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fs/">fs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hdfs/">hdfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-cacti接入微信告警功能"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-cacti接入微信告警功能"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-20 16:04:56" datetime="2018-04-20T08:04:56.000Z"  itemprop="datePublished">2018-04-20</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/04/20/cacti接入微信告警功能/">cacti接入微信告警功能</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/20/cacti接入微信告警功能/" class="article-date">
+	  <time datetime="2018-04-20T08:04:56.000Z" itemprop="datePublished">2018-04-20</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/20/cacti接入微信告警功能/">cacti接入微信告警功能</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>cacti接入微信告警功能
 </code></pre>
-    
+        <!-- cacti接入微信告警功能
 
-        <a href="/2018/04/20/cacti接入微信告警功能/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+插件安装需要cacti安装thold与settings插件并启用插件
+参考：插件安装
+配置微信告警代码vi /var/www/cacti/plugins/thold/thold_functions.php
+ $message = str_replace(&#39;&lt;GRAPH&gt;&#39;, &quot;&lt;br&gt;&lt;img src=&#......  -->
+        <p class="article-more-link">
+          <a href="/2018/04/20/cacti接入微信告警功能/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cacti/">cacti</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/微信/">微信</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/微信告警/">微信告警</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cacti/">cacti</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/微信/">微信</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/微信告警/">微信告警</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-查看占用内存或CPU最多的进程"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-查看占用内存或CPU最多的进程"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-20 09:52:33" datetime="2018-04-20T01:52:33.000Z"  itemprop="datePublished">2018-04-20</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/04/20/查看占用内存或CPU最多的进程/">查看占用内存或CPU最多的进程</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/20/查看占用内存或CPU最多的进程/" class="article-date">
+	  <time datetime="2018-04-20T01:52:33.000Z" itemprop="datePublished">2018-04-20</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/20/查看占用内存或CPU最多的进程/">查看占用内存或CPU最多的进程</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>快速定位占用内存或占用CPU最多的进程，并对其排序。
 </code></pre>
-    
+        <!-- 快速定位占用内存或占用CPU最多的进程，并对其排序。
 
-        <a href="/2018/04/20/查看占用内存或CPU最多的进程/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CPU/">CPU</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/使用率/">使用率</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存/">内存</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+查看占用内存最多的进程ps -aux |sort -k4nr |head -10
 
+或
+
+top界面，按下（大写的）M
+查看占用CPU较高的进程
+ps -aux |sort -k3nr|head -10
+
+或
+
+top界面, 按下（大写的）P
+...  -->
+        <p class="article-more-link">
+          <a href="/2018/04/20/查看占用内存或CPU最多的进程/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CPU/">CPU</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/使用率/">使用率</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存/">内存</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-Nginx状态码499-错误分析"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-Nginx状态码499-错误分析"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-11 15:50:03" datetime="2018-04-11T07:50:03.000Z"  itemprop="datePublished">2018-04-11</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/04/11/Nginx状态码499-错误分析/">Nginx状态码499-错误分析</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/11/Nginx状态码499-错误分析/" class="article-date">
+	  <time datetime="2018-04-11T07:50:03.000Z" itemprop="datePublished">2018-04-11</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/11/Nginx状态码499-错误分析/">Nginx状态码499-错误分析</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>nginx日志大量499报错,分析与处理。
 </code></pre>
-    
+        <!-- nginx日志大量499报错,分析与处理。
 
-        <a href="/2018/04/11/Nginx状态码499-错误分析/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/499/">499</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx-upstream/">nginx upstream</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/proxy-ignore-client-abort/">proxy_ignore_client_abort</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+错误日志220.181.165.136 - - [18/May/2015:10:31:02 +0800] &quot;POST /v1/jobsHTTP/1.1&quot; 499 0 &quot;&quot; &quot;bdHttpRequest/1.0.0&quot;
 
+115.239.212.7 - - [18/May/2015:10:3......  -->
+        <p class="article-more-link">
+          <a href="/2018/04/11/Nginx状态码499-错误分析/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/499/">499</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx-upstream/">nginx upstream</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/proxy-ignore-client-abort/">proxy_ignore_client_abort</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-Linux网卡限速"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-Linux网卡限速"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-11 14:19:23" datetime="2018-04-11T06:19:23.000Z"  itemprop="datePublished">2018-04-11</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/04/11/Linux网卡限速/">Linux网卡限速</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/11/Linux网卡限速/" class="article-date">
+	  <time datetime="2018-04-11T06:19:23.000Z" itemprop="datePublished">2018-04-11</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/11/Linux网卡限速/">Linux网卡限速</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>罗列几种linux网卡限速方案，运行结果已实际为准，不对以下工具限速结果负责。
 </code></pre>
-    
+        <!-- 罗列几种linux网卡限速方案，运行结果已实际为准，不对以下工具限速结果负责。
 
-        <a href="/2018/04/11/Linux网卡限速/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux限速/">Linux限速</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ethtool/">ethtool</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tc/">tc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wondershaper/">wondershaper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/限速方案/">限速方案</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+MB/s与Mbit/s概念Mbit/s意思是 兆比特/秒，俗称:小b, 是指每秒传输的比特位数，即家里使用的10M或50M宽带或者speedtest测速结果再或者Cacti监控看到的带宽峰值就是这个小b的概念。
 
+MB/s意思是 兆字节/秒,俗称:大B，是指每秒传输的字节数量，也是实际下载文件看到的网络速度。
+......  -->
+        <p class="article-more-link">
+          <a href="/2018/04/11/Linux网卡限速/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux限速/">Linux限速</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ethtool/">ethtool</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tc/">tc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wondershaper/">wondershaper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/限速方案/">限速方案</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+
+
+  <nav id="page-nav">
     
-    </ul>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+  </nav>
 
-    
-<nav id="page-nav">
-    <div class="inner">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
-    </div>
-</nav>
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
+</section>
         
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      </div>
+      
+        <div align="center" style="margin-top: 30px;"><hr class="hr" style="margin:0px; height:3px;"></div>
+      
+      <footer id="footer">
+  
 
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 Gary Wu All Rights Reserved.</p>
+	      
+	      
+  		   	<p id="copyRightCn">Gary Wu 保留所有权利</p>
+  		   
+		</div>
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Gary Wu &copy; 2015 - 2018</span>
-            <span>
-                
-                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
-            </span>
-        </p>
-    </div>
+		
+  </div>
 </footer>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
+<!-- min height -->
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/&title=Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/&title=Gary Wu&source=GaryWu Blog" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Gary Wu&url=https://wuyanteng.github.io/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAAByElEQVR42u3aQY6DMAwF0N7/0sy2Uof02yGBSi8rhIC8sLBiO69XPI638X4nf3J85+KBi4s7zT2G4xP3OU11+vECzgy4uLj7uWcfHYOq7+a/4PQ+Li7ug7lfwk3xLVxc3N/lVrdE4/CHi4v7fG4+/fhzva8tydVwcXEnuHkhY931kvouLi5ui3u0RlIknQ95/8yLi4u7hVsNOr0Wy1UbIFxc3D3cawsfOa53aAMXF3cPt5qQJOlKtYSaN25xcXH3cPPgUg1bvYLIlyXh4uJu4fZe6G1lkhBZLqfi4uLexE1SoGoppHrwCxcXdye3d6gimSw/+llItHBxcW/iJtBeS3XmydNcDRcXdwE32Yj0mq+9EFZIfnBxcZdxe83RPK+aabKenhPBxcVdzM0fzYsj+SLz4ikuLu5O7vxaZ8qp1V+Ai4u7h1stTCTHrfKAVW3n4OLi7uEexdErZ+Sp0ZedDC4u7hbuZbEwPnpVXSQuLu5d3PwAVh50qmlVYTG4uLgbuVMd2nhz0yvE4OLiPpmbH82sNmuTxgwuLu4zub1kqVouabZacXFxF3Bngk7egk1+R7TFwcXFXczNA9N89bIayKbqu7i4uB3uH0RHlYzd2WwIAAAAAElFTkSuQmCC" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
+  });
 </script>
 
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
 
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '经检测,你已离开...';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '欢迎回来...';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-})();
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
+
+<script src="/js/scripts.js"></script>
+
+
+  <script src="/js/home.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Gary Wu
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Gary Wu All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
 </body>
 </html>

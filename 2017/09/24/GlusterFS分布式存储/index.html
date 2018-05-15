@@ -1,26 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    <title>GlusterFS存储 | Gary Wu | 运维架构师 - 从入门到放弃</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="高级运维,GlusterFS,SAN,NAS,分布式存储">
-    <meta name="description" content="概述  GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。GlusterFS 是 Scale-Out 存储解决方案 Gluster 的核心，具有强大的横向扩展能力，通过扩展能够支持数PB存储容量和处理数千客户端。GlusterFS 借助 TCP/IP 或 InfiniBand RDMA 网络将物理分布的存储资源">
+  <meta charset="utf-8">
+  
+  <title>glusterfs存储 | Gary Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="高级运维GlusterFSSANNAS分布式存储" />
+  
+  
+  
+  
+  <meta name="description" content="概述  GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。GlusterFS 是 Scale-Out 存储解决方案 Gluster 的核心，具有强大的横向扩展能力，通过扩展能够支持数PB存储容量和处理数千客户端。GlusterFS 借助 TCP/IP 或 InfiniBand RDMA 网络将物理分布的存储资源">
 <meta name="keywords" content="高级运维,GlusterFS,SAN,NAS,分布式存储">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GlusterFS存储">
@@ -41,156 +32,167 @@
 <meta name="twitter:title" content="GlusterFS存储">
 <meta name="twitter:description" content="概述  GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。GlusterFS 是 Scale-Out 存储解决方案 Gluster 的核心，具有强大的横向扩展能力，通过扩展能够支持数PB存储容量和处理数千客户端。GlusterFS 借助 TCP/IP 或 InfiniBand RDMA 网络将物理分布的存储资源">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/zongtijiagou.png">
-    
-        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+    <link rel="alternate" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
+  
 
-    <!-- custom head -->
-    
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
 
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Gary Wu</h5>
-          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
-        </hgroup>
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
       </div>
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                所有文章
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags/高级运维"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/wuyanteng" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://t.me/om_china" target="_blank" >
-                <i class="icon icon-lg icon-link"></i>
-                Telegram讨论组
-              </a>
-            </li>
-        
-      </ul>
-    </div>
-  </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">GlusterFS存储</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">GlusterFS存储</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-09-24T02:50:18.000Z" itemprop="datePublished" class="page-time">
-  2017-09-24
-</time>
-
-
-            
-        </h5>
-    </div>
-
-    
-
 
 </header>
 
 
-<div class="container body-wrap">
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-GlusterFS分布式存储" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署"><span class="post-toc-number">1.</span> <span class="post-toc-text">部署</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Trusted-Storage-Pools可信存储池-【在server1配置】"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">Trusted Storage Pools可信存储池-【在server1配置】</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GlusterFS逻辑卷-Volume-创建"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">GlusterFS逻辑卷(Volume)创建</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-创建分布式卷"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">1. 创建分布式卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-创建复制卷"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">2. 创建复制卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-创建条带卷"><span class="post-toc-number">1.0.5.</span> <span class="post-toc-text">3. 创建条带卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-创建分布式-复制卷（推荐）"><span class="post-toc-number">1.0.6.</span> <span class="post-toc-text">4. 创建分布式+复制卷（推荐）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5-创建分布式-条带卷"><span class="post-toc-number">1.0.7.</span> <span class="post-toc-text">5. 创建分布式+条带卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-stripe-replica-volume条带复制卷"><span class="post-toc-number">1.0.8.</span> <span class="post-toc-text">6. stripe replica volume条带复制卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#7-distribute-stripe-replica-volume分布式条带复制卷"><span class="post-toc-number">1.0.9.</span> <span class="post-toc-text">7. distribute stripe replica volume分布式条带复制卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Docker-GlusterFS-Volume-插件"><span class="post-toc-number">1.0.10.</span> <span class="post-toc-text">Docker GlusterFS Volume 插件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#管理GlusterFS卷"><span class="post-toc-number">1.0.11.</span> <span class="post-toc-text">管理GlusterFS卷</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端挂载"><span class="post-toc-number">1.0.12.</span> <span class="post-toc-text">客户端挂载</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#基于GlusterFS实现MySQL数据持久化"><span class="post-toc-number">1.0.13.</span> <span class="post-toc-text">基于GlusterFS实现MySQL数据持久化</span></a></li></ol></li></ol></li></ol>
-        </nav>
-    </aside>
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      GlusterFS存储
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/09/24/GlusterFS分布式存储/" class="article-date">
+	  <time datetime="2017-09-24T02:50:18.000Z" itemprop="datePublished">2017-09-24</time>
+	</a>
 
-<article id="post-GlusterFS分布式存储"
-  class="post-article article-type-post fade" itemprop="blogPost">
-
-    <div class="post-card">
-        <h1 class="post-card-title">GlusterFS存储</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-09-24 10:50:18" datetime="2017-09-24T02:50:18.000Z"  itemprop="datePublished">2017-09-24</time>
-
-            
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
-</span>
-
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <blockquote>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
 <p>概述</p>
 </blockquote>
 <pre><code>GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。GlusterFS 是 Scale-Out 存储解决方案 Gluster 的核心，具有强大的横向扩展能力，通过扩展能够支持数PB存储容量和处理数千客户端。GlusterFS 借助 TCP/IP 或 InfiniBand RDMA 网络将物理分布的存储资源聚集在一起，使用单一全局命名空间来管理数据。GlusterFS 基于可堆叠的用户空间设计，可为各种不同的数据负载提供优异的性能。
@@ -203,13 +205,7 @@
 </code></pre><blockquote>
 <p>GlusterFS总体架构</p>
 </blockquote>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/zongtijiagou.png" alt="GFS_jiagou" title="">
-                </div>
-                <div class="image-caption">GFS_jiagou</div>
-            </figure>
+<p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/zongtijiagou.png" alt="GFS_jiagou"></p>
 <blockquote>
 <p>GlusterFS卷类型</p>
 </blockquote>
@@ -499,13 +495,7 @@ Filesystem                 Size  Used Avail Use% Mounted on
 </code></pre><h4 id="4-创建分布式-复制卷（推荐）"><a href="#4-创建分布式-复制卷（推荐）" class="headerlink" title="4. 创建分布式+复制卷（推荐）"></a>4. 创建分布式+复制卷（推荐）</h4><pre><code>特点：
 Brick server 数量是镜像数的倍数，兼具 distribute 和 replica 卷的特点,可以在 2 个或多个节点之间复制数据。分布式的复制卷，volume 中 brick 所包含的存储服务器数必须是 replica 的倍数(&gt;=2倍)，兼顾分布式和复制式的功能。
 </code></pre><p>分布式复制卷架构示意图：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi-fuzhijuan.png" alt="fenbushi-fuzhi" title="">
-                </div>
-                <div class="image-caption">fenbushi-fuzhi</div>
-            </figure>
+<p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi-fuzhijuan.png" alt="fenbushi-fuzhi"></p>
 <pre><code>测试之前，我们先删除刚才创建的分布式卷
 
 [root@gserver1 ~]# gluster volume stop dis-volume   #必须先停止卷，然后再删除卷
@@ -576,29 +566,11 @@ Filesystem                 Size  Used Avail Use% Mounted on
 另外2台服务器/data/A没有数据，由此可以总结为分布式复制卷类似于RIAD1,有备份冗余功能，但磁盘利用率低。
 </code></pre><h4 id="5-创建分布式-条带卷"><a href="#5-创建分布式-条带卷" class="headerlink" title="5. 创建分布式+条带卷"></a>5. 创建分布式+条带卷</h4><pre><code>特点：
 Brick server 数量是条带数的倍数，兼具 distribute 和 stripe 卷的特点。分布式的条带卷，volume 中 brick 所包含的存储服务器数必须是 stripe 的倍数(&gt;=2倍)，兼顾分布式和条带式的功能。每个文件分布在四台共享服务器上，通常用于大文件访问处理，最少需要 4 台服务器才能创建分布条带卷。
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi-tiaodaijuan.png" alt="fenbushi_tiaodaijuan" title="">
-                </div>
-                <div class="image-caption">fenbushi_tiaodaijuan</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi-tiaodaijuan.png" alt="fenbushi_tiaodaijuan"></p>
 <h4 id="6-stripe-replica-volume条带复制卷"><a href="#6-stripe-replica-volume条带复制卷" class="headerlink" title="6. stripe replica volume条带复制卷"></a>6. stripe replica volume条带复制卷</h4><pre><code>特点：类似 RAID 10，同时具有条带卷和复制卷的特点。
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tiaodai-fuzhijuan.png" alt="tiaodai_fuzhijuan" title="">
-                </div>
-                <div class="image-caption">tiaodai_fuzhijuan</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/tiaodai-fuzhijuan.png" alt="tiaodai_fuzhijuan"></p>
 <h4 id="7-distribute-stripe-replica-volume分布式条带复制卷"><a href="#7-distribute-stripe-replica-volume分布式条带复制卷" class="headerlink" title="7. distribute stripe replica volume分布式条带复制卷"></a>7. distribute stripe replica volume分布式条带复制卷</h4><pre><code>特点：三种基本卷的复合卷，通常用于类 Map Reduce 应用。
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi_tiaodai_fuzhijuan.png" alt="fenbushi_tiaodai_fuzhijuan" title="">
-                </div>
-                <div class="image-caption">fenbushi_tiaodai_fuzhijuan</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/fenbushi_tiaodai_fuzhijuan.png" alt="fenbushi_tiaodai_fuzhijuan"></p>
 <h4 id="Docker-GlusterFS-Volume-插件"><a href="#Docker-GlusterFS-Volume-插件" class="headerlink" title="Docker GlusterFS Volume 插件"></a>Docker GlusterFS Volume 插件</h4><pre><code>Docker Volume是一种可以将容器以及容器生产的数据分享开来的数据格式，我们可以使用宿主机的本地存储作为Volume的提供方，也可以使用Volume Plugin接入许多第三方的存储。 GitHub就有一个Docker GlusterFS Volume Plugin，方便我们将GlusterFS挂载到容器中。
 
 GitHub:https://github.com/calavera/docker-volume-glusterfs
@@ -795,317 +767,247 @@ mount -o mountproto=tcp -t nfs server1:/test-volume /mnt/test
 <p>参考：<a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-glusterfs-docker-volume/index.html" target="_blank" rel="noopener">IBM developerworks</a></p>
 </blockquote>
 
-        </div>
-
-        <blockquote class="post-copyright">
-    
-    <div class="content">
-        
-<span class="post-time">
-    最后更新时间：<time datetime="2017-09-26T03:56:56.368Z" itemprop="dateUpdated">2017-09-26 11:56:56</time>
-</span><br>
-
-
-        
-        转载文章请注明出处！<br>文章永久链接：<a href="/2017/09/24/GlusterFS分布式存储/" target="_blank" rel="external">https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/</a>
-        
+      
     </div>
-    
-    <footer>
-        <a href="https://wuyanteng.github.io">
-            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
-            Gary Wu
-        </a>
+    <footer class="article-footer">
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GlusterFS/">GlusterFS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NAS/">NAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SAN/">SAN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式存储/">分布式存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
     </footer>
-</blockquote>
-
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/09/24/CentOS7-创建网卡子接口/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
         
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
-</div>
-
-
-
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GlusterFS/">GlusterFS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NAS/">NAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SAN/">SAN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式存储/">分布式存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&title=《GlusterFS存储》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&title=《GlusterFS存储》 — Gary Wu&source=
-概述
-
-GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。Glus..." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《GlusterFS存储》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
+          CentOS7-创建网卡子接口
+        
+      </div>
     </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/2017/09/24/CentOS7-创建网卡子接口/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">CentOS7-创建网卡子接口</h4>
-      </a>
-    </div>
   
-
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/09/23/Nginx负载均衡/" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Nginx负载均衡</h4>
-      </a>
-    </div>
+    <a href="/2017/09/23/Nginx负载均衡/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Nginx负载均衡</div>
+    </a>
   
 </nav>
 
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
 </article>
 
-<div id="reward" class="page-modal reward-lay">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <h3 class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        我们不一样
-        <i class="icon icon-quote-right"></i>
-    </h3>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
-        </div>
-        
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#部署"><span class="nav-number">1.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Trusted-Storage-Pools可信存储池-【在server1配置】"><span class="nav-number">1.0.1.</span> <span class="nav-text">Trusted Storage Pools可信存储池-【在server1配置】</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GlusterFS逻辑卷-Volume-创建"><span class="nav-number">1.0.2.</span> <span class="nav-text">GlusterFS逻辑卷(Volume)创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-创建分布式卷"><span class="nav-number">1.0.3.</span> <span class="nav-text">1. 创建分布式卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-创建复制卷"><span class="nav-number">1.0.4.</span> <span class="nav-text">2. 创建复制卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-创建条带卷"><span class="nav-number">1.0.5.</span> <span class="nav-text">3. 创建条带卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-创建分布式-复制卷（推荐）"><span class="nav-number">1.0.6.</span> <span class="nav-text">4. 创建分布式+复制卷（推荐）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-创建分布式-条带卷"><span class="nav-number">1.0.7.</span> <span class="nav-text">5. 创建分布式+条带卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-stripe-replica-volume条带复制卷"><span class="nav-number">1.0.8.</span> <span class="nav-text">6. stripe replica volume条带复制卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-distribute-stripe-replica-volume分布式条带复制卷"><span class="nav-number">1.0.9.</span> <span class="nav-text">7. distribute stripe replica volume分布式条带复制卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker-GlusterFS-Volume-插件"><span class="nav-number">1.0.10.</span> <span class="nav-text">Docker GlusterFS Volume 插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#管理GlusterFS卷"><span class="nav-number">1.0.11.</span> <span class="nav-text">管理GlusterFS卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端挂载"><span class="nav-number">1.0.12.</span> <span class="nav-text">客户端挂载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于GlusterFS实现MySQL数据持久化"><span class="nav-number">1.0.13.</span> <span class="nav-text">基于GlusterFS实现MySQL数据持久化</span></a></li></ol></li></ol></li></ol>
+    
     </div>
-</div>
-
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
+  </aside>
+</section>
         
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      </div>
+      
+      <footer id="footer">
+  
 
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 Gary Wu All Rights Reserved.</p>
+	      
+	      
+  		   	<p id="copyRightCn">Gary Wu 保留所有权利</p>
+  		   
+		</div>
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Gary Wu &copy; 2015 - 2018</span>
-            <span>
-                
-                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
-            </span>
-        </p>
-    </div>
+		
+  </div>
 </footer>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
+<!-- min height -->
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&title=《GlusterFS存储》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&title=《GlusterFS存储》 — Gary Wu&source=
-概述
-
-GlusterFS (Gluster File System) 是一个开源的分布式文件系统，主要由 Z RESEARCH 公司负责开发。Glus..." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《GlusterFS存储》 — Gary Wu&url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/09/24/GlusterFS分布式存储/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACyUlEQVR42u3aQW7CQAwF0Nz/0lTqrqoC3/YYWLysKgpk3lTKuN++rvh6/F7PX/n/+t3Pz1/Jv+HYhYeHh9da+t2VLO7/+5PXk/Ukd7xbMx4eHt42b/KITzZrfsdkDXh4eHjfxru7TfLO3kKrW4yHh4f3bbwkqsipzwvo3uGEh4eH905eEkbkEUB+qMwPpGNZCx4eHl7MqzbAvuHnxf4eHh4e3qCrnl+94YCkyK4eTn8+hYeHh7fAS+KA6jBWtVg/G+8WJhHw8PDwxry8oVVdaLK4XlMtCnPx8PDw1nh5Qbx3tOSDVs2UGg8PD+8QLy+1q62yPJjoRRij3BoPDw+vxctbTcktqxFDPnbQPBjw8PDwFni9NlX1AZ1vXFIWJ6u6/Rvi4eHhjXn5P/OTaj0fEehtWXnoCg8PD2/A65WteWOsOp7Va6e9YOPh4eEt86rt/+qy8jbVpDGGh4eH9x5er7k1OTYSUnX06jZrwcPDwzvEqwa4yY17C60yongXDw8Pb43Xi27z2ycjAoVwIW+e4eHh4a3x8gXlQeqpz+bfFpXUeHh4eId4eTCaFNy9cav8CMnbaXh4eHh7vGoMUS1/52ME1a2/en8ZPDw8vFYYsdcGy8cOkuK7XFLj4eHhHeL1HvqTUrgK6B0ko+oeDw8PL+DlAwT5EFXy22qjKw8pmvMReHh4eMW0oVrg5kMDSTDR29D84MHDw8M7y8sf7nnUmxfBvYOnUJrj4eHhvYXXW1DUlIrD3APRLR4eHt4C71G85sVxEiLkx8aLDcXDw8Nb4OVXL4o9Fc5WN+iqXnh4eHiD3tDGwzcPL6rvLP/HgIeHh3eU1xvD6n02iUIOZy14eHh4H+VNgonCLENMevGdeHh4eB/l5c2qyVhAEk/kW4+Hh4e3x+s1n6qP6Tx0yKPeF8cMHh4e3gJv0gDLj4TJsbE4NICHh4dX4/0AspvaTy4W4kYAAAAASUVORK5CYII=" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
+  });
 </script>
 
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
 
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '经检测,你已离开...';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '欢迎回来...';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-})();
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Gary Wu
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Gary Wu All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
 </body>
 </html>

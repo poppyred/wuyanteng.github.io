@@ -1,26 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    <title>Gary Wu | 运维架构师 - 从入门到放弃</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="">
-    <meta name="description" content="GaryWu Blog">
+  <meta charset="utf-8">
+  
+  <title>Gary Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  
+  <meta name="description" content="GaryWu Blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Gary Wu">
 <meta property="og:url" content="https://wuyanteng.github.io/page/5/index.html">
@@ -30,572 +19,697 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gary Wu">
 <meta name="twitter:description" content="GaryWu Blog">
-    
-        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+    <link rel="alternate" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
+  
 
-    <!-- custom head -->
-    
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/home.css" >
+  
+
+  
+
+  
+
+  
+  
+  
 
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
 
-    <aside id="menu"  >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Gary Wu</h5>
-          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
-        </hgroup>
-      </div>
-    </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
+
+  <body>
+
+
+  
+    <header id="header">
+
+	<!-- 背景图模式 -->
+	
+
+    
+      <div id="intrologo" class="intro-logo">
+    
+ 
+
+
+    <canvas width="100%" height="100%"></canvas>
+    <script>
+      var c = document.getElementsByTagName('canvas')[0],
+          x = c.getContext('2d'),
+          w = window.innerWidth,
+          h = window.innerHeight,
+          pr = window.devicePixelRatio || 1,
+          f = 90,
+          q,
+          m = Math,
+          r = 0,
+          u = m.PI*2,
+          v = m.cos,
+          z = m.random
+      c.width = w*pr
+      c.height = h*pr
+      x.scale(pr, pr)
+      x.globalAlpha = 0.6
+
+      <!-- 折线Polyline背景 -->
+      
+        function i(){
+            x.clearRect(0,0,w,h)
+            q=[{x:0,y:h*.7+f},{x:0,y:h*.7-f}]
+            while(q[1].x<w+f) d(q[0], q[1])
+        }
+        function d(i,j){   
+            x.beginPath()
+            x.moveTo(i.x, i.y)
+            x.lineTo(j.x, j.y)
+            var k = j.x + (z()*2-0.25)*f,
+                n = y(j.y)
+            x.lineTo(k, n)
+            x.closePath()
+            r-=u/-50
+            x.fillStyle = '#'+(v(r)*127+128<<16 | v(r+u/3)*127+128<<8 | v(r+u/3*2)*127+128).toString(16)
+            x.fill()
+            q[0] = q[1]
+            q[1] = {x:k,y:n}
+        }
+        function y(p){
+            var t = p + (z()*2-1.1)*f
+            return (t>h||t<0) ? y(p) : t
+        }
+        document.getElementById("intrologo").onclick = i
+        document.getElementById("intrologo").ontouchstart = i
+        i()
+
+      <!-- 多边形trianglify背景 -->
+      
+    </script>
+    
+
+    
+      <div id="homelogo" class="homelogo"> 
+    
+
         
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
+          <div class="homelogoback" >
+            <h1><a href="#content" id="logo">Gary Wu</a></h1>
+            <h3>GaryWu Blog</h3>
+            <h5>Gary Wu</h5>
+            <!-- <p><a href="https://github.com/iTimeTraveler" target="_blank">Github</a></p> -->
+          </div>
         
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                所有文章
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags/高级运维"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/wuyanteng" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://t.me/om_china" target="_blank" >
-                <i class="icon icon-lg icon-link"></i>
-                Telegram讨论组
-              </a>
-            </li>
-        
-      </ul>
+    
     </div>
   </div>
-</aside>
 
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Gary Wu</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header index-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Gary Wu</h1>
-        <h5 class="subtitle">
-            
-                运维架构师 - 从入门到放弃
-            
-        </h5>
-    </div>
-
-    
-
-
-</header>
-
-<div class="container body-wrap">
-
-    <ul class="post-list">
-    
-        <li class="post-list-item fade">
-            <article id="post-iptables网络防火墙"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-10 09:36:25" datetime="2018-02-10T01:36:25.000Z"  itemprop="datePublished">2018-02-10</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/10/iptables网络防火墙/">iptables网络防火墙</a>
-    </h3>
+  <!-- 自适应主页背景大图 -->
   
 
+ <!-- home_logo_image居中 -->
+ 
+    <script>
+        var homelogodiv = document.getElementById("homelogo");
+        if (document.all.homelogo.offsetWidth > document.body.clientWidth) {
+          homelogodiv.style.width = document.body.clientWidth + "px";
+          homelogodiv.style.marginLeft = document.body.clientWidth * -0.5 + "px";
+        } else {
+          homelogodiv.style.width = homelogodiv.clientWidth  + "px";
+          homelogodiv.style.marginLeft = (homelogodiv.clientWidth)  * -0.5 + "px";
+        }
+    </script>
+  
 
+  <div class="intro-navigate">
+      <p class="navigater-list">
+        
+          <a id="beautifont" class="main-nav-link" href="/">首页</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/archives">归档</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/categories">分类</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/tags">标签</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/about">关于</a>
+        
+      </p>
+  </div>
 
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
+</header>
+  
+  <div id="container">
+    <div id="wrap">
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;">
+  
+    <article id="post-iptables网络防火墙"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/10/iptables网络防火墙/">iptables网络防火墙</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/10/iptables网络防火墙/" class="article-date">
+	  <time datetime="2018-02-10T01:36:25.000Z" itemprop="datePublished">2018-02-10</time>
+	</a>
+
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>官网：http://www.netfilter.org/
 iptables由Netfilter内核态组件实现防火墙功能, 包过滤功能强大，使用灵活
 不适用于大并发场景，适用于并发量相对较少(500左右并发)的访问场景
 </code></pre>
-    
+        <!-- 官网：http://www.netfilter.org/
+iptables由Netfilter内核态组件实现防火墙功能, 包过滤功能强大，使用灵活
+不适用于大并发场景，适用于并发量相对较少(500左右并发)的访问场景
 
-        <a href="/2018/02/10/iptables网络防火墙/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iptables/">iptables</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/防火墙/">防火墙</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+iptables -V   #查看iptables版本
 
+iptables主要工作在OSI七层的3层(IP), 也支持2层(但基本不需要对2层控制)
+iptables也可以支......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/10/iptables网络防火墙/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iptables/">iptables</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/防火墙/">防火墙</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-zabbix自定义key监控mysql主从"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-zabbix自定义key监控mysql主从"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-09 15:06:08" datetime="2018-02-09T07:06:08.000Z"  itemprop="datePublished">2018-02-09</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/09/zabbix自定义key监控mysql主从/">zabbix自定义key监控mysql主从</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/09/zabbix自定义key监控mysql主从/" class="article-date">
+	  <time datetime="2018-02-09T07:06:08.000Z" itemprop="datePublished">2018-02-09</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/09/zabbix自定义key监控mysql主从/">zabbix自定义key监控mysql主从</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>以下通过自定义脚本对mysql主从存活状态以及io和sql线程进行监控
 </code></pre>
-    
+        <!-- 以下通过自定义脚本对mysql主从存活状态以及io和sql线程进行监控
 
-        <a href="/2018/02/09/zabbix自定义key监控mysql主从/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/slave/">slave</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+步骤1：创建脚本存放目录并使用脚本
+mkdir -p  /var/lib/zabbix/scripts/mysql
+在此目录使用以下脚本并赋予执行权限
 
+注：以下脚本会生成3个文件
+#!/bin/bash
+USER=root
+PASS=
+io_check=`cat mysql_slave_status.log |awk......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/09/zabbix自定义key监控mysql主从/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/slave/">slave</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-postfix邮件发送服务器"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-postfix邮件发送服务器"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-09 11:51:27" datetime="2018-02-09T03:51:27.000Z"  itemprop="datePublished">2018-02-09</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/09/postfix邮件发送服务器/">postfix邮件发送服务器</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/09/postfix邮件发送服务器/" class="article-date">
+	  <time datetime="2018-02-09T03:51:27.000Z" itemprop="datePublished">2018-02-09</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/09/postfix邮件发送服务器/">postfix邮件发送服务器</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>Postfix是用来替代Sendmail的，它的配置文件比Sendmail简单得多，配置相当容易。适合当做告警邮件发送服务器
 </code></pre>
-    
+        <!-- Postfix是用来替代Sendmail的，它的配置文件比Sendmail简单得多，配置相当容易。适合当做告警邮件发送服务器
 
-        <a href="/2018/02/09/postfix邮件发送服务器/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/from/">from</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mail/">mail</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/postfix/">postfix</a></li></ul>
+yum remove -y sendmail
+yum install -y postfix
 
+主配置文件修改
+
+/etc/postfix/main.cf
+myhostname = mail.example.com      #改为自己想定义的域名
+mydomain ......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/09/postfix邮件发送服务器/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/from/">from</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mail/">mail</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/postfix/">postfix</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-xtrabackup连接不上MySQL的问题"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-xtrabackup连接不上MySQL的问题"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-08 15:28:51" datetime="2018-02-08T07:28:51.000Z"  itemprop="datePublished">2018-02-08</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/08/xtrabackup连接不上MySQL的问题/">xtrabackup连接不上MySQL的问题</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/08/xtrabackup连接不上MySQL的问题/" class="article-date">
+	  <time datetime="2018-02-08T07:28:51.000Z" itemprop="datePublished">2018-02-08</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/08/xtrabackup连接不上MySQL的问题/">xtrabackup连接不上MySQL的问题</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <p>使用xtrabackup备份问题</p>
-    
+        <!-- 使用xtrabackup备份问题
 
-        <a href="/2018/02/08/xtrabackup连接不上MySQL的问题/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/innobackupex/">innobackupex</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xtrabackup/">xtrabackup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+[root@localhost ~]# innobackupex --user=root --password=131417 /backup
 
+以下是错误提示：
+innobackupex: got a fatal error with the following stacktrace: at /usr/bin/innobackupex line 3011.......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/08/xtrabackup连接不上MySQL的问题/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/innobackupex/">innobackupex</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xtrabackup/">xtrabackup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-查询MySQL占用空间空间排序"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-查询MySQL占用空间空间排序"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-08 14:39:27" datetime="2018-02-08T06:39:27.000Z"  itemprop="datePublished">2018-02-08</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/08/查询MySQL占用空间空间排序/">查询MySQL表占用空间空间排序</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/08/查询MySQL占用空间空间排序/" class="article-date">
+	  <time datetime="2018-02-08T06:39:27.000Z" itemprop="datePublished">2018-02-08</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/08/查询MySQL占用空间空间排序/">查询MySQL表占用空间空间排序</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>一个数据库运行了很久，向对其进行清理优化，如何能快速知道哪些表占用容量较大呢？
 </code></pre>
-    
+        <!-- 一个数据库运行了很久，向对其进行清理优化，如何能快速知道哪些表占用容量较大呢？
 
-        <a href="/2018/02/08/查询MySQL占用空间空间排序/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+Select  
+Concat(table_schema, &#39;.&#39;, table_name) As &quot;Name&quot;  
+,Concat(Round(table_rows / 1000000, 2), &#39;M&#39;) As &quot;Rows&quot;  
+,Con......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/08/查询MySQL占用空间空间排序/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-xtrabackup单表备份与还原"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-xtrabackup单表备份与还原"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-08 13:22:37" datetime="2018-02-08T05:22:37.000Z"  itemprop="datePublished">2018-02-08</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/08/xtrabackup单表备份与还原/">xtrabackup单表备份与还原</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/08/xtrabackup单表备份与还原/" class="article-date">
+	  <time datetime="2018-02-08T05:22:37.000Z" itemprop="datePublished">2018-02-08</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/08/xtrabackup单表备份与还原/">xtrabackup单表备份与还原</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h4 id="单表备份"><a href="#单表备份" class="headerlink" title="单表备份"></a>单表备份</h4><blockquote>
 <p>使用–include方式</p>
 </blockquote>
-    
+        <!-- 单表备份
+使用–include方式
 
-        <a href="/2018/02/08/xtrabackup单表备份与还原/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/innobackupex/">innobackupex</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xtrabackup/">xtrabackup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
+例：备份oss库中以store开头的表和pms库中以sys_right开头的表
+
+注意2个匹配条件中必须以|分隔
+
+#innobackupex --defaults-file=/etc/my.cnf --user=root --password=admin  --include=&#39;oss.store.*|pms.sys_right.*&#39;......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/08/xtrabackup单表备份与还原/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/innobackupex/">innobackupex</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xtrabackup/">xtrabackup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-深入理解zabbix权限及业务分类告警"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-深入理解zabbix权限及业务分类告警"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-08 11:45:34" datetime="2018-02-08T03:45:34.000Z"  itemprop="datePublished">2018-02-08</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/08/深入理解zabbix权限及业务分类告警/">深入理解zabbix权限及业务分类告警</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/08/深入理解zabbix权限及业务分类告警/" class="article-date">
+	  <time datetime="2018-02-08T03:45:34.000Z" itemprop="datePublished">2018-02-08</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/08/深入理解zabbix权限及业务分类告警/">深入理解zabbix权限及业务分类告警</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>以下是工作中对zabbix用户、用户组、主机、主机组以及动作的一些理解，并根据业务需求，对业务进行分类监控
 </code></pre>
-    
+        <!-- 以下是工作中对zabbix用户、用户组、主机、主机组以及动作的一些理解，并根据业务需求，对业务进行分类监控
 
-        <a href="/2018/02/08/深入理解zabbix权限及业务分类告警/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+用户： 谁有权限登陆zabbix
+用户群组: 用户可根据业务分类，让不同用户隶属于不同的用户群组（可配置业务主机zabbix登陆后访问权限）
 
+
+主机: 添加的主机(主机添加时选择主机群组)
+主机群组: 主机群组是主机的集合。可根据业务划分,让不同业务主机隶属于不同的主机群组
+
+动作......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/08/深入理解zabbix权限及业务分类告警/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-emerge-USE标记介绍-gentoo"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-emerge-USE标记介绍-gentoo"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-06 20:31:26" datetime="2018-02-06T12:31:26.000Z"  itemprop="datePublished">2018-02-06</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/06/emerge-USE标记介绍-gentoo/">emerge USE标记介绍-gentoo</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/06/emerge-USE标记介绍-gentoo/" class="article-date">
+	  <time datetime="2018-02-06T12:31:26.000Z" itemprop="datePublished">2018-02-06</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/06/emerge-USE标记介绍-gentoo/">emerge USE标记介绍-gentoo</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <blockquote>
 <p>Gentoo/Funtoo USE标记</p>
 </blockquote>
 <pre><code>安装软件时，避免不了一些依赖。那么就需要了解USE标记。
 USE的简单理解如下：一个软件不只包含软件本身，还包括其组件，如，文档，插件，GUI支持等。USE就是用来标记是否要安装软件的同时安装这些组件。
 </code></pre>
-    
+        <!-- 
+Gentoo/Funtoo USE标记
 
-        <a href="/2018/02/06/emerge-USE标记介绍-gentoo/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Funtoo/">Funtoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gentoo/">Gentoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/USE标记/">USE标记</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emerge/">emerge</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emerge命令/">emerge命令</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+安装软件时，避免不了一些依赖。那么就需要了解USE标记。
+USE的简单理解如下：一个软件不只包含软件本身，还包括其组件，如，文档，插件，GUI支持等。USE就是用来标记是否要安装软件的同时安装这些组件。
 
+
+默认USE标记
+
+所有USE标志都声明在 USE 变量里面。为了让用户能方便地查找和选择USE标志，官方提供了一份默认的USE设定。这些设定是......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/06/emerge-USE标记介绍-gentoo/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Funtoo/">Funtoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gentoo/">Gentoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/USE标记/">USE标记</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emerge/">emerge</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emerge命令/">emerge命令</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-supervisor安装与管理-Gentoo"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-supervisor安装与管理-Gentoo"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-06 19:48:18" datetime="2018-02-06T11:48:18.000Z"  itemprop="datePublished">2018-02-06</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/06/supervisor安装与管理-Gentoo/">supervisor安装与管理-Gentoo</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/06/supervisor安装与管理-Gentoo/" class="article-date">
+	  <time datetime="2018-02-06T11:48:18.000Z" itemprop="datePublished">2018-02-06</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/06/supervisor安装与管理-Gentoo/">supervisor安装与管理-Gentoo</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>Supervisor 相当强大，提供了很丰富的功能，不过我们可能只需要用到其中一小部分。安装完成之后，可以编写配置文件，来满足自己的需求。
 </code></pre>
-    
+        <!-- Supervisor 相当强大，提供了很丰富的功能，不过我们可能只需要用到其中一小部分。安装完成之后，可以编写配置文件，来满足自己的需求。
 
-        <a href="/2018/02/06/supervisor安装与管理-Gentoo/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gentoo/">gentoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/supervisor/">supervisor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/supervisorctl/">supervisorctl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
+supervisor安装
+
+eix supervisor   #查看安装包名称
+[I] app-admin/supervisor
+     Available versions:  (~)3.1.3 {doc test PYTHON_TARGETS=......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/06/supervisor安装与管理-Gentoo/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gentoo/">gentoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/supervisor/">supervisor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/supervisorctl/">supervisorctl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-MySQL-MHA高可用架构与实现"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-MySQL-MHA高可用架构与实现"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-03 13:21:10" datetime="2018-02-03T05:21:10.000Z"  itemprop="datePublished">2018-02-03</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/03/MySQL-MHA高可用架构与实现/">MySQL MHA高可用架构与实现</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/03/MySQL-MHA高可用架构与实现/" class="article-date">
+	  <time datetime="2018-02-03T05:21:10.000Z" itemprop="datePublished">2018-02-03</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/03/MySQL-MHA高可用架构与实现/">MySQL MHA高可用架构与实现</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <blockquote>
 <p>MHA高可用架构</p>
 </blockquote>
@@ -605,193 +719,217 @@ USE的简单理解如下：一个软件不只包含软件本身，还包括其�
 3. 对业务透明（通过VIP自动切换到新主库）
 4. 尽量保证新的主库与老的主库数据一致,即数据补偿
 </code></pre>
-    
+        <!-- 
+MHA高可用架构
 
-        <a href="/2018/02/03/MySQL-MHA高可用架构与实现/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Failover/">Failover</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MHA/">MHA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VIP/">VIP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/binlog-server/">binlog server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/半同步复制/">半同步复制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/异步复制/">异步复制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+MHA可以解决的问题
+1. 监控所有节点状态
+2. 自动选择新的主库
+3. 对业务透明（通过VIP自动切换到新主库）
+4. 尽量保证新的主库与老的主库数据一致,即数据补偿
 
+MHA原理
+1. 原版MHA架构要求至少三个节点才能实现
+2. 监控多个节点【心跳、主从复制的状态(show slave status)】
+3. MHA结构是由Manager+node构成。所以三台......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/03/MySQL-MHA高可用架构与实现/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Failover/">Failover</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MHA/">MHA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VIP/">VIP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/binlog-server/">binlog server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/半同步复制/">半同步复制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/异步复制/">异步复制</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+
+
+  <nav id="page-nav">
     
-    </ul>
+    <a class="extend prev" rel="prev" href="/page/4/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/6/">下一页 &raquo;</a>
+  </nav>
 
-    
-<nav id="page-nav">
-    <div class="inner">
-    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
-    </div>
-</nav>
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
+</section>
         
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      </div>
+      
+        <div align="center" style="margin-top: 30px;"><hr class="hr" style="margin:0px; height:3px;"></div>
+      
+      <footer id="footer">
+  
 
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 Gary Wu All Rights Reserved.</p>
+	      
+	      
+  		   	<p id="copyRightCn">Gary Wu 保留所有权利</p>
+  		   
+		</div>
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Gary Wu &copy; 2015 - 2018</span>
-            <span>
-                
-                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
-            </span>
-        </p>
-    </div>
+		
+  </div>
 </footer>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
+<!-- min height -->
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/page/5/&title=Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/page/5/&title=Gary Wu&source=GaryWu Blog" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/page/5/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Gary Wu&url=https://wuyanteng.github.io/page/5/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/page/5/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABxElEQVR42u3aS27DMAwFwNz/0u62QGHnkZSEpBitAli1pl4Q/Oj1itf1Z909vdt/9/S1Y+Hi4o651+P6vefu9zP0+cTcgIuLe55799JnRJWefII3Nlxc3I/kJn+VJDe4uLj/g5u8LqHg4uJ+C7fayMjbHPnbFtdquLi4A27epdz3e0t/FxcXt8W9Bqs3bpmcjouLe4ZbDTrJ0+fwNE+ncHFxd3PzA/J2yTwI3hZUuLi4B7lRm3LR6CVvpzYPxsXFXcpdW+pMBjNvUhxcXNwj3FUDjN51jcJ+XFzcg9w8uPS4SXJTLn5wcXG3catbe2lKflGjUALh4uJu4/ZCSULJGy55kwUXF/c8d1XDdJIqFYofXFzczdxespKPTHpD1tt7Iri4uJu5eXKzsc1RDXm4uLibudXxxnwln6Bc/ODi4i7llhsTwZFJzMkDWfPiJi4u7oB7FVc1SE0ar4X/AxcXdym3F1x6A5XqyHaExsXFHXPzlkee6FTbH0krFhcX9zy3PPJcdXzxPbi4uJ/GrZY01YZp9GlwcXE/jLu2pdJ8iouLe5DbK36StKbaFnkT2nBxcY9w59cmkjxkkgwtvuWBi4v7tP8HGykGHMZ/cdMAAAAASUVORK5CYII=" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
+  });
 </script>
 
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
 
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '经检测,你已离开...';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '欢迎回来...';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-})();
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
+
+<script src="/js/scripts.js"></script>
+
+
+  <script src="/js/home.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Gary Wu
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Gary Wu All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
 </body>
 </html>

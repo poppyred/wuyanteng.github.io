@@ -1,26 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    <title>ceph分布式存储 | Gary Wu | 运维架构师 - 从入门到放弃</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="高级运维,分布式存储,ceph,对象存储,块存储">
-    <meta name="description" content="Ceph分布式存储 官网：http://docs.ceph.org.cn/start/intro/">
+  <meta charset="utf-8">
+  
+  <title>ceph分布式存储 | Gary Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="高级运维分布式存储ceph对象存储块存储" />
+  
+  
+  
+  
+  <meta name="description" content="Ceph分布式存储 官网：http://docs.ceph.org.cn/start/intro/">
 <meta name="keywords" content="高级运维,分布式存储,ceph,对象存储,块存储">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ceph分布式存储">
@@ -44,156 +35,167 @@
 <meta name="twitter:title" content="ceph分布式存储">
 <meta name="twitter:description" content="Ceph分布式存储 官网：http://docs.ceph.org.cn/start/intro/">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84.png">
-    
-        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+    <link rel="alternate" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
+  
 
-    <!-- custom head -->
-    
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
 
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Gary Wu</h5>
-          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
-        </hgroup>
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
       </div>
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                所有文章
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags/高级运维"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/wuyanteng" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://t.me/om_china" target="_blank" >
-                <i class="icon icon-lg icon-link"></i>
-                Telegram讨论组
-              </a>
-            </li>
-        
-      </ul>
-    </div>
-  </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">ceph分布式存储</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">ceph分布式存储</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-08-25T02:12:34.000Z" itemprop="datePublished" class="page-time">
-  2017-08-25
-</time>
-
-
-            
-        </h5>
-    </div>
-
-    
-
 
 </header>
 
 
-<div class="container body-wrap">
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ceph存储" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Ceph优势："><span class="post-toc-number">1.</span> <span class="post-toc-text">Ceph优势：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CEPH基本结构"><span class="post-toc-number">2.</span> <span class="post-toc-text">CEPH基本结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ceph基本组件"><span class="post-toc-number">3.</span> <span class="post-toc-text">ceph基本组件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OSD"><span class="post-toc-number">4.</span> <span class="post-toc-text">OSD</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OSD读写流程如下图"><span class="post-toc-number">5.</span> <span class="post-toc-text">OSD读写流程如下图</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#monitor节点"><span class="post-toc-number">6.</span> <span class="post-toc-text">monitor节点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MDS"><span class="post-toc-number">7.</span> <span class="post-toc-text">MDS</span></a></li></ol>
-        </nav>
-    </aside>
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      ceph分布式存储
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/08/25/ceph存储/" class="article-date">
+	  <time datetime="2017-08-25T02:12:34.000Z" itemprop="datePublished">2017-08-25</time>
+	</a>
 
-<article id="post-ceph存储"
-  class="post-article article-type-post fade" itemprop="blogPost">
-
-    <div class="post-card">
-        <h1 class="post-card-title">ceph分布式存储</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-08-25 10:12:34" datetime="2017-08-25T02:12:34.000Z"  itemprop="datePublished">2017-08-25</time>
-
-            
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
-</span>
-
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <blockquote>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
 <p>Ceph分布式存储</p>
 <p>官网：<a href="http://docs.ceph.org.cn/start/intro/" target="_blank" rel="noopener">http://docs.ceph.org.cn/start/intro/</a> </p>
 </blockquote>
@@ -210,25 +212,13 @@ Ceph不同于swift，客户端所有的读写操作都要经过代理节点。�
 4. 特性丰富
 Ceph支持三种调用接口：对象存储，块存储，文件系统挂载。三种方式可以一同使用。在国内一些公司的云环境中，通常会采用ceph作为openstack的唯一后端存储来提升数据转发效率。
 </code></pre><h4 id="CEPH基本结构"><a href="#CEPH基本结构" class="headerlink" title="CEPH基本结构"></a>CEPH基本结构</h4><p>Ceph的基本组成结构如下图：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84.png" alt="ceph基本结构" title="">
-                </div>
-                <div class="image-caption">ceph基本结构</div>
-            </figure>
+<p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84.png" alt="ceph基本结构"></p>
 <pre><code>Ceph的底层是RADOS，RADOS本身也是分布式存储系统，CEPH所有的存储功能都是基于RADOS实现。RADOS采用C++开发，所提供的原生Librados API包括C和C++两种。Ceph的上层应用调用本机上的librados API，再由后者通过socket与RADOS集群中的其他节点通信并完成各种操作。
 
 RADOS GateWay、RBD其作用是在librados库的基础上提供抽象层次更高、更便于应用或客户端使用的上层接口。其中，RADOS GW是一个提供与Amazon S3和Swift兼容的RESTful API的gateway，以供相应的对象存储应用开发使用。RBD则提供了一个标准的块设备接口，常用于在虚拟化的场景下为虚拟机创建volume。目前，Red Hat已经将RBD驱动集成在KVM/QEMU中，以提高虚拟机访问性能。这两种方式目前在云计算中应用的比较多。
 
 CEPHFS则提供了POSIX接口，用户可直接通过客户端挂载使用。它是内核态的程序，所以无需调用用户空间的librados库。它通过内核中的net模块来与Rados进行交互。
-</code></pre><h4 id="ceph基本组件"><a href="#ceph基本组件" class="headerlink" title="ceph基本组件"></a>ceph基本组件</h4><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E5%9F%BA%E6%9C%AC%E7%BB%84%E4%BB%B6.png" alt="ceph基本组件" title="">
-                </div>
-                <div class="image-caption">ceph基本组件</div>
-            </figure>
+</code></pre><h4 id="ceph基本组件"><a href="#ceph基本组件" class="headerlink" title="ceph基本组件"></a>ceph基本组件</h4><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E5%9F%BA%E6%9C%AC%E7%BB%84%E4%BB%B6.png" alt="ceph基本组件"></p>
 <pre><code>如上图所示，Ceph主要有三个基本进程
 
 Osd:
@@ -240,13 +230,7 @@ MDS(可选):
 
 Monitor:
 监控整个集群的状态，维护集群的cluster MAP二进制表，保证集群数据的一致性。ClusterMAP描述了对象块存储的物理位置，以及一个将设备聚合到物理位置的桶列表。
-</code></pre><h4 id="OSD"><a href="#OSD" class="headerlink" title="OSD"></a>OSD</h4><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/osd.png" alt="osd" title="">
-                </div>
-                <div class="image-caption">osd</div>
-            </figure>
+</code></pre><h4 id="OSD"><a href="#OSD" class="headerlink" title="OSD"></a>OSD</h4><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/osd.png" alt="osd"></p>
 <pre><code>    无论使用哪种存储方式（对象、块、挂载），存储的数据都会被切分成对象（Objects）。Objects size大小可以由管理员调整，通常为2M或4M。
 
     每个对象都会有一个唯一的OID，由ino与ono生成，虽然这些名词看上去很复杂，其实相当简单。ino即是文件的File ID，用于在全局唯一标示每一个文件，而ono则是分片的编号。比如：一个文件FileID为A，它被切成了两个对象，一个对象编号0，另一个编号1，那么这两个文件的oid则为A0与A1。Oid的好处是可以唯一标示每个不同的对象，并且存储了对象与文件的从属关系。由于ceph的所有数据都虚拟成了整齐划一的对象，所以在读写时效率都会比较高。
@@ -265,50 +249,20 @@ pg = obj_hash % num_pg
 osds_for_pg = crush(pg)    # returns a list of osds
 primary = osds_for_pg[0]
 replicas = osds_for_pg[1:]
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E6%95%B0%E6%8D%AE%E6%B5%81%E7%9A%84%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B.png" alt="ceph数据存储流程" title="">
-                </div>
-                <div class="image-caption">ceph数据存储流程</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E6%95%B0%E6%8D%AE%E6%B5%81%E7%9A%84%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B.png" alt="ceph数据存储流程"></p>
 <pre><code>上图很好的诠释了ceph数据流的存储过程，数据不论从哪种接口接入(Ceph支持三种调用接口：对象存储，块存储，文件系统挂载)，最终都要切分成对象存储到底层的RADOS中。逻辑上通过算法先映射到PG上，最终存储到OSD节点里。图中除了之前介绍过的概念之外多了一个pools的概念。
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/pools.png" alt="pools概念" title="">
-                </div>
-                <div class="image-caption">pools概念</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/pools.png" alt="pools概念"></p>
 <pre><code>　Pool是管理员自定义的命名空间，像其他的命名空间一样，用来隔离对象与PG。我们在调用API存储即使用对象存储时，需要指定对象要存储进哪一个POOL中。除了隔离数据，我们也可以分别对不同的POOL设置不同的优化策略，比如副本数、数据清洗次数、数据块及对象大小等。
-</code></pre><h4 id="OSD读写流程如下图"><a href="#OSD读写流程如下图" class="headerlink" title="OSD读写流程如下图"></a>OSD读写流程如下图</h4><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/osd%E7%8B%AC%E6%98%BE%E6%B5%81%E7%A8%8B.png" alt="OSD读写流程" title="">
-                </div>
-                <div class="image-caption">OSD读写流程</div>
-            </figure>
+</code></pre><h4 id="OSD读写流程如下图"><a href="#OSD读写流程如下图" class="headerlink" title="OSD读写流程如下图"></a>OSD读写流程如下图</h4><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/osd%E7%8B%AC%E6%98%BE%E6%B5%81%E7%A8%8B.png" alt="OSD读写流程"></p>
 <pre><code> Ceph的读写操作采用主从模型，客户端要读写数据时，只能向对象所对应的主osd节点发起请求。主节点在接受到写请求时，会同步的向从OSD中写入数据。当所有的OSD节点都写入完成后，主节点才会向客户端报告写入完成的信息。因此保证了主从节点数据的高度一致性。而读取的时候，客户端也只会向主osd节点发起读请求，并不会有类似于数据库中的读写分离的情况出现，这也是出于强一致性的考虑。由于所有写操作都要交给主osd节点来处理，所以在数据量很大时，性能可能会比较慢，为了克服这个问题以及让ceph能支持事物，每个osd节点都包含了一个journal文件，稍后介绍。
 
 　　数据流向介绍到这里就告一段落了，现在终于回到正题：osd进程。在ceph中，每一个osd进程都可称作是一个osd节点，也就是说，每台存储服务器上可能包含了众多的osd节点，每个osd节点监听不同的端口，类似于在同一台服务器上跑多个mysql或redis。每个osd节点可以设置一个目录作为实际存储区域，也可以是一个分区，一整块硬盘。如下图，当前这台机器上跑了两个osd进程，每个osd监听4个端口，分别用于接收客户请求、传输数据、发送心跳、同步数据等操作。
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/osd%E8%BF%9B%E7%A8%8B.png" alt="osd进程" title="">
-                </div>
-                <div class="image-caption">osd进程</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/osd%E8%BF%9B%E7%A8%8B.png" alt="osd进程"></p>
 <pre><code>如上图所示，osd节点默认监听tcp的6800到6803端口，如果同一台服务器上有多个osd节点，则依次往后排序。
 
 　　在生产环境中的osd最少可能都有上百个，所以每个osd都有一个全局的编号，类似osd0，osd1，osd2........序号根据osd诞生的顺序排列，并且是全局唯一的。存储了相同PG的osd节点除了向mon节点发送心跳外，还会互相发送心跳信息以检测pg数据副本是否正常。
 </code></pre><p>刚才在介绍数据流向时说过，每个osd节点都包含一个journal文件，如下图：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/journal.png" alt="journal" title="">
-                </div>
-                <div class="image-caption">journal</div>
-            </figure>
+<p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/journal.png" alt="journal"></p>
 <pre><code>默认大小为5G，也就说每创建一个osd节点，还没使用就要被journal占走5G的空间。这个值是可以调整的，具体大小要依osd的总大小而定。
 
 　　Journal的作用类似于mysql innodb引擎中的事物日志系统。当有突发的大量写入操作时，ceph可以先把一些零散的，随机的IO请求保存到缓存中进行合并，然后再统一向内核发起IO请求。这样做效率会比较高，但是一旦osd节点崩溃，缓存中的数据就会丢失，所以数据在还未写进硬盘中时，都会记录到journal中，当osd崩溃后重新启动时，会自动尝试从journal恢复因崩溃丢失的缓存数据。因此journal的io是非常密集的，而且由于一个数据要io两次，很大程度上也损耗了硬件的io性能，所以通常在生产环境中，建议使用ssd来单独存储journal文件以提高ceph读写性能。
@@ -319,345 +273,257 @@ replicas = osds_for_pg[1:]
 　　Mon节点并不会主动轮询各个osd的当前状态，相反，osd只有在一些特殊情况才会上报自己的信息，平常只会简单的发送心跳。特殊情况包括：1、新的OSD被加入集群；2、某个OSD发现自身或其他OSD发生异常。Mon节点在收到这些上报信息时，则会更新cluster map信息并加以扩散。
 
 　　cluster map信息是以异步且lazy的形式扩散的。monitor并不会在每一次cluster map版本更新后都将新版本广播至全体OSD，而是在有OSD向自己上报信息时，将更新回复给对方。类似的，各个OSD也是在和其他OSD通信时，如果发现对方的osd中持有的cluster map版本较低，则把自己更新的版本发送给对方。
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E6%8E%A8%E8%8D%90%E6%9E%B6%E6%9E%84.png" alt="ceph推荐架构" title="">
-                </div>
-                <div class="image-caption">ceph推荐架构</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/ceph%E6%8E%A8%E8%8D%90%E6%9E%B6%E6%9E%84.png" alt="ceph推荐架构"></p>
 <pre><code>这里的ceph除了管理网段外，设了两个网段，一个用于客户端读写传输数据。另一个用于各OSD节点之间同步数据和发送心跳信息等。这样做的好处是可以分担网卡的IO压力。否则在数据清洗时，客户端的读写速度会变得极为缓慢。
 </code></pre><h4 id="MDS"><a href="#MDS" class="headerlink" title="MDS"></a>MDS</h4><pre><code>Mds是ceph集群中的元数据服务器，而通常它都不是必须的，因为只有在使用cephfs的时候才需要它，而且在云计算中用的更广泛的是另外两种存储方式。
 
 Mds虽然是元数据服务器，但是它不负责存储元数据，元数据也是被切成对象存在各个osd节点中的，如下图：
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mds1.png" alt="MDS1" title="">
-                </div>
-                <div class="image-caption">MDS1</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mds1.png" alt="MDS1"></p>
 <pre><code>在创建cephfs时，要至少创建两个POOL，一个用于存放数据，另一个用于存放元数据。Mds只是负责接受用户的元数据查询请求，然后从osd中把数据取出来映射进自己的内存中供客户访问。所以mds其实类似一个代理缓存服务器，替osd分担了用户的访问压力,如下图：
-</code></pre><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mds2.png" alt="cephfs" title="">
-                </div>
-                <div class="image-caption">cephfs</div>
-            </figure>
+</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/mds2.png" alt="cephfs"></p>
 <p>注：以上理论来源-<a href="http://www.jianshu.com/p/25163032f57f" target="_blank" rel="noopener">简书</a>”</p>
 
-        </div>
-
-        <blockquote class="post-copyright">
-    
-    <div class="content">
-        
-<span class="post-time">
-    最后更新时间：<time datetime="2017-09-06T08:41:13.906Z" itemprop="dateUpdated">2017-09-06 16:41:13</time>
-</span><br>
-
-
-        
-        转载文章请注明出处！<br>文章永久链接：<a href="/2017/08/25/ceph存储/" target="_blank" rel="external">https://wuyanteng.github.io/2017/08/25/ceph存储/</a>
-        
+      
     </div>
-    
-    <footer>
-        <a href="https://wuyanteng.github.io">
-            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
-            Gary Wu
-        </a>
+    <footer class="article-footer">
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ceph/">ceph</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式存储/">分布式存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/块存储/">块存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象存储/">对象存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
     </footer>
-</blockquote>
-
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/08/26/inotify+rsync实时同步/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
         
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
-</div>
-
-
-
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ceph/">ceph</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式存储/">分布式存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/块存储/">块存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象存储/">对象存储</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/25/ceph存储/&title=《ceph分布式存储》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/25/ceph存储/&title=《ceph分布式存储》 — Gary Wu&source=
-Ceph分布式存储
-官网：http://docs.ceph.org.cn/start/intro/ 
-" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/25/ceph存储/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ceph分布式存储》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/25/ceph存储/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/25/ceph存储/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
+          inotify+rsync实时同步
+        
+      </div>
     </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/2017/08/26/inotify+rsync实时同步/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">inotify+rsync实时同步</h4>
-      </a>
-    </div>
   
-
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/08/24/nginx生产环境-案例1/" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">nginx生产环境-案例1</h4>
-      </a>
-    </div>
+    <a href="/2017/08/24/nginx生产环境-案例1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">nginx生产环境-案例1</div>
+    </a>
   
 </nav>
 
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
 </article>
 
-<div id="reward" class="page-modal reward-lay">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <h3 class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        我们不一样
-        <i class="icon icon-quote-right"></i>
-    </h3>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
-        </div>
-        
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ceph优势："><span class="nav-number">1.</span> <span class="nav-text">Ceph优势：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CEPH基本结构"><span class="nav-number">2.</span> <span class="nav-text">CEPH基本结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ceph基本组件"><span class="nav-number">3.</span> <span class="nav-text">ceph基本组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSD"><span class="nav-number">4.</span> <span class="nav-text">OSD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSD读写流程如下图"><span class="nav-number">5.</span> <span class="nav-text">OSD读写流程如下图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#monitor节点"><span class="nav-number">6.</span> <span class="nav-text">monitor节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MDS"><span class="nav-number">7.</span> <span class="nav-text">MDS</span></a></li></ol>
+    
     </div>
-</div>
-
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
+  </aside>
+</section>
         
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      </div>
+      
+      <footer id="footer">
+  
 
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 Gary Wu All Rights Reserved.</p>
+	      
+	      
+  		   	<p id="copyRightCn">Gary Wu 保留所有权利</p>
+  		   
+		</div>
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Gary Wu &copy; 2015 - 2018</span>
-            <span>
-                
-                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
-            </span>
-        </p>
-    </div>
+		
+  </div>
 </footer>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
+<!-- min height -->
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/08/25/ceph存储/&title=《ceph分布式存储》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/08/25/ceph存储/&title=《ceph分布式存储》 — Gary Wu&source=
-Ceph分布式存储
-官网：http://docs.ceph.org.cn/start/intro/ 
-" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/08/25/ceph存储/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ceph分布式存储》 — Gary Wu&url=https://wuyanteng.github.io/2017/08/25/ceph存储/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/08/25/ceph存储/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACIUlEQVR42u3a0W6DMAwF0P7/TzNpr13ptQ2TSA5PVVcIJ5MsO/brFV/H73X+zftfk99U7xpdGBgYj2Ucp1fCeP+cPCdhJO+GgYGxD+M8IH66OVogXiWhfvweAwMD45SUAM43AgMDA+OOgJukgNU0MUlJMTAwdmbkr9VLFvPDtdtrcQwMjAcyqo2B//x8Y38DAwPjIYyjeOUF6n0h+48VMTAwlmZUBynyBmSewPVS0tE8CAYGxgMZ+TLV9K5axObNAwwMjH0Y84XzsNhLOpNtxcDA2IcR3TAO1jmyMKCGgYGxNGNSTFbP53sBOg/EGBgYqzLy4/5qKTt/cmFdDAyMpRnVA/37xrwmW4CBgbEDo1deJoGymlZOhjkwMDBWZfRGHHohcn4wh4GBsScjn16YtwqSI7Z8+KywJAYGxhKMyeNy0rxAbfZjMTAwHs64qgKeNyyT/f74HAwMjKUZ84IzKXerLYR8FAMDA2MfxlVtxWrQnAT0L/8HDAyMhRh50dhrGPSGOarfYGBg7MCoNgbywJonfJNEEwMDY21GEnbzcbHqsVryy8sSRAwMjMcyjuI1mePolbLRoBgGBsbSjOpQ1yTVy5fvJaAYGBhrM+ZJXt4GmDQyvySsGBgYGzCqrzg5nqumldHTMDAwMFrtzGowHZXNGBgYGK0w2hu56JXQGBgYOzDmh/VJ+ljdjuQ5GBgYOzAmIa93QJZQq5uCgYGxKOMHIshgvkOg/UAAAAAASUVORK5CYII=" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
+  });
 </script>
 
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
 
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '经检测,你已离开...';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '欢迎回来...';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-})();
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Gary Wu
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Gary Wu All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
 </body>
 </html>

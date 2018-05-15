@@ -1,26 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    <title>Gary Wu | 运维架构师 - 从入门到放弃</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="">
-    <meta name="description" content="GaryWu Blog">
+  <meta charset="utf-8">
+  
+  <title>Gary Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  
+  <meta name="description" content="GaryWu Blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Gary Wu">
 <meta property="og:url" content="https://wuyanteng.github.io/page/3/index.html">
@@ -30,762 +19,898 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gary Wu">
 <meta name="twitter:description" content="GaryWu Blog">
-    
-        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+    <link rel="alternate" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
+  
 
-    <!-- custom head -->
-    
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/home.css" >
+  
+
+  
+
+  
+
+  
+  
+  
 
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
 
-    <aside id="menu"  >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Gary Wu</h5>
-          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
-        </hgroup>
-      </div>
-    </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
+
+  <body>
+
+
+  
+    <header id="header">
+
+	<!-- 背景图模式 -->
+	
+
+    
+      <div id="intrologo" class="intro-logo">
+    
+ 
+
+
+    <canvas width="100%" height="100%"></canvas>
+    <script>
+      var c = document.getElementsByTagName('canvas')[0],
+          x = c.getContext('2d'),
+          w = window.innerWidth,
+          h = window.innerHeight,
+          pr = window.devicePixelRatio || 1,
+          f = 90,
+          q,
+          m = Math,
+          r = 0,
+          u = m.PI*2,
+          v = m.cos,
+          z = m.random
+      c.width = w*pr
+      c.height = h*pr
+      x.scale(pr, pr)
+      x.globalAlpha = 0.6
+
+      <!-- 折线Polyline背景 -->
+      
+        function i(){
+            x.clearRect(0,0,w,h)
+            q=[{x:0,y:h*.7+f},{x:0,y:h*.7-f}]
+            while(q[1].x<w+f) d(q[0], q[1])
+        }
+        function d(i,j){   
+            x.beginPath()
+            x.moveTo(i.x, i.y)
+            x.lineTo(j.x, j.y)
+            var k = j.x + (z()*2-0.25)*f,
+                n = y(j.y)
+            x.lineTo(k, n)
+            x.closePath()
+            r-=u/-50
+            x.fillStyle = '#'+(v(r)*127+128<<16 | v(r+u/3)*127+128<<8 | v(r+u/3*2)*127+128).toString(16)
+            x.fill()
+            q[0] = q[1]
+            q[1] = {x:k,y:n}
+        }
+        function y(p){
+            var t = p + (z()*2-1.1)*f
+            return (t>h||t<0) ? y(p) : t
+        }
+        document.getElementById("intrologo").onclick = i
+        document.getElementById("intrologo").ontouchstart = i
+        i()
+
+      <!-- 多边形trianglify背景 -->
+      
+    </script>
+    
+
+    
+      <div id="homelogo" class="homelogo"> 
+    
+
         
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
+          <div class="homelogoback" >
+            <h1><a href="#content" id="logo">Gary Wu</a></h1>
+            <h3>GaryWu Blog</h3>
+            <h5>Gary Wu</h5>
+            <!-- <p><a href="https://github.com/iTimeTraveler" target="_blank">Github</a></p> -->
+          </div>
         
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                所有文章
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags/高级运维"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/wuyanteng" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://t.me/om_china" target="_blank" >
-                <i class="icon icon-lg icon-link"></i>
-                Telegram讨论组
-              </a>
-            </li>
-        
-      </ul>
+    
     </div>
   </div>
-</aside>
 
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Gary Wu</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header index-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Gary Wu</h1>
-        <h5 class="subtitle">
-            
-                运维架构师 - 从入门到放弃
-            
-        </h5>
-    </div>
-
-    
-
-
-</header>
-
-<div class="container body-wrap">
-
-    <ul class="post-list">
-    
-        <li class="post-list-item fade">
-            <article id="post-问题汇总-openstack可用域availablitiy-zone配置"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-22 10:40:20" datetime="2018-03-22T02:40:20.000Z"  itemprop="datePublished">2018-03-22</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/">问题汇总:openstack可用域availablitiy_zone配置</a>
-    </h3>
+  <!-- 自适应主页背景大图 -->
   
 
+ <!-- home_logo_image居中 -->
+ 
+    <script>
+        var homelogodiv = document.getElementById("homelogo");
+        if (document.all.homelogo.offsetWidth > document.body.clientWidth) {
+          homelogodiv.style.width = document.body.clientWidth + "px";
+          homelogodiv.style.marginLeft = document.body.clientWidth * -0.5 + "px";
+        } else {
+          homelogodiv.style.width = homelogodiv.clientWidth  + "px";
+          homelogodiv.style.marginLeft = (homelogodiv.clientWidth)  * -0.5 + "px";
+        }
+    </script>
+  
 
+  <div class="intro-navigate">
+      <p class="navigater-list">
+        
+          <a id="beautifont" class="main-nav-link" href="/">首页</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/archives">归档</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/categories">分类</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/tags">标签</a>
+        
+          <a id="beautifont" class="main-nav-link" href="/about">关于</a>
+        
+      </p>
+  </div>
 
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
+</header>
+  
+  <div id="container">
+    <div id="wrap">
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;">
+  
+    <article id="post-问题汇总-openstack可用域availablitiy-zone配置"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/">问题汇总:openstack可用域availablitiy_zone配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/" class="article-date">
+	  <time datetime="2018-03-22T02:40:20.000Z" itemprop="datePublished">2018-03-22</time>
+	</a>
+
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
         <h4 id="什么是availablitiy-zone-可用域"><a href="#什么是availablitiy-zone-可用域" class="headerlink" title="什么是availablitiy_zone(可用域)"></a>什么是availablitiy_zone(可用域)</h4><pre><code>Availability Zones 通常是对 computes 节点上的资源在小的区域内进行逻辑上的分组和隔离。
 
 例如在同一个数据中心，我们可以将 Availability Zones 规划到不同的机房，或者在同一机房的几个相邻的机架，从而保障如果某个 Availability Zone 的节点发生故障（如供电系统或网络），而不影响其他的 Availability Zones 上节点运行的虚拟机，通过这种划分来提高 OpenStack 的可用性。目前 OpenStack 默认的安装是把所有的 computes 节点划分到 nova 的 Availability Zone 上，但我们可以通过对 nova.conf 文件的配置来定义不同的 Availability zones。
 </code></pre>
-    
+        <!-- 什么是availablitiy_zone(可用域)Availability Zones 通常是对 computes 节点上的资源在小的区域内进行逻辑上的分组和隔离。
 
-        <a href="/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+例如在同一个数据中心，我们可以将 Availability Zones 规划到不同的机房，或者在同一机房的几个相邻的机架，从而保障如果某个 Availability Zone 的节点发生故障（如供电系统或网络），而不影响其他的......  -->
+        <p class="article-more-link">
+          <a href="/2018/03/22/问题汇总-openstack可用域availablitiy-zone配置/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/aggregate-host/">aggregate host</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/availablitiy-zone/">availablitiy_zone</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/az/">az</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule/">nova schedule</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/可用域/">可用域</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/aggregate-host/">aggregate host</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/availablitiy-zone/">availablitiy_zone</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/az/">az</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule/">nova schedule</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/可用域/">可用域</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-云计算三种服务模式-IaaS和PaaS及SaaS"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-云计算三种服务模式-IaaS和PaaS及SaaS"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-21 10:44:06" datetime="2018-03-21T02:44:06.000Z"  itemprop="datePublished">2018-03-21</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/21/云计算三种服务模式-IaaS和PaaS及SaaS/">云计算三种服务模式:IaaS和PaaS及SaaS</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/21/云计算三种服务模式-IaaS和PaaS及SaaS/" class="article-date">
+	  <time datetime="2018-03-21T02:44:06.000Z" itemprop="datePublished">2018-03-21</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/21/云计算三种服务模式-IaaS和PaaS及SaaS/">云计算三种服务模式:IaaS和PaaS及SaaS</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>自己搞openstack有段时间了,但对于IaaS、PaaS和SaaS并没有深入的概念或者说它们各自解决了哪些问题...今天就再来温习下
 </code></pre>
-    
+        <!-- 自己搞openstack有段时间了,但对于IaaS、PaaS和SaaS并没有深入的概念或者说它们各自解决了哪些问题...今天就再来温习下
 
-        <a href="/2018/03/21/云计算三种服务模式-IaaS和PaaS及SaaS/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IaaS/">IaaS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PaaS/">PaaS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SaaS/">SaaS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+云也是分层的其实云计算分几层的，分别是:
+Infrastructure（基础设施)-as-a-Service
+Platform（平台)-as-a-Service
+Software（软件)-as-a-Service。
 
+基础设施在最下端，平台在中间，软件在......  -->
+        <p class="article-more-link">
+          <a href="/2018/03/21/云计算三种服务模式-IaaS和PaaS及SaaS/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IaaS/">IaaS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PaaS/">PaaS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SaaS/">SaaS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-rsync同步时导致服务器重启-故障记录"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-rsync同步时导致服务器重启-故障记录"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-20 17:45:55" datetime="2018-03-20T09:45:55.000Z"  itemprop="datePublished">2018-03-20</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/20/rsync同步时导致服务器重启-故障记录/">rsync同步时导致服务器重启-故障记录</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/20/rsync同步时导致服务器重启-故障记录/" class="article-date">
+	  <time datetime="2018-03-20T09:45:55.000Z" itemprop="datePublished">2018-03-20</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/20/rsync同步时导致服务器重启-故障记录/">rsync同步时导致服务器重启-故障记录</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>生产环境有台服务器专用于各种数据备份归档, 突然有一短时间rsync服务器基本在固定时间凌晨3点左右自重启。
 
 以下为故障彻查记录, 便于日后查阅。
 </code></pre>
-    
+        <!-- 生产环境有台服务器专用于各种数据备份归档, 突然有一短时间rsync服务器基本在固定时间凌晨3点左右自重启。
 
-        <a href="/2018/03/20/rsync同步时导致服务器重启-故障记录/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rsync/">rsync</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/磁盘坏道/">磁盘坏道</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自重启/">自重启</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+以下为故障彻查记录, 便于日后查阅。
 
+解决思路及过程为什么会那么准时导致服务器重启这个问题很好查证, 很快我们就定位到了问题点。是因为有台代码服务器crontab配置在了凌晨3点10分左右开始通过脚本自动同步。日志没有任何有价值信息, 同步为什么会导致服务器重启呢？实在无解.........  -->
+        <p class="article-more-link">
+          <a href="/2018/03/20/rsync同步时导致服务器重启-故障记录/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rsync/">rsync</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/磁盘坏道/">磁盘坏道</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自重启/">自重启</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-gentoo-emerge编译nginx"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-gentoo-emerge编译nginx"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-17 11:50:56" datetime="2018-03-17T03:50:56.000Z"  itemprop="datePublished">2018-03-17</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/17/gentoo-emerge编译nginx/">gentoo emerge编译nginx</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/17/gentoo-emerge编译nginx/" class="article-date">
+	  <time datetime="2018-03-17T03:50:56.000Z" itemprop="datePublished">2018-03-17</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/17/gentoo-emerge编译nginx/">gentoo emerge编译nginx</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>nginx是一个稳定、轻量、高性能的web服务器以及反向代理服务器...扯蛋完毕。
 来说下如何利用gentoo特性来编译nginx
 </code></pre>
-    
+        <!-- nginx是一个稳定、轻量、高性能的web服务器以及反向代理服务器...扯蛋完毕。
+来说下如何利用gentoo特性来编译nginx
 
-        <a href="/2018/03/17/gentoo-emerge编译nginx/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emerge/">emerge</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gentoo/">gentoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译nginx/">编译nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+安装Nginx在gentoo中, 想要安装nginx,如何搜索它的包名称呢？
 
+eix  nginx #eix工具可以很方便的检索到符合条件的软件全称
+emerge --ask  www-servers/nginx
+
+/etc/init.d/nginx sta......  -->
+        <p class="article-more-link">
+          <a href="/2018/03/17/gentoo-emerge编译nginx/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emerge/">emerge</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gentoo/">gentoo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译nginx/">编译nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-MongoDB集群节点添加移除管理维护"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-MongoDB集群节点添加移除管理维护"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-16 18:34:41" datetime="2018-03-16T10:34:41.000Z"  itemprop="datePublished">2018-03-16</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/16/MongoDB集群节点添加移除管理维护/">MongoDB集群节点-添加移除管理维护</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/16/MongoDB集群节点添加移除管理维护/" class="article-date">
+	  <time datetime="2018-03-16T10:34:41.000Z" itemprop="datePublished">2018-03-16</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/16/MongoDB集群节点添加移除管理维护/">MongoDB集群节点-添加移除管理维护</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>此操作在mongo V3.0已验证
 </code></pre>
-    
+        <!-- 此操作在mongo V3.0已验证
 
-        <a href="/2018/03/16/MongoDB集群节点添加移除管理维护/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB集群/">MongoDB集群</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo集群管理维护/">mongo集群管理维护</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+1.集群运行时添加节点查看复制集节点配置
+./mongo 192.168.1.207:27017
 
+db.version()    查看版本
+ 3.2.11 
+
+rs0:PRIMARY&gt; rs.conf();  查看集群配置文件
+或
+rs0:PRIMARY&gt; rs.isMaster(); 
+添加节点
+添加新的数据目录
+mkdir –p /mo......  -->
+        <p class="article-more-link">
+          <a href="/2018/03/16/MongoDB集群节点添加移除管理维护/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB集群/">MongoDB集群</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo集群管理维护/">mongo集群管理维护</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-问题汇总-VM热迁移live-migration"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-问题汇总-VM热迁移live-migration"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-16 12:11:19" datetime="2018-03-16T04:11:19.000Z"  itemprop="datePublished">2018-03-16</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/16/问题汇总-VM热迁移live-migration/">问题汇总: VM热迁移live migration</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/16/问题汇总-VM热迁移live-migration/" class="article-date">
+	  <time datetime="2018-03-16T04:11:19.000Z" itemprop="datePublished">2018-03-16</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/16/问题汇总-VM热迁移live-migration/">问题汇总: VM热迁移live migration</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><pre><code>热迁移: 在保证源和目标计算节点都存活的情况下,可进行热迁移。
 但当计算节点宕机后,vm虚拟机并不能进行自动热迁移, 也可通过脚本检测VM存活然后去触发迁移
 </code></pre>
-    
+        <!-- 适用场景热迁移: 在保证源和目标计算节点都存活的情况下,可进行热迁移。
+但当计算节点宕机后,vm虚拟机并不能进行自动热迁移, 也可通过脚本检测VM存活然后去触发迁移
 
-        <a href="/2018/03/16/问题汇总-VM热迁移live-migration/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+热迁移[Live Migration]前提条件1. 源和目标节点的CPU类型要一致。 
+2. 源和目标节点的Libvirt版本要一致。
+3. 源和目标节点能相互识别对方的主机名称【即在/etc/hosts 中加入对方的条目】
+......  -->
+        <p class="article-more-link">
+          <a href="/2018/03/16/问题汇总-VM热迁移live-migration/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/libvert/">libvert</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova/">nova</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动态迁移/">动态迁移</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/热迁移-live-migration/">热迁移 live migration</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/libvert/">libvert</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova/">nova</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动态迁移/">动态迁移</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/热迁移-live-migration/">热迁移 live migration</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-问题汇总-openstack如何将VM分配到固定计算节点"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-问题汇总-openstack如何将VM分配到固定计算节点"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-15 15:13:24" datetime="2018-03-15T07:13:24.000Z"  itemprop="datePublished">2018-03-15</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/15/问题汇总-openstack如何将VM分配到固定计算节点/">问题汇总-openstack如何将VM分配到固定计算节点</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/15/问题汇总-openstack如何将VM分配到固定计算节点/" class="article-date">
+	  <time datetime="2018-03-15T07:13:24.000Z" itemprop="datePublished">2018-03-15</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/15/问题汇总-openstack如何将VM分配到固定计算节点/">问题汇总-openstack如何将VM分配到固定计算节点</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>注: N版经测试不支持
 </code></pre>
-    
+        <!-- 注: N版经测试不支持
 
-        <a href="/2018/03/15/问题汇总-openstack如何将VM分配到固定计算节点/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VM/">VM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/schedule/">schedule</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/主机聚合-Host-Aggregates/">主机聚合 Host Aggregates</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/可用域-Availability-Zones/">可用域 Availability Zones</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+如何保证新增一台虚拟机100%分配到其中一台固定的计算节点？
+由于nova的调度原因,调度后的虚拟机并不是在我们想要的计算节点。这时候需要在WEB界面新建一个可用域,如SSD. 然后把我们想加入到这个可用域的计算节点添加进来
 
+(2)web中创建一台虚拟机,选择SSD可用域,创建完成后,确保虚拟机运行正常
+
+(3)去这个计算节点查看
+   virsh list --......  -->
+        <p class="article-more-link">
+          <a href="/2018/03/15/问题汇总-openstack如何将VM分配到固定计算节点/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VM/">VM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/schedule/">schedule</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/主机聚合-Host-Aggregates/">主机聚合 Host Aggregates</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/可用域-Availability-Zones/">可用域 Availability Zones</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-问题汇总-OpenStack-VM随计算节点自启动"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-问题汇总-OpenStack-VM随计算节点自启动"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-14 11:02:29" datetime="2018-03-14T03:02:29.000Z"  itemprop="datePublished">2018-03-14</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/14/问题汇总-OpenStack-VM随计算节点自启动/">问题汇总-OpenStack VM随计算节点自启动</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/14/问题汇总-OpenStack-VM随计算节点自启动/" class="article-date">
+	  <time datetime="2018-03-14T03:02:29.000Z" itemprop="datePublished">2018-03-14</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/14/问题汇总-OpenStack-VM随计算节点自启动/">问题汇总-OpenStack VM随计算节点自启动</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>适用场景: 自己琢磨
 </code></pre>
-    
+        <!-- 适用场景: 自己琢磨
 
-        <a href="/2018/03/14/问题汇总-OpenStack-VM随计算节点自启动/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+(1)在所有计算节点上, 使用命令查看所有已经运行的instance实例
+virsh  list  --all
+Id        名称                         状态
+----------------------------------------------------
+84     instance-0000010b   running
+1......  -->
+        <p class="article-more-link">
+          <a href="/2018/03/14/问题汇总-OpenStack-VM随计算节点自启动/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/autostart/">autostart</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openstack/">openstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vm/">vm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/autostart/">autostart</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openstack/">openstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vm/">vm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-问题汇总-给openstack VM创建静态IP"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-问题汇总-给openstack VM创建静态IP"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-03-14 10:08:57" datetime="2018-03-14T02:08:57.000Z"  itemprop="datePublished">2018-03-14</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/03/14/问题汇总-给openstack VM创建静态IP/">问题汇总-给openstack VM创建静态IP</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/14/问题汇总-给openstack VM创建静态IP/" class="article-date">
+	  <time datetime="2018-03-14T02:08:57.000Z" itemprop="datePublished">2018-03-14</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/03/14/问题汇总-给openstack VM创建静态IP/">问题汇总-给openstack VM创建静态IP</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <pre><code>由于业务需要, 需给openstack虚拟机添加静态IP地址，下面说说正确姿势。
 </code></pre>
-    
+        <!-- 由于业务需要, 需给openstack虚拟机添加静态IP地址，下面说说正确姿势。
 
-        <a href="/2018/03/14/问题汇总-给openstack VM创建静态IP/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VM/">VM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/neutron/">neutron</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openstack/">openstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/port-update/">port-update</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/static-IP/">static IP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/静态IP/">静态IP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+1. 首先正常创建一台VM虚拟机(IP为自动分配), 查看其分配的IP地址
+2. 在控制节点执行如下操作
+2.1 查看所有运行的虚拟机网络信息
+    neutron port-list
+2.2 更新VM虚拟机的IP地址为静态
 
+查看命令帮助    
+neutron port-update --help  
+......  -->
+        <p class="article-more-link">
+          <a href="/2018/03/14/问题汇总-给openstack VM创建静态IP/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VM/">VM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/neutron/">neutron</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/openstack/">openstack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/port-update/">port-update</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/static-IP/">static IP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/静态IP/">静态IP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+    <article id="post-记一次线上服务器频繁宕机"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-        <li class="post-list-item fade">
-            <article id="post-记一次线上服务器频繁宕机"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-02-27 17:06:20" datetime="2018-02-27T09:06:20.000Z"  itemprop="datePublished">2018-02-27</time>
-
+    
+      <header class="article-header">
         
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/02/27/记一次线上服务器频繁宕机/">记一次线上服务器频繁宕机</a>
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/02/27/记一次线上服务器频繁宕机/" class="article-date">
+	  <time datetime="2018-02-27T09:06:20.000Z" itemprop="datePublished">2018-02-27</time>
+	</a>
 
+      
+      
     </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/02/27/记一次线上服务器频繁宕机/">记一次线上服务器频繁宕机</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
+    <div class="article-entry" itemprop="articleBody">
+      
         <h4 id="message日志如下："><a href="#message日志如下：" class="headerlink" title="message日志如下："></a>message日志如下：</h4><pre><code>kernel: ERST: Error Record Serialization Table (ERST) support is initialized.
 kernel: ACPI: No handler for Region [IPMI] (ffff880e76fc9468) [IPMI]
 </code></pre>
-    
+        <!-- message日志如下：kernel: ERST: Error Record Serialization Table (ERST) support is initialized.
+kernel: ACPI: No handler for Region [IPMI] (ffff880e76fc9468) [IPMI]
 
-        <a href="/2018/02/27/记一次线上服务器频繁宕机/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
+dmesg日志如下：dmar: Device scope device [......  -->
+        <p class="article-more-link">
+          <a href="/2018/02/27/记一次线上服务器频繁宕机/#more">阅读全文</a>
+        </p>
+      
     </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ACPI-Error/">ACPI Error</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kernel/">Kernel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/no-hander/">no hander</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+    <footer class="article-footer">
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ACPI-Error/">ACPI Error</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kernel/">Kernel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/no-hander/">no hander</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
 
-    </div>
-    
+    </footer>
+  </div>
+  
 </article>
 
-        </li>
+<!-- Table of Contents -->
+
+  
+
+
+  <nav id="page-nav">
     
-    </ul>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
+  </nav>
 
-    
-<nav id="page-nav">
-    <div class="inner">
-    <a class="extend prev" rel="prev" href="/page/2/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/4/">下一页</a>
-    </div>
-</nav>
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
+</section>
         
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      </div>
+      
+        <div align="center" style="margin-top: 30px;"><hr class="hr" style="margin:0px; height:3px;"></div>
+      
+      <footer id="footer">
+  
 
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 Gary Wu All Rights Reserved.</p>
+	      
+	      
+  		   	<p id="copyRightCn">Gary Wu 保留所有权利</p>
+  		   
+		</div>
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Gary Wu &copy; 2015 - 2018</span>
-            <span>
-                
-                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
-            </span>
-        </p>
-    </div>
+		
+  </div>
 </footer>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
+<!-- min height -->
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/page/3/&title=Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/page/3/&title=Gary Wu&source=GaryWu Blog" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/page/3/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Gary Wu&url=https://wuyanteng.github.io/page/3/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/page/3/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABuklEQVR42u3aQW4CMRAEQP7/aXLNIUu6x2tDotoTspC34DDytOfxiJ/ntydfSdYfOx5cXNxl7vPl8/qVyQ7t/lffwcXFPc+9Qlx9fl2YWkpiwMXF/bvcBISLi/tfubOWKdkfFxf3c7jtEWQWahzt1XBxcRe4+Wv2fd6S7+Li4o64s3Az+TE5t3g7Li7uEW5eUBL6SqhatE+4uLhHuElbkhep9dYl2gEXF/cIN/lqfomSlKR2mAMXF/ckdxaMJgUuH/AqDkO4uLibufnV5nqAMrs4+SHFwcXFPcJtG5h8JY9ZowMTLi7uEW4bbs4ijzxkKfJdXFzczdy8GM1KWB6X5GNhuLi47+K2xaUNSvK/AxcX973cWfHaccn6y5+Ii4u7mdsOUa1fsuaxy1KvhouLu4177zjFbB0XF/dd3JVRjPYH5EecOn/FxcVd5s6GKvLi1Q5hFHkMLi7uNm5bXNrSlg9ttMcjXFzc3dz1S472EmW2jouLe57bNkU3RJ+jkoeLi/uZ3GTrBDqMUXBxcT+S2zZCKy3TzXUXFxe35CbNT16kklI1HPjAxcU9wm1LyaxgzV6/lO/i4uJOuF9/v6RTi2tDawAAAABJRU5ErkJggg==" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
+  });
 </script>
 
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
 
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '经检测,你已离开...';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '欢迎回来...';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-})();
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
+
+<script src="/js/scripts.js"></script>
+
+
+  <script src="/js/home.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Gary Wu
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Gary Wu All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
 </body>
 </html>

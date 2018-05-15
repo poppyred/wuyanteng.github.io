@@ -1,26 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    <title>老男孩37期-第6节课-正则表达式和通配符 | Gary Wu | 运维架构师 - 从入门到放弃</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="Linux基础,shell,egrep,sed,awk,正则表达式">
-    <meta name="description" content="上节课回顾-命令补充回顾 ls -li与ls -lhi的区别   ls -lrt">
+  <meta charset="utf-8">
+  
+  <title>老男孩37期-第6节课-正则表达式和通配符 | Gary Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Linux基础shellegrepsedawk正则表达式" />
+  
+  
+  
+  
+  <meta name="description" content="上节课回顾-命令补充回顾 ls -li与ls -lhi的区别   ls -lrt">
 <meta name="keywords" content="Linux基础,shell,egrep,sed,awk,正则表达式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="老男孩37期-第6节课-正则表达式和通配符">
@@ -32,156 +23,167 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="老男孩37期-第6节课-正则表达式和通配符">
 <meta name="twitter:description" content="上节课回顾-命令补充回顾 ls -li与ls -lhi的区别   ls -lrt">
-    
-        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+    <link rel="alternate" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
+  
 
-    <!-- custom head -->
-    
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
 
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Gary Wu</h5>
-          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
-        </hgroup>
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
       </div>
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                所有文章
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags/高级运维"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/wuyanteng" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://t.me/om_china" target="_blank" >
-                <i class="icon icon-lg icon-link"></i>
-                Telegram讨论组
-              </a>
-            </li>
-        
-      </ul>
-    </div>
-  </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">老男孩37期-第6节课-正则表达式和通配符</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">老男孩37期-第6节课-正则表达式和通配符</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-06-03T11:11:52.000Z" itemprop="datePublished" class="page-time">
-  2017-06-03
-</time>
-
-
-            
-        </h5>
-    </div>
-
-    
-
 
 </header>
 
 
-<div class="container body-wrap">
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-老男孩37期-第6节课-正则表达式和通配符" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#上节课回顾-命令补充回顾"><span class="post-toc-number">1.</span> <span class="post-toc-text">上节课回顾-命令补充回顾</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#特殊符号"><span class="post-toc-number"></span> <span class="post-toc-text">特殊符号</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#通配符"><span class="post-toc-number">1.</span> <span class="post-toc-text">通配符</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#（星号示例）"><span class="post-toc-number">2.</span> <span class="post-toc-text">* （星号示例）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#（花括号示例）"><span class="post-toc-number">3.</span> <span class="post-toc-text">{} （花括号示例）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#示例：创建-stu01-txt-到stu05-txt"><span class="post-toc-number">3.0.1.</span> <span class="post-toc-text">示例：创建 stu01.txt 到stu05.txt</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#使用花括号进行备份"><span class="post-toc-number">3.0.2.</span> <span class="post-toc-text">使用花括号进行备份</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#单引号、双引号与不加引号区别"><span class="post-toc-number">3.0.3.</span> <span class="post-toc-text">单引号、双引号与不加引号区别</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基本正则表达式"><span class="post-toc-number"></span> <span class="post-toc-text">基本正则表达式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#正则别名定义-准备-环境"><span class="post-toc-number">0.0.1.</span> <span class="post-toc-text">正则别名定义  -  准备-环境</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#正则表达式分为2种"><span class="post-toc-number">0.0.2.</span> <span class="post-toc-text">正则表达式分为2种</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#基本正则表达式-环境准备"><span class="post-toc-number">0.0.3.</span> <span class="post-toc-text">基本正则表达式-环境准备</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#基本正则表达式-1"><span class="post-toc-number">0.0.4.</span> <span class="post-toc-text">基本正则表达式</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展正则表达式"><span class="post-toc-number"></span> <span class="post-toc-text">扩展正则表达式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试题"><span class="post-toc-number"></span> <span class="post-toc-text">测试题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#利用sed取出eth0的IP地址？"><span class="post-toc-number">1.</span> <span class="post-toc-text">利用sed取出eth0的IP地址？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则方法1-掐头去尾法-："><span class="post-toc-number">2.</span> <span class="post-toc-text">正则方法1(掐头去尾法)：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则方法2"><span class="post-toc-number">3.</span> <span class="post-toc-text">正则方法2</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则方法3"><span class="post-toc-number">4.</span> <span class="post-toc-text">正则方法3</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#利用反向引用，取出IP地址"><span class="post-toc-number">4.0.1.</span> <span class="post-toc-text">利用反向引用，取出IP地址</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#利用反向引用，取Bcast地址"><span class="post-toc-number">4.0.2.</span> <span class="post-toc-text">利用反向引用，取Bcast地址</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#正则方法4"><span class="post-toc-number">5.</span> <span class="post-toc-text">正则方法4</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#方法5"><span class="post-toc-number">6.</span> <span class="post-toc-text">方法5:</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扩展1：sed文件内容替换"><span class="post-toc-number"></span> <span class="post-toc-text">扩展1：sed文件内容替换</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扩展2：使用正则提取-etc-hosts权限"><span class="post-toc-number"></span> <span class="post-toc-text">扩展2：使用正则提取/etc/hosts权限</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扩展3：取消某个文件的空行"><span class="post-toc-number"></span> <span class="post-toc-text">扩展3：取消某个文件的空行</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扩展4：取出文本前两列"><span class="post-toc-number"></span> <span class="post-toc-text">扩展4：取出文本前两列</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#date时间显示"><span class="post-toc-number"></span> <span class="post-toc-text">date时间显示</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#显示三天前日期"><span class="post-toc-number"></span> <span class="post-toc-text">显示三天前日期</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#sed-正则"><span class="post-toc-number"></span> <span class="post-toc-text">sed 正则</span></a>
-        </nav>
-    </aside>
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      老男孩37期-第6节课-正则表达式和通配符
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" class="article-date">
+	  <time datetime="2017-06-03T11:11:52.000Z" itemprop="datePublished">2017-06-03</time>
+	</a>
 
-<article id="post-老男孩37期-第6节课-正则表达式和通配符"
-  class="post-article article-type-post fade" itemprop="blogPost">
-
-    <div class="post-card">
-        <h1 class="post-card-title">老男孩37期-第6节课-正则表达式和通配符</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-06-03 19:11:52" datetime="2017-06-03T11:11:52.000Z"  itemprop="datePublished">2017-06-03</time>
-
-            
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
-</span>
-
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <h4 id="上节课回顾-命令补充回顾"><a href="#上节课回顾-命令补充回顾" class="headerlink" title="上节课回顾-命令补充回顾"></a>上节课回顾-命令补充回顾</h4><pre><code> ls -li与ls -lhi的区别
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="上节课回顾-命令补充回顾"><a href="#上节课回顾-命令补充回顾" class="headerlink" title="上节课回顾-命令补充回顾"></a>上节课回顾-命令补充回顾</h4><pre><code> ls -li与ls -lhi的区别
 
  ls -lrt
 </code></pre><a id="more"></a>
@@ -610,317 +612,247 @@ I like badminton ball ,billiard ball and chinese chess!
 our site is http://www.etiantian.org
 my qq num is 49000448.
 </code></pre>
-        </div>
-
-        <blockquote class="post-copyright">
-    
-    <div class="content">
-        
-<span class="post-time">
-    最后更新时间：<time datetime="2017-06-09T03:32:34.208Z" itemprop="dateUpdated">2017-06-09 11:32:34</time>
-</span><br>
-
-
-        
-        转载文章请注明出处！<br>文章永久链接：<a href="/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" target="_blank" rel="external">https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/</a>
-        
+      
     </div>
-    
-    <footer>
-        <a href="https://wuyanteng.github.io">
-            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
-            Gary Wu
-        </a>
+    <footer class="article-footer">
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/awk/">awk</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/egrep/">egrep</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sed/">sed</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/正则表达式/">正则表达式</a></li></ul>
+
     </footer>
-</blockquote>
-
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/06/05/RouterOS多线NAT问题处理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
         
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
-</div>
-
-
-
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux基础/">Linux基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/awk/">awk</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/egrep/">egrep</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sed/">sed</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/正则表达式/">正则表达式</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&title=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&title=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&source=上节课回顾-命令补充回顾 ls -li与ls -lhi的区别
-
- ls -lrt
-" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
+          RouterOS多线NAT问题处理
+        
+      </div>
     </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/2017/06/05/RouterOS多线NAT问题处理/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">RouterOS多线NAT问题处理</h4>
-      </a>
-    </div>
   
-
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/06/01/mysql备份脚本-rsync上传/" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">mysql备份脚本-rsync上传</h4>
-      </a>
-    </div>
+    <a href="/2017/06/01/mysql备份脚本-rsync上传/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">mysql备份脚本-rsync上传</div>
+    </a>
   
 </nav>
 
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
 </article>
 
-<div id="reward" class="page-modal reward-lay">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <h3 class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        我们不一样
-        <i class="icon icon-quote-right"></i>
-    </h3>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
-        </div>
-        
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#上节课回顾-命令补充回顾"><span class="nav-number">1.</span> <span class="nav-text">上节课回顾-命令补充回顾</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊符号"><span class="nav-number"></span> <span class="nav-text">特殊符号</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#通配符"><span class="nav-number">1.</span> <span class="nav-text">通配符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（星号示例）"><span class="nav-number">2.</span> <span class="nav-text">* （星号示例）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（花括号示例）"><span class="nav-number">3.</span> <span class="nav-text">{} （花括号示例）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#示例：创建-stu01-txt-到stu05-txt"><span class="nav-number">3.0.1.</span> <span class="nav-text">示例：创建 stu01.txt 到stu05.txt</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#使用花括号进行备份"><span class="nav-number">3.0.2.</span> <span class="nav-text">使用花括号进行备份</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#单引号、双引号与不加引号区别"><span class="nav-number">3.0.3.</span> <span class="nav-text">单引号、双引号与不加引号区别</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本正则表达式"><span class="nav-number"></span> <span class="nav-text">基本正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#正则别名定义-准备-环境"><span class="nav-number">0.0.1.</span> <span class="nav-text">正则别名定义  -  准备-环境</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#正则表达式分为2种"><span class="nav-number">0.0.2.</span> <span class="nav-text">正则表达式分为2种</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#基本正则表达式-环境准备"><span class="nav-number">0.0.3.</span> <span class="nav-text">基本正则表达式-环境准备</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#基本正则表达式-1"><span class="nav-number">0.0.4.</span> <span class="nav-text">基本正则表达式</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展正则表达式"><span class="nav-number"></span> <span class="nav-text">扩展正则表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试题"><span class="nav-number"></span> <span class="nav-text">测试题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#利用sed取出eth0的IP地址？"><span class="nav-number">1.</span> <span class="nav-text">利用sed取出eth0的IP地址？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则方法1-掐头去尾法-："><span class="nav-number">2.</span> <span class="nav-text">正则方法1(掐头去尾法)：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则方法2"><span class="nav-number">3.</span> <span class="nav-text">正则方法2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则方法3"><span class="nav-number">4.</span> <span class="nav-text">正则方法3</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#利用反向引用，取出IP地址"><span class="nav-number">4.0.1.</span> <span class="nav-text">利用反向引用，取出IP地址</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#利用反向引用，取Bcast地址"><span class="nav-number">4.0.2.</span> <span class="nav-text">利用反向引用，取Bcast地址</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则方法4"><span class="nav-number">5.</span> <span class="nav-text">正则方法4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法5"><span class="nav-number">6.</span> <span class="nav-text">方法5:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展1：sed文件内容替换"><span class="nav-number"></span> <span class="nav-text">扩展1：sed文件内容替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展2：使用正则提取-etc-hosts权限"><span class="nav-number"></span> <span class="nav-text">扩展2：使用正则提取/etc/hosts权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展3：取消某个文件的空行"><span class="nav-number"></span> <span class="nav-text">扩展3：取消某个文件的空行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展4：取出文本前两列"><span class="nav-number"></span> <span class="nav-text">扩展4：取出文本前两列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#date时间显示"><span class="nav-number"></span> <span class="nav-text">date时间显示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示三天前日期"><span class="nav-number"></span> <span class="nav-text">显示三天前日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed-正则"><span class="nav-number"></span> <span class="nav-text">sed 正则</span></a>
+    
     </div>
-</div>
-
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
+  </aside>
+</section>
         
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      </div>
+      
+      <footer id="footer">
+  
 
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 Gary Wu All Rights Reserved.</p>
+	      
+	      
+  		   	<p id="copyRightCn">Gary Wu 保留所有权利</p>
+  		   
+		</div>
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Gary Wu &copy; 2015 - 2018</span>
-            <span>
-                
-                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
-            </span>
-        </p>
-    </div>
+		
+  </div>
 </footer>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
+<!-- min height -->
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&title=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&title=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&source=上节课回顾-命令补充回顾 ls -li与ls -lhi的区别
-
- ls -lrt
-" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《老男孩37期-第6节课-正则表达式和通配符》 — Gary Wu&url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/06/03/老男孩37期-第6节课-正则表达式和通配符/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADF0lEQVR42u3aS46kQAwFwL7/pWuk2c5AP9sgFSZYlagPGdkLt/3y5ye+Pn+vf+8c3T/6TP6t3uuLL2xsbOyHsD+n11VLqW7B+f3z555bsLGxsbeyz4tW/vrwMYPtSJ6YW7CxsbHfzK42A+cbkXwr3zhsbGxs7F4BS0pRtYzlG4SNjY2NXR0q9YpQsui8jcnXedksDRsbG/vr2dWg95tf35hvY2NjY38l+9O6JmWv2nJ8briwsbGxN7GTcXx1fD+pIPMot1DYsLGxsdexrz2sc/748wJWXU+1TGJjY2NvYlcLSd5g5O/2YuBq2cPGxsbeyq4GA8mPTopZLwzI38XGxsbeyq6WhOY4vjUAquILK8HGxsZex66OinrNw+QzvXgAGxsbezf72sH9fUFyb2B0+C1sbGzspew8ZE1igBw/D5XLR3awsbGx17HzIf5kCJVHtnfEDP9pRbCxsbFfwE6WNfl8dcBUHSodGrGxsbGXspMhUVJ+7t6sSWBQzhywsbGxv559bbhbPdzTCx56kTM2Njb2e9h5ENv7fC8emK8tOriDjY2N/UB2cjRnPiSqMiYRclQmsbGxsRexk6A0WUpvWfkv91qRaIXY2NjYD2ffvdz8l6vFcrI12NjY2JvYeYCavzu539uUZtnDxsbGXsFORj+9AzrNYzTxsKm6hsO/MzY2NvbD2b2l94byveKXb1a1HGJjY2PvYN+x3Hw8lBzZqRbXpHxiY2Njb2L3hjLVqLV6NKdawPLQotDfYGNjY69gTwZGeambNBUX/KmwsbGxl7InUe4kGJgHFVH7gY2Njf0Cdq8NqC692jzMmx9sbGzsN7CTO9U4IS+K1YFULvqlFcHGxsZ+LPtTvKqjn+qyelWmOlrCxsbG3sTu/ceeH6bJm5nJts6jYmxsbOyns6vhbt6EVNuPXhjQa2awsbGx97HzVqEX1lYbm3wrmw0PNjY2Nnbw3UnbkNeaalyBjY2N/WZ29XhN9XDkJHKoDq2wsbGx97GTIc75subFrxokjLYMGxsbexF7EvT2NqI3nLovisDGxsZ+LPsPCxJaPQ8NWnMAAAAASUVORK5CYII=" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
+  });
 </script>
 
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
 
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '经检测,你已离开...';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '欢迎回来...';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-})();
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Gary Wu
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Gary Wu All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
 </body>
 </html>

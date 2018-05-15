@@ -1,26 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    <title>问题汇总-openstack计算节点无法调度及热迁移调度 | Gary Wu | 运维架构师 - 从入门到放弃</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="高级运维,计算节点,nova_schedule调度,nova_schedule,热迁移调度">
-    <meta name="description" content="由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：">
+  <meta charset="utf-8">
+  
+  <title>问题汇总-openstack计算节点无法调度及热迁移调度 | Gary Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="高级运维计算节点nova_schedule调度nova_schedule热迁移调度" />
+  
+  
+  
+  
+  <meta name="description" content="由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：">
 <meta name="keywords" content="高级运维,计算节点,nova_schedule调度,nova_schedule,热迁移调度">
 <meta property="og:type" content="article">
 <meta property="og:title" content="问题汇总-openstack计算节点无法调度及热迁移调度">
@@ -32,156 +23,167 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="问题汇总-openstack计算节点无法调度及热迁移调度">
 <meta name="twitter:description" content="由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：">
-    
-        <link rel="alternate" type="application/atom+xml" title="Gary Wu" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+    <link rel="alternate" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
+  
 
-    <!-- custom head -->
-    
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
 
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bingchuan.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Gary Wu</h5>
-          <a href="mailto:wuyanteng@foxmail.com" title="wuyanteng@foxmail.com" class="mail">wuyanteng@foxmail.com</a>
-        </hgroup>
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
       </div>
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                所有文章
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags/高级运维"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/wuyanteng" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://t.me/om_china" target="_blank" >
-                <i class="icon icon-lg icon-link"></i>
-                Telegram讨论组
-              </a>
-            </li>
-        
-      </ul>
-    </div>
-  </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">问题汇总-openstack计算节点无法调度及热迁移调度</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入关键字来检索">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">问题汇总-openstack计算节点无法调度及热迁移调度</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-03-22T12:07:01.000Z" itemprop="datePublished" class="page-time">
-  2017-03-22
-</time>
-
-
-            
-        </h5>
-    </div>
-
-    
-
 
 </header>
 
 
-<div class="container body-wrap">
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-问题汇总-openstack计算节点无法调度及热迁移调度" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#首先去验证计算节点服务是否正常"><span class="post-toc-number">1.</span> <span class="post-toc-text">首先去验证计算节点服务是否正常</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#其次-需要保证所有计算节点都在一个可用域中"><span class="post-toc-number">2.</span> <span class="post-toc-text">其次,需要保证所有计算节点都在一个可用域中</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#问题1解决方案：计算节点无法被schedule调度"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题1解决方案：计算节点无法被schedule调度</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#问题2解决方案：热迁移配置"><span class="post-toc-number">4.</span> <span class="post-toc-text">问题2解决方案：热迁移配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#以上配置正常后-其中一个计算节点扔不能被调度"><span class="post-toc-number">5.</span> <span class="post-toc-text">以上配置正常后,其中一个计算节点扔不能被调度</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何快速定位故障"><span class="post-toc-number">6.</span> <span class="post-toc-text">如何快速定位故障?</span></a></li></ol>
-        </nav>
-    </aside>
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      问题汇总-openstack计算节点无法调度及热迁移调度
+    </h1>
+  
 
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" class="article-date">
+	  <time datetime="2017-03-22T12:07:01.000Z" itemprop="datePublished">2017-03-22</time>
+	</a>
 
-<article id="post-问题汇总-openstack计算节点无法调度及热迁移调度"
-  class="post-article article-type-post fade" itemprop="blogPost">
-
-    <div class="post-card">
-        <h1 class="post-card-title">问题汇总-openstack计算节点无法调度及热迁移调度</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-03-22 20:07:01" datetime="2017-03-22T12:07:01.000Z"  itemprop="datePublished">2017-03-22</time>
-
-            
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
-</span>
-
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <pre><code>由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台计算节点上。在后来的热迁移测试中,也发现了问题。由于这套openstack非自己部署,所以故障排查尤为艰难，下面详细记录下：
 </code></pre><a id="more"></a>
 <h4 id="首先去验证计算节点服务是否正常"><a href="#首先去验证计算节点服务是否正常" class="headerlink" title="首先去验证计算节点服务是否正常"></a>首先去验证计算节点服务是否正常</h4><pre><code>首先去验证计算节点服务是否正常
 openstack compute service list 
@@ -260,311 +262,247 @@ Error oslo_message.rpc.server ...... Exception during message handling
 </code></pre><pre><code>这类报错基本都是由于nova.conf配置文件语法问题导致，虽然服务正常启动，但是不能被成功调度。解决方案：拷贝正常的配置文件覆盖并简要修改，重启服务，测试OK
 </code></pre><h4 id="如何快速定位故障"><a href="#如何快速定位故障" class="headerlink" title="如何快速定位故障?"></a>如何快速定位故障?</h4><pre><code>首先理清楚架构, 其次尝试去修改错误, 验证时或无解决思路时, 务必要查看日志，日志基本能够说明一切。
 </code></pre>
-        </div>
-
-        <blockquote class="post-copyright">
-    
-    <div class="content">
-        
-<span class="post-time">
-    最后更新时间：<time datetime="2018-03-22T12:42:23.321Z" itemprop="dateUpdated">2018-03-22 20:42:23</time>
-</span><br>
-
-
-        
-        转载文章请注明出处！<br>文章永久链接：<a href="/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" target="_blank" rel="external">https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/</a>
-        
+      
     </div>
-    
-    <footer>
-        <a href="https://wuyanteng.github.io">
-            <img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" alt="Gary Wu">
-            Gary Wu
-        </a>
+    <footer class="article-footer">
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule/">nova_schedule</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule调度/">nova_schedule调度</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/热迁移调度/">热迁移调度</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算节点/">计算节点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
+
     </footer>
-</blockquote>
-
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/03/Dingo反代Google-DNS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
         
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
-</div>
-
-
-
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule/">nova_schedule</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nova-schedule调度/">nova_schedule调度</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/热迁移调度/">热迁移调度</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算节点/">计算节点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高级运维/">高级运维</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&title=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&title=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&source=由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台..." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
+          dingo反代Goolge DNS
+        
+      </div>
     </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/2017/04/03/Dingo反代Google-DNS/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">dingo反代Goolge DNS</h4>
-      </a>
-    </div>
   
-
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/03/20/使用光盘搭建本地yum源/" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">使用光盘搭建本地yum源</h4>
-      </a>
-    </div>
+    <a href="/2017/03/20/使用光盘搭建本地yum源/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">使用光盘搭建本地yum源</div>
+    </a>
   
 </nav>
 
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
 </article>
 
-<div id="reward" class="page-modal reward-lay">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <h3 class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        我们不一样
-        <i class="icon icon-quote-right"></i>
-    </h3>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE.png" alt="打赏二维码">
-        </div>
-        
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先去验证计算节点服务是否正常"><span class="nav-number">1.</span> <span class="nav-text">首先去验证计算节点服务是否正常</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其次-需要保证所有计算节点都在一个可用域中"><span class="nav-number">2.</span> <span class="nav-text">其次,需要保证所有计算节点都在一个可用域中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题1解决方案：计算节点无法被schedule调度"><span class="nav-number">3.</span> <span class="nav-text">问题1解决方案：计算节点无法被schedule调度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题2解决方案：热迁移配置"><span class="nav-number">4.</span> <span class="nav-text">问题2解决方案：热迁移配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#以上配置正常后-其中一个计算节点扔不能被调度"><span class="nav-number">5.</span> <span class="nav-text">以上配置正常后,其中一个计算节点扔不能被调度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何快速定位故障"><span class="nav-number">6.</span> <span class="nav-text">如何快速定位故障?</span></a></li></ol>
+    
     </div>
-</div>
-
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
+  </aside>
+</section>
         
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      </div>
+      
+      <footer id="footer">
+  
 
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 Gary Wu All Rights Reserved.</p>
+	      
+	      
+  		   	<p id="copyRightCn">Gary Wu 保留所有权利</p>
+  		   
+		</div>
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>很惭愧，在运维不归路上，一去不复返。。。始终不忘初心！我是GaryWu<br>欢迎加入"运维中国"-Telegram讨论组：https://t.me/om_china [需借助梯子]</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Gary Wu &copy; 2015 - 2018</span>
-            <span>
-                
-                <a href="https://wuyanteng.github.io" target="_blank">博客由Hexo强力驱动</a>
-            </span>
-        </p>
-    </div>
+		
+  </div>
 </footer>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
+<!-- min height -->
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&title=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&pic=https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/touxiang.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&title=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&source=由于生产环境openstack N版在使用中发现, （疑似后来新添加的4个）计算节点无法被nova_schedule调度, 即创建虚拟机不能被分配到这几台..." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《问题汇总-openstack计算节点无法调度及热迁移调度》 — Gary Wu&url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/&via=https://wuyanteng.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wuyanteng.github.io/2017/03/22/问题汇总-openstack计算节点无法调度及热迁移调度/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADKElEQVR42u3awU4jQQwEUP7/p1lpTysBocrdrBLz5oRQpmdeH+LY1W9v8fX+9/rq//9eyQrJJz+u+fGu5LlHFzY2NvaLsN8fXsmLJlsze267frEmNjY29jp2vlzysPPS1W5cvfXY2NjYv5L9uEi0m9W2E8m92NjY2NjtT/yThuTuxmFjY2NjJ2WpbRVmyHwr/9MsDRsbG/vp2W3Q+8x//2C+jY2Njf2U7PfyyleYjfIfF85rCmxsbOxF7GRM0wYGeTCcrHPSinxzLzY2NvYi9skP/VvDprwc5o1HdC82Njb2IvYssm1blDwkzuOKC2UMGxsbex07KSGzZuOk8MwaoSLoxcbGxn5Z9q1DkLMtS56YRw556cXGxsbewZ4tmr/ibDg128Q8MMDGxsbeym67lmTccxLo5od78u3AxsbG3s1uW4WT4z4tLC97UfuEjY2NvY49O15z/op5QbrVrmBjY2NvZddDmbhtaO9q49v2uA82Njb2Pnb+sz4Pa1vk3YakbXiwsbGxX52df+nnj69LyPG4Km+Z6hfFxsbGfhF20gbcaj9mTUgbCXyzHdjY2Njr2LMC1pa3vLCdx8zRIAkbGxt7Ebsd5eTHembrnLQ90WALGxsbezW7DVZPitwskGibnE8+iY2Njb2I3Y7yZ48/GQblW5mXNGxsbOx97Dw0bYdQeQBw8qKXwdjY2Ngvxc6LSl7eZnP4fCzVbs0n74yNjY29iJ3f8BPlrR0J5TFDsiY2Njb2Dnb7mFtHbdpwIh9pRUUUGxsbex27DXTPY+C8IM0ih2+aHGxsbOxF7PNQNulpTkpROxIqSjI2Njb2CnbSNuQNQ9uKzArhLH4oeiBsbGzsF2SfLNQWtlsJRlvMvowHsLGxsVew2wFQS0rGQ3k5TIpofYoHGxsb+2XZ+TU7XnMS4uaA9inY2NjY+9izojWLbPNS1G56HkJgY2Njb2UnhaEND2ZxQp1U32ozsLGxsX8Bu/1MW9hm7U1eSrGxsbGxZ83D3Xtn23GhgGFjY2M/PTsZKuVLt6Ulb1dOjg0N4wFsbGzsp2efBL3tQP8cP2tysLGxsZey/wBcxJa6n10HTAAAAABJRU5ErkJggg==" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
 <!-- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
+  });
 </script>
 
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
 
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '经检测,你已离开...';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '欢迎回来...';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-})();
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Gary Wu
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Gary Wu All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
 </body>
 </html>
