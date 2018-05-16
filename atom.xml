@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-05-16T02:47:00.078Z</updated>
+  <updated>2018-05-16T02:51:41.647Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -17,17 +17,17 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>带有附加数据的认证加密-libsodium</title>
+    <title>带有附加数据的加密算法-libsodium</title>
     <link href="https://wuyanteng.github.io/2018/05/16/%E5%B8%A6%E6%9C%89%E9%99%84%E5%8A%A0%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AE%A4%E8%AF%81%E5%8A%A0%E5%AF%86-libsodium/"/>
     <id>https://wuyanteng.github.io/2018/05/16/带有附加数据的认证加密-libsodium/</id>
     <published>2018-05-16T02:17:14.000Z</published>
-    <updated>2018-05-16T02:47:00.078Z</updated>
+    <updated>2018-05-16T02:51:41.647Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="Libsodium支持的加密"><a href="#Libsodium支持的加密" class="headerlink" title="Libsodium支持的加密"></a>Libsodium支持的加密</h5><pre><code>Libsodium 支持两种流行的结构: AES256-GCM 和 ChaCha20-Poly1305(原始版和IETF版) ，另一种是后者的一种变体，即: XChaCha20-Poly1305</code></pre><a id="more"></a><h5 id="加密信息对比"><a href="#加密信息对比" class="headerlink" title="加密信息对比"></a>加密信息对比</h5><table><thead><tr><th>加密方式</th><th>Key  大小</th><th>Nonce大小</th><th>Block大小</th><th>MAC  大小</th><th>对应libsodium版本</th></tr></thead><tbody><tr><td>AES-256-GCM</td><td>256  比特</td><td>96比特</td><td>128  比特</td><td>128  比特</td><td>libsodium &gt;= 1.0.4 but requires hardware support. IETF standard; also implemented in many other libraries.</td></tr><tr><td>ChaCha20-Poly1305</td><td>256  比特</td><td>64比特</td><td>512  比特</td><td>128  比特</td><td>libsodium &gt;= 0.6.0. Also implemented in {Libre,Open,Boring}SSL.</td></tr><tr><td>ChaCha20-IETF-Poly1305</td><td>256  比特</td><td>96比特</td><td>512  比特</td><td>128  比特</td><td>libsodium &gt;= 1.0.4. IETF standard; also implemented in Ring, {Libre,Open,Boring}SSL and other libraries.</td></tr><tr><td>XChaCha20-IETF-Poly1305</td><td>256  比特</td><td>192  比特</td><td>512  比特</td><td>128  比特</td><td>libsodium &gt;= 1.0.12.</td></tr></tbody></table><h5 id="加密方式选择"><a href="#加密方式选择" class="headerlink" title="加密方式选择"></a>加密方式选择</h5><pre><code>Xchacha20-poly1305-ietf是相对最安全的</code></pre><h5 id="AES-256-GCM"><a href="#AES-256-GCM" class="headerlink" title="AES-256-GCM"></a>AES-256-GCM</h5><pre><code>目前这种结构支持硬件加速，需要Intel SSSE3扩展，以及 aesni 和 pclmul。官方暂无计划将AES-256-GCM通过非硬件技术(即软件层)来实现</code></pre><h5 id="ChaCha20-Poly1305"><a href="#ChaCha20-Poly1305" class="headerlink" title="ChaCha20-Poly1305"></a>ChaCha20-Poly1305</h5><pre><code>虽然AES-256-GCM在专用硬件上速度非常快，但在非专用硬件上性能要低得多。并且, AES容易受到缓存冲突时间的攻击。ChaCha20在纯软件方面加密就比AES快得多，在缺乏专用AES硬件的平台上速度比其快三倍。 并且, ChaCha20对定时攻击也不敏感。而Poly1305是一种高速信息验证码。ChaCha20流密码+Poly1305认证的组合的使得其成为了Salsa20-Poly1305加密方式的替代品。其于2015年5月成为IETF官方标准，所以目前很多主流操作系统均以支持ChaCha20-Poly1305，</code></pre><h5 id="XChaCha20-IETF-Poly1305"><a href="#XChaCha20-IETF-Poly1305" class="headerlink" title="XChaCha20-IETF-Poly1305"></a>XChaCha20-IETF-Poly1305</h5><pre><code>XChaCha20-Poly1305继承了ChaCha20-Poly1305所有优势并将随机文件nonce大小扩展到192位。这种扩展的随机数大小允许安全使用随机数。libsodium中的XChaCha20-Poly1305实现可在所有支持的体系结构中移植。这种加密需要 &gt;=libsodium 1.0.12的版本方能支持。</code></pre><p>翻译自:<a href="https://download.libsodium.org/doc/secret-key_cryptography/aead.html" target="_blank" rel="noopener">Libsodium官网</a></p>]]></content>
+    <content type="html"><![CDATA[<h5 id="Libsodium支持的加密"><a href="#Libsodium支持的加密" class="headerlink" title="Libsodium支持的加密"></a>Libsodium支持的加密</h5><pre><code>Libsodium 支持两种流行的加密算法: AES256-GCM 和 ChaCha20-Poly1305(原始版和IETF版) ，另一种是后者的一种变体，即: XChaCha20-Poly1305</code></pre><a id="more"></a><h5 id="加密信息对比"><a href="#加密信息对比" class="headerlink" title="加密信息对比"></a>加密信息对比</h5><table><thead><tr><th>加密方式</th><th>Key  大小</th><th>Nonce大小</th><th>Block大小</th><th>MAC  大小</th><th>对应libsodium版本</th></tr></thead><tbody><tr><td>AES-256-GCM</td><td>256  比特</td><td>96比特</td><td>128  比特</td><td>128  比特</td><td>libsodium &gt;= 1.0.4 but requires hardware support. IETF standard; also implemented in many other libraries.</td></tr><tr><td>ChaCha20-Poly1305</td><td>256  比特</td><td>64比特</td><td>512  比特</td><td>128  比特</td><td>libsodium &gt;= 0.6.0. Also implemented in {Libre,Open,Boring}SSL.</td></tr><tr><td>ChaCha20-IETF-Poly1305</td><td>256  比特</td><td>96比特</td><td>512  比特</td><td>128  比特</td><td>libsodium &gt;= 1.0.4. IETF standard; also implemented in Ring, {Libre,Open,Boring}SSL and other libraries.</td></tr><tr><td>XChaCha20-IETF-Poly1305</td><td>256  比特</td><td>192  比特</td><td>512  比特</td><td>128  比特</td><td>libsodium &gt;= 1.0.12.</td></tr></tbody></table><h5 id="加密方式选择"><a href="#加密方式选择" class="headerlink" title="加密方式选择"></a>加密方式选择</h5><pre><code>Xchacha20-poly1305-ietf是相对最安全的</code></pre><h5 id="AES-256-GCM"><a href="#AES-256-GCM" class="headerlink" title="AES-256-GCM"></a>AES-256-GCM</h5><pre><code>目前这种结构支持硬件加速，需要Intel SSSE3扩展，以及 aesni 和 pclmul。官方暂无计划将AES-256-GCM通过非硬件技术(即软件层)来实现</code></pre><h5 id="ChaCha20-Poly1305"><a href="#ChaCha20-Poly1305" class="headerlink" title="ChaCha20-Poly1305"></a>ChaCha20-Poly1305</h5><pre><code>虽然AES-256-GCM在专用硬件上速度非常快，但在非专用硬件上性能要低得多。并且, AES容易受到缓存冲突时间的攻击。ChaCha20在纯软件方面加密就比AES快得多，在缺乏专用AES硬件的平台上速度比其快三倍。 并且, ChaCha20对定时攻击也不敏感。而Poly1305是一种高速信息验证码。ChaCha20流密码+Poly1305认证的组合的使得其成为了Salsa20-Poly1305加密方式的替代品。其于2015年5月成为IETF官方标准，所以目前很多主流操作系统均以支持ChaCha20-Poly1305，</code></pre><h5 id="XChaCha20-IETF-Poly1305"><a href="#XChaCha20-IETF-Poly1305" class="headerlink" title="XChaCha20-IETF-Poly1305"></a>XChaCha20-IETF-Poly1305</h5><pre><code>XChaCha20-Poly1305继承了ChaCha20-Poly1305所有优势并将随机文件nonce大小扩展到192位。这种扩展的随机数大小允许安全使用随机数。libsodium中的XChaCha20-Poly1305实现可在所有支持的体系结构中移植。这种加密需要 &gt;=libsodium 1.0.12的版本方能支持。</code></pre><p>翻译自:<a href="https://download.libsodium.org/doc/secret-key_cryptography/aead.html" target="_blank" rel="noopener">Libsodium官网</a></p>]]></content>
     
     <summary type="html">
     
-      &lt;h5 id=&quot;Libsodium支持的加密&quot;&gt;&lt;a href=&quot;#Libsodium支持的加密&quot; class=&quot;headerlink&quot; title=&quot;Libsodium支持的加密&quot;&gt;&lt;/a&gt;Libsodium支持的加密&lt;/h5&gt;&lt;pre&gt;&lt;code&gt;Libsodium 支持两种流行的结构: AES256-GCM 和 ChaCha20-Poly1305(原始版和IETF版) ，另一种是后者的一种变体，即: XChaCha20-Poly1305
+      &lt;h5 id=&quot;Libsodium支持的加密&quot;&gt;&lt;a href=&quot;#Libsodium支持的加密&quot; class=&quot;headerlink&quot; title=&quot;Libsodium支持的加密&quot;&gt;&lt;/a&gt;Libsodium支持的加密&lt;/h5&gt;&lt;pre&gt;&lt;code&gt;Libsodium 支持两种流行的加密算法: AES256-GCM 和 ChaCha20-Poly1305(原始版和IETF版) ，另一种是后者的一种变体，即: XChaCha20-Poly1305
 &lt;/code&gt;&lt;/pre&gt;
     
     </summary>
@@ -449,9 +449,9 @@ X-Forwarded-For
     
       <category term="Linux" scheme="https://wuyanteng.github.io/tags/Linux/"/>
     
-      <category term="文件句柄" scheme="https://wuyanteng.github.io/tags/%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84/"/>
-    
       <category term="lsof" scheme="https://wuyanteng.github.io/tags/lsof/"/>
+    
+      <category term="文件句柄" scheme="https://wuyanteng.github.io/tags/%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84/"/>
     
       <category term="空间释放" scheme="https://wuyanteng.github.io/tags/%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE/"/>
     
