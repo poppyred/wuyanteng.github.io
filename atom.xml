@@ -449,9 +449,9 @@ X-Forwarded-For
     
       <category term="Linux" scheme="https://wuyanteng.github.io/tags/Linux/"/>
     
-      <category term="lsof" scheme="https://wuyanteng.github.io/tags/lsof/"/>
-    
       <category term="文件句柄" scheme="https://wuyanteng.github.io/tags/%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84/"/>
+    
+      <category term="lsof" scheme="https://wuyanteng.github.io/tags/lsof/"/>
     
       <category term="空间释放" scheme="https://wuyanteng.github.io/tags/%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE/"/>
     

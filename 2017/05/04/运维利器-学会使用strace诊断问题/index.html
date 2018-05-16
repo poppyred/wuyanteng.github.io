@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/unbound_dns.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/strace_time.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/strace_epoll_wait.png">
-<meta property="og:updated_time" content="2018-05-04T08:06:25.732Z">
+<meta property="og:updated_time" content="2018-05-16T07:40:50.565Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="运维利器-学会使用strace诊断问题">
 <meta name="twitter:description" content="按照strace官网的描述, strace是一个可用于诊断、调试和教学的Linux用户空间跟踪器。我们用它来监控用户空间进程和内核的交互，比如系统调用、信号传递、进程状态变更等。  在运维的日常工作中，故障处理和问题诊断是个主要的内容，也是必备的技能。strace作为一种动态跟踪工具，能够帮助运维高效地定位进程和服务故障。它像是一个侦探，通过系统调用的蛛丝马迹，告诉你异常的真相。">
@@ -234,7 +234,12 @@ Unlike fork(2), these calls allow the child process to share parts of its execut
 
 简单来说，就是创建一个新进程。至于程序为什么会出现此类调用，这个问题可以咨询下公司研发同学。
 </code></pre><hr>
-<h5 id="strace选项-说明"><a href="#strace选项-说明" class="headerlink" title="strace选项-说明"></a>strace选项-说明</h5><pre><code>-c 统计每一系统调用的所执行的时间,次数和出错的次数等.
+<h5 id="程序运行很慢-原因定位"><a href="#程序运行很慢-原因定位" class="headerlink" title="程序运行很慢-原因定位"></a>程序运行很慢-原因定位</h5><pre><code>程序运行很慢，我们如何知道到底慢在哪？此时可以利用strace的「-T」选项，不过需要注意的是，strace的结果在标准错误里，使用前最好重定向到标准输出。
+</code></pre><pre><code>下面让我们过滤某个PHP进程中操作时间大于0.001秒的操作：
+strace -T -p &lt;PID&gt; 2&gt;&amp;1 | awk &#39;substr($NF, 2, 8) &gt; 0.001&#39;
+
+如果问题比较简单,通常这样就够了
+</code></pre><h5 id="strace选项-说明"><a href="#strace选项-说明" class="headerlink" title="strace选项-说明"></a>strace选项-说明</h5><pre><code>-c 统计每一系统调用的所执行的时间,次数和出错的次数等.
 -d 输出strace关于标准错误的调试信息.
 -f 跟踪由fork调用所产生的子进程.
 -ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.
@@ -1083,6 +1088,18 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">文件句柄</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">lsof</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">空间释放</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">限速方案</a>
               </li>
              
@@ -1243,15 +1260,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Error1044</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">慢查询</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">mysqldumpslow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Error1044</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1847,15 +1864,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">BIOS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DTK</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">raidcfg</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">BIOS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2059,10 +2076,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">lsof</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">主从复制错误</a>
               </li>
              
@@ -2120,14 +2133,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">补丁升级</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">文件句柄</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">空间释放</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2220,6 +2225,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">saltenv=prod</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">zabbix_agent</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2672,10 +2681,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">加密算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">zabbix_agent</a>
               </li>
              
               <li class="article-tag-list-item">

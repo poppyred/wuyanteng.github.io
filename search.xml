@@ -354,9 +354,9 @@
             
             <tag> Linux </tag>
             
-            <tag> lsof </tag>
-            
             <tag> 文件句柄 </tag>
+            
+            <tag> lsof </tag>
             
             <tag> 空间释放 </tag>
             
@@ -5702,9 +5702,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> BIOS </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
             
         </tags>
       
