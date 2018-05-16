@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-05-16T02:51:41.647Z</updated>
+  <updated>2018-05-16T08:43:53.980Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>sar命令-Linux查找系统瓶颈利器</title>
+    <link href="https://wuyanteng.github.io/2018/05/16/sar%E5%91%BD%E4%BB%A4-Linux%E6%9F%A5%E6%89%BE%E7%B3%BB%E7%BB%9F%E7%93%B6%E9%A2%88%E5%88%A9%E5%99%A8/"/>
+    <id>https://wuyanteng.github.io/2018/05/16/sar命令-Linux查找系统瓶颈利器/</id>
+    <published>2018-05-16T08:03:13.000Z</published>
+    <updated>2018-05-16T08:43:53.980Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>SAR是一个在Unix和Linux操作系统中用来收集、报告和保存CPU、内存、输入输出端口使用情况的命令。sar 命令将操作系统中选定的累计活动计数器的内容写到标准输出。基于 number 和 interval 参数的值，记帐系统按指定次数，以指定的时间间隔（以秒为单位）写入信息。number 参数的缺省采样时间间隔为 1 秒。收集的数据也可以保存在由 -o file 标志指定的文件中。当指定 –X 选项时，sar 命令会生成 XML 文件。</code></pre><a id="more"></a><h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><pre><code>yum install sysstat当启动sysstat服务后，报告就会被写入到日志文件“/var/log/sa/saDD”中并且已经存在的文档将会被归档。DD表示当前日期。systemctl start sysstatsystemctl enable sysstat</code></pre><pre><code>[root@bogon ~]# cat /etc/cron.d/sysstat #每10分钟运行一次系统活动收集*/10 * * * * root /usr/lib64/sa/sa1 1 1#每天形成一份报告53 23 * * * root /usr/lib64/sa/sa2 -A其中,crontab文件负责收集和生成报告。</code></pre><pre><code>SysStat的默认Config配置文件[root@bogon ~]# grep -v &quot;^[#]&quot; /etc/sysconfig/sysstatHISTORY=28COMPRESSAFTER=31SADC_OPTIONS=&quot;-S DISK&quot;ZIP=&quot;bzip2&quot;</code></pre><h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><h5 id="每隔2秒动态生成5次CPU的使用情况"><a href="#每隔2秒动态生成5次CPU的使用情况" class="headerlink" title="每隔2秒动态生成5次CPU的使用情况"></a>每隔2秒动态生成5次CPU的使用情况</h5><pre><code>[root@bogon ~]# sar -u 2 5Linux 3.10.0-327.el7.x86_64 (bogon)     05/16/2018     _x86_64_    (8 CPU)04:17:00 AM     CPU     %user     %nice   %system   %iowait    %steal     %idle04:17:02 AM     all      0.00      0.00      0.00      0.00      0.00    100.0004:17:04 AM     all      0.00      0.00      0.06      0.00      0.00     99.9404:17:06 AM     all      0.00      0.00      0.00      0.00      0.00    100.0004:17:08 AM     all      0.00      0.00      0.00      0.00      0.00    100.0004:17:10 AM     all      0.00      0.00      0.00      0.00      0.00    100.00Average:        all      0.00      0.00      0.01      0.00      0.00     99.99%user 用户模式下消耗的CPU时间的比例；%nice 通过nice改变了进程调度优先级的进程，在用户模式下消耗的CPU时间的比例%system 系统模式下消耗的CPU时间的比例；%iowait CPU等待磁盘I/O导致空闲状态消耗的时间比例；%steal 利用Xen等操作系统虚拟化技术，等待其它虚拟CPU计算占用的时间比例；%idle CPU空闲时间比例；注：如果 &quot;%iowait&quot; 这一项是一个超过0的长时间值，那么我们就要考虑是否在输入输出系统方面存在瓶颈(比如硬盘或者网络)。</code></pre><h5 id="使用-q选项查看平均负载"><a href="#使用-q选项查看平均负载" class="headerlink" title="使用-q选项查看平均负载"></a>使用-q选项查看平均负载</h5><pre><code>[root@bogon ~]# sar -q 2 5Linux 3.10.0-327.el7.x86_64 (bogon)     05/16/2018     _x86_64_    (8 CPU)04:37:43 AM   runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked04:37:45 AM         0       163      0.00      0.01      0.05         004:37:47 AM         0       163      0.00      0.01      0.05         004:37:49 AM         0       163      0.00      0.01      0.05         004:37:51 AM         0       163      0.00      0.01      0.05         004:37:53 AM         0       163      0.00      0.01      0.05         0Average:            0       163      0.00      0.01      0.05         0runq-sz：运行队列的长度（等待运行的进程数）plist-sz：进程列表中进程（processes）和线程（threads）的数量ldavg-1：最后1分钟的系统平均负载 ldavg-5：过去5分钟的系统平均负载ldavg-15：过去15分钟的系统平均负载</code></pre><h5 id="使用-o选项保存sar命令的输出结果"><a href="#使用-o选项保存sar命令的输出结果" class="headerlink" title="使用-o选项保存sar命令的输出结果"></a>使用-o选项保存sar命令的输出结果</h5><pre><code>[root@bogon ~]# sar 2 5 -o /tmp/cpu_data.log &gt;/dev/null 2&gt;&amp;1</code></pre><p>使用”sar -f”输出结果(否则将出现乱码)：</p><pre><code>[root@bogon ~]# sar -f /tmp/cpu_data.log Linux 3.10.0-327.el7.x86_64 (bogon)     05/16/2018     _x86_64_    (8 CPU)04:19:56 AM     CPU     %user     %nice   %system   %iowait    %steal     %idle04:19:58 AM     all      0.00      0.00      0.06      0.00      0.00     99.94......</code></pre><h5 id="使用-r选项生成内存的使用情况报告"><a href="#使用-r选项生成内存的使用情况报告" class="headerlink" title="使用-r选项生成内存的使用情况报告"></a>使用-r选项生成内存的使用情况报告</h5><pre><code>[root@bogon ~]# sar -r 2 5Linux 3.10.0-327.el7.x86_64 (bogon)     05/16/2018     _x86_64_    (8 CPU)......kbmemfree：这个值和free命令中的free值基本一致,所以它不包括buffer和cache的空间.kbmemused：这个值和free命令中的used值基本一致,所以它包括buffer和cache的空间.%memused：物理内存使用率，这个值是kbmemused和内存总量(不包括swap)的一个百分比.kbbuffers和kbcached：这两个值就是free命令中的buffer和cache.kbcommit：保证当前系统所需要的内存,即为了确保不溢出而需要的内存(RAM+swap).%commit：这个值是kbcommit与内存总量(包括swap)的一个百分比.</code></pre><h5 id="w选项查看页面交换发生情况"><a href="#w选项查看页面交换发生情况" class="headerlink" title="-w选项查看页面交换发生情况"></a>-w选项查看页面交换发生情况</h5><pre><code>[root@bogon ~]# sar -w  1 3Linux 3.10.0-327.el7.x86_64 (bogon)     05/16/2018     _x86_64_    (8 CPU)04:41:37 AM  pswpin/s pswpout/s04:41:38 AM      0.00      0.0004:41:39 AM      0.00      0.0004:41:40 AM      0.00      0.00Average:         0.00      0.00pswpin/s：每秒系统换入的交换页面（swap page）数量pswpout/s：每秒系统换出的交换页面（swap page）数量</code></pre><h5 id="使用-d选项生成块设备使用情况报告"><a href="#使用-d选项生成块设备使用情况报告" class="headerlink" title="使用-d选项生成块设备使用情况报告"></a>使用-d选项生成块设备使用情况报告</h5><pre><code>-d 选项在sar命令中被用以显示块设备的状态报告。在 -d 后面加上 -p  (pretty-print)选项可以增强 dev 列的可读性.[root@bogon ~]# sar -d -p 2 4Linux 3.10.0-327.el7.x86_64 (bogon)     05/16/2018     _x86_64_    (8 CPU)04:30:46 AM  DEV  tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util04:30:48 AM  sda  0.00   0.00      0.00      0.00      0.00      0.00      0.00      0.0004:30:48 AM  sdb  0.00   0.00      0.00      0.00      0.00      0.00      0.00      0.00......</code></pre><h5 id="使用-n选项生成网络使用情况报告"><a href="#使用-n选项生成网络使用情况报告" class="headerlink" title="使用-n选项生成网络使用情况报告"></a>使用-n选项生成网络使用情况报告</h5><pre><code>-n选项在sar命令中被用来生成网络使用情况的统计报告。下面是语法规则：# sar -n {keyword} or {ALL}</code></pre><pre><code># sar -n ALL</code></pre><h5 id="用-f读sar日志文件"><a href="#用-f读sar日志文件" class="headerlink" title="用-f读sar日志文件"></a>用-f读sar日志文件</h5><pre><code>sar的日志文件是保存在“/var/log/sa/saDD”里的。使用-f选项可以查看日志文件。</code></pre><pre><code>[root@bogon ~]# sar -r -f /var/log/sa/sa16 </code></pre><h5 id="输出前两个核心CPU的使用情况"><a href="#输出前两个核心CPU的使用情况" class="headerlink" title="输出前两个核心CPU的使用情况"></a>输出前两个核心CPU的使用情况</h5><pre><code>[root@bogon ~]# sar  -u  -P 0,1</code></pre><h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><pre><code>要判断系统瓶颈问题，通常需几个sar命令选项结合起来；怀疑CPU存在瓶颈，可用 sar -u 和 sar -q 等来查看怀疑内存存在瓶颈，可用sar -B、sar -r 和 sar -W 等来查看怀疑I/O存在瓶颈，可用 sar -b、sar -u 和 sar -d 等来查看</code></pre><h4 id="sar参数说明"><a href="#sar参数说明" class="headerlink" title="sar参数说明"></a>sar参数说明</h4><pre><code>-A 汇总所有的报告-a 报告文件读写使用情况-B 报告附加的缓存的使用情况-b 报告缓存的使用情况-c 报告系统调用的使用情况-d 报告磁盘的使用情况-g 报告串口的使用情况-h 报告关于buffer使用的统计数据-m 报告IPC消息队列和信号量的使用情况-n 报告命名cache的使用情况-p 报告调页活动的使用情况-q 报告运行队列和交换队列的平均长度-R 报告进程的活动情况-r 报告没有使用的内存页面和硬盘块-u 报告CPU的利用率-v 报告进程、i节点、文件和锁表状态-w 报告系统交换活动状况-y 报告TTY设备活动状况</code></pre><p>参考: <a href="https://www.ibm.com/support/knowledgecenter/zh/ssw_aix_71/com.ibm.aix.cmds5/sar.htm" target="_blank" rel="noopener">IBM等</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;SAR是一个在Unix和Linux操作系统中用来收集、报告和保存CPU、内存、输入输出端口使用情况的命令。
+
+sar 命令将操作系统中选定的累计活动计数器的内容写到标准输出。基于 number 和 interval 参数的值，记帐系统按指定次数，以指定的时间间隔（以秒为单位）写入信息。number 参数的缺省采样时间间隔为 1 秒。收集的数据也可以保存在由 -o file 标志指定的文件中。
+
+当指定 –X 选项时，sar 命令会生成 XML 文件。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="系统瓶颈" scheme="https://wuyanteng.github.io/tags/%E7%B3%BB%E7%BB%9F%E7%93%B6%E9%A2%88/"/>
+    
+      <category term="sar" scheme="https://wuyanteng.github.io/tags/sar/"/>
+    
+      <category term="System Activity Reporter" scheme="https://wuyanteng.github.io/tags/System-Activity-Reporter/"/>
+    
+      <category term="系统活动情况报告" scheme="https://wuyanteng.github.io/tags/%E7%B3%BB%E7%BB%9F%E6%B4%BB%E5%8A%A8%E6%83%85%E5%86%B5%E6%8A%A5%E5%91%8A/"/>
+    
+  </entry>
   
   <entry>
     <title>带有附加数据的加密算法-libsodium</title>
@@ -563,31 +596,6 @@ X-Forwarded-For
       <category term="内核" scheme="https://wuyanteng.github.io/tags/%E5%86%85%E6%A0%B8/"/>
     
       <category term="net.ipv4" scheme="https://wuyanteng.github.io/tags/net-ipv4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>部署openstack各版本-本地yum源</title>
-    <link href="https://wuyanteng.github.io/2018/03/27/%E9%83%A8%E7%BD%B2openstack%E6%9C%AC%E5%9C%B0yum%E6%BA%90/"/>
-    <id>https://wuyanteng.github.io/2018/03/27/部署openstack本地yum源/</id>
-    <published>2018-03-27T06:50:29.000Z</published>
-    <updated>2018-03-28T11:28:42.639Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>部署本地openstack yum源，原因主要是我想安装老版本，比如N版(newton),而由于官方新版本的发布，官方取消了老版本的yum源。其次是部署本地yum源，安装速度更快。</code></pre><p>访问：<a href="http://mirror.centos.org/centos/7/cloud/x86_64/" target="_blank" rel="noopener">老版本CentOS openstack yum源</a></p><a id="more"></a><h4 id="1-使用apache提供yum服务"><a href="#1-使用apache提供yum服务" class="headerlink" title="1. 使用apache提供yum服务"></a>1. 使用apache提供yum服务</h4><pre><code>yum install -y httpdmkdir /var/www/html/newton   创建本地yum源目录cd /vaw/www/html/newton</code></pre><p>优化Apache目录浏览</p><pre><code>vim /etc/httpd/conf/httpd.conf&lt;Directory &quot;/vaw/www/html/newton&quot;&gt;    Options Indexes FollowSymLinks     IndexOptions NameWidth=80 Charset=UTF-8     AllowOverride None    Order allow,deny    Allow from all&lt;/Directory&gt;</code></pre><h4 id="2-同步远程仓库到本地"><a href="#2-同步远程仓库到本地" class="headerlink" title="2. 同步远程仓库到本地"></a>2. 同步远程仓库到本地</h4><pre><code>同步方式很原始，把源站所有rpm包及repodata目录wget到本地即可在根目录下载即可wget -c -r -np -k -L -p http://mirror.centos.org/centos/7/cloud/x86_64/openstack-newton/cd mirror.centos.org/centos/7/cloud/x86_64/openstack-newtonrm -f index.html*   #删除无关文件mv ./* /var/www/html/newton/</code></pre><h4 id="3-启动httpd服务"><a href="#3-启动httpd服务" class="headerlink" title="3. 启动httpd服务"></a>3. 启动httpd服务</h4><pre><code>然后启动httpd服务，其他机器通过httpd服务来访问yum源systemctl start httpdsystemctl enable httpd</code></pre><h4 id="4-openstack所有节点配置"><a href="#4-openstack所有节点配置" class="headerlink" title="4. openstack所有节点配置"></a>4. openstack所有节点配置</h4><pre><code>vim /etc/yum.repos.d/openstack-newtron.repo[openstack-local]name=openstack-newtronbaseurl=http://10.0.10.100/newtonenabled=1         gpgcheck=0注：enabled=1  说明启用这个更新库，0表示不启用。    gpgcheck=0 表示不使用gpg文件来检查软件包的签名更新yum缓存yum clean all &amp; yum makecache</code></pre><p>注：其他版本方法类似,不再赘述。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;部署本地openstack yum源，原因主要是我想安装老版本，比如N版(newton),而由于官方新版本的发布，官方取消了老版本的yum源。其次是部署本地yum源，安装速度更快。
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;访问：&lt;a href=&quot;http://mirror.centos.org/centos/7/cloud/x86_64/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;老版本CentOS openstack yum源&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="openstack" scheme="https://wuyanteng.github.io/tags/openstack/"/>
-    
-      <category term="yum" scheme="https://wuyanteng.github.io/tags/yum/"/>
     
   </entry>
   
