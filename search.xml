@@ -736,9 +736,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> neutron </tag>
-            
             <tag> openstack </tag>
+            
+            <tag> neutron </tag>
             
             <tag> VM </tag>
             
@@ -1590,9 +1590,9 @@
       
         <tags>
             
-            <tag> openstack </tag>
-            
             <tag> Glance </tag>
+            
+            <tag> openstack </tag>
             
             <tag> qcow2 </tag>
             
@@ -1680,11 +1680,11 @@
       
         <tags>
             
-            <tag> OpenStack </tag>
-            
             <tag> Horizon </tag>
             
             <tag> Dashboard </tag>
+            
+            <tag> OpenStack </tag>
             
         </tags>
       
@@ -1742,9 +1742,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> neutron </tag>
-            
             <tag> openstack </tag>
+            
+            <tag> neutron </tag>
             
         </tags>
       
@@ -1844,9 +1844,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Nova </tag>
-            
             <tag> OpenStack </tag>
+            
+            <tag> Nova </tag>
             
         </tags>
       
@@ -1932,9 +1932,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Nova </tag>
-            
             <tag> OpenStack </tag>
+            
+            <tag> Nova </tag>
             
         </tags>
       
@@ -1952,9 +1952,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> openstack </tag>
-            
             <tag> Glance </tag>
+            
+            <tag> openstack </tag>
             
         </tags>
       
@@ -5886,9 +5886,9 @@
             
             <tag> VM </tag>
             
-            <tag> 计算节点 </tag>
-            
             <tag> compute </tag>
+            
+            <tag> 计算节点 </tag>
             
             <tag> VM迁移 </tag>
             
@@ -5910,9 +5910,9 @@
             
             <tag> keepalived </tag>
             
-            <tag> neutron </tag>
-            
             <tag> openstack </tag>
+            
+            <tag> neutron </tag>
             
             <tag> LVS </tag>
             
