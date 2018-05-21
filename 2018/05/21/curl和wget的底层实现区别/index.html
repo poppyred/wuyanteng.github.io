@@ -9,14 +9,14 @@
   <title>curl和wget的底层实现区别 | Gary Wu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="开发有个php程序,通过curl去调用bind dns中一个域名(2个A记录)，在某些服务器上始终只轮询落到其中一个A记录服务器（使用wget和ping不存在这个问题），具体原因后研究认定可能与路由消耗有关。但现在来说说curl和wget的区别。">
-<meta name="keywords" content="高级运维,curl,wget">
+<meta name="keywords" content="高级运维,curl,wget,curl请求url不使用缓存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="curl和wget的底层实现区别">
 <meta property="og:url" content="https://wuyanteng.github.io/2018/05/21/curl和wget的底层实现区别/index.html">
 <meta property="og:site_name" content="Gary Wu">
 <meta property="og:description" content="开发有个php程序,通过curl去调用bind dns中一个域名(2个A记录)，在某些服务器上始终只轮询落到其中一个A记录服务器（使用wget和ping不存在这个问题），具体原因后研究认定可能与路由消耗有关。但现在来说说curl和wget的区别。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-21T09:47:01.905Z">
+<meta property="og:updated_time" content="2018-05-21T10:01:00.530Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="curl和wget的底层实现区别">
 <meta name="twitter:description" content="开发有个php程序,通过curl去调用bind dns中一个域名(2个A记录)，在某些服务器上始终只轮询落到其中一个A记录服务器（使用wget和ping不存在这个问题），具体原因后研究认定可能与路由消耗有关。但现在来说说curl和wget的区别。">
@@ -265,6 +265,9 @@ write(2, &quot;connected.\n&quot;, 11connected.
 
 相对于curl来说，一次wget请求，它把很多时间都用在了域名解析上，在查找hosts文件无果的情况下，通过类似dig的方式解析获取所有ip地址并去选择其一去请求数据，多次测试，结果是使用不同A记录IP地址去请求数据。
 </code></pre><pre><code>对于以上结论，纯属个人观点，如有雷同，纯属巧合。我已经在stackoverflow发布了该话题，如果有大牛回答，我可能会更新我的观点。
+</code></pre><h5 id="其他-curl请求URL不使用缓存"><a href="#其他-curl请求URL不使用缓存" class="headerlink" title="其他-curl请求URL不使用缓存"></a>其他-curl请求URL不使用缓存</h5><pre><code>curl请求url不使用缓存
+
+curl -H &#39;Cache-Control: no-cache&#39; http://www.example.com
 </code></pre><p>基本无价值参考: <a href="https://daniel.haxx.se/docs/curl-vs-wget.html" target="_blank" rel="noopener">haxx.se</a></p>
 
       
@@ -288,6 +291,10 @@ write(2, &quot;connected.\n&quot;, 11connected.
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">wget</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">curl请求url不使用缓存</a>
         		</li>
       		
 		</ul>
@@ -3087,6 +3094,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DNScrypts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">curl请求url不使用缓存</a>
               </li>
             
             <div class="clearfix"></div>

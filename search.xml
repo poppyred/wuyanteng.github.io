@@ -18,6 +18,8 @@
             
             <tag> wget </tag>
             
+            <tag> curl请求url不使用缓存 </tag>
+            
         </tags>
       
     </entry>
