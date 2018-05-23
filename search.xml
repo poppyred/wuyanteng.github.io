@@ -1570,9 +1570,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> ssh </tag>
-            
             <tag> chrony </tag>
+            
+            <tag> ssh </tag>
             
             <tag> Google Authenticator </tag>
             
@@ -2268,9 +2268,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> kafka </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> kafka </tag>
             
             <tag> producer </tag>
             
@@ -2642,8 +2642,6 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> zookeeper </tag>
-            
             <tag> codis </tag>
             
             <tag> codis集群 </tag>
@@ -2651,6 +2649,8 @@
             <tag> memcache </tag>
             
             <tag> redis </tag>
+            
+            <tag> zookeeper </tag>
             
         </tags>
       
@@ -2668,9 +2668,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> zookeeper </tag>
-            
             <tag> codis </tag>
+            
+            <tag> zookeeper </tag>
             
         </tags>
       
@@ -2828,9 +2828,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> kafka </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> kafka </tag>
             
             <tag> producer </tag>
             
@@ -3602,11 +3602,11 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -4588,9 +4588,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> kafka </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> kafka </tag>
             
             <tag> NAT </tag>
             
@@ -5086,9 +5086,9 @@
       
         <tags>
             
-            <tag> Ansible </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> Ansible </tag>
             
         </tags>
       
@@ -5642,11 +5642,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> kafka </tag>
+            <tag> 大数据 </tag>
             
             <tag> zookeeper </tag>
             
-            <tag> 大数据 </tag>
+            <tag> kafka </tag>
             
             <tag> flume </tag>
             
@@ -5685,6 +5685,28 @@
             <tag> 高级运维 </tag>
             
             <tag> GitHub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>全球局域网穿透利器-ZeroTier</title>
+      <link href="/2017/05/23/%E5%85%A8%E7%90%83%E5%B1%80%E5%9F%9F%E7%BD%91%E7%A9%BF%E9%80%8F%E5%88%A9%E5%99%A8-ZeroTier/"/>
+      <url>/2017/05/23/%E5%85%A8%E7%90%83%E5%B1%80%E5%9F%9F%E7%BD%91%E7%A9%BF%E9%80%8F%E5%88%A9%E5%99%A8-ZeroTier/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zerotier </tag>
+            
+            <tag> 内网穿透 </tag>
+            
+            <tag> 全球畅联 </tag>
             
         </tags>
       
