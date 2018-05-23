@@ -556,7 +556,7 @@
             
             <tag> openstack </tag>
             
-            <tag> yum </tag>
+            <tag> 本地yum </tag>
             
         </tags>
       
@@ -1570,9 +1570,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> chrony </tag>
-            
             <tag> ssh </tag>
+            
+            <tag> chrony </tag>
             
             <tag> Google Authenticator </tag>
             
@@ -2266,17 +2266,17 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
+            <tag> kafka </tag>
             
             <tag> zookeeper </tag>
-            
-            <tag> kafka </tag>
             
             <tag> producer </tag>
             
             <tag> consumer </tag>
             
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -2640,6 +2640,8 @@
       
         <tags>
             
+            <tag> zookeeper </tag>
+            
             <tag> 高级运维 </tag>
             
             <tag> codis </tag>
@@ -2649,8 +2651,6 @@
             <tag> memcache </tag>
             
             <tag> redis </tag>
-            
-            <tag> zookeeper </tag>
             
         </tags>
       
@@ -2666,11 +2666,11 @@
       
         <tags>
             
+            <tag> zookeeper </tag>
+            
             <tag> 高级运维 </tag>
             
             <tag> codis </tag>
-            
-            <tag> zookeeper </tag>
             
         </tags>
       
@@ -2796,11 +2796,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -2826,11 +2826,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
+            <tag> kafka </tag>
             
             <tag> zookeeper </tag>
-            
-            <tag> kafka </tag>
             
             <tag> producer </tag>
             
@@ -2843,6 +2841,8 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -2972,9 +2972,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> Producer </tag>
             
@@ -3602,11 +3602,11 @@
       
         <tags>
             
+            <tag> Nginx </tag>
+            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -3876,9 +3876,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -4482,9 +4482,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -4566,11 +4566,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -4586,11 +4586,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
+            <tag> kafka </tag>
             
             <tag> zookeeper </tag>
             
-            <tag> kafka </tag>
+            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -5086,9 +5086,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> Ansible </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -5640,13 +5640,13 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
-            <tag> 大数据 </tag>
+            <tag> kafka </tag>
             
             <tag> zookeeper </tag>
             
-            <tag> kafka </tag>
+            <tag> 高级运维 </tag>
+            
+            <tag> 大数据 </tag>
             
             <tag> flume </tag>
             
@@ -5814,9 +5814,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> DTK </tag>
-            
             <tag> BIOS </tag>
+            
+            <tag> DTK </tag>
             
         </tags>
       
