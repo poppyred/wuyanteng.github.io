@@ -5814,9 +5814,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> BIOS </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
             
         </tags>
       
