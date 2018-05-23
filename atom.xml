@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-05-21T10:01:00.530Z</updated>
+  <updated>2018-05-23T02:54:15.169Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ps命令查看进程启动及运行时间-linux</title>
+    <link href="https://wuyanteng.github.io/2018/05/23/ps%E5%91%BD%E4%BB%A4%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%8F%8A%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4-linux/"/>
+    <id>https://wuyanteng.github.io/2018/05/23/ps命令查看进程启动及运行时间-linux/</id>
+    <published>2018-05-23T02:27:26.000Z</published>
+    <updated>2018-05-23T02:54:15.169Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>有时候排查故障，可能需要查看下某个服务进程的启动时间与运行时间，如果进程由supervisor启动，就好办了。supervisor查看服务启动时间：supervisorctl status 如果程序没有使用supervisor启动，该怎么查看呢？</code></pre><a id="more"></a><h5 id="man命令查看下ps参数含义"><a href="#man命令查看下ps参数含义" class="headerlink" title="man命令查看下ps参数含义"></a>man命令查看下ps参数含义</h5><pre><code># man ps|egrep &#39;lstart|etime&#39;       running during the entire lifetime of a process.  This is not ideal,       %t     etime    ELAPSED       args, cmd, comm, command, fname, ucmd, ucomm, lstart, bsdstart, start.                             to be fully destroyed by its parent.  Sometimes                             lstart, start, start_time, and stime.                             lifetime of the process.  (see %cpu).       etime       ELAPSED   elapsed time since the process was started, in       etimes      ELAPSED   elapsed time since the process was started, in       lstart      STARTED   time the command started.  See also                             lstart, bsdstart, start_time, and stime.                             otherwise.  See also bsdstart, start, lstart,可以看到官方解释：etime指: 进程启动后运行或流逝的时间lstart指: 进程启动精确时间</code></pre><h5 id="查看服务或进程的启动时间"><a href="#查看服务或进程的启动时间" class="headerlink" title="查看服务或进程的启动时间"></a>查看服务或进程的启动时间</h5><pre><code># ps -eo pid,lstart,etime,cmd |grep mysql30244 Thu Feb  8 18:27:02 2018 103-16:22:50 /bin/mysqld_safe...</code></pre><p>或</p><pre><code># ps -eo lstart,etime,cmd |grep pid30244 Thu Feb  8 18:27:02 2018 103-16:23:27  common</code></pre><p>参考：<a href="https://jaminzhang.github.io/linux/using-ps-to-view-process-started-and-elapsed-time-in-linux/" target="_blank" rel="noopener">JAMIN ZHANG</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;有时候排查故障，可能需要查看下某个服务进程的启动时间与运行时间，如果进程由supervisor启动，就好办了。
+
+supervisor查看服务启动时间：
+supervisorctl status 
+
+如果程序没有使用supervisor启动，该怎么查看呢？
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="ps" scheme="https://wuyanteng.github.io/tags/ps/"/>
+    
+      <category term="进程启动时间" scheme="https://wuyanteng.github.io/tags/%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E6%97%B6%E9%97%B4/"/>
+    
+      <category term="进程运行时间" scheme="https://wuyanteng.github.io/tags/%E8%BF%9B%E7%A8%8B%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4/"/>
+    
+  </entry>
   
   <entry>
     <title>curl和wget的底层实现区别</title>
@@ -478,11 +510,11 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
+      <category term="ps" scheme="https://wuyanteng.github.io/tags/ps/"/>
+    
       <category term="strace" scheme="https://wuyanteng.github.io/tags/strace/"/>
     
       <category term="pid" scheme="https://wuyanteng.github.io/tags/pid/"/>
-    
-      <category term="ps" scheme="https://wuyanteng.github.io/tags/ps/"/>
     
   </entry>
   
@@ -569,33 +601,6 @@ X-Forwarded-For
       <category term="慢查询" scheme="https://wuyanteng.github.io/tags/%E6%85%A2%E6%9F%A5%E8%AF%A2/"/>
     
       <category term="mysqldumpslow" scheme="https://wuyanteng.github.io/tags/mysqldumpslow/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HTTP状态码301和302的区别</title>
-    <link href="https://wuyanteng.github.io/2018/04/03/HTTP%E7%8A%B6%E6%80%81%E7%A0%81301%E5%92%8C302%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
-    <id>https://wuyanteng.github.io/2018/04/03/HTTP状态码301和302的区别/</id>
-    <published>2018-04-03T04:17:03.000Z</published>
-    <updated>2018-04-04T07:39:32.310Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>简单理解：301是永久重定向，而302是临时重定向。 当然，他们之间也是有共同点的，就是用户都可以看到url替换为了一个新的，然后发出请求。</code></pre><a id="more"></a><h5 id="301适合永久重定向"><a href="#301适合永久重定向" class="headerlink" title="301适合永久重定向"></a>301适合永久重定向</h5><pre><code>301比较常用的场景是: 使用域名跳转。比如，我们访问 http://www.baidu.com 会跳转到 https://www.baidu.com，发送请求之后，就会返回301状态码，然后返回一个location，提示新的地址，浏览器就会拿着这个新的地址去访问。 注意： 301请求是可以缓存的，即通过看status code，可以发现后面写着from cache。或者你把你的网页的名称从php修改为了html，这个过程中，也会发生永久重定向。</code></pre><h5 id="302用来做临时跳转"><a href="#302用来做临时跳转" class="headerlink" title="302用来做临时跳转"></a>302用来做临时跳转</h5><pre><code>比如未登陆的用户访问用户中心重定向到登录页面。访问404页面会重新定向到首页。 </code></pre><h5 id="Nginx-301-302配置"><a href="#Nginx-301-302配置" class="headerlink" title="Nginx 301/302配置"></a>Nginx 301/302配置</h5><pre><code>rewrite后面接上permanent就代表301跳转, 例如://把来自veryyoung.me的请求301跳到 www.veryyoung.meif ($host != &#39;veryyoung.me&#39;) {    rewrite ^/(.*)$ http://www.veryyoung.me/$1 permanent;}</code></pre><pre><code>接上redirect就代表302跳转//把来自veryyoung.me的请求302跳到 www.veryyoung.meif ($host != &#39;veryyoung.me&#39;) {    rewrite ^/(.*)$ http://www.veryyoung.me/$1 redirect;}</code></pre><h5 id="301与302的区别"><a href="#301与302的区别" class="headerlink" title="301与302的区别"></a>301与302的区别</h5><pre><code>302重定向只是暂时的重定向，搜索引擎会抓取新的内容而保留旧的地址，因为服务器返回302，所以，搜索搜索引擎认为新的网址是暂时的。而301重定向是永久的重定向，搜索引擎在抓取新的内容的同时也将旧的网址替换为了重定向之后的网址。</code></pre><p>参考：<a href="https://www.cnblogs.com/zhuzhenwei918/p/7582620.html" target="_blank" rel="noopener">Wayne Zhu</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;简单理解：301是永久重定向，而302是临时重定向。 当然，他们之间也是有共同点的，就是用户都可以看到url替换为了一个新的，然后发出请求。
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="HTTP状态码" scheme="https://wuyanteng.github.io/tags/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/"/>
-    
-      <category term="301" scheme="https://wuyanteng.github.io/tags/301/"/>
-    
-      <category term="302" scheme="https://wuyanteng.github.io/tags/302/"/>
     
   </entry>
   
