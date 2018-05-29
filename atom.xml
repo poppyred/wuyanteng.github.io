@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-05-23T02:54:15.169Z</updated>
+  <updated>2018-05-29T09:50:35.281Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,99 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MongoDB副本集成员状态</title>
+    <link href="https://wuyanteng.github.io/2018/05/29/MongoDB%E5%89%AF%E6%9C%AC%E9%9B%86%E6%88%90%E5%91%98%E7%8A%B6%E6%80%81/"/>
+    <id>https://wuyanteng.github.io/2018/05/29/MongoDB副本集成员状态/</id>
+    <published>2018-05-29T09:38:59.000Z</published>
+    <updated>2018-05-29T09:50:35.281Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>副本集的每个成员都有一个状态，反映了它在集合中的配置情况。</code></pre><table><thead><tr><th><strong>数字</strong></th><th><strong>名称</strong></th><th><strong>状态描述</strong></th></tr></thead><tbody><tr><td>0</td><td>STARTUP</td><td>还不是任何集合的活动成员。所有的成员启动在该状态。在STARTUP状态mongod解析副本集配置文档。</td></tr><tr><td>1</td><td>PRIMARY</td><td>处于PRIMARY状态的成员是唯一能接受写操作的成员。</td></tr><tr><td>2</td><td>SECONDARY</td><td>处于SECONDARY状态的成员复制数据存储。数据可用于读，尽管可能比较旧。</td></tr><tr><td>3</td><td>RECOVERING</td><td>可以选举。成员要么实施启动自检测，或完成回滚或重新同步的转换。</td></tr><tr><td>5</td><td>STARTUP2</td><td>成员加入了集合，正运行初始化同步。</td></tr><tr><td>6</td><td>UNKNOWN</td><td>成员的状态，正如从集合的另一个成员中所看到的，未知。</td></tr><tr><td>7</td><td>ARBITER</td><td>仲裁不复制数据，而仅仅参与选举。</td></tr><tr><td>8</td><td>DOWN</td><td>该成员，正如从集合的立即你跟一个成员所见，不可达。</td></tr><tr><td>9</td><td>ROLLBACK</td><td>该成员正在实施回滚。数据不可读。</td></tr><tr><td>10</td><td>REMOVED</td><td>成员曾今在副本集但随后被移除。</td></tr></tbody></table><a id="more"></a><h4 id="核心状态"><a href="#核心状态" class="headerlink" title="核心状态"></a>核心状态</h4><h5 id="PRIMARY"><a href="#PRIMARY" class="headerlink" title="PRIMARY"></a>PRIMARY</h5><pre><code>处于PRIMARY状态的成员接受写操作。一个副本集每次最多只有一个主成员。在一次选举后，一个SECONDARY状态成员成为主成员。处于PRIMARY状态的成员有资格选举。</code></pre><h5 id="SECONDARY"><a href="#SECONDARY" class="headerlink" title="SECONDARY"></a>SECONDARY</h5><pre><code>处于SECONDARY状态的成员复制主成员的数据集合，并可以被配置为接受读操作。辅助成员有资格在选举中投票，如果主成员不可用，会被选举为PRIMARY状态。</code></pre><h5 id="ARBITER"><a href="#ARBITER" class="headerlink" title="ARBITER"></a>ARBITER</h5><pre><code>处于ARBITER状态的成员不复制数据，也不接受写操作。它们有资格选举，仅仅存在于选举中决胜负。如果集合要么有大量的成员，并能够参与决胜选举，否则副本集应该只有一个成员处于ARBITER状态。在任何副本集中最多只有一个仲裁被配置。</code></pre><h4 id="其他状态"><a href="#其他状态" class="headerlink" title="其他状态"></a>其他状态</h4><h5 id="STARTUP"><a href="#STARTUP" class="headerlink" title="STARTUP"></a>STARTUP</h5><pre><code>副本集的每个成员以STARTUP状态启动。Mongod然后加载成员的副本集配置，成员的状态转化为STARTUP2。在STARTUP状态的成员没有资格选举，因为它们不被人为是任何副本集的成员。</code></pre><h5 id="STARTUP2"><a href="#STARTUP2" class="headerlink" title="STARTUP2"></a>STARTUP2</h5><pre><code>一旦mongod加载成员配置完成，副本集的每个成员就进入STARTUP2状态，在此时它开始成员副本集的一个活动成员。成员然后决定是否需要初始化同步。如果一个成员开始初始化同步，成员保持STARTUP2状态直到所有数据拷贝完成所有索引创建完成。之后，成员转换为RECOVERING状态。</code></pre><h5 id="RECOVERING"><a href="#RECOVERING" class="headerlink" title="RECOVERING"></a>RECOVERING</h5><pre><code>当副本集成员不准备接受读取时，它进入RECOVERING状态。RECOVERING状态发生在正常操作期间，不必显示一个错误条件。处于RECOVERING状态的成员有资格在选举中投票，但是没有资格进入PRIMARY状态。在复制足够的数据给客户端所需读取数据的一致性视图，成员便从RECOVERING状态转为SECONDARY状态。在RECOVERING和SECONDARY状态之间的唯一区别是，RECOVERING阻止客户端读取，SECONDARY运行读取。SECONDARY状态并不保证主成员数据陈旧化。</code></pre><pre><code>注：关于负载，一个辅助成员可能会远远落后于副本集的其他成员，以至于它可能需要重新同步数据到副本集。当这种情况发生时，成员进入RECOVERING状态，并需要手工干预。</code></pre><h4 id="错误状态"><a href="#错误状态" class="headerlink" title="错误状态"></a>错误状态</h4><pre><code>处于错误状态的成员不能选举。</code></pre><h5 id="UNKNOWN"><a href="#UNKNOWN" class="headerlink" title="UNKNOWN"></a>UNKNOWN</h5><pre><code>从没交流状态信息到副本集的成员会处于UNKNOWN状态。</code></pre><h5 id="DOWN"><a href="#DOWN" class="headerlink" title="DOWN"></a>DOWN</h5><pre><code>丢失到副本集连接的成员被集合的剩余成员看作为DOWN状态。</code></pre><h5 id="REMOVED"><a href="#REMOVED" class="headerlink" title="REMOVED"></a>REMOVED</h5><pre><code>从副本集移除的成员进入REMOVED状态。当成员进入REMOVED状态，日志将会标记replset REMOVED消息事件。</code></pre><h5 id="ROLLBACK"><a href="#ROLLBACK" class="headerlink" title="ROLLBACK"></a>ROLLBACK</h5><pre><code>当副本集在选举中替换掉主成员，旧的主成员可能包含不会复制到辅助成员的文档。在这种情况下，旧的主成员反转这些写操作。在回滚期间，成员将保持ROLLBACK状态。</code></pre><h5 id="FATAL"><a href="#FATAL" class="headerlink" title="FATAL"></a>FATAL</h5><pre><code>处于FATAL状态的成员触发了一个不可恢复错误。成员必需关闭并重启，可能还需要重新同步。</code></pre><p>参考：<a href="http://blog.51cto.com/ultrasql/1663181" target="_blank" rel="noopener">UltraSQL</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;副本集的每个成员都有一个状态，反映了它在集合中的配置情况。
+&lt;/code&gt;&lt;/pre&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;数字&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;名称&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;状态描述&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;STARTUP&lt;/td&gt;
+&lt;td&gt;还不是任何集合的活动成员。所有的成员启动在该状态。在STARTUP状态mongod解析副本集配置文档。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;PRIMARY&lt;/td&gt;
+&lt;td&gt;处于PRIMARY状态的成员是唯一能接受写操作的成员。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;SECONDARY&lt;/td&gt;
+&lt;td&gt;处于SECONDARY状态的成员复制数据存储。数据可用于读，尽管可能比较旧。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;RECOVERING&lt;/td&gt;
+&lt;td&gt;可以选举。成员要么实施启动自检测，或完成回滚或重新同步的转换。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;STARTUP2&lt;/td&gt;
+&lt;td&gt;成员加入了集合，正运行初始化同步。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;UNKNOWN&lt;/td&gt;
+&lt;td&gt;成员的状态，正如从集合的另一个成员中所看到的，未知。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;ARBITER&lt;/td&gt;
+&lt;td&gt;仲裁不复制数据，而仅仅参与选举。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;DOWN&lt;/td&gt;
+&lt;td&gt;该成员，正如从集合的立即你跟一个成员所见，不可达。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;ROLLBACK&lt;/td&gt;
+&lt;td&gt;该成员正在实施回滚。数据不可读。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;REMOVED&lt;/td&gt;
+&lt;td&gt;成员曾今在副本集但随后被移除。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
+    
+      <category term="STARTUP" scheme="https://wuyanteng.github.io/tags/STARTUP/"/>
+    
+      <category term="PRIMARY" scheme="https://wuyanteng.github.io/tags/PRIMARY/"/>
+    
+      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
+    
+      <category term="副本集成员" scheme="https://wuyanteng.github.io/tags/%E5%89%AF%E6%9C%AC%E9%9B%86%E6%88%90%E5%91%98/"/>
+    
+      <category term="成员状态" scheme="https://wuyanteng.github.io/tags/%E6%88%90%E5%91%98%E7%8A%B6%E6%80%81/"/>
+    
+  </entry>
   
   <entry>
     <title>ps命令查看进程启动及运行时间-linux</title>
@@ -574,33 +667,6 @@ X-Forwarded-For
       <category term="lsof" scheme="https://wuyanteng.github.io/tags/lsof/"/>
     
       <category term="空间释放" scheme="https://wuyanteng.github.io/tags/%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL慢查询mysqldumpslow</title>
-    <link href="https://wuyanteng.github.io/2018/04/03/MySQL%E6%85%A2%E6%9F%A5%E8%AF%A2mysqldumpslow/"/>
-    <id>https://wuyanteng.github.io/2018/04/03/MySQL慢查询mysqldumpslow/</id>
-    <published>2018-04-03T06:17:23.000Z</published>
-    <updated>2018-04-03T07:04:01.551Z</updated>
-    
-    <content type="html"><![CDATA[<h5 id="认识mysqldumpslow"><a href="#认识mysqldumpslow" class="headerlink" title="认识mysqldumpslow"></a>认识mysqldumpslow</h5><pre><code>mysqldumpslow 是一个针对于 MySQL 慢查询的命令行程序。在配置 MySQL 相关参数后，可以通过 mysqldumpslow 查找出查询较慢的 SQL 语句。</code></pre><a id="more"></a><h5 id="查看是否开启慢查询"><a href="#查看是否开启慢查询" class="headerlink" title="查看是否开启慢查询"></a>查看是否开启慢查询</h5><pre><code class="mysql">mysql&gt; show variables like &quot;%quer%&quot; ;+---------------------------------------+------------------------------------+| Variable_name                         | Value                              |+---------------------------------------+------------------------------------+| binlog_rows_query_log_events          | OFF                                || ft_query_expansion_limit              | 20                                 || have_query_cache                      | YES                                || log_queries_not_using_indexes         | OFF                                || log_throttle_queries_not_using_indexes| 0                                  || long_query_time                       | 10.000000                          || query_alloc_block_size                | 8192                               || query_cache_limit                     | 1048576                            || query_cache_min_res_unit              | 4096                               || query_cache_size                      | 1048576                            || query_cache_type                      | OFF                                || query_cache_wlock_invalidate          | OFF                                || query_prealloc_size                   | 8192                               || slow_query_log                        | OFF                                || slow_query_log_file                   | /usr/local/var/mysql/mysql-slow.log|+---------------------------------------+------------------------------------+15 rows in set (0.01 sec)</code></pre><pre><code>与 mysqldumpslow 相关的配置变量:slow_query_log：是否开启慢查询日志long_query_time：是否设置慢查询的 SQL 执行规定时间slow_query_log_file：设置慢查询日志记录位置log_queries_not_using_indexes：是否设置了把没有索引的记录到慢查询日志</code></pre><h5 id="配置文件启用慢查询"><a href="#配置文件启用慢查询" class="headerlink" title="配置文件启用慢查询"></a>配置文件启用慢查询</h5><pre><code>#开启慢查询日志slow_query_log=on;#设置没有索引的记录到慢查询日志log_queries_not_using_indexes=on;#设置到慢查询日志的 SQL 执行时间（1 代表 1 秒）long_query_time=1;#设置慢查询日志的存放位置slow_query_log_file=&quot;/Users/LuisEdware/Code/output/mysql-slow.log&quot;;重启mysql</code></pre><h5 id="mysqldumpslow使用"><a href="#mysqldumpslow使用" class="headerlink" title="mysqldumpslow使用"></a>mysqldumpslow使用</h5><pre><code>格式：-s, 是表示按照何种方式排序，    c: 出现次数    l: 锁定时间    r: 返回记录    t: 查询时间    al:平均锁定时间    ar:平均返回记录数    at:平均查询时间-t, 是top n的意思，即为返回前面多少条的数据；-g, 后边可以写一个正则匹配模式</code></pre><pre><code>只需分析处理速度最慢的10条sql：mysqldumpslow -t 10 /database/mysql/mysql06_slow.log分析出使用频率最高的前50条慢sql：mysqldumpslow -s c -t 50 /database/mysql/mysql06_slow.log得到访问次数最多的10个SQLmysqldumpslow -s c -t 10 /database/mysql/mysql06_slow.log得到返回记录集最多的10个SQL。mysqldumpslow -s r -t 10 /database/mysql/mysql06_slow.log得到按照时间排序的前10条里面含有左连接的查询语句。mysqldumpslow -s t -t 10 -g “left join” /database/mysql/mysql06_slow.log另外建议在使用这些命令时结合 | 和more 使用 ，否则有可能出现刷屏的情况。mysqldumpslow -s r -t 20 /mysqldata/mysql/mysql06-slow.log | more根据返回结果，进行进一步建立索引等优化即可。</code></pre><p>参考：<a href="https://github.com/luisedware" target="_blank" rel="noopener">luisedware</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h5 id=&quot;认识mysqldumpslow&quot;&gt;&lt;a href=&quot;#认识mysqldumpslow&quot; class=&quot;headerlink&quot; title=&quot;认识mysqldumpslow&quot;&gt;&lt;/a&gt;认识mysqldumpslow&lt;/h5&gt;&lt;pre&gt;&lt;code&gt;mysqldumpslow 是一个针对于 MySQL 慢查询的命令行程序。在配置 MySQL 相关参数后，可以通过 mysqldumpslow 查找出查询较慢的 SQL 语句。
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
-    
-      <category term="慢查询" scheme="https://wuyanteng.github.io/tags/%E6%85%A2%E6%9F%A5%E8%AF%A2/"/>
-    
-      <category term="mysqldumpslow" scheme="https://wuyanteng.github.io/tags/mysqldumpslow/"/>
     
   </entry>
   
