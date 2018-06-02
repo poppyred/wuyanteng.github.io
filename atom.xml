@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-05-29T09:50:35.281Z</updated>
+  <updated>2018-06-02T00:19:50.923Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>单独运行shell脚本与crontab运行shell脚本的区别</title>
+    <link href="https://wuyanteng.github.io/2018/06/02/%E5%8D%95%E7%8B%AC%E8%BF%90%E8%A1%8Cshell%E8%84%9A%E6%9C%AC%E4%B8%8Ecrontab%E8%BF%90%E8%A1%8Cshell%E8%84%9A%E6%9C%AC%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <id>https://wuyanteng.github.io/2018/06/02/单独运行shell脚本与crontab运行shell脚本的区别/</id>
+    <published>2018-06-02T00:10:57.000Z</published>
+    <updated>2018-06-02T00:19:50.923Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>crontab运行脚本存在两大问题：环境变量和路径.现象：单独运行脚本没问题，但用crontab定时运行脚本就报错，cron日志只显示执行过了命令，但运行结果不是我们想要的，因为中间过程中出现了错误。</code></pre><a id="more"></a><h5 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h5><pre><code>常常写脚本，要能够基本判断某个命令是否是shell内部命令（所支持的命令），外部命令在脚本中需要使用命令绝对路径，否则crontab去执行这个脚本时会出现错误。外部命令如：python、jq等等解决方法：命令使用绝对路径即可（可使用which命令查看）</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;crontab运行脚本存在两大问题：环境变量和路径.
+现象：单独运行脚本没问题，但用crontab定时运行脚本就报错，cron日志只显示执行过了命令，但运行结果不是我们想要的，因为中间过程中出现了错误。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="shell" scheme="https://wuyanteng.github.io/tags/shell/"/>
+    
+      <category term="crontab" scheme="https://wuyanteng.github.io/tags/crontab/"/>
+    
+      <category term="外部命令" scheme="https://wuyanteng.github.io/tags/%E5%A4%96%E9%83%A8%E5%91%BD%E4%BB%A4/"/>
+    
+      <category term="内部命令" scheme="https://wuyanteng.github.io/tags/%E5%86%85%E9%83%A8%E5%91%BD%E4%BB%A4/"/>
+    
+  </entry>
   
   <entry>
     <title>MongoDB副本集成员状态</title>
@@ -638,35 +668,6 @@ X-Forwarded-For
       <category term="Host" scheme="https://wuyanteng.github.io/tags/Host/"/>
     
       <category term="X-Forward-For" scheme="https://wuyanteng.github.io/tags/X-Forward-For/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux文件句柄以及空间释放问题</title>
-    <link href="https://wuyanteng.github.io/2018/04/03/Linux%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84%E4%BB%A5%E5%8F%8A%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE%E9%97%AE%E9%A2%98/"/>
-    <id>https://wuyanteng.github.io/2018/04/03/Linux文件句柄以及空间释放问题/</id>
-    <published>2018-04-03T07:09:29.000Z</published>
-    <updated>2018-04-03T07:16:51.638Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>在生产环境中,经常遇到这样的问题。另一个程序正在运行，而你把它的运行所相关的文件给删除了，导致空间并未被真正释放</code></pre><a id="more"></a><h5 id="正式使用lsof命令排查"><a href="#正式使用lsof命令排查" class="headerlink" title="正式使用lsof命令排查"></a>正式使用lsof命令排查</h5><pre><code>第一种情况: 如果知道相关文件或进程名称，则lsof |grep rsyncd</code></pre><pre><code>如果不知道是哪个程序在占用，则需要使用如下命令lsof |grep deleted注：这个deleted表示已经删除了的文件，但是文件句柄未释放,这个命令会把所有的未释放文件句柄的进程列出来</code></pre><pre><code>查找出结果后, 如果是一个服务在占用，则reload或重启服务即可释放；如果是文件进程,则直接 kill+进程号即可</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;在生产环境中,经常遇到这样的问题。另一个程序正在运行，而你把它的运行所相关的文件给删除了，导致空间并未被真正释放
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="Linux" scheme="https://wuyanteng.github.io/tags/Linux/"/>
-    
-      <category term="文件句柄" scheme="https://wuyanteng.github.io/tags/%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84/"/>
-    
-      <category term="lsof" scheme="https://wuyanteng.github.io/tags/lsof/"/>
-    
-      <category term="空间释放" scheme="https://wuyanteng.github.io/tags/%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE/"/>
     
   </entry>
   
