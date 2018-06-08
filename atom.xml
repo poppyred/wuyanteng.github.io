@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-06-02T00:19:50.923Z</updated>
+  <updated>2018-06-08T02:00:13.122Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mongodb单机版安装</title>
+    <link href="https://wuyanteng.github.io/2018/06/08/mongodb%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/"/>
+    <id>https://wuyanteng.github.io/2018/06/08/mongodb单机版安装/</id>
+    <published>2018-06-08T01:58:30.000Z</published>
+    <updated>2018-06-08T02:00:13.122Z</updated>
+    
+    <content type="html"><![CDATA[<p>下载</p><pre><code>cd rootwget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.2.0.tgz</code></pre><p>解压</p><pre><code>tar -zxvf mongodb-linux-x86_64-amazon-3.2.0.tgz</code></pre><a id="more"></a><p>剪切MongoDB到/usr/local目录中</p><pre><code>mv mongodb-linux-x86_64-amazon-3.2.0 /usr/local/mongodb</code></pre><p>创建MongoDB数据库和日志存放路径</p><pre><code>mkdir -p /data/mongodbmkdir -p /var/log/mongodbmkdir -p /var/run/mongodbtouch /var/log/mongodb/mongodb.log注：(1)这个log文件必须事先创建且存在(2)如果mongodb以其他用户启动，该用户需具有所有相关目录和文件的属主权限</code></pre><p>启动</p><pre><code>vim /usr/local/mongodb/config.conf## 配置文件内容pidfilepath = /var/run/mongodb/mongodb.piddbpath = /data/mongodblogpath = /var/log/mongodb/mongodb.loglogappend = truebind_ip = 0.0.0.0port = 27017fork = true#declare this is a config db of a cluster;configsvr = true#副本集名称replSet=configs#设置最大连接数maxConns=20000</code></pre><p>启动</p><pre><code>/usr/local/mongodb/bin/mongod -f /usr/local/mongodb/config.conf</code></pre><pre><code>停止mongo服务/usr/local/mongodb/bin/mongod -f /usr/local/mongodb/config.conf --shutdown注意：禁止使用kill -9 &lt;pid&gt; 的方式把进程结束掉,会造成数据丢失！</code></pre><p>启动故障-解决方案</p><pre><code>启动错误：mongod: /usr/lib64/libstdc++.so.6: version `CXXABI_1.3.5&#39; not found (required by mongod)mongod: /usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.15&#39; not found (required by mongod)mongod: /usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.14&#39; not found (required by mongod)解决方法：查看动态库版本strings /usr/lib64/libstdc++.so.6 | grep GLIBC   查找动态库文件find / -name &quot;libstdc++.so*&quot;   备份现有的libstdc++.so.6mv /usr/lib64/libstdc++.so.6 /usr/lib64/libstdc++.so.6.bak  软链最新的动态库文件ln -sv ln -sv /usr/local/androidSDK/tools/lib64/libstdc++/libstdc++.so.6.0.18 /usr/lib64/libstdc++.so.6  /usr/lib64/libstdc++.so.6再次查看动态库版本strings /usr/lib64/libstdc++.so.6 | grep GLIBC 再次启动mongodb</code></pre><p>验证启动</p><pre><code>netstat -lntup|grep 27017</code></pre><p>Mongo服务启动脚本</p><pre><code>不多说，网上down脚本，按照配置文件指定参数进行对应替换即可</code></pre><p>连接</p><pre><code>/usr/local/mongodb/bin/mongo ip:port</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;下载&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd root
+wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.2.0.tgz
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解压&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;tar -zxvf mongodb-linux-x86_64-amazon-3.2.0.tgz
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Mongodb" scheme="https://wuyanteng.github.io/tags/Mongodb/"/>
+    
+      <category term="mongod" scheme="https://wuyanteng.github.io/tags/mongod/"/>
+    
+      <category term="二进制版" scheme="https://wuyanteng.github.io/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%89%88/"/>
+    
+  </entry>
   
   <entry>
     <title>单独运行shell脚本与crontab运行shell脚本的区别</title>
@@ -638,36 +669,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="strace" scheme="https://wuyanteng.github.io/tags/strace/"/>
     
       <category term="pid" scheme="https://wuyanteng.github.io/tags/pid/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>X-Forward-For详解</title>
-    <link href="https://wuyanteng.github.io/2018/04/03/Nginx%E4%BF%A1%E6%81%AF%E5%A4%B4%E9%85%8D%E7%BD%AE-proxy-set-header/"/>
-    <id>https://wuyanteng.github.io/2018/04/03/Nginx信息头配置-proxy-set-header/</id>
-    <published>2018-04-03T07:51:36.000Z</published>
-    <updated>2018-04-03T08:16:26.424Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>当nginx作为反向代理功能时，转发请求到后端服务器。通常需要使用如下命令为转发的请求增加请求头 X-Forwarded-For</code></pre><a id="more"></a><pre><code>X-Forwarded-For请求头格式: X-Forwarded-For:client, proxy1, proxy2如果一个 HTTP 请求到达服务器之前，经过了三个代理 Proxy1、Proxy2、Proxy3，IP分别为 IP1、IP2、IP3，用户真实 IP 为IP0，那么按照 XFF 标准，服务端最终会收到以下信息：X-Forwarded-For: IP0, IP1, IP2</code></pre><p>所以nginx做负载均衡的时候，想要获取用户真实IP地址怎么办？</p><pre><code>在nginx反向代理服务器-配置文件中【一般是location字段】添加如下配置proxy set header X-Forwarded-For $remote_addr;</code></pre><p>所以nginx做负载均衡的时候，同时支持后端配置多个虚拟主机？</p><pre><code>在nginx反向代理服务器-配置文件中【一般是location字段】添加如下配置Proxy set header Host $host;</code></pre><h5 id="最新版-内置变量-配置"><a href="#最新版-内置变量-配置" class="headerlink" title="最新版(内置变量)配置"></a>最新版(内置变量)配置</h5><pre><code>proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</code></pre><p>最新版(内置变量)配置-参考官方：<a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html#.24proxy_add_x_forwarded_for" target="_blank" rel="noopener">X-Forwarded-For</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;当nginx作为反向代理功能时，转发请求到后端服务器。通常需要使用如下命令为转发的请求增加请求头 
-X-Forwarded-For
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="Nginx" scheme="https://wuyanteng.github.io/tags/Nginx/"/>
-    
-      <category term="proxy-set-header" scheme="https://wuyanteng.github.io/tags/proxy-set-header/"/>
-    
-      <category term="Host" scheme="https://wuyanteng.github.io/tags/Host/"/>
-    
-      <category term="X-Forward-For" scheme="https://wuyanteng.github.io/tags/X-Forward-For/"/>
     
   </entry>
   
