@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-06-08T02:00:13.122Z</updated>
+  <updated>2018-06-12T03:47:36.368Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx反爬虫</title>
+    <link href="https://wuyanteng.github.io/2018/06/12/Nginx%E5%8F%8D%E7%88%AC%E8%99%AB/"/>
+    <id>https://wuyanteng.github.io/2018/06/12/Nginx反爬虫/</id>
+    <published>2018-06-12T03:09:14.000Z</published>
+    <updated>2018-06-12T03:47:36.368Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>Nginx被爬虫的服务器，会在某个时间点CPU占用骤增, 不同时间段CPU占用较高（也可能会出现内存溢出等问题）。如果服务器有web业务，那么基本可以确定被爬虫了...</code></pre><a id="more"></a><h4 id="反爬虫"><a href="#反爬虫" class="headerlink" title="反爬虫"></a>反爬虫</h4><h5 id="首先对爬虫IP进行屏蔽"><a href="#首先对爬虫IP进行屏蔽" class="headerlink" title="首先对爬虫IP进行屏蔽"></a>首先对爬虫IP进行屏蔽</h5><pre><code>策略: 通过awk筛选日志，找出访问量较高的可以IP地址进行屏蔽。(1)查找要禁止的IP:awk &#39;{print $1}&#39; /var/log/nginx/access.log|sort |uniq -c|sort -rn(2)屏蔽IP或IP段在nginx server区段添加如下即可：deny 5.188.211.72;或deny 5.188.211.70/32;</code></pre><p>#####Nginx判断UA处理反爬虫</p><pre><code>这个时候就有充足的时间通过一些手段进行反爬虫处理了...</code></pre><p>将下面的if语句放在nginx配置文件的server或者location代码区域内【不能放在http区域】。</p><pre><code>#禁止指定UA及UA为空的访问(常见UA列表详见附录)if ($http_user_agent ~* &quot;Applebot|SEOkicks-Robot|DotBot|YunGuanCe|Exabot|spiderman|Scrapy|HttpClient|Teleport|TeleportPro|SiteExplorer|WBSearchBot|Elefent|psbot|TurnitinBot|wsAnalyzer|ichiro|ezooms|FeedDemon|Indy Library|Alexa Toolbar|AskTbFXTV|AhrefsBot|CrawlDaddy|CoolpadWebkit|Java|Feedly|UniversalFeedParser|ApacheBench|Microsoft URL Control|Swiftbot|ZmEu|oBot|jaunty|Python-urllib|lightDeckReports Bot|YYSpider|DigExt|HttpClient|MJ12bot|heritrix|EasouSpider|Ezooms|^$&quot;) {  return 403;} </code></pre><p>生效</p><pre><code>添加此配置之后，验证语法：nginx -t 无误后,重载Nginx配置: nginx -s reload</code></pre><p>测试</p><pre><code>curl -I -A &quot;spiderman&quot; https://xx.xxx.com或curl -I -A &quot;YunGuanCe&quot; https://xx.xxx.com如果返回403的输出，则说明配置已经生效了</code></pre><h5 id="自行筛选屏蔽UA"><a href="#自行筛选屏蔽UA" class="headerlink" title="自行筛选屏蔽UA"></a>自行筛选屏蔽UA</h5><pre><code>log筛选命令：cat access.log|awk -F &#39;&quot;&#39; &#39;{print $6}&#39;|sort|uniq -c |sort -rn|head -20将可疑的UA加入以上屏蔽列表即可。</code></pre><h5 id="附录：常见的爬虫UA"><a href="#附录：常见的爬虫UA" class="headerlink" title="附录：常见的爬虫UA"></a>附录：常见的爬虫UA</h5><p>常见搜索引擎爬虫的User-Agent</p><pre><code>百度爬虫Baiduspider+(+http://www.baidu.com/search/spider.htm”)Google爬虫Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)Googlebot/2.1 (+http://www.googlebot.com/bot.html)Googlebot/2.1 (+http://www.google.com/bot.html)雅虎爬虫(分别是雅虎中国和美国总部的爬虫)Mozilla/5.0 (compatible; Yahoo! Slurp China; http://misc.yahoo.com.cn/help.html”)Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp”)新浪爱问爬虫iaskspider/2.0(+http://iask.com/help/help_index.html”)Mozilla/5.0 (compatible; iaskspider/1.0; MSIE 6.0)搜狗爬虫Sogou web spider/3.0(+http://www.sogou.com/docs/help/webmasters.htm#07″)Sogou Push Spider/3.0(+http://www.sogou.com/docs/help/webmasters.htm#07″)网易爬虫Mozilla/5.0 (compatible; YodaoBot/1.0; http://www.yodao.com/help/webmaster/spider/”; )MSN爬虫msnbot/1.0 (+http://search.msn.com/msnbot.htm”)</code></pre><p>网络上常见的垃圾UA列表</p><pre><code>内容采集：      FeedDemon      Java 内容采集      Jullo 内容采集      Feedly 内容采集      UniversalFeedParser 内容采集SQL注入：      BOT/0.1 (BOT for JCE)      CrawlDaddy无用爬虫:      EasouSpider      Swiftbot      YandexBot      AhrefsBot      jikeSpider      MJ12bot      YYSpider      oBotCC攻击器:      ApacheBench      WinHttpTCP攻击:      HttpClient扫描:      Microsoft URL Control      ZmEu phpmyadmin      jaunty</code></pre><p>参考：<a href="https://www.hi-linux.com/posts/5492.html" target="_blank" rel="noopener">运维之美</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;Nginx被爬虫的服务器，会在某个时间点CPU占用骤增, 不同时间段CPU占用较高（也可能会出现内存溢出等问题）。如果服务器有web业务，那么基本可以确定被爬虫了...
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="nginx反爬虫" scheme="https://wuyanteng.github.io/tags/nginx%E5%8F%8D%E7%88%AC%E8%99%AB/"/>
+    
+      <category term="蜘蛛" scheme="https://wuyanteng.github.io/tags/%E8%9C%98%E8%9B%9B/"/>
+    
+      <category term="User Agent" scheme="https://wuyanteng.github.io/tags/User-Agent/"/>
+    
+      <category term="垃圾UA" scheme="https://wuyanteng.github.io/tags/%E5%9E%83%E5%9C%BEUA/"/>
+    
+  </entry>
   
   <entry>
     <title>mongodb单机版安装</title>
@@ -642,33 +671,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="默认路由" scheme="https://wuyanteng.github.io/tags/%E9%BB%98%E8%AE%A4%E8%B7%AF%E7%94%B1/"/>
     
       <category term="路由配置" scheme="https://wuyanteng.github.io/tags/%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>strace命令-追踪指定pid进程</title>
-    <link href="https://wuyanteng.github.io/2018/04/04/strace%E5%91%BD%E4%BB%A4-%E8%BF%BD%E8%B8%AA%E6%8C%87%E5%AE%9Apid%E8%BF%9B%E7%A8%8B/"/>
-    <id>https://wuyanteng.github.io/2018/04/04/strace命令-追踪指定pid进程/</id>
-    <published>2018-04-04T07:41:25.000Z</published>
-    <updated>2018-04-04T08:07:43.511Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>适用场景：生产环境中，人为定位到某个业务某个进程可能存在问题时,就需要使用strace命令，对指定进程进行跟踪与调试，查找出罪魁祸首。</code></pre><a id="more"></a><pre><code>说到strace命令, 先来聊聊ps -ef命令的内容输出及其代表的含义.</code></pre><pre><code># ps -ef|grep phproot     10498  2978  0 Mar19 ?  00:20:54 php-fpm: master process (/etc/php-fpm.conf)root     20559  2978  0 Mar31 ?  00:00:05 php-fpm: master process (/etc/php-fpm.conf)www   20560 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20561 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20562 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20563 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20564 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20565 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20566 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20567 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20568 20559  0 Mar31 ?        00:00:01 php-fpm: pool wwwwww   20569 20559  0 Mar31 ?        00:00:01 php-fpm: pool www</code></pre><pre><code>在上面的结果中,可以看到有两个php的父级进程(php-fpm和php-fpm7),我们也可以通过grep取到具体的php版本的进程进行显示。这里说下结果中的具体含义。从左往右依次是：用户UID--子进程ID--父进程ID--CPU占用率--STIME开始时间--TTY--进程运行的总时间--命令/进程名称</code></pre><p>当进程处理出现问题时,某个“进程运行的总时间”普遍较长,这时候就需要使用strace命令去查看详细</p><pre><code>作为运维，这个命令最常用的用法是【完成跟踪时，按ctrl + C结束strace】:strace -p 子进程pid其他常用参数：-o xxx.txt 输出结果到文档-e execve  只记录execve这类调用-f 跟踪由fork调用所产生的子进程.</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;适用场景：生产环境中，人为定位到某个业务某个进程可能存在问题时,就需要使用strace命令，对指定进程进行跟踪与调试，查找出罪魁祸首。
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="ps" scheme="https://wuyanteng.github.io/tags/ps/"/>
-    
-      <category term="strace" scheme="https://wuyanteng.github.io/tags/strace/"/>
-    
-      <category term="pid" scheme="https://wuyanteng.github.io/tags/pid/"/>
     
   </entry>
   

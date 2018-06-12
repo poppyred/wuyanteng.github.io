@@ -3,6 +3,30 @@
   
     
     <entry>
+      <title>Nginx反爬虫</title>
+      <link href="/2018/06/12/Nginx%E5%8F%8D%E7%88%AC%E8%99%AB/"/>
+      <url>/2018/06/12/Nginx%E5%8F%8D%E7%88%AC%E8%99%AB/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> nginx反爬虫 </tag>
+            
+            <tag> 蜘蛛 </tag>
+            
+            <tag> User Agent </tag>
+            
+            <tag> 垃圾UA </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>mongodb单机版安装</title>
       <link href="/2018/06/08/mongodb%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/"/>
       <url>/2018/06/08/mongodb%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/</url>
@@ -974,9 +998,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -998,9 +1022,9 @@
             
             <tag> 高可用 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 路由 </tag>
             
@@ -1798,11 +1822,11 @@
       
         <tags>
             
-            <tag> OpenStack </tag>
-            
             <tag> Horizon </tag>
             
             <tag> Dashboard </tag>
+            
+            <tag> OpenStack </tag>
             
         </tags>
       
@@ -1900,9 +1924,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
             
             <tag> MySQL </tag>
             
@@ -4411,30 +4435,6 @@
     </entry>
     
     <entry>
-      <title>ceph分布式存储</title>
-      <link href="/2017/08/25/ceph%E5%AD%98%E5%82%A8/"/>
-      <url>/2017/08/25/ceph%E5%AD%98%E5%82%A8/</url>
-	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
-      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
-      
-      
-        <tags>
-            
-            <tag> 高级运维 </tag>
-            
-            <tag> 分布式存储 </tag>
-            
-            <tag> ceph </tag>
-            
-            <tag> 对象存储 </tag>
-            
-            <tag> 块存储 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
       <title>nginx生产环境-案例1</title>
       <link href="/2017/08/24/nginx%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83-%E6%A1%88%E4%BE%8B1/"/>
       <url>/2017/08/24/nginx%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83-%E6%A1%88%E4%BE%8B1/</url>
@@ -5160,9 +5160,9 @@
       
         <tags>
             
-            <tag> Ansible </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> Ansible </tag>
             
         </tags>
       
@@ -5340,13 +5340,13 @@
             
             <tag> Linux基础 </tag>
             
-            <tag> egrep </tag>
+            <tag> 正则表达式 </tag>
             
-            <tag> sed </tag>
+            <tag> egrep </tag>
             
             <tag> awk </tag>
             
-            <tag> 正则表达式 </tag>
+            <tag> sed </tag>
             
         </tags>
       
@@ -5572,13 +5572,13 @@
             
             <tag> shell </tag>
             
-            <tag> egrep </tag>
+            <tag> 正则表达式 </tag>
             
-            <tag> sed </tag>
+            <tag> egrep </tag>
             
             <tag> awk </tag>
             
-            <tag> 正则表达式 </tag>
+            <tag> sed </tag>
             
         </tags>
       
@@ -6026,9 +6026,9 @@
             
             <tag> VM </tag>
             
-            <tag> 计算节点 </tag>
-            
             <tag> compute </tag>
+            
+            <tag> 计算节点 </tag>
             
             <tag> VM迁移 </tag>
             
