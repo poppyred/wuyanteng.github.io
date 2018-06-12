@@ -998,9 +998,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MongoDB </tag>
-            
             <tag> Mongo </tag>
+            
+            <tag> MongoDB </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -1022,9 +1022,9 @@
             
             <tag> 高可用 </tag>
             
-            <tag> MongoDB </tag>
-            
             <tag> Mongo </tag>
+            
+            <tag> MongoDB </tag>
             
             <tag> 路由 </tag>
             
@@ -5160,9 +5160,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> Ansible </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -5340,13 +5340,13 @@
             
             <tag> Linux基础 </tag>
             
-            <tag> 正则表达式 </tag>
-            
             <tag> egrep </tag>
+            
+            <tag> sed </tag>
             
             <tag> awk </tag>
             
-            <tag> sed </tag>
+            <tag> 正则表达式 </tag>
             
         </tags>
       
@@ -5572,13 +5572,13 @@
             
             <tag> shell </tag>
             
-            <tag> 正则表达式 </tag>
-            
             <tag> egrep </tag>
+            
+            <tag> sed </tag>
             
             <tag> awk </tag>
             
-            <tag> sed </tag>
+            <tag> 正则表达式 </tag>
             
         </tags>
       
