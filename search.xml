@@ -1226,7 +1226,9 @@
             
             <tag> mail </tag>
             
-            <tag> from </tag>
+            <tag> mailx </tag>
+            
+            <tag> sendmail </tag>
             
         </tags>
       
@@ -1616,9 +1618,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> docker </tag>
-            
             <tag> ELK </tag>
+            
+            <tag> docker </tag>
             
         </tags>
       
@@ -1946,9 +1948,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> 数据库管理 </tag>
-            
             <tag> 用户管理 </tag>
+            
+            <tag> 数据库管理 </tag>
             
             <tag> MySQL </tag>
             
@@ -3722,11 +3724,11 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -5910,9 +5912,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> DTK </tag>
-            
             <tag> BIOS </tag>
+            
+            <tag> DTK </tag>
             
         </tags>
       
