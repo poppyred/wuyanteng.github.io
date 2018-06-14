@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-06-12T08:30:07.776Z</updated>
+  <updated>2018-06-14T08:46:11.617Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MariaDB Galera Cluster部署</title>
+    <link href="https://wuyanteng.github.io/2018/06/14/MariaDB-Galera-Cluster%E9%83%A8%E7%BD%B2/"/>
+    <id>https://wuyanteng.github.io/2018/06/14/MariaDB-Galera-Cluster部署/</id>
+    <published>2018-06-14T08:46:11.000Z</published>
+    <updated>2018-06-14T08:46:11.617Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。</code></pre><a id="more"></a><h5 id="MariaDB-Galera-Cluster-介绍"><a href="#MariaDB-Galera-Cluster-介绍" class="headerlink" title="MariaDB Galera Cluster 介绍"></a>MariaDB Galera Cluster 介绍</h5><pre><code>MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisam系统变量）。</code></pre><h5 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h5><pre><code>- 同步复制- 真正的multi-master，即所有节点可以同时读写数据库- 自动的节点成员控制，失效节点自动被清除- 新节点加入数据自动复制- 真正的并行复制，行级- 用户可以直接连接集群，使用感受上与MySQL完全一致</code></pre><h5 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h5><pre><code>因为是多主，所以不存在Slavelag(延迟)不存在丢失事务的情况同时具有读和写的扩展能力更小的客户端延迟节点间数据是同步的,而Master/Slave模式是异步的,不同slave上的binlog可能是不同的</code></pre><h5 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h5><pre><code>Galera集群的复制功能基于Galeralibrary实现,为了让MySQL与Galera library通讯，特别针对MySQL开发了wsrep API。Galera插件保证集群同步数据，保持数据的一致性，靠的就是可认证的复制，工作原理如下图： </code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="MariaDB" scheme="https://wuyanteng.github.io/tags/MariaDB/"/>
+    
+      <category term="Galera" scheme="https://wuyanteng.github.io/tags/Galera/"/>
+    
+      <category term="Cluster" scheme="https://wuyanteng.github.io/tags/Cluster/"/>
+    
+      <category term="MySQL" scheme="https://wuyanteng.github.io/tags/MySQL/"/>
+    
+  </entry>
   
   <entry>
     <title>nginx日志配合iptables封IP防CC攻击</title>
@@ -652,37 +681,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="nginx upstream" scheme="https://wuyanteng.github.io/tags/nginx-upstream/"/>
     
       <category term="proxy_ignore_client_abort" scheme="https://wuyanteng.github.io/tags/proxy-ignore-client-abort/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux网卡限速</title>
-    <link href="https://wuyanteng.github.io/2018/04/11/Linux%E7%BD%91%E5%8D%A1%E9%99%90%E9%80%9F/"/>
-    <id>https://wuyanteng.github.io/2018/04/11/Linux网卡限速/</id>
-    <published>2018-04-11T06:19:23.000Z</published>
-    <updated>2018-04-11T06:48:10.962Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>罗列几种linux网卡限速方案，运行结果已实际为准，不对以下工具限速结果负责。</code></pre><a id="more"></a><h4 id="MB-s与Mbit-s概念"><a href="#MB-s与Mbit-s概念" class="headerlink" title="MB/s与Mbit/s概念"></a>MB/s与Mbit/s概念</h4><pre><code>Mbit/s意思是 兆比特/秒，俗称:小b, 是指每秒传输的比特位数，即家里使用的10M或50M宽带或者speedtest测速结果再或者Cacti监控看到的带宽峰值就是这个小b的概念。MB/s意思是 兆字节/秒,俗称:大B，是指每秒传输的字节数量，也是实际下载文件看到的网络速度。8Mbit/s(运营商网络带宽)=1MB/s(实际文件下载速度)</code></pre><h4 id="限速方案"><a href="#限速方案" class="headerlink" title="限速方案"></a>限速方案</h4><h5 id="简单粗暴之ethtool命令"><a href="#简单粗暴之ethtool命令" class="headerlink" title="简单粗暴之ethtool命令"></a>简单粗暴之ethtool命令</h5><pre><code>以CentOS为例，系统默认自带ethtool命令，使用方法如下：(1) 查看网卡信息      ethtool em1(2) 使用ethtool命令把千兆网卡降为百兆网卡并关闭自协商    ethtool -s em1 speed 100 duplex full autoneg off(3) 恢复千兆速度并启用自协商    ethtool -s em1 speed 1000 duplex full autoneg on注：此命令会导致服务器em1临时断网,后自恢复，请谨慎操作。注: 此操作在ESXI虚拟机中无效</code></pre><h5 id="最便捷之wondershaper"><a href="#最便捷之wondershaper" class="headerlink" title="最便捷之wondershaper"></a>最便捷之wondershaper</h5><pre><code>(1)google搜索wondershaper rpm下载对应安装包并通过rpm -ivh命令安装（不需要依赖）(2)命令格式（单位:Kbps）：   wondershaper 网卡名称 下载速度 上传速度(3)例如: 我限制em1网卡下载速度为10Mbit/s,上传速度为15Mbit/s   wondershaper em1  10000 15000(4)取消限速   wondershaper clear em1</code></pre><h5 id="最稳妥限速之交换机端口限速"><a href="#最稳妥限速之交换机端口限速" class="headerlink" title="最稳妥限速之交换机端口限速"></a>最稳妥限速之交换机端口限速</h5><pre><code>对此不进行赘述</code></pre><h4 id="限速后测速"><a href="#限速后测速" class="headerlink" title="限速后测速"></a>限速后测速</h4><pre><code>linux下限速后如何测速？下载speedtest测速脚本wget -O speedtest-cli https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py &amp;&amp; chmod +x speedtest-cli执行如下命令等待结果即可./speedtest-cli</code></pre><p>更多speedtest安装方式-<a href="https://github.com/sivel/speedtest-cli" target="_blank" rel="noopener">参考</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;罗列几种linux网卡限速方案，运行结果已实际为准，不对以下工具限速结果负责。
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="限速方案" scheme="https://wuyanteng.github.io/tags/%E9%99%90%E9%80%9F%E6%96%B9%E6%A1%88/"/>
-    
-      <category term="Linux限速" scheme="https://wuyanteng.github.io/tags/Linux%E9%99%90%E9%80%9F/"/>
-    
-      <category term="wondershaper" scheme="https://wuyanteng.github.io/tags/wondershaper/"/>
-    
-      <category term="tc" scheme="https://wuyanteng.github.io/tags/tc/"/>
-    
-      <category term="ethtool" scheme="https://wuyanteng.github.io/tags/ethtool/"/>
     
   </entry>
   

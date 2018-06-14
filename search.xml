@@ -3,6 +3,30 @@
   
     
     <entry>
+      <title>MariaDB Galera Cluster部署</title>
+      <link href="/2018/06/14/MariaDB-Galera-Cluster%E9%83%A8%E7%BD%B2/"/>
+      <url>/2018/06/14/MariaDB-Galera-Cluster%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MariaDB </tag>
+            
+            <tag> Galera </tag>
+            
+            <tag> Cluster </tag>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>nginx日志配合iptables封IP防CC攻击</title>
       <link href="/2018/06/12/nginx%E6%97%A5%E5%BF%97%E9%85%8D%E5%90%88iptables%E5%B0%81IP%E9%98%B2CC%E6%94%BB%E5%87%BB/"/>
       <url>/2018/06/12/nginx%E6%97%A5%E5%BF%97%E9%85%8D%E5%90%88iptables%E5%B0%81IP%E9%98%B2CC%E6%94%BB%E5%87%BB/</url>
@@ -1618,9 +1642,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> ELK </tag>
-            
             <tag> docker </tag>
+            
+            <tag> ELK </tag>
             
         </tags>
       
@@ -1948,11 +1972,11 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> MySQL </tag>
+            
             <tag> 用户管理 </tag>
             
             <tag> 数据库管理 </tag>
-            
-            <tag> MySQL </tag>
             
         </tags>
       
@@ -2334,11 +2358,11 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> MariaDB </tag>
+            
             <tag> mysql </tag>
             
             <tag> dba </tag>
-            
-            <tag> MariaDB </tag>
             
             <tag> PerconaDB </tag>
             
@@ -2364,11 +2388,11 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> MariaDB </tag>
+            
             <tag> mysql </tag>
             
             <tag> dba </tag>
-            
-            <tag> MariaDB </tag>
             
             <tag> PerconaDB </tag>
             
@@ -5912,9 +5936,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> BIOS </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
             
         </tags>
       
