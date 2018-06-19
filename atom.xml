@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-06-14T10:24:29.444Z</updated>
+  <updated>2018-06-19T03:24:35.723Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Telegram群组-Linux</title>
+    <link href="https://wuyanteng.github.io/2018/06/19/Telegram%E7%BE%A4%E7%BB%84-Linux/"/>
+    <id>https://wuyanteng.github.io/2018/06/19/Telegram群组-Linux/</id>
+    <published>2018-06-19T03:19:18.000Z</published>
+    <updated>2018-06-19T03:24:35.723Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="Linux-Telegram-群组："><a href="#Linux-Telegram-群组：" class="headerlink" title="Linux Telegram 群组："></a>Linux Telegram 群组：</h5><p>(1) 运维中国  <a href="https://t.me/om_china" target="_blank" rel="noopener">https://t.me/om_china</a></p><p>(2) 运维中国-电报0101兆赫 <a href="https://t.me/om_china_0101" target="_blank" rel="noopener">https://t.me/om_china_0101</a></p><h5 id="群组简介"><a href="#群组简介" class="headerlink" title="群组简介"></a>群组简介</h5><p>正经Linux技术讨论群, 不开车，不扯蛋。交流范围：从底层(OSI7层模型)到OpenStack/K8S等虚拟化,再到Ceph/Swift等分布式存储。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h5 id=&quot;Linux-Telegram-群组：&quot;&gt;&lt;a href=&quot;#Linux-Telegram-群组：&quot; class=&quot;headerlink&quot; title=&quot;Linux Telegram 群组：&quot;&gt;&lt;/a&gt;Linux Telegram 群组：&lt;/h5&gt;&lt;p&gt;(1) 运维
+      
+    
+    </summary>
+    
+    
+      <category term="随笔" scheme="https://wuyanteng.github.io/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+      <category term="Telegram" scheme="https://wuyanteng.github.io/tags/Telegram/"/>
+    
+      <category term="Telegram Groups" scheme="https://wuyanteng.github.io/tags/Telegram-Groups/"/>
+    
+      <category term="Telegram群组" scheme="https://wuyanteng.github.io/tags/Telegram%E7%BE%A4%E7%BB%84/"/>
+    
+      <category term="Telegram群组linux" scheme="https://wuyanteng.github.io/tags/Telegram%E7%BE%A4%E7%BB%84linux/"/>
+    
+      <category term="TG" scheme="https://wuyanteng.github.io/tags/TG/"/>
+    
+      <category term="TG X" scheme="https://wuyanteng.github.io/tags/TG-X/"/>
+    
+  </entry>
   
   <entry>
     <title>MariaDB Galera Cluster部署</title>
@@ -655,33 +690,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="内存" scheme="https://wuyanteng.github.io/tags/%E5%86%85%E5%AD%98/"/>
     
       <category term="使用率" scheme="https://wuyanteng.github.io/tags/%E4%BD%BF%E7%94%A8%E7%8E%87/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nginx状态码499-错误分析</title>
-    <link href="https://wuyanteng.github.io/2018/04/11/Nginx%E7%8A%B6%E6%80%81%E7%A0%81499-%E9%94%99%E8%AF%AF%E5%88%86%E6%9E%90/"/>
-    <id>https://wuyanteng.github.io/2018/04/11/Nginx状态码499-错误分析/</id>
-    <published>2018-04-11T07:50:03.000Z</published>
-    <updated>2018-04-11T08:14:52.385Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>nginx日志大量499报错,分析与处理。</code></pre><a id="more"></a><h5 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h5><pre><code>220.181.165.136 - - [18/May/2015:10:31:02 +0800] &quot;POST /v1/jobsHTTP/1.1&quot; 499 0 &quot;&quot; &quot;bdHttpRequest/1.0.0&quot;115.239.212.7 - - [18/May/2015:10:31:03 +0800] &quot;GET /v1/job/643309e3-dc73-4025-aa69-c9405c1d818fHTTP/1.1&quot; 499 0&quot;http://www.baidu.com/?tn=91638679_hao_pg&amp;s_j=1&quot;&quot;Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko&quot;140.207.202.187 - - [18/May/2015:10:30:58 +0800] &quot;POST/v3/violations HTTP/1.1&quot; 499 0 &quot;-&quot; &quot;-&quot;</code></pre><h5 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h5><pre><code>499 CLIENT CLOSED REQUEST A non-standard status code introduced by nginx for the case when a client closes the connection while nginx is processing the request.499  客户端关闭请求Nginx在处理请求时，客户端关闭了连接，故nginx抛出了499这个状态代码。</code></pre><pre><code>大牛分析源码-摘录/** HTTP does notdefine the code for the case when a client closed* the connectionwhile we are processing its request so we introduce* own code to logsuch situation when a client has closed the connection* before we even tryto send the HTTP header to it*/意思是服务器在返回HTTP头之前，客户端就已经关闭了当前连接。很可能是因为服务器端处理的时间过长，客户端&quot;不耐烦&quot;了...</code></pre><pre><code>Nginx upstream在以下情况下会返回499状态码：(1)upstream 在收到读写事件处理之前时，会检查连接是否可用，当连接错误时会返回499。(2)server处理请求未结束，而client提前关闭了连接，此时也会返回499。总之，这个错误的比例升高可能表明服务器upstream处理过慢，导致用户提前关闭连接。</code></pre><pre><code>为什么服务端处理时间过长？可能的原因是：(1)后台python程序处理请求时间过长(2)mysql慢查询尝试去验证结论：(1)查看CPU和内存使用, 是否在正常范围(2)后台程序访问是否正常(3)验证mysql是否有慢查询</code></pre><pre><code>如果以上结论都正常，可以使用如下参数来优化proxy_ignore_client_abort  on;  #让代理服务端不要主动关闭客户端的连接。如果使用了 proxy_ignore_client_abort on ;那么客户端主动断掉连接之后，Nginx 会等待后端处理完(或者超时)，然后记录「后端的返回信息」到日志。所以，如果后端返回200，就记录200 ；如果后端放回 5XX ，那么就记录 5XX.如果超时(默认60s，可以用 proxy_read_timeout 设置)，Nginx会主动断开连接，记录504注：建议只在做反向代理的时候使用。最好关闭这一选项。</code></pre><p>参考: <a href="http://blog.51cto.com/yucanghai/1713803" target="_blank" rel="noopener">51CTO</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;nginx日志大量499报错,分析与处理。
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="499" scheme="https://wuyanteng.github.io/tags/499/"/>
-    
-      <category term="nginx upstream" scheme="https://wuyanteng.github.io/tags/nginx-upstream/"/>
-    
-      <category term="proxy_ignore_client_abort" scheme="https://wuyanteng.github.io/tags/proxy-ignore-client-abort/"/>
     
   </entry>
   
