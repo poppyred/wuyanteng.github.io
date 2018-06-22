@@ -3,6 +3,30 @@
   
     
     <entry>
+      <title>shell变量传参</title>
+      <link href="/2018/06/22/shell%E5%8F%98%E9%87%8F%E4%BC%A0%E5%8F%82/"/>
+      <url>/2018/06/22/shell%E5%8F%98%E9%87%8F%E4%BC%A0%E5%8F%82/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> 变量传参 </tag>
+            
+            <tag> shell传参 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Telegram群组-Linux</title>
       <link href="/2018/06/19/Telegram%E7%BE%A4%E7%BB%84-Linux/"/>
       <url>/2018/06/19/Telegram%E7%BE%A4%E7%BB%84-Linux/</url>
@@ -1072,9 +1096,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -1096,9 +1120,9 @@
             
             <tag> 高可用 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 路由 </tag>
             
@@ -1670,9 +1694,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> ELK </tag>
-            
             <tag> docker </tag>
+            
+            <tag> ELK </tag>
             
         </tags>
       
@@ -2440,6 +2464,8 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -2449,8 +2475,6 @@
             <tag> consumer </tag>
             
             <tag> MQ </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -2814,9 +2838,9 @@
       
         <tags>
             
-            <tag> zookeeper </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> zookeeper </tag>
             
             <tag> codis </tag>
             
@@ -2840,9 +2864,9 @@
       
         <tags>
             
-            <tag> zookeeper </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> zookeeper </tag>
             
             <tag> codis </tag>
             
@@ -2970,11 +2994,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -3000,6 +3024,8 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3015,8 +3041,6 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -3146,9 +3170,9 @@
       
         <tags>
             
-            <tag> MQ </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> MQ </tag>
             
             <tag> Producer </tag>
             
@@ -4050,9 +4074,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> nginx </tag>
             
@@ -4632,9 +4656,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> nginx </tag>
             
@@ -4716,11 +4740,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -4736,11 +4760,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -5236,9 +5260,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> Ansible </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -5792,11 +5816,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> 大数据 </tag>
             
@@ -6104,9 +6128,9 @@
             
             <tag> VM </tag>
             
-            <tag> 计算节点 </tag>
-            
             <tag> compute </tag>
+            
+            <tag> 计算节点 </tag>
             
             <tag> VM迁移 </tag>
             

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-06-19T03:24:35.723Z</updated>
+  <updated>2018-06-22T08:49:07.757Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>shell变量传参</title>
+    <link href="https://wuyanteng.github.io/2018/06/22/shell%E5%8F%98%E9%87%8F%E4%BC%A0%E5%8F%82/"/>
+    <id>https://wuyanteng.github.io/2018/06/22/shell变量传参/</id>
+    <published>2018-06-22T07:54:54.000Z</published>
+    <updated>2018-06-22T08:49:07.757Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>有时候经常会写传参脚本，下面是一个zabbix自定义key传参案例</code></pre><h5 id="zabbix配置文件"><a href="#zabbix配置文件" class="headerlink" title="zabbix配置文件"></a>zabbix配置文件</h5><pre><code>UnsafeUserParameters=1#mysql slave监控UserParameter=mysql.slave[*],/var/lib/mysql/check_mysql_slave.sh $1注：留意下这个key值，后面是*表示所有</code></pre><a id="more"></a><h5 id="自定义key传参脚本"><a href="#自定义key传参脚本" class="headerlink" title="自定义key传参脚本"></a>自定义key传参脚本</h5><pre><code>vim  check_mysql.sh</code></pre><pre><code>#!/bin/bashUSER=xxxPASS=xxxxxxio_status(){    IoStatus=`mysql -u${USER} -p${PASS} -e &quot;show slave status\G;&quot; |grep -i running|sed -n 1p|awk &#39;{print $NF}&#39;`    if [ $IoStatus == &quot;Yes&quot; ];then        IoStatus=1    else        IoStatus=0    fi    echo  $IoStatus}sql_status(){    SqlStatus=`mysql -u${USER} -p${PASS} -e &quot;show slave status\G;&quot; |grep -i running|sed -n 2p|awk &#39;{print $NF}&#39;`    if [ $SqlStatus == &quot;Yes&quot; ];then        SqlStatus=1    else        SqlStatus=0    fi    echo $SqlStatus}lag_status(){    DelayStatus=`mysql -u${USER} -p${PASS} -e &quot;show slave status\G;&quot; |grep &quot;Seconds_Behind_Master&quot;|awk &#39;{print $NF}&#39;`    echo $DelayStatus}$1</code></pre><pre><code>如何快速理解脚本传参逻辑？(1)可以看到整个脚本使用了3个函数,要知道，写了函数需要在脚本调用才会生效，而本脚本中是使用$1来进行调用的。(2)从脚本中可以看到，对应的传参值分别为io_status、sql_status和lag_status, 其他传参值将不会被调用。(3)zabbix mysql模板中自定义key名称与脚本函数名称相同，所以可以被正确赋值给$1并正确取值。</code></pre><h5 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h5><pre><code>如果zabbix mysql模板中自定义key名称不是 io_status、sql_status和lag_status，依然能被正确调用？</code></pre><pre><code>需要在脚本中, 加入判断。如果$1等于zabbix mysql模板中的某个值，则执行脚本中其中一个函数。</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;有时候经常会写传参脚本，下面是一个zabbix自定义key传参案例
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&quot;zabbix配置文件&quot;&gt;&lt;a href=&quot;#zabbix配置文件&quot; class=&quot;headerlink&quot; title=&quot;zabbix配置文件&quot;&gt;&lt;/a&gt;zabbix配置文件&lt;/h5&gt;&lt;pre&gt;&lt;code&gt;UnsafeUserParameters=1
+
+#mysql slave监控
+UserParameter=mysql.slave[*],/var/lib/mysql/check_mysql_slave.sh $1
+
+注：留意下这个key值，后面是*表示所有
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="zabbix" scheme="https://wuyanteng.github.io/tags/zabbix/"/>
+    
+      <category term="shell" scheme="https://wuyanteng.github.io/tags/shell/"/>
+    
+      <category term="变量传参" scheme="https://wuyanteng.github.io/tags/%E5%8F%98%E9%87%8F%E4%BC%A0%E5%8F%82/"/>
+    
+      <category term="shell传参" scheme="https://wuyanteng.github.io/tags/shell%E4%BC%A0%E5%8F%82/"/>
+    
+  </entry>
   
   <entry>
     <title>Telegram群组-Linux</title>
@@ -663,33 +698,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="微信" scheme="https://wuyanteng.github.io/tags/%E5%BE%AE%E4%BF%A1/"/>
     
       <category term="微信告警" scheme="https://wuyanteng.github.io/tags/%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>查看占用内存或CPU最多的进程</title>
-    <link href="https://wuyanteng.github.io/2018/04/20/%E6%9F%A5%E7%9C%8B%E5%8D%A0%E7%94%A8%E5%86%85%E5%AD%98%E6%88%96CPU%E6%9C%80%E5%A4%9A%E7%9A%84%E8%BF%9B%E7%A8%8B/"/>
-    <id>https://wuyanteng.github.io/2018/04/20/查看占用内存或CPU最多的进程/</id>
-    <published>2018-04-20T01:52:33.000Z</published>
-    <updated>2018-05-10T09:14:12.728Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>快速定位占用内存或占用CPU最多的进程，并对其排序。</code></pre><a id="more"></a><h5 id="查看占用内存最多的进程"><a href="#查看占用内存最多的进程" class="headerlink" title="查看占用内存最多的进程"></a>查看占用内存最多的进程</h5><pre><code>ps -aux |sort -k4nr |head -10或top界面，按下（大写的）M</code></pre><p>查看占用CPU较高的进程</p><pre><code>ps -aux |sort -k3nr|head -10或top界面, 按下（大写的）P</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;快速定位占用内存或占用CPU最多的进程，并对其排序。
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="CPU" scheme="https://wuyanteng.github.io/tags/CPU/"/>
-    
-      <category term="内存" scheme="https://wuyanteng.github.io/tags/%E5%86%85%E5%AD%98/"/>
-    
-      <category term="使用率" scheme="https://wuyanteng.github.io/tags/%E4%BD%BF%E7%94%A8%E7%8E%87/"/>
     
   </entry>
   
