@@ -380,9 +380,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> mongodb </tag>
-            
             <tag> mongo </tag>
+            
+            <tag> mongodb </tag>
             
             <tag> rs.slaveOk() </tag>
             
@@ -422,9 +422,9 @@
       
         <tags>
             
-            <tag> mongodb </tag>
-            
             <tag> mongo </tag>
+            
+            <tag> mongodb </tag>
             
             <tag> mongoexport </tag>
             
@@ -1096,9 +1096,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MongoDB </tag>
-            
             <tag> Mongo </tag>
+            
+            <tag> MongoDB </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -1120,9 +1120,9 @@
             
             <tag> 高可用 </tag>
             
-            <tag> MongoDB </tag>
-            
             <tag> Mongo </tag>
+            
+            <tag> MongoDB </tag>
             
             <tag> 路由 </tag>
             
@@ -2024,9 +2024,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MySQL </tag>
-            
             <tag> 用户管理 </tag>
+            
+            <tag> MySQL </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -2464,8 +2464,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -2475,6 +2473,8 @@
             <tag> consumer </tag>
             
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -2838,9 +2838,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -2864,9 +2864,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -2994,11 +2994,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -3024,8 +3024,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3041,6 +3039,8 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -3138,8 +3138,8 @@
     
     <entry>
       <title>CentOS6.X安装Python2.7</title>
-      <link href="/2017/11/16/CentOS6-X%E5%AE%89%E8%A3%85Python2-7/"/>
-      <url>/2017/11/16/CentOS6-X%E5%AE%89%E8%A3%85Python2-7/</url>
+      <link href="/2017/11/16/CentOS6-%E5%8D%87%E7%BA%A7Python3/"/>
+      <url>/2017/11/16/CentOS6-%E5%8D%87%E7%BA%A7Python3/</url>
 	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
       <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
       
@@ -3153,6 +3153,10 @@
             <tag> CentOS6 </tag>
             
             <tag> Python2.7 </tag>
+            
+            <tag> python27 </tag>
+            
+            <tag> python35 </tag>
             
             <tag> SCL </tag>
             
@@ -3170,9 +3174,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> Producer </tag>
             
@@ -3802,11 +3806,11 @@
             
             <tag> Nginx </tag>
             
+            <tag> upstream </tag>
+            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> upstream </tag>
             
             <tag> pass_proxy </tag>
             
@@ -4074,9 +4078,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -4656,9 +4660,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -4740,11 +4744,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -4760,11 +4764,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -5816,11 +5820,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> 大数据 </tag>
             
@@ -5990,9 +5994,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> DTK </tag>
-            
             <tag> BIOS </tag>
+            
+            <tag> DTK </tag>
             
         </tags>
       
@@ -6128,9 +6132,9 @@
             
             <tag> VM </tag>
             
-            <tag> compute </tag>
-            
             <tag> 计算节点 </tag>
+            
+            <tag> compute </tag>
             
             <tag> VM迁移 </tag>
             
