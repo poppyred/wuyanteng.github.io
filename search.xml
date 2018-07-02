@@ -3,6 +3,32 @@
   
     
     <entry>
+      <title>mysqldump备份避免锁表</title>
+      <link href="/2018/07/02/mysqldump%E5%A4%87%E4%BB%BD%E9%81%BF%E5%85%8D%E9%94%81%E8%A1%A8/"/>
+      <url>/2018/07/02/mysqldump%E5%A4%87%E4%BB%BD%E9%81%BF%E5%85%8D%E9%94%81%E8%A1%A8/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> MySQL </tag>
+            
+            <tag> xtrabackup </tag>
+            
+            <tag> mysqldump </tag>
+            
+            <tag> innobackup </tag>
+            
+            <tag> 锁表 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>shell变量传参</title>
       <link href="/2018/06/22/shell%E5%8F%98%E9%87%8F%E4%BC%A0%E5%8F%82/"/>
       <url>/2018/06/22/shell%E5%8F%98%E9%87%8F%E4%BC%A0%E5%8F%82/</url>
@@ -2026,9 +2052,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
             
         </tags>
       
@@ -3804,11 +3830,11 @@
       
         <tags>
             
+            <tag> Nginx </tag>
+            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-06-22T08:53:43.784Z</updated>
+  <updated>2018-07-02T04:26:27.768Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mysqldump备份避免锁表</title>
+    <link href="https://wuyanteng.github.io/2018/07/02/mysqldump%E5%A4%87%E4%BB%BD%E9%81%BF%E5%85%8D%E9%94%81%E8%A1%A8/"/>
+    <id>https://wuyanteng.github.io/2018/07/02/mysqldump备份避免锁表/</id>
+    <published>2018-07-02T04:09:26.000Z</published>
+    <updated>2018-07-02T04:26:27.768Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>生产环境中,场景难免会遇到对正在运行的数据库进行备份，而mysqldump备份会有锁表风险，导致数据在备份期间无法写入数据，所以对正在运行的数据库备份需要慎重。下面就聊聊如何解决锁表？</code></pre><a id="more"></a><h5 id="mysqldump命令备份Mysql数据库的参数说明"><a href="#mysqldump命令备份Mysql数据库的参数说明" class="headerlink" title="mysqldump命令备份Mysql数据库的参数说明"></a>mysqldump命令备份Mysql数据库的参数说明</h5><pre><code>-q       采用快速的dump方式(提高导出性能)-e       采用多重insert语句形式(提高还原性能)-R       导出存储过程，函数，和触发器--events        如果是5.1以上的版本使用，包含事件--skip-opt      避免锁表--create-option            添加create相关的选项--single-transaction       一致性备份--no-autocommit      采用批量提交方式(提高还原性能)--master-data   如果有写log-bin且版本为5.0以上的版本，则再加上 --master-data=2</code></pre><h5 id="改良mysqldump备份命令"><a href="#改良mysqldump备份命令" class="headerlink" title="改良mysqldump备份命令"></a>改良mysqldump备份命令</h5><pre><code>我的版本是MySQL-5.7.11,启用了binlog，所以应使用如下命令备份数据库mysqldump -uroot -p --events --single-transaction --master-data=2 --skip-opt --databases db1 db2 &gt;/root/mysql.sql</code></pre><h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><pre><code>mysqldump命令适用于对数据库相对较小的MySQL进行备份，一般数据量约50GB以内，大于50GB强烈建议使用xtrabackup工具。</code></pre><p>参考：<a href="https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/">MySql xtrabackup大数据量备份与还原</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;生产环境中,场景难免会遇到对正在运行的数据库进行备份，而mysqldump备份会有锁表风险，导致数据在备份期间无法写入数据，所以对正在运行的数据库备份需要慎重。下面就聊聊如何解决锁表？
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="MySQL" scheme="https://wuyanteng.github.io/tags/MySQL/"/>
+    
+      <category term="xtrabackup" scheme="https://wuyanteng.github.io/tags/xtrabackup/"/>
+    
+      <category term="mysqldump" scheme="https://wuyanteng.github.io/tags/mysqldump/"/>
+    
+      <category term="innobackup" scheme="https://wuyanteng.github.io/tags/innobackup/"/>
+    
+      <category term="锁表" scheme="https://wuyanteng.github.io/tags/%E9%94%81%E8%A1%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>shell变量传参</title>
@@ -671,33 +702,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="hdfs" scheme="https://wuyanteng.github.io/tags/hdfs/"/>
     
       <category term="fs" scheme="https://wuyanteng.github.io/tags/fs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>cacti接入微信告警功能</title>
-    <link href="https://wuyanteng.github.io/2018/04/20/cacti%E6%8E%A5%E5%85%A5%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6%E5%8A%9F%E8%83%BD/"/>
-    <id>https://wuyanteng.github.io/2018/04/20/cacti接入微信告警功能/</id>
-    <published>2018-04-20T08:04:56.000Z</published>
-    <updated>2018-04-20T11:22:08.608Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>cacti接入微信告警功能</code></pre><a id="more"></a><h5 id="插件安装"><a href="#插件安装" class="headerlink" title="插件安装"></a>插件安装</h5><pre><code>需要cacti安装thold与settings插件并启用插件</code></pre><p>参考：<a href="https://wuyanteng.github.io/2017/04/13/cacti%E9%85%8D%E7%BD%AE%E9%82%AE%E4%BB%B6%E5%91%8A%E8%AD%A6/">插件安装</a></p><h5 id="配置微信告警代码"><a href="#配置微信告警代码" class="headerlink" title="配置微信告警代码"></a>配置微信告警代码</h5><pre><code>vi /var/www/cacti/plugins/thold/thold_functions.php</code></pre><pre><code> $message = str_replace(&#39;&lt;GRAPH&gt;&#39;, &quot;&lt;br&gt;&lt;img src=&#39;&quot; . $val[&#39;file&#39;] . &quot;&#39;&gt;&lt;br&gt;Could not open!&lt;br&gt;&quot; . $val[&#39;file&#39;], $message);          }     }}########## 在这个位置添加如下代码 ###############$msg_wx = strip_tags(str_replace(&#39;&lt;br&gt;&#39;, &quot;\n&quot;, $message));$msg_wx = trim($msg_wx);$msg_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $msg_wx);$sub_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $subject);$file_title  = &#39;/tmp/wechat.txt&#39;;$file_message  = &#39;/tmp/wechat_message.txt&#39;;if($f  = file_put_contents($file_title, $sub_wx))   if($f  = file_put_contents($file_message,  $msg_wx))shell_exec(&quot;/etc/wechat.sh&quot;);########## 代码添加-结束 #######################$text = array(&#39;text&#39; =&gt; &#39;&#39;, &#39;html&#39; =&gt; &#39;&#39;);   if ($filename == &#39;&#39;) {        $message = str_replace(&#39;&lt;br&gt;&#39;,  &quot;\n&quot;, $message);        $message = str_replace(&#39;&lt;BR&gt;&#39;,  &quot;\n&quot;, $message);        $message = str_replace(&#39;&lt;/BR&gt;&#39;, &quot;\n&quot;, $message);</code></pre><pre><code>上面添加代码注释：//删除message中的html标签,并将&lt;br&gt;替换为换行符\n$msg_wx = strip_tags(str_replace(&#39;&lt;br&gt;&#39;, &quot;\n&quot;, $message));    //整理msg_wx字符串$msg_wx = trim($msg_wx); //转换编码为utf-8，防止乱码 $msg_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $msg_wx);//转换编码为utf-8，防止乱码$sub_wx = iconv( &quot;GB2312//IGNORE&quot;, &quot;UTF-8&quot;, $subject);  //要写入文件的文件名（可以是任意文件名），如果文件不存在，将会创建一个$file_title  = &#39;/tmp/wechat.txt&#39;;       //要写入文件的文件名（可以是任意文件名），如果文件不存在，将会创建一个$file_message  = &#39;/tmp/wechat_message.txt&#39;;  //将subject参数的值保存到file_title中if($f  = file_put_contents($file_title, $sub_wx))   //将msg_wx参数的值保存到file_message中if($f  = file_put_contents($file_message,  $msg_wx))//运行wechat.sh文件，进行微信报警操作。shell_exec(&quot;/etc/wechat.sh&quot;);                       </code></pre><h5 id="配置触发消息脚本"><a href="#配置触发消息脚本" class="headerlink" title="配置触发消息脚本"></a>配置触发消息脚本</h5><pre><code># vi /etc/wechat.sh#微信企业号的CropIDCropID=&#39;xxxxxxxxxxxx&#39;#企业号应用SecretSecret=&#39;xxxxxxxxxxxxxxxxxxxxxx&#39;GURL=&quot;https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$CropID&amp;corpsecret=$Secret&quot;Gtoken=$(/usr/bin/curl -s -G $GURL |  awk -F &quot;[\&quot;:,]&quot; &#39;{print $15}&#39;)PURL=&quot;https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=$Gtoken&quot;function body() {#Appid 填写企业号中建立的报警APP的IDlocal int AppID=1#此处填写报警接收用户，全部报警可留空local UserID=&quot;@all&quot;local PartyID=&quot;@all&quot;local TagID=&quot;@all&quot;Ent=$&#39;\n&#39;#应cactifans群内要求，添加Cacti微信报警日期参数Date=$(date &#39;+%Y年%m月%d日 %H:%M:%S\n\n&#39;)#读取/tmp/wechat.txt文件中内容到变量TitTit=$(cat /tmp/wechat.txt)#拼接msg主体文件,包含日期,主题,报警内容.并删除报警内容中的&#39;%&#39;号.Msg=$Date$Tit$Ent$(cat /tmp/wechat_message.txt|sed &#39;s/%//g&#39;)#获取wechat_message.txt中的url行内容Url=$(grep  &quot;http&quot; /tmp/wechat_message.txt|sed  &#39;s/URL: //g&#39;)Pic_tmp=$(grep  &quot;http&quot; /tmp/wechat_message.txt|sed  &#39;s/URL: //g&#39;|sed &#39;s/\/graph.php/\/graph_image.php/g&#39;)#在此修改图片大小，防止图像显示不全,并判断图片文件是否存在。防止宕机出现图片报警if [ ! -n &quot;$Pic_tmp&quot; ] ;then    Pic=&quot;&quot;else    Pic=$Pic_tmp$&#39;&amp;graph_height=215&amp;graph_width=424&#39;fiprintf &#39;{\n&#39;printf &#39;\t&quot;touser&quot;: &quot;&#39;&quot;$UserID&quot;\&quot;&quot;,\n&quot;printf &#39;\t&quot;toparty&quot;: &quot;&#39;&quot;$PartyID&quot;\&quot;&quot;,\n&quot;printf &#39;\t&quot;totag&quot;: &quot;&#39;&quot;$TagID&quot;\&quot;&quot;,\n&quot;printf &#39;\t&quot;msgtype&quot;: &quot;news&quot;,\n&#39;printf &#39;\t&quot;agentid&quot;: &quot;&#39;&quot; $AppID &quot;\&quot;&quot;,\n&quot;printf &#39;\t&quot;news&quot;: {\n&#39;printf &#39;\t&quot;articles&quot;: [\n&#39;printf &#39;{\n&#39;printf &#39;\t\t&quot;title&quot;: &quot;&#39;&quot;$Tit&quot;\&quot;,&quot;\n&quot;printf &#39;\t\t&quot;description&quot;: &quot;&#39;&quot;$Msg&quot;\&quot;,&quot;\n&quot;printf &#39;\t\t&quot;url&quot;: &quot;&#39;&quot;$Url&quot;\&quot;,&quot;\n&quot;printf &#39;\t\t&quot;picurl&quot;: &quot;&#39;&quot;$Pic&quot;\&quot;,&quot;\n&quot;printf &#39;\t}\n&#39;printf &#39;\t]\n&#39;printf &#39;\t}\n&#39;printf &#39;}\n&#39;}curl -l -H &quot;Content-type: application/json&quot; -X POST -d &quot;$(body )&quot; $PURL</code></pre><h5 id="测试微信脚本是否可用"><a href="#测试微信脚本是否可用" class="headerlink" title="测试微信脚本是否可用"></a>测试微信脚本是否可用</h5><pre><code>在/tmp/wechat.txt和/tmp/wechat_message.txt中随便填写一些内容，然后运行微信脚本echo &quot;主题123&quot; &gt; /tmp/wechat.txtecho &quot;主体内容-测试456&quot; &gt; /tmp/wechat_message.txtsh  /etc/wechat.shchmod +x /etc/wechat.sh注:测试完成后,需要删除/tmp/wechat* 文件，否则会出现权限问题导致数据无法写入</code></pre><h5 id="配置告警阈值并测试微信收取"><a href="#配置告警阈值并测试微信收取" class="headerlink" title="配置告警阈值并测试微信收取"></a>配置告警阈值并测试微信收取</h5><pre><code>略</code></pre><h5 id="故障处理-流量图不能显示"><a href="#故障处理-流量图不能显示" class="headerlink" title="故障处理:流量图不能显示"></a>故障处理:流量图不能显示</h5><pre><code>注意：如果流量告警中无法显示流量图，可以做如下修改#取消cacti的图像验证配置# vi /var/www/cacti/graph_image.php#include(&quot;./include/auth.php&quot;);         #添加注释include_once(&quot;./lib/rrd.php&quot;);include(&quot;./include/global.php&quot;);        #添加这一行</code></pre><p>参考: <a href="http://blog.51cto.com/icenycmh/1940443" target="_blank" rel="noopener">51CTO</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;cacti接入微信告警功能
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="cacti" scheme="https://wuyanteng.github.io/tags/cacti/"/>
-    
-      <category term="微信" scheme="https://wuyanteng.github.io/tags/%E5%BE%AE%E4%BF%A1/"/>
-    
-      <category term="微信告警" scheme="https://wuyanteng.github.io/tags/%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6/"/>
     
   </entry>
   
