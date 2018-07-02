@@ -380,9 +380,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> mongo </tag>
-            
             <tag> mongodb </tag>
+            
+            <tag> mongo </tag>
             
             <tag> rs.slaveOk() </tag>
             
@@ -422,9 +422,9 @@
       
         <tags>
             
-            <tag> mongo </tag>
-            
             <tag> mongodb </tag>
+            
+            <tag> mongo </tag>
             
             <tag> mongoexport </tag>
             
@@ -2024,9 +2024,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 用户管理 </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -3804,13 +3804,13 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
-            <tag> upstream </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
+            
+            <tag> upstream </tag>
             
             <tag> pass_proxy </tag>
             
@@ -5994,9 +5994,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> BIOS </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
             
         </tags>
       
@@ -6132,9 +6132,9 @@
             
             <tag> VM </tag>
             
-            <tag> 计算节点 </tag>
-            
             <tag> compute </tag>
+            
+            <tag> 计算节点 </tag>
             
             <tag> VM迁移 </tag>
             

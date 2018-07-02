@@ -579,9 +579,9 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
-      <category term="mongo" scheme="https://wuyanteng.github.io/tags/mongo/"/>
-    
       <category term="mongodb" scheme="https://wuyanteng.github.io/tags/mongodb/"/>
+    
+      <category term="mongo" scheme="https://wuyanteng.github.io/tags/mongo/"/>
     
       <category term="rs.slaveOk()" scheme="https://wuyanteng.github.io/tags/rs-slaveOk/"/>
     
@@ -631,9 +631,9 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
     </summary>
     
     
-      <category term="mongo" scheme="https://wuyanteng.github.io/tags/mongo/"/>
-    
       <category term="mongodb" scheme="https://wuyanteng.github.io/tags/mongodb/"/>
+    
+      <category term="mongo" scheme="https://wuyanteng.github.io/tags/mongo/"/>
     
       <category term="mongoexport" scheme="https://wuyanteng.github.io/tags/mongoexport/"/>
     
