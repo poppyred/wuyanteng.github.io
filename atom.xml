@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-07-02T04:26:27.768Z</updated>
+  <updated>2018-07-06T09:54:12.591Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mysql从库-只同步某些库</title>
+    <link href="https://wuyanteng.github.io/2018/07/06/mysql%E4%BB%8E%E5%BA%93-%E5%8F%AA%E5%90%8C%E6%AD%A5%E6%9F%90%E4%BA%9B%E5%BA%93/"/>
+    <id>https://wuyanteng.github.io/2018/07/06/mysql从库-只同步某些库/</id>
+    <published>2018-07-06T09:54:12.000Z</published>
+    <updated>2018-07-06T09:54:12.591Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>生产环境需求：从库同步时，限定只同步某些数据库，而非全部同步，如何优雅逆袭？</code></pre><p>配置</p><pre><code>vim /etc/my.cnf[mysqld]......replicate_wild_do_table=db1.%replicate_wild_do_table=db2.%replicate_wild_do_table=db3.%db1到db3是需要同步的数据库名，如果复制多个数据库，重复设置这个选项即可。</code></pre><pre><code>重启mysql</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;pre&gt;&lt;code&gt;生产环境需求：从库同步时，限定只同步某些数据库，而非全部同步，如何优雅逆袭？
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;配置&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vim /etc/my.cnf
+
+[mysqld]
+......
+replicate_wild_do_table
+      
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="mysql从库" scheme="https://wuyanteng.github.io/tags/mysql%E4%BB%8E%E5%BA%93/"/>
+    
+      <category term="同步个别库" scheme="https://wuyanteng.github.io/tags/%E5%90%8C%E6%AD%A5%E4%B8%AA%E5%88%AB%E5%BA%93/"/>
+    
+  </entry>
   
   <entry>
     <title>mysqldump备份避免锁表</title>
@@ -675,33 +708,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="csv" scheme="https://wuyanteng.github.io/tags/csv/"/>
     
       <category term="mongo导出命令" scheme="https://wuyanteng.github.io/tags/mongo%E5%AF%BC%E5%87%BA%E5%91%BD%E4%BB%A4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>hadoop常用命令</title>
-    <link href="https://wuyanteng.github.io/2018/04/23/hadoop%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
-    <id>https://wuyanteng.github.io/2018/04/23/hadoop常用命令/</id>
-    <published>2018-04-23T02:47:58.000Z</published>
-    <updated>2018-04-23T03:59:35.497Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>作为hadoop运维,常用命令还是要牢记下的，与linux稍有区别，来总结下</code></pre><a id="more"></a><h4 id="Hadoop常用命令"><a href="#Hadoop常用命令" class="headerlink" title="Hadoop常用命令"></a>Hadoop常用命令</h4><h5 id="hadoop命令格式"><a href="#hadoop命令格式" class="headerlink" title="hadoop命令格式"></a>hadoop命令格式</h5><pre><code>hadoop  fs  -cmd  &lt;args&gt;</code></pre><h5 id="ls命令"><a href="#ls命令" class="headerlink" title="ls命令"></a>ls命令</h5><pre><code>列出hdfs文件系统根目录下的目录和文件hadoop fs -ls /</code></pre><pre><code>列出hdfs文件系统所有的目录和文件(含子目录和文件)hadoop fs -ls -R /  </code></pre><h5 id="mkdir命令"><a href="#mkdir命令" class="headerlink" title="mkdir命令"></a>mkdir命令</h5><pre><code>创建多级目录,即使父目录不存在hadoop fs -mkdir -p [hdfs dir]</code></pre><h5 id="rm命令"><a href="#rm命令" class="headerlink" title="rm命令"></a>rm命令</h5><pre><code>删除文件hadoop fs -rm [hdfs file]删除目录hadoop fs -rm -r [hdfs dir]</code></pre><h5 id="touchz命令"><a href="#touchz命令" class="headerlink" title="touchz命令"></a>touchz命令</h5><pre><code>在hadoop指定目录下新建空文件hadoop fs -ls -touchz [hdfs dir]/new.txt</code></pre><h5 id="cp命令"><a href="#cp命令" class="headerlink" title="cp命令"></a>cp命令</h5><pre><code>hadoop fs -cp [hdfs file] [hdfs file]</code></pre><h5 id="mv命令"><a href="#mv命令" class="headerlink" title="mv命令"></a>mv命令</h5><pre><code>重命名hdfs上的文件名hadoop fs -mv /user/new.txt /user/ok.txt</code></pre><h5 id="put命令"><a href="#put命令" class="headerlink" title="put命令"></a>put命令</h5><pre><code>文件上传到hdfshadoop fs -put [local file] [hdfs dir]</code></pre><pre><code>目录上传到hdfshadoop fs -ls -put [local dir] [hdfs dir]</code></pre><h5 id="get命令"><a href="#get命令" class="headerlink" title="get命令"></a>get命令</h5><pre><code>从hdfs下载文件到本地目录hadoop fs -get [hdfs file] [local dir]</code></pre><pre><code>从hdfs下载目录到本地目录hadoop fs -get [hdfs dir] [local dir]</code></pre><pre><code>将hdfs指定目录下所有文件排序后合并到local指定的文件中，若指定的local文件不存在则自动创建，若文件存在则会覆盖原文件内容。hadoop fs -getmerge [hdfs dir] [local file]</code></pre><h5 id="du命令"><a href="#du命令" class="headerlink" title="du命令"></a>du命令</h5><pre><code>显示hdfs对应目录下每个目录或文件的大小hadoop fs -du [hdfs path]以人类可读的方式显示每个目录或文件的大小hadoop fs -du -h [hdfs path]</code></pre><h5 id="tail命令"><a href="#tail命令" class="headerlink" title="tail命令"></a>tail命令</h5><pre><code>hadoop fs -tail [hdfs file]</code></pre><h5 id="count命令"><a href="#count命令" class="headerlink" title="count命令"></a>count命令</h5><pre><code>统计hdfs对应路径下的目录个数 + 文件格式 + 文件总大小等hadoop fs -count /serverdata</code></pre><h5 id="stat命令"><a href="#stat命令" class="headerlink" title="stat命令"></a>stat命令</h5><pre><code>hdoop fs -stat [format]  [hdfs path]返回对应路径的状态信息其中，[format]可选参数有：%b（文件大小），%o（Block大小），%n（文件名），%r（副本个数），%y（最后一次修改日期和时间）hadoop fs -stat %b%o%n [hdfs path]</code></pre><h5 id="setrep命令"><a href="#setrep命令" class="headerlink" title="setrep命令"></a>setrep命令</h5><pre><code>改变一个文件在hdfs中的副本个数。hadoop fs setrep -R 3 [hdfs file or hdfs dir]上述命令中数字3为设置的副本个数，-R选项可以对一个目录下的所有目录和文件递归执行改变副本的个数。</code></pre><h5 id="balancer命令"><a href="#balancer命令" class="headerlink" title="balancer命令"></a>balancer命令</h5><pre><code>hdfs balancer 如果管理员发现某些DataNode保存数据过多，某些DataNode保存数据相对较少，可以使用上述命令手动启动内部的均衡过程</code></pre><h5 id="dfsadmin命令"><a href="#dfsadmin命令" class="headerlink" title="dfsadmin命令"></a>dfsadmin命令</h5><pre><code>管理员可以通过dfsadmin管理HDFS查看帮助hdfs dfsadmin -help显示文件系统的基本数据hdfs dfsadmin -safemode &lt; enter | leave | get | wait &gt;enter：进入安全模式；leave：离开安全模式；get：获知是否开启安全模式；wait：等待离开安全模式</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;作为hadoop运维,常用命令还是要牢记下的，与linux稍有区别，来总结下
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="hadoop" scheme="https://wuyanteng.github.io/tags/hadoop/"/>
-    
-      <category term="hdfs" scheme="https://wuyanteng.github.io/tags/hdfs/"/>
-    
-      <category term="fs" scheme="https://wuyanteng.github.io/tags/fs/"/>
     
   </entry>
   

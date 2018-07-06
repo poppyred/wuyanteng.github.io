@@ -3,6 +3,26 @@
   
     
     <entry>
+      <title>mysql从库-只同步某些库</title>
+      <link href="/2018/07/06/mysql%E4%BB%8E%E5%BA%93-%E5%8F%AA%E5%90%8C%E6%AD%A5%E6%9F%90%E4%BA%9B%E5%BA%93/"/>
+      <url>/2018/07/06/mysql%E4%BB%8E%E5%BA%93-%E5%8F%AA%E5%90%8C%E6%AD%A5%E6%9F%90%E4%BA%9B%E5%BA%93/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mysql从库 </tag>
+            
+            <tag> 同步个别库 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>mysqldump备份避免锁表</title>
       <link href="/2018/07/02/mysqldump%E5%A4%87%E4%BB%BD%E9%81%BF%E5%85%8D%E9%94%81%E8%A1%A8/"/>
       <url>/2018/07/02/mysqldump%E5%A4%87%E4%BB%BD%E9%81%BF%E5%85%8D%E9%94%81%E8%A1%A8/</url>
@@ -956,13 +976,13 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> VM </tag>
-            
             <tag> 主机聚合 Host Aggregates </tag>
             
             <tag> 可用域 Availability Zones </tag>
             
             <tag> schedule </tag>
+            
+            <tag> VM </tag>
             
         </tags>
       
@@ -3978,9 +3998,9 @@
             
             <tag> 内存 </tag>
             
-            <tag> tmpfs </tag>
-            
             <tag> VM </tag>
+            
+            <tag> tmpfs </tag>
             
             <tag> RM </tag>
             
@@ -6158,9 +6178,9 @@
             
             <tag> VM </tag>
             
-            <tag> compute </tag>
-            
             <tag> 计算节点 </tag>
+            
+            <tag> compute </tag>
             
             <tag> VM迁移 </tag>
             
