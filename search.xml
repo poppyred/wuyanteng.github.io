@@ -3,6 +3,32 @@
   
     
     <entry>
+      <title>Mongo Slave节点无法show dbs</title>
+      <link href="/2018/07/09/Mongo-Slave%E8%8A%82%E7%82%B9%E6%97%A0%E6%B3%95show-dbs/"/>
+      <url>/2018/07/09/Mongo-Slave%E8%8A%82%E7%82%B9%E6%97%A0%E6%B3%95show-dbs/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> SECONDARY </tag>
+            
+            <tag> PRIMARY </tag>
+            
+            <tag> MongoDB </tag>
+            
+            <tag> slave </tag>
+            
+            <tag> show dbs </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>mysql从库-只同步某些库</title>
       <link href="/2018/07/06/mysql%E4%BB%8E%E5%BA%93-%E5%8F%AA%E5%90%8C%E6%AD%A5%E6%9F%90%E4%BA%9B%E5%BA%93/"/>
       <url>/2018/07/06/mysql%E4%BB%8E%E5%BA%93-%E5%8F%AA%E5%90%8C%E6%AD%A5%E6%9F%90%E4%BA%9B%E5%BA%93/</url>
@@ -228,13 +254,13 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MongoDB </tag>
-            
-            <tag> STARTUP </tag>
+            <tag> SECONDARY </tag>
             
             <tag> PRIMARY </tag>
             
-            <tag> SECONDARY </tag>
+            <tag> MongoDB </tag>
+            
+            <tag> STARTUP </tag>
             
             <tag> 副本集成员 </tag>
             
@@ -976,13 +1002,13 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> VM </tag>
+            
             <tag> 主机聚合 Host Aggregates </tag>
             
             <tag> 可用域 Availability Zones </tag>
             
             <tag> schedule </tag>
-            
-            <tag> VM </tag>
             
         </tags>
       
@@ -1142,9 +1168,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -1166,9 +1192,9 @@
             
             <tag> 高可用 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 路由 </tag>
             
@@ -1324,9 +1350,9 @@
             
             <tag> zabbix </tag>
             
-            <tag> mysql </tag>
-            
             <tag> slave </tag>
+            
+            <tag> mysql </tag>
             
         </tags>
       
@@ -1740,9 +1766,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> docker </tag>
-            
             <tag> ELK </tag>
+            
+            <tag> docker </tag>
             
         </tags>
       
@@ -1878,9 +1904,9 @@
       
         <tags>
             
-            <tag> Glance </tag>
-            
             <tag> openstack </tag>
+            
+            <tag> Glance </tag>
             
             <tag> qcow2 </tag>
             
@@ -2240,9 +2266,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Glance </tag>
-            
             <tag> openstack </tag>
+            
+            <tag> Glance </tag>
             
         </tags>
       
@@ -2260,9 +2286,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> openstack </tag>
-            
             <tag> Keystone </tag>
+            
+            <tag> openstack </tag>
             
         </tags>
       
@@ -3850,11 +3876,11 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -3998,9 +4024,9 @@
             
             <tag> 内存 </tag>
             
-            <tag> VM </tag>
-            
             <tag> tmpfs </tag>
+            
+            <tag> VM </tag>
             
             <tag> RM </tag>
             
@@ -6040,9 +6066,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> DTK </tag>
-            
             <tag> BIOS </tag>
+            
+            <tag> DTK </tag>
             
         </tags>
       
@@ -6178,9 +6204,9 @@
             
             <tag> VM </tag>
             
-            <tag> 计算节点 </tag>
-            
             <tag> compute </tag>
+            
+            <tag> 计算节点 </tag>
             
             <tag> VM迁移 </tag>
             
