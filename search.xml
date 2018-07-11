@@ -3,6 +3,26 @@
   
     
     <entry>
+      <title>CentOS6部署bugzilla</title>
+      <link href="/2018/07/11/CentOS6%E9%83%A8%E7%BD%B2bugzilla/"/>
+      <url>/2018/07/11/CentOS6%E9%83%A8%E7%BD%B2bugzilla/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> bugzilla </tag>
+            
+            <tag> bugs </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Mongo Slave节点无法show dbs</title>
       <link href="/2018/07/09/Mongo-Slave%E8%8A%82%E7%82%B9%E6%97%A0%E6%B3%95show-dbs/"/>
       <url>/2018/07/09/Mongo-Slave%E8%8A%82%E7%82%B9%E6%97%A0%E6%B3%95show-dbs/</url>
@@ -1904,9 +1924,9 @@
       
         <tags>
             
-            <tag> openstack </tag>
-            
             <tag> Glance </tag>
+            
+            <tag> openstack </tag>
             
             <tag> qcow2 </tag>
             
@@ -2266,9 +2286,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> openstack </tag>
-            
             <tag> Glance </tag>
+            
+            <tag> openstack </tag>
             
         </tags>
       
@@ -2286,9 +2306,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Keystone </tag>
-            
             <tag> openstack </tag>
+            
+            <tag> Keystone </tag>
             
         </tags>
       
@@ -2844,13 +2864,13 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> CentOS7 </tag>
-            
             <tag> Gitlab </tag>
             
             <tag> Git服务器 </tag>
             
             <tag> Docker </tag>
+            
+            <tag> CentOS7 </tag>
             
         </tags>
       
@@ -2868,9 +2888,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> docker </tag>
-            
             <tag> Gitlab </tag>
+            
+            <tag> docker </tag>
             
             <tag> Jenkins </tag>
             
@@ -2958,9 +2978,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> docker </tag>
-            
             <tag> CentOS7 </tag>
+            
+            <tag> docker </tag>
             
             <tag> docker-ce </tag>
             
@@ -6066,9 +6086,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> BIOS </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
             
         </tags>
       
