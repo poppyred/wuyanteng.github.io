@@ -1786,9 +1786,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> ELK </tag>
-            
             <tag> docker </tag>
+            
+            <tag> ELK </tag>
             
         </tags>
       
@@ -2864,13 +2864,13 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> CentOS7 </tag>
+            
             <tag> Gitlab </tag>
             
             <tag> Git服务器 </tag>
             
             <tag> Docker </tag>
-            
-            <tag> CentOS7 </tag>
             
         </tags>
       
@@ -2888,9 +2888,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Gitlab </tag>
-            
             <tag> docker </tag>
+            
+            <tag> Gitlab </tag>
             
             <tag> Jenkins </tag>
             
@@ -2978,9 +2978,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> CentOS7 </tag>
-            
             <tag> docker </tag>
+            
+            <tag> CentOS7 </tag>
             
             <tag> docker-ce </tag>
             
@@ -3896,11 +3896,11 @@
       
         <tags>
             
+            <tag> Nginx </tag>
+            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
