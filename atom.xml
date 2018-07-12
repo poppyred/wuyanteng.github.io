@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-07-11T06:17:03.927Z</updated>
+  <updated>2018-07-12T04:20:50.972Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -17,11 +17,45 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>vim打开文件中文乱码问题</title>
+    <link href="https://wuyanteng.github.io/2018/07/12/vim%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/"/>
+    <id>https://wuyanteng.github.io/2018/07/12/vim打开文件中文乱码问题/</id>
+    <published>2018-07-12T04:16:26.000Z</published>
+    <updated>2018-07-12T04:20:50.972Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>相关知识点：set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1set fileencoding=utf-8set encoding=utf-8fileencodings则是决定Vim识别文件编码格式的识别序列，应当按照从严格到宽松的角度来摆放；fileencoding设置文件保存时的编码格式；encoding用来指导Vim理解自己内部处理和显示的缺省编码；</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;pre&gt;&lt;code&gt;相关知识点：
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fileencoding=utf-8
+set encoding=utf-8
+
+fileenc
+      
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="shell" scheme="https://wuyanteng.github.io/tags/shell/"/>
+    
+      <category term="vim" scheme="https://wuyanteng.github.io/tags/vim/"/>
+    
+      <category term="中文乱码" scheme="https://wuyanteng.github.io/tags/%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/"/>
+    
+  </entry>
+  
+  <entry>
     <title>CentOS6部署bugzilla</title>
     <link href="https://wuyanteng.github.io/2018/07/11/CentOS6%E9%83%A8%E7%BD%B2bugzilla/"/>
     <id>https://wuyanteng.github.io/2018/07/11/CentOS6部署bugzilla/</id>
     <published>2018-07-11T06:17:03.000Z</published>
-    <updated>2018-07-11T06:17:03.927Z</updated>
+    <updated>2018-07-11T10:32:20.679Z</updated>
     
     <content type="html"><![CDATA[<h5 id="Bugzilla介绍"><a href="#Bugzilla介绍" class="headerlink" title="Bugzilla介绍"></a>Bugzilla介绍</h5><pre><code>Bugzilla 是一个开源的缺陷跟踪系统（Bug-Tracking System），它可以管理软件开发中缺陷的提交（new），修复（resolve），关闭（close）等整个生命周期。它可以使我们更好的在软件开发过程中跟踪软件错误的处理过程，为开发和测试工作以及产品质量的度量提供数据支持。并能够为你建立一个完善的 Bug 跟踪体系, 包括报告Bug、查询Bug记录并产生报表。</code></pre><a id="more"></a><h4 id="部署Bugzilla"><a href="#部署Bugzilla" class="headerlink" title="部署Bugzilla"></a>部署Bugzilla</h4><pre><code>系统环境：CentOS6.9由于需要使用其提供的自动化脚本安装很多依赖库，故不建议使用小众Linux</code></pre><h5 id="系统优化"><a href="#系统优化" class="headerlink" title="系统优化"></a>系统优化</h5><pre><code>关闭防火墙service iptables stop关闭selinuxsetenforce 0</code></pre><h5 id="安装Apache-MySQL及相关依赖"><a href="#安装Apache-MySQL及相关依赖" class="headerlink" title="安装Apache|MySQL及相关依赖"></a>安装Apache|MySQL及相关依赖</h5><pre><code>yum -y install httpd mod_ssl mysql-server mysql php-mysql gcc perl* mod_perl-develservice httpd startchkconfig httpd onservice mysqld startservice mysqld on</code></pre><h5 id="设置mysql-root密码"><a href="#设置mysql-root密码" class="headerlink" title="设置mysql root密码"></a>设置mysql root密码</h5><pre><code>mysql密码默认为空，需修改如下：mysqladmin -uroot -p password &quot;123456&quot;登陆测试mysql -uroot -p123456创建数据库名为bugscreate database bugs;grant all on bugs.* to root@localhost identified by &quot;123456&quot;;flush privileges; </code></pre><h5 id="下载安装bugzilla"><a href="#下载安装bugzilla" class="headerlink" title="下载安装bugzilla"></a>下载安装bugzilla</h5><pre><code>官网:https://www.bugzilla.org/download/或https://archive.mozilla.org/pub/webtools/</code></pre><pre><code>以bugzilla-5.0.3.tar.gz为例：解压tar xf bugzilla-5.0.3.tar.gz -C /var/www/html/重命名源码目录cd /var/www/htmlmv bugzilla-5.0.3 bugzilla检查缺少的组件cd /var/www/html/bugzilla./checksetup.pl --check-modules自动化安装缺少的组件perl install-module.pl --all运行以下这条命令，它会在/var/www/html/bugzilla路径下自动生成一个名为localconfig的文件。./checksetup.pl主要修改以下数据库相关信息vim localconfig$db_driver = &#39;mysql&#39;;$db_host = &#39;localhost&#39;;$db_name = &#39;bugs&#39;;$db_user = &#39;root&#39;;$db_pass = &#39;123456&#39;;$db_port = 3306;最后，再次执行以下命令根据提示输入管理员邮箱及密码./checksetup.pl </code></pre><h5 id="配置Apache"><a href="#配置Apache" class="headerlink" title="配置Apache"></a>配置Apache</h5><pre><code>vi /etc/httpd/conf/httpd.conf   在配置文件底部添加如下内容：&lt;VirtualHost *:80&gt;     DocumentRoot /var/www/html/bugzilla/&lt;/VirtualHost&gt;&lt;Directory /var/www/html/bugzilla&gt;     AddHandler cgi-script .cgi     Options +Indexes +ExecCGI     DirectoryIndex index.cgi     AllowOverride Limit FileInfo Indexes&lt;/Directory&gt;</code></pre><pre><code>接着需要编辑.htacess文件，注释掉以下内容,保存：vim /var/www/html/bugzilla/.htaccess#Options -Indexes</code></pre><pre><code>重启Apache服务，浏览器测试访问service httpd restart浏览器： http://server-ip</code></pre><p><img src="https://raw.githubusercontent.com/wuyanteng/wuyanteng.github.io/master/images/bugzilla.jpg" alt="bugzilla"></p><h4 id="关于Bugzilla源码和数据库迁移"><a href="#关于Bugzilla源码和数据库迁移" class="headerlink" title="关于Bugzilla源码和数据库迁移"></a>关于Bugzilla源码和数据库迁移</h4><pre><code>注意事项：1. 首先在新机器上按照如上步骤完整部署一套，目的是安装完所有依赖。2. 将原数据库中的bugs通过mysqldump导出一份sql文件3. 将原bugs.sql导入到新库名为bugzilla数据库中，并修改新部署的一套源码中localconfig文件，修改数据库设置，重启apache服务，如果能正常使用，则迁移完毕。4. 若无法登陆，可能之前版本嵌入了LDAP账号，此时就需要把原bugzilla代码目录整个压缩拷贝过来，并修改localconfig文件为最新mysql数据库信息，重启mysql，访问并测试。</code></pre>]]></content>
     
@@ -65,11 +99,11 @@ QUERY  Error: listDatabases failed:{ &amp;quot;note&amp;quot; : &amp;quot;from e
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
-      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
+      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
     
       <category term="PRIMARY" scheme="https://wuyanteng.github.io/tags/PRIMARY/"/>
     
-      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
+      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
     
       <category term="slave" scheme="https://wuyanteng.github.io/tags/slave/"/>
     
@@ -453,13 +487,13 @@ wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.2.0.tgz
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
-      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
-    
-      <category term="PRIMARY" scheme="https://wuyanteng.github.io/tags/PRIMARY/"/>
-    
       <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
     
       <category term="STARTUP" scheme="https://wuyanteng.github.io/tags/STARTUP/"/>
+    
+      <category term="PRIMARY" scheme="https://wuyanteng.github.io/tags/PRIMARY/"/>
+    
+      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
     
       <category term="副本集成员" scheme="https://wuyanteng.github.io/tags/%E5%89%AF%E6%9C%AC%E9%9B%86%E6%88%90%E5%91%98/"/>
     
@@ -682,35 +716,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="模拟浏览器" scheme="https://wuyanteng.github.io/tags/%E6%A8%A1%E6%8B%9F%E6%B5%8F%E8%A7%88%E5%99%A8/"/>
     
       <category term="伪造referer" scheme="https://wuyanteng.github.io/tags/%E4%BC%AA%E9%80%A0referer/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>让mongo的从库支持读操作</title>
-    <link href="https://wuyanteng.github.io/2018/04/28/%E8%AE%A9mongo%E7%9A%84%E4%BB%8E%E5%BA%93%E6%94%AF%E6%8C%81%E8%AF%BB%E6%93%8D%E4%BD%9C/"/>
-    <id>https://wuyanteng.github.io/2018/04/28/让mongo的从库支持读操作/</id>
-    <published>2018-04-28T03:41:26.000Z</published>
-    <updated>2018-04-28T03:52:04.562Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>对于replica set 中的secondary 节点默认是不可读的。通过在连接时指定或者在主库指定slaveOk，由Secondary来分担读的压力，Primary只承担写操作。</code></pre><a id="more"></a><pre><code>如果通过shell访问mongo，要在secondary进行查询。会出现如下错误：#mongo 192.168.10.10:27017SECONDARY&gt; show dbs;2018-04-28T11:28:17.596+0800 E QUERY    Error: listDatabases failed:{ &quot;note&quot; : &quot;from execCommand&quot;, &quot;ok&quot; : 0, &quot;errmsg&quot; : &quot;not master&quot; }    at Error (&lt;anonymous&gt;)    at Mongo.getDBs (src/mongo/shell/mongo.js:47:15)    at shellHelper.show (src/mongo/shell/utils.js:630:33)    at shellHelper (src/mongo/shell/utils.js:524:36)    at (shellhelp2):1:1 at src/mongo/shell/mongo.js:47SECONDARY&gt; </code></pre><h4 id="有两种方法实现从机的查询："><a href="#有两种方法实现从机的查询：" class="headerlink" title="有两种方法实现从机的查询："></a>有两种方法实现从机的查询：</h4><h5 id="第一种方法："><a href="#第一种方法：" class="headerlink" title="第一种方法："></a>第一种方法：</h5><pre><code>db.getMongo().setSlaveOk();</code></pre><h5 id="第二种方法："><a href="#第二种方法：" class="headerlink" title="第二种方法："></a>第二种方法：</h5><pre><code>rs.slaveOk();</code></pre><pre><code>但是这种方式有一个缺点就是，下次再通过mongo进入实例的时候，查询仍然会报错，为此可以通过下列方式vi ~/.mongorc.js增加一行rs.slaveOk();这样的话以后每次通过mongo命令进入都可以查询了</code></pre><h5 id="第三种方法"><a href="#第三种方法" class="headerlink" title="第三种方法:"></a>第三种方法:</h5><pre><code>在配置mongo的时候增加slave-ok=&quot;true&quot;  来实现从secondary中进行读操作。</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;对于replica set 中的secondary 节点默认是不可读的。通过在连接时指定或者在主库指定slaveOk，由Secondary来分担读的压力，Primary只承担写操作。
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="mongodb" scheme="https://wuyanteng.github.io/tags/mongodb/"/>
-    
-      <category term="mongo" scheme="https://wuyanteng.github.io/tags/mongo/"/>
-    
-      <category term="rs.slaveOk()" scheme="https://wuyanteng.github.io/tags/rs-slaveOk/"/>
-    
-      <category term="mongodb从库读操作" scheme="https://wuyanteng.github.io/tags/mongodb%E4%BB%8E%E5%BA%93%E8%AF%BB%E6%93%8D%E4%BD%9C/"/>
     
   </entry>
   
