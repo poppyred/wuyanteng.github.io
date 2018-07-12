@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-07-12T04:20:50.972Z</updated>
+  <updated>2018-07-12T06:08:15.331Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -21,20 +21,19 @@
     <link href="https://wuyanteng.github.io/2018/07/12/vim%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/"/>
     <id>https://wuyanteng.github.io/2018/07/12/vim打开文件中文乱码问题/</id>
     <published>2018-07-12T04:16:26.000Z</published>
-    <updated>2018-07-12T04:20:50.972Z</updated>
+    <updated>2018-07-12T06:08:15.331Z</updated>
     
-    <content type="html"><![CDATA[<pre><code>相关知识点：set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1set fileencoding=utf-8set encoding=utf-8fileencodings则是决定Vim识别文件编码格式的识别序列，应当按照从严格到宽松的角度来摆放；fileencoding设置文件保存时的编码格式；encoding用来指导Vim理解自己内部处理和显示的缺省编码；</code></pre>]]></content>
+    <content type="html"><![CDATA[<pre><code>vim ~/.vimrc</code></pre><pre><code>set encoding=utf-8set fenc=utf-8set fencs=utf-8,usc-bom,euc-jp,gb18030,gbk,gbk2312,cp936</code></pre><pre><code>现在试试中文乱码就消失了</code></pre><p>GitHub参考：<a href="https://gist.github.com/jhezjkp/3405319" target="_blank" rel="noopener">.vimrc配置</a></p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;pre&gt;&lt;code&gt;相关知识点：
-set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
-set fileencoding=utf-8
-set encoding=utf-8
-
-fileenc
+        &lt;pre&gt;&lt;code&gt;vim ~/.vimrc
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;set encoding=utf-8
+set fenc=utf-8
+set fencs=utf-8,usc-bom,euc-jp,gb18030,gbk,gbk2312,cp936
+&lt;
       
     
     </summary>
@@ -99,11 +98,11 @@ QUERY  Error: listDatabases failed:{ &amp;quot;note&amp;quot; : &amp;quot;from e
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
-      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
+      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
     
       <category term="PRIMARY" scheme="https://wuyanteng.github.io/tags/PRIMARY/"/>
     
-      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
+      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
     
       <category term="slave" scheme="https://wuyanteng.github.io/tags/slave/"/>
     
@@ -487,13 +486,13 @@ wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.2.0.tgz
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
-      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
-    
-      <category term="STARTUP" scheme="https://wuyanteng.github.io/tags/STARTUP/"/>
+      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
     
       <category term="PRIMARY" scheme="https://wuyanteng.github.io/tags/PRIMARY/"/>
     
-      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
+      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
+    
+      <category term="STARTUP" scheme="https://wuyanteng.github.io/tags/STARTUP/"/>
     
       <category term="副本集成员" scheme="https://wuyanteng.github.io/tags/%E5%89%AF%E6%9C%AC%E9%9B%86%E6%88%90%E5%91%98/"/>
     
