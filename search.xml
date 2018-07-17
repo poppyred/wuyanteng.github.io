@@ -2036,11 +2036,11 @@
       
         <tags>
             
+            <tag> OpenStack </tag>
+            
             <tag> Horizon </tag>
             
             <tag> Dashboard </tag>
-            
-            <tag> OpenStack </tag>
             
         </tags>
       
@@ -2140,9 +2140,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 数据库管理 </tag>
-            
             <tag> 用户管理 </tag>
+            
+            <tag> 数据库管理 </tag>
             
         </tags>
       
@@ -2578,6 +2578,8 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -2587,8 +2589,6 @@
             <tag> consumer </tag>
             
             <tag> MQ </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -2952,9 +2952,9 @@
       
         <tags>
             
-            <tag> zookeeper </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> zookeeper </tag>
             
             <tag> codis </tag>
             
@@ -2978,9 +2978,9 @@
       
         <tags>
             
-            <tag> zookeeper </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> zookeeper </tag>
             
             <tag> codis </tag>
             
@@ -3108,11 +3108,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -3138,6 +3138,8 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3153,8 +3155,6 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -3288,9 +3288,9 @@
       
         <tags>
             
-            <tag> MQ </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> MQ </tag>
             
             <tag> Producer </tag>
             
@@ -3918,11 +3918,11 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -4192,9 +4192,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> nginx </tag>
             
@@ -4774,9 +4774,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> nginx </tag>
             
@@ -4858,11 +4858,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -4878,11 +4878,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -5934,11 +5934,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> 大数据 </tag>
             
@@ -6106,11 +6106,11 @@
             
             <tag> 自动化 </tag>
             
-            <tag> cobbler </tag>
+            <tag> BIOS </tag>
             
             <tag> DTK </tag>
             
-            <tag> BIOS </tag>
+            <tag> cobbler </tag>
             
         </tags>
       
@@ -6154,9 +6154,9 @@
             
             <tag> RAID </tag>
             
-            <tag> cobbler </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> cobbler </tag>
             
             <tag> raidcfg </tag>
             
@@ -6246,9 +6246,9 @@
             
             <tag> VM </tag>
             
-            <tag> compute </tag>
-            
             <tag> 计算节点 </tag>
+            
+            <tag> compute </tag>
             
             <tag> VM迁移 </tag>
             

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-07-12T06:08:15.331Z</updated>
+  <updated>2018-07-12T06:24:36.119Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://wuyanteng.github.io/2018/07/12/vim%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/"/>
     <id>https://wuyanteng.github.io/2018/07/12/vim打开文件中文乱码问题/</id>
     <published>2018-07-12T04:16:26.000Z</published>
-    <updated>2018-07-12T06:08:15.331Z</updated>
+    <updated>2018-07-12T06:24:36.119Z</updated>
     
     <content type="html"><![CDATA[<pre><code>vim ~/.vimrc</code></pre><pre><code>set encoding=utf-8set fenc=utf-8set fencs=utf-8,usc-bom,euc-jp,gb18030,gbk,gbk2312,cp936</code></pre><pre><code>现在试试中文乱码就消失了</code></pre><p>GitHub参考：<a href="https://gist.github.com/jhezjkp/3405319" target="_blank" rel="noopener">.vimrc配置</a></p>]]></content>
     
