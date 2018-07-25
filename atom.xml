@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-07-12T06:24:36.119Z</updated>
+  <updated>2018-07-25T02:13:55.999Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mysql用户远程登录失败--Host is not allowed to connect to this MySQL server</title>
+    <link href="https://wuyanteng.github.io/2018/07/25/mysql%E7%94%A8%E6%88%B7%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%E5%A4%B1%E8%B4%A5/"/>
+    <id>https://wuyanteng.github.io/2018/07/25/mysql用户远程登录失败/</id>
+    <published>2018-07-25T02:13:55.000Z</published>
+    <updated>2018-07-25T02:13:55.999Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="故障描述"><a href="#故障描述" class="headerlink" title="故障描述"></a>故障描述</h4><pre><code>mysql远程登录失败，错误如下：Host &#39;X.X.X.X&#39; is not allowed to connect to this MySQL server.</code></pre><a id="more"></a><h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><pre><code>当前使用的用户不允许从远程登录</code></pre><h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>方案1：更改用户表</p><pre><code>mysql &gt; use mysql;mysql &gt; update user set host = &#39;%&#39; where user = &#39;usr_name&#39;;;其中， usr_name 用户名； 而 &#39;%&#39; 为通配符，表示匹配所有主机。</code></pre><p>方案2：命令行授权</p><pre><code>mysql &gt; grant all privileges on db_name.* to usr_name@&#39;%&#39; identified by &#39;user_password&#39;;mysql &gt; flush privileges ;其中，db_name 是数据库名， usr_name 用户名， pwd 密码。&#39;%&#39; 为通配符。</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;故障描述&quot;&gt;&lt;a href=&quot;#故障描述&quot; class=&quot;headerlink&quot; title=&quot;故障描述&quot;&gt;&lt;/a&gt;故障描述&lt;/h4&gt;&lt;pre&gt;&lt;code&gt;mysql远程登录失败，错误如下：
+Host &amp;#39;X.X.X.X&amp;#39; is not allowed to connect to this MySQL server.
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
+    
+      <category term="root远程登录" scheme="https://wuyanteng.github.io/tags/root%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"/>
+    
+  </entry>
   
   <entry>
     <title>vim打开文件中文乱码问题</title>
@@ -679,42 +705,6 @@ sar 命令将操作系统中选定的累计活动计数器的内容写到标准�
       <category term="if判断" scheme="https://wuyanteng.github.io/tags/if%E5%88%A4%E6%96%AD/"/>
     
       <category term="浮点数判断" scheme="https://wuyanteng.github.io/tags/%E6%B5%AE%E7%82%B9%E6%95%B0%E5%88%A4%E6%96%AD/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>curl命令详解</title>
-    <link href="https://wuyanteng.github.io/2018/05/09/curl%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/"/>
-    <id>https://wuyanteng.github.io/2018/05/09/curl命令详解/</id>
-    <published>2018-05-09T06:17:40.000Z</published>
-    <updated>2018-05-09T07:30:28.103Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>curl是一个利用URL规则在命令行下工作的强大文件传输工具。语法：# curl [option] [url]</code></pre><a id="more"></a><h5 id="常见参数"><a href="#常见参数" class="headerlink" title="常见参数"></a>常见参数</h5><pre><code>-A/--user-agent &lt;string&gt;          设置用户代理发送给服务器-b/--cookie &lt;name=string/file&gt;    cookie字符串或文件读取位置-c/--cookie-jar &lt;file&gt;            操作结束后把cookie写入到这个文件中-C/--continue-at &lt;offset&gt;         断点续转-D/--dump-header &lt;file&gt;           把header信息写入到该文件中-e/--referer                      来源网址-f/--fail                         连接失败时不显示http错误-o/--output                       把输出写到该文件中-O/--remote-name                  把输出写到该文件中，保留远程文件的文件名-r/--range &lt;range&gt;                检索来自HTTP/1.1或FTP服务器字节范围-s/--silent                       静音模式。不输出任何东西-T/--upload-file &lt;file&gt;          上传文件-u/--user &lt;user[:password]&gt;      设置服务器的用户和密码-w/--write-out [format]          什么输出完成后-x/--proxy &lt;host[:port]&gt;         在给定的端口上使用HTTP代理-#/--progress-bar                进度条显示当前的传送状态</code></pre><h5 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h5><pre><code>curl  http://www.baidu.com</code></pre><h5 id="保存访问的网页"><a href="#保存访问的网页" class="headerlink" title="保存访问的网页"></a>保存访问的网页</h5><pre><code>使用重定向功能保存curl http://www.baidu.com &gt;baidu.html</code></pre><pre><code>使用内置option选项保存curl -o qq.html http://www.qq.com</code></pre><h5 id="测试网页返回值"><a href="#测试网页返回值" class="headerlink" title="测试网页返回值"></a>测试网页返回值</h5><pre><code>curl -o /dev/null -s -w %{http_code} www.qq.com在脚本中，这是很常见的测试网站是否正常的用法</code></pre><h5 id="指定proxy服务器以及端口"><a href="#指定proxy服务器以及端口" class="headerlink" title="指定proxy服务器以及端口"></a>指定proxy服务器以及端口</h5><pre><code>通过-x 选项来支持设置http代理curl -x 10.10.10.100:1080 http://www.google.com</code></pre><h5 id="保存http的response里面的header信息"><a href="#保存http的response里面的header信息" class="headerlink" title="保存http的response里面的header信息"></a>保存http的response里面的header信息</h5><pre><code>curl -D header.txt http://www.qq.com</code></pre><h5 id="模仿浏览器User-agent"><a href="#模仿浏览器User-agent" class="headerlink" title="模仿浏览器User-agent"></a>模仿浏览器User-agent</h5><pre><code>curl -A &quot;Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/48 (like Gecko) Safari/48&quot; http://www.qq.com &gt; qq.html</code></pre><p>参考：<a href="https://youruseragent.info/commonua.en.htm" target="_blank" rel="noopener">所有版本User-agent列表</a></p><h5 id="伪造referer-盗链"><a href="#伪造referer-盗链" class="headerlink" title="伪造referer-盗链"></a>伪造referer-盗链</h5><pre><code>很多服务器会检查http访问的referer从而来控制访问。比如：你是先访问首页，然后再访问首页中的邮箱页面。其中这里访问邮箱的referer地址就是访问首页成功后的页面地址，如果服务器发现对邮箱页面访问的referer地址不是首页的地址，就断定那是个盗连了</code></pre><pre><code>curl中内置-e 选项可以自定义referercurl -e &quot;www.qq.com&quot; https://mail.qq.com</code></pre><h5 id="下载显示进度条"><a href="#下载显示进度条" class="headerlink" title="下载显示进度条"></a>下载显示进度条</h5><pre><code>curl -# -O https://codeload.github.com/shadowsocks/shadowsocks-windows/zip/master注：-#表示显示进度条</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;curl是一个利用URL规则在命令行下工作的强大文件传输工具。
-
-语法：
-# curl [option] [url]
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="curl" scheme="https://wuyanteng.github.io/tags/curl/"/>
-    
-      <category term="cookie" scheme="https://wuyanteng.github.io/tags/cookie/"/>
-    
-      <category term="POST" scheme="https://wuyanteng.github.io/tags/POST/"/>
-    
-      <category term="response" scheme="https://wuyanteng.github.io/tags/response/"/>
-    
-      <category term="模拟浏览器" scheme="https://wuyanteng.github.io/tags/%E6%A8%A1%E6%8B%9F%E6%B5%8F%E8%A7%88%E5%99%A8/"/>
-    
-      <category term="伪造referer" scheme="https://wuyanteng.github.io/tags/%E4%BC%AA%E9%80%A0referer/"/>
     
   </entry>
   
