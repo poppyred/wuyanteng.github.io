@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-08-06T08:05:13.185Z</updated>
+  <updated>2018-08-06T08:08:45.668Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://wuyanteng.github.io/2018/08/06/DNS-TLS-Public/"/>
     <id>https://wuyanteng.github.io/2018/08/06/DNS-TLS-Public/</id>
     <published>2018-08-06T07:57:13.000Z</published>
-    <updated>2018-08-06T08:05:13.185Z</updated>
+    <updated>2018-08-06T08:08:45.668Z</updated>
     
-    <content type="html"><![CDATA[<pre><code>Public DNS(TLS) </code></pre><h4 id="Cloudflare"><a href="#Cloudflare" class="headerlink" title="Cloudflare"></a>Cloudflare</h4><pre><code>1.1.1.1@8531.0.0.1@8532606:4700:4700::1111@8532606:4700:4700::1001@853</code></pre><a id="more"></a><h4 id="Quad9"><a href="#Quad9" class="headerlink" title="Quad9"></a>Quad9</h4><pre><code>9.9.9.9@853149.112.112.112@8532620:fe::fe@8532620:fe::9@853</code></pre><p>CleanBrowsing</p><pre><code>185.228.168.168@853185.228.168.169@8532a0d:2a00:1::@8532a0d:2a00:2::@853</code></pre><h4 id="Taipei"><a href="#Taipei" class="headerlink" title="Taipei"></a>Taipei</h4><pre><code>101.101.101.101@853101.102.103.104@853</code></pre>]]></content>
+    <content type="html"><![CDATA[<pre><code>Public DNS(TLS) </code></pre><h4 id="Cloudflare"><a href="#Cloudflare" class="headerlink" title="Cloudflare"></a>Cloudflare</h4><pre><code>1.1.1.1@8531.0.0.1@8532606:4700:4700::1111@8532606:4700:4700::1001@853</code></pre><a id="more"></a><h4 id="Quad9"><a href="#Quad9" class="headerlink" title="Quad9"></a>Quad9</h4><pre><code>9.9.9.9@853149.112.112.112@8532620:fe::fe@8532620:fe::9@853</code></pre><h4 id="CleanBrowsing"><a href="#CleanBrowsing" class="headerlink" title="CleanBrowsing"></a>CleanBrowsing</h4><pre><code>185.228.168.168@853185.228.168.169@8532a0d:2a00:1::@8532a0d:2a00:2::@853</code></pre><h4 id="Taipei"><a href="#Taipei" class="headerlink" title="Taipei"></a>Taipei</h4><pre><code>101.101.101.101@853101.102.103.104@853</code></pre>]]></content>
     
     <summary type="html">
     
