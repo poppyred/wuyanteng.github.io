@@ -2211,6 +2211,28 @@
     </entry>
     
     <entry>
+      <title>RouterOS启用HTTPS访问</title>
+      <link href="/2018/01/09/RouterOS%E5%90%AF%E7%94%A8HTTPS%E8%AE%BF%E9%97%AE/"/>
+      <url>/2018/01/09/RouterOS%E5%90%AF%E7%94%A8HTTPS%E8%AE%BF%E9%97%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> RouterOS </tag>
+            
+            <tag> ROS </tag>
+            
+            <tag> HTTPS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>MySQL数据库用户与权限管理3</title>
       <link href="/2018/01/08/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%863/"/>
       <url>/2018/01/08/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%863/</url>
@@ -2222,11 +2244,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MySQL </tag>
+            <tag> 用户管理 </tag>
             
             <tag> 数据库管理 </tag>
             
-            <tag> 用户管理 </tag>
+            <tag> MySQL </tag>
             
         </tags>
       
