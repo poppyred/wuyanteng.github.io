@@ -3,6 +3,34 @@
   
     
     <entry>
+      <title>编写expect交互类脚本</title>
+      <link href="/2018/08/09/%E7%BC%96%E5%86%99expect%E4%BA%A4%E4%BA%92%E7%B1%BB%E8%84%9A%E6%9C%AC/"/>
+      <url>/2018/08/09/%E7%BC%96%E5%86%99expect%E4%BA%A4%E4%BA%92%E7%B1%BB%E8%84%9A%E6%9C%AC/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> expect </tag>
+            
+            <tag> 自动输入密码 </tag>
+            
+            <tag> 交互式 </tag>
+            
+            <tag> 非交互 </tag>
+            
+            <tag> 使用ssh和expect监控RouterOS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>DNS TLS Public</title>
       <link href="/2018/08/06/DNS-TLS-Public/"/>
       <url>/2018/08/06/DNS-TLS-Public/</url>
@@ -2244,11 +2272,11 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> MySQL </tag>
+            
             <tag> 用户管理 </tag>
             
             <tag> 数据库管理 </tag>
-            
-            <tag> MySQL </tag>
             
         </tags>
       
@@ -2684,6 +2712,8 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -2693,8 +2723,6 @@
             <tag> consumer </tag>
             
             <tag> MQ </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -3058,9 +3086,9 @@
       
         <tags>
             
-            <tag> zookeeper </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> zookeeper </tag>
             
             <tag> codis </tag>
             
@@ -3084,9 +3112,9 @@
       
         <tags>
             
-            <tag> zookeeper </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> zookeeper </tag>
             
             <tag> codis </tag>
             
@@ -3214,11 +3242,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -3244,6 +3272,8 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3259,8 +3289,6 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -3394,9 +3422,9 @@
       
         <tags>
             
-            <tag> MQ </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> MQ </tag>
             
             <tag> Producer </tag>
             
@@ -4298,9 +4326,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> nginx </tag>
             
@@ -4880,9 +4908,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> nginx </tag>
             
@@ -4964,11 +4992,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -4984,11 +5012,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -6040,11 +6068,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
-            
-            <tag> 高级运维 </tag>
             
             <tag> 大数据 </tag>
             
