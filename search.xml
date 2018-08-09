@@ -1169,6 +1169,28 @@
     </entry>
     
     <entry>
+      <title>RouterOS时间同步</title>
+      <link href="/2018/03/09/RouterOS%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5/"/>
+      <url>/2018/03/09/RouterOS%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> RouterOS </tag>
+            
+            <tag> ROS </tag>
+            
+            <tag> NTP时间同步 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>记一次线上服务器频繁宕机</title>
       <link href="/2018/02/27/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%91%E7%B9%81%E5%AE%95%E6%9C%BA/"/>
       <url>/2018/02/27/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%91%E7%B9%81%E5%AE%95%E6%9C%BA/</url>
