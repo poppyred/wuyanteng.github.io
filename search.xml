@@ -586,9 +586,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> mongodb </tag>
-            
             <tag> mongo </tag>
+            
+            <tag> mongodb </tag>
             
             <tag> rs.slaveOk() </tag>
             
@@ -628,9 +628,9 @@
       
         <tags>
             
-            <tag> mongodb </tag>
-            
             <tag> mongo </tag>
+            
+            <tag> mongodb </tag>
             
             <tag> mongoexport </tag>
             
@@ -780,9 +780,9 @@
             
             <tag> expect </tag>
             
-            <tag> SSH </tag>
-            
             <tag> Ros </tag>
+            
+            <tag> SSH </tag>
             
             <tag> 交互 </tag>
             
@@ -1499,6 +1499,34 @@
             <tag> 高级运维 </tag>
             
             <tag> jumpserver </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>ssh方式备份RouterOS配置</title>
+      <link href="/2018/02/10/ssh%E6%96%B9%E5%BC%8F%E5%A4%87%E4%BB%BDRouterOS%E9%85%8D%E7%BD%AE/"/>
+      <url>/2018/02/10/ssh%E6%96%B9%E5%BC%8F%E5%A4%87%E4%BB%BDRouterOS%E9%85%8D%E7%BD%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> RouterOS </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> ssh </tag>
+            
+            <tag> expect </tag>
+            
+            <tag> Ros </tag>
+            
+            <tag> FTP </tag>
             
         </tags>
       
