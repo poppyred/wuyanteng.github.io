@@ -761,6 +761,38 @@
     </entry>
     
     <entry>
+      <title>通过ssh和expect监控RouterOS</title>
+      <link href="/2018/04/10/%E9%80%9A%E8%BF%87ssh%E5%92%8Cexpect%E7%9B%91%E6%8E%A7RouterOS/"/>
+      <url>/2018/04/10/%E9%80%9A%E8%BF%87ssh%E5%92%8Cexpect%E7%9B%91%E6%8E%A7RouterOS/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> RouterOS </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> expect </tag>
+            
+            <tag> SSH </tag>
+            
+            <tag> Ros </tag>
+            
+            <tag> 交互 </tag>
+            
+            <tag> 免交互 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Linux下route路由配置梳理</title>
       <link href="/2018/04/07/Linux%E4%B8%8Broute%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E6%A2%B3%E7%90%86/"/>
       <url>/2018/04/07/Linux%E4%B8%8Broute%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E6%A2%B3%E7%90%86/</url>
