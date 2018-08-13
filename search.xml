@@ -586,9 +586,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> mongo </tag>
-            
             <tag> mongodb </tag>
+            
+            <tag> mongo </tag>
             
             <tag> rs.slaveOk() </tag>
             
@@ -628,9 +628,9 @@
       
         <tags>
             
-            <tag> mongo </tag>
-            
             <tag> mongodb </tag>
+            
+            <tag> mongo </tag>
             
             <tag> mongoexport </tag>
             
@@ -1395,7 +1395,7 @@
     </entry>
     
     <entry>
-      <title>gentoo rc-update启动项管理</title>
+      <title>gentoo rc-update启动项自启管理</title>
       <link href="/2018/02/16/gentoo-rc-update%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%AE%A1%E7%90%86/"/>
       <url>/2018/02/16/gentoo-rc-update%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%AE%A1%E7%90%86/</url>
 	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
@@ -1408,7 +1408,17 @@
             
             <tag> gentoo </tag>
             
+            <tag> rc.local </tag>
+            
+            <tag> local.d </tag>
+            
             <tag> rc-update </tag>
+            
+            <tag> 自启动 </tag>
+            
+            <tag> 开机自启动 </tag>
+            
+            <tag> 服务自启 </tag>
             
         </tags>
       
@@ -2336,9 +2346,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 数据库管理 </tag>
-            
             <tag> 用户管理 </tag>
+            
+            <tag> 数据库管理 </tag>
             
         </tags>
       
@@ -4114,11 +4124,11 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
