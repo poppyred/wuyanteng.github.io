@@ -12,8 +12,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> bind </tag>
             
             <tag> bind9 </tag>
@@ -25,6 +23,8 @@
             <tag> 迭代DNS </tag>
             
             <tag> root hint </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -176,11 +176,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MongoDB </tag>
-            
             <tag> SECONDARY </tag>
             
             <tag> PRIMARY </tag>
+            
+            <tag> MongoDB </tag>
             
             <tag> slave </tag>
             
@@ -416,11 +416,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MongoDB </tag>
-            
             <tag> SECONDARY </tag>
             
             <tag> PRIMARY </tag>
+            
+            <tag> MongoDB </tag>
             
             <tag> STARTUP </tag>
             
@@ -1384,9 +1384,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -1408,9 +1408,9 @@
             
             <tag> 高可用 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 路由 </tag>
             
@@ -2374,9 +2374,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 数据库管理 </tag>
-            
             <tag> 用户管理 </tag>
+            
+            <tag> 数据库管理 </tag>
             
         </tags>
       
@@ -3120,13 +3120,13 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> CentOS7 </tag>
+            
             <tag> Gitlab </tag>
             
             <tag> Git服务器 </tag>
             
             <tag> Docker </tag>
-            
-            <tag> CentOS7 </tag>
             
         </tags>
       
@@ -3144,9 +3144,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Gitlab </tag>
-            
             <tag> docker </tag>
+            
+            <tag> Gitlab </tag>
             
             <tag> Jenkins </tag>
             
@@ -3234,9 +3234,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> CentOS7 </tag>
-            
             <tag> docker </tag>
+            
+            <tag> CentOS7 </tag>
             
             <tag> docker-ce </tag>
             
@@ -4426,9 +4426,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -5008,9 +5008,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -5092,11 +5092,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -6144,9 +6144,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> DNS </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> 递归DNS服务器 </tag>
             
@@ -6342,9 +6342,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> DTK </tag>
-            
             <tag> BIOS </tag>
+            
+            <tag> DTK </tag>
             
         </tags>
       
@@ -6408,9 +6408,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> DNS </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> dingo </tag>
             
