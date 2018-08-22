@@ -12,6 +12,8 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> bind </tag>
             
             <tag> bind9 </tag>
@@ -23,8 +25,6 @@
             <tag> 迭代DNS </tag>
             
             <tag> root hint </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -2374,9 +2374,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
             
         </tags>
       
@@ -2812,8 +2812,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -2823,6 +2821,8 @@
             <tag> consumer </tag>
             
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -3186,9 +3186,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -3212,9 +3212,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -3342,11 +3342,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -3372,8 +3372,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3389,6 +3387,8 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -3522,9 +3522,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> Producer </tag>
             
@@ -5112,11 +5112,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -6144,9 +6144,9 @@
       
         <tags>
             
-            <tag> DNS </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> DNS </tag>
             
             <tag> 递归DNS服务器 </tag>
             
@@ -6168,11 +6168,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> 大数据 </tag>
             
@@ -6342,9 +6342,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> BIOS </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
             
         </tags>
       
@@ -6408,9 +6408,9 @@
       
         <tags>
             
-            <tag> DNS </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> DNS </tag>
             
             <tag> dingo </tag>
             
