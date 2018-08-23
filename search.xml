@@ -3,6 +3,30 @@
   
     
     <entry>
+      <title>OpenVPN编译安装部署</title>
+      <link href="/2018/08/23/OpenVPN%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/"/>
+      <url>/2018/08/23/OpenVPN%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ovpn </tag>
+            
+            <tag> openvpn </tag>
+            
+            <tag> vpn </tag>
+            
+            <tag> easy-rsa3 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Bind9主从同步部署</title>
       <link href="/2018/08/17/Bind9%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E9%83%A8%E7%BD%B2/"/>
       <url>/2018/08/17/Bind9%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E9%83%A8%E7%BD%B2/</url>
@@ -2374,9 +2398,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 数据库管理 </tag>
-            
             <tag> 用户管理 </tag>
+            
+            <tag> 数据库管理 </tag>
             
         </tags>
       
