@@ -4935,6 +4935,34 @@
     </entry>
     
     <entry>
+      <title>关于DNS集群并发优化-瓶颈结论</title>
+      <link href="/2017/08/24/%E5%85%B3%E4%BA%8EDNS%E9%9B%86%E7%BE%A4%E5%B9%B6%E5%8F%91%E4%BC%98%E5%8C%96-%E7%93%B6%E9%A2%88%E7%BB%93%E8%AE%BA/"/>
+      <url>/2017/08/24/%E5%85%B3%E4%BA%8EDNS%E9%9B%86%E7%BE%A4%E5%B9%B6%E5%8F%91%E4%BC%98%E5%8C%96-%E7%93%B6%E9%A2%88%E7%BB%93%E8%AE%BA/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> bind </tag>
+            
+            <tag> bind9 </tag>
+            
+            <tag> DNS </tag>
+            
+            <tag> DNS性能瓶颈 </tag>
+            
+            <tag> unbound </tag>
+            
+            <tag> NSD </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>mysql故障处理之匿名登陆问题</title>
       <link href="/2017/08/22/MySQL%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E4%B9%8B%E5%8C%BF%E5%90%8D%E7%99%BB%E9%99%86%E9%97%AE%E9%A2%98/"/>
       <url>/2017/08/22/MySQL%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E4%B9%8B%E5%8C%BF%E5%90%8D%E7%99%BB%E9%99%86%E9%97%AE%E9%A2%98/</url>
@@ -6172,11 +6200,11 @@
             
             <tag> DNS </tag>
             
+            <tag> unbound </tag>
+            
             <tag> 递归DNS服务器 </tag>
             
             <tag> DNScrypts </tag>
-            
-            <tag> unbound </tag>
             
         </tags>
       
