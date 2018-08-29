@@ -3,6 +3,26 @@
   
     
     <entry>
+      <title>shell数组</title>
+      <link href="/2018/08/28/shell%E6%95%B0%E7%BB%84/"/>
+      <url>/2018/08/28/shell%E6%95%B0%E7%BB%84/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> 数组 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>OpenVPN编译安装部署</title>
       <link href="/2018/08/23/OpenVPN%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/"/>
       <url>/2018/08/23/OpenVPN%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/</url>
@@ -2396,11 +2416,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MySQL </tag>
-            
             <tag> 用户管理 </tag>
             
             <tag> 数据库管理 </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -4176,11 +4196,11 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -5718,11 +5738,11 @@
       
         <tags>
             
+            <tag> Linux基础 </tag>
+            
             <tag> Apache </tag>
             
             <tag> web认证 </tag>
-            
-            <tag> Linux基础 </tag>
             
         </tags>
       
@@ -5738,11 +5758,11 @@
       
         <tags>
             
-            <tag> Linux基础 </tag>
-            
             <tag> cpu </tag>
             
             <tag> Dell </tag>
+            
+            <tag> Linux基础 </tag>
             
         </tags>
       
