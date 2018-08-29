@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-08-29T10:39:38.817Z</updated>
+  <updated>2018-08-29T10:44:38.462Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://wuyanteng.github.io/2018/08/28/shell%E6%95%B0%E7%BB%84/"/>
     <id>https://wuyanteng.github.io/2018/08/28/shell数组/</id>
     <published>2018-08-28T09:24:20.000Z</published>
-    <updated>2018-08-29T10:39:38.817Z</updated>
+    <updated>2018-08-29T10:44:38.462Z</updated>
     
-    <content type="html"><![CDATA[<pre><code>shell数组</code></pre><a id="more"></a><h4 id="数组的定义"><a href="#数组的定义" class="headerlink" title="#### 数组的定义"></a>#### 数组的定义</h4><pre><code>在Shell中，用括号来表示数组, 数组元素使用“空格” 分隔开，如：#数组定义name=(tom jerry jackson free gary)  #读取数组读取数组元素值的一般格式是：${数组名[下标]}，注：下标是从0开始的例如：echo ${name[0]}       #获取第1个元素值echo ${name[1]}       #获取第2个元素值echo ${name[2]}       #获取第3个元素值使用“*”或“@”符号可以获取数组中的所有元素echo ${name=[*]}echo $(name=[@])</code></pre><h4 id="数组删除"><a href="#数组删除" class="headerlink" title="数组删除"></a>数组删除</h4><pre><code>直接通过：&quot;unset 数组[下标]&quot; 可以清除相应的元素；若不带下标，则清除整个数据。 只清除第1个元素a=(1 2 3 4 5)unset a[0]echo ${a[*]}2 3 4 5清除整个数组元素unset a </code></pre><h4 id="数组之分片"><a href="#数组之分片" class="headerlink" title="数组之分片"></a>数组之分片</h4><pre><code>直接通过 &quot;${数组名[@或*]:起始位置:长度}&quot; 切片原先数组,然后返回字符串。如下：a=(1 2 3 4 5)       #定义数组echo ${a[@]:0:3}    #分片 1 2 3echo ${a[@]:1:4}2 3 4 5如果加上”()”，将得到切片数组，下面例子中，c就是一个新数据。c=(${a[@]:1:4})echo ${#c[@]}      #统计新数据c的元素总个数4echo ${c[*]}       #重新打印c的新数据数组 2 3 4 5  </code></pre><h4 id="数组之替换"><a href="#数组之替换" class="headerlink" title="数组之替换"></a>数组之替换</h4><pre><code>调用方法是：&quot;${数组名[@或*]/查找字符/替换字符}&quot; 注：该操作不会改变原先数组内容，如果需要修改，可以看下面例子，重新定义数据。# name=(gary tom jerry jackson)# echo ${name[@]/jackson/green}   #查找字符jackson，替换字符为greengary tom jerry green# echo ${name[@]}                 #可以看到，数组替换不会改变原数组的内容gary tom jerry jackson# name2=(${name[@]/jackson/green})  #但可以进行重新赋值来实现数组替换# echo ${name2[@]}gary tom jerry green</code></pre><pre><code>关于数组相关shell案例，有时间补充。。。</code></pre>]]></content>
+    <content type="html"><![CDATA[<pre><code>shell数组</code></pre><a id="more"></a><h4 id="数组的定义"><a href="#数组的定义" class="headerlink" title="数组的定义"></a>数组的定义</h4><pre><code>在Shell中，用括号来表示数组, 数组元素使用“空格” 分隔开，如：#数组定义name=(tom jerry jackson free gary)  #读取数组读取数组元素值的一般格式是：${数组名[下标]}，注：下标是从0开始的例如：echo ${name[0]}       #获取第1个元素值echo ${name[1]}       #获取第2个元素值echo ${name[2]}       #获取第3个元素值使用“*”或“@”符号可以获取数组中的所有元素echo ${name=[*]}echo $(name=[@])</code></pre><h4 id="数组删除"><a href="#数组删除" class="headerlink" title="数组删除"></a>数组删除</h4><pre><code>直接通过：&quot;unset 数组[下标]&quot; 可以清除相应的元素；若不带下标，则清除整个数据。 只清除第1个元素a=(1 2 3 4 5)unset a[0]echo ${a[*]}2 3 4 5清除整个数组元素unset a </code></pre><h4 id="数组之分片"><a href="#数组之分片" class="headerlink" title="数组之分片"></a>数组之分片</h4><pre><code>直接通过 &quot;${数组名[@或*]:起始位置:长度}&quot; 切片原先数组,然后返回字符串。如下：a=(1 2 3 4 5)       #定义数组echo ${a[@]:0:3}    #分片 1 2 3echo ${a[@]:1:4}2 3 4 5如果加上”()”，将得到切片数组，下面例子中，c就是一个新数据。c=(${a[@]:1:4})echo ${#c[@]}      #统计新数据c的元素总个数4echo ${c[*]}       #重新打印c的新数据数组 2 3 4 5  </code></pre><h4 id="数组之替换"><a href="#数组之替换" class="headerlink" title="数组之替换"></a>数组之替换</h4><pre><code>调用方法是：&quot;${数组名[@或*]/查找字符/替换字符}&quot; 注：该操作不会改变原先数组内容，如果需要修改，可以看下面例子，重新定义数据。# name=(gary tom jerry jackson)# echo ${name[@]/jackson/green}   #查找字符jackson，替换字符为greengary tom jerry green# echo ${name[@]}                 #可以看到，数组替换不会改变原数组的内容gary tom jerry jackson# name2=(${name[@]/jackson/green})  #但可以进行重新赋值来实现数组替换# echo ${name2[@]}gary tom jerry green</code></pre><pre><code>关于数组相关shell案例，有时间补充。。。</code></pre>]]></content>
     
     <summary type="html">
     

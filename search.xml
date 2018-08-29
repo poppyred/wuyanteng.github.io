@@ -1216,9 +1216,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> nova </tag>
-            
             <tag> libvert </tag>
+            
+            <tag> nova </tag>
             
             <tag> 热迁移 live migration </tag>
             
@@ -2180,9 +2180,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> 高级优化 </tag>
-            
             <tag> nova </tag>
+            
+            <tag> 高级优化 </tag>
             
             <tag> CPU超配 </tag>
             
@@ -2416,11 +2416,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> 用户管理 </tag>
+            <tag> MySQL </tag>
             
             <tag> 数据库管理 </tag>
             
-            <tag> MySQL </tag>
+            <tag> 用户管理 </tag>
             
         </tags>
       
@@ -4196,11 +4196,11 @@
       
         <tags>
             
+            <tag> Nginx </tag>
+            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -5738,11 +5738,11 @@
       
         <tags>
             
-            <tag> Linux基础 </tag>
-            
             <tag> Apache </tag>
             
             <tag> web认证 </tag>
+            
+            <tag> Linux基础 </tag>
             
         </tags>
       
@@ -5758,11 +5758,11 @@
       
         <tags>
             
+            <tag> Linux基础 </tag>
+            
             <tag> cpu </tag>
             
             <tag> Dell </tag>
-            
-            <tag> Linux基础 </tag>
             
         </tags>
       
