@@ -3,6 +3,28 @@
   
     
     <entry>
+      <title>shell脚本中嵌入ssh无密钥登陆</title>
+      <link href="/2018/08/31/shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%B5%8C%E5%85%A5ssh%E6%97%A0%E5%AF%86%E9%92%A5%E7%99%BB%E9%99%86/"/>
+      <url>/2018/08/31/shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%B5%8C%E5%85%A5ssh%E6%97%A0%E5%AF%86%E9%92%A5%E7%99%BB%E9%99%86/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> shell </tag>
+            
+            <tag> ssh </tag>
+            
+            <tag> shell脚本 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>rsync限速实例</title>
       <link href="/2018/08/31/rsync%E9%99%90%E9%80%9F%E5%AE%9E%E4%BE%8B/"/>
       <url>/2018/08/31/rsync%E9%99%90%E9%80%9F%E5%AE%9E%E4%BE%8B/</url>
@@ -1194,9 +1216,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> gentoo </tag>
-            
             <tag> emerge </tag>
+            
+            <tag> gentoo </tag>
             
             <tag> 编译nginx </tag>
             
@@ -1792,9 +1814,9 @@
             
             <tag> Gentoo </tag>
             
-            <tag> emerge </tag>
-            
             <tag> Funtoo </tag>
+            
+            <tag> emerge </tag>
             
             <tag> USE标记 </tag>
             
@@ -2440,9 +2462,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
             
         </tags>
       
@@ -4218,11 +4240,11 @@
       
         <tags>
             
+            <tag> Nginx </tag>
+            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -4520,11 +4542,11 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> 高可用 </tag>
+            
             <tag> lvs </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> 高可用 </tag>
             
             <tag> dns </tag>
             
@@ -5706,9 +5728,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> Ansible </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       

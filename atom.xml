@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-08-31T03:54:35.617Z</updated>
+  <updated>2018-08-31T06:38:47.875Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -17,11 +17,38 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>shell脚本中嵌入ssh无密钥登陆</title>
+    <link href="https://wuyanteng.github.io/2018/08/31/shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%B5%8C%E5%85%A5ssh%E6%97%A0%E5%AF%86%E9%92%A5%E7%99%BB%E9%99%86/"/>
+    <id>https://wuyanteng.github.io/2018/08/31/shell脚本中嵌入ssh无密钥登陆/</id>
+    <published>2018-08-31T06:17:21.000Z</published>
+    <updated>2018-08-31T06:38:47.875Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><pre><code>有这样一个生产场景: zabbix-agent只在server1服务器有安装并提供监控服务，想使用这一台server1服务器通过编写shell脚本去监控其他服务器运行的服务，比如：服务运行状态、log日志统计并发等等。如何做？</code></pre><a id="more"></a><p>场景分析</p><pre><code>server1需要与其他server创建SSH互信，shell中通过ssh来远程登陆到其他服务器来执行命令。那么问题来了？命令执行完成，如何在shell中退出并将命令执行后的结果返回到server1中，并让zabbix去监控呢？</code></pre><h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h4 id="将server1的密钥上传到101服务器实现ssh互信"><a href="#将server1的密钥上传到101服务器实现ssh互信" class="headerlink" title="将server1的密钥上传到101服务器实现ssh互信"></a>将server1的密钥上传到101服务器实现ssh互信</h4><pre><code>首先在server1以root命令生成SSH密钥[root@web01 ~]# ssh-keygen -t dsaGenerating public/private dsa key pair.Enter file in which to save the key (/root/.ssh/id_dsa):Created directory &#39;/root/.ssh&#39;.Enter passphrase (empty for no passphrase):Enter same passphrase again: Your identification has been saved in /root/.ssh/id_dsa.Your public key has been saved in /root/.ssh/id_dsa.pub.The key fingerprint is:25:93:78:e9:01:2d:82:db:cb:0b:34:f7:0c:a9:1b:11 root@web01The key&#39;s randomart image is:+--[ DSA 1024]----+|   .  ..         ||  E . .o.o       ||   + o..B .      ||  = =  o =       || . * =  S        ||  + o o          ||   + .           ||  . .            ||                 |+-----------------+#检查密钥文件[root@web01 ~]# ll /root/.ssh/total 8-rw------- 1 root root 736 2017-08-06 15:17 id_dsa-rw-r--r-- 1 root root 600 2017-08-06 15:17 id_dsa.pub#将生成的.pub密钥上传到所需的服务器上（比如：101），实现ssh免密登陆 ssh-copy-id -i ~/.ssh/id_dsa.pub root@10.10.10.101#确认远端101服务器密钥上传成功[root@101 ~]# ll /root/.ssh/total 8-rw------- 1 root root 600 2017-08-06 15:29 authorized_keys-rw-r--r-- 1 root root 393 2017-08-05 11:03 known_hosts#在server1服务器无密码远程登录测试[root@web01 ~]# ssh root@10.10.10.101注意：如果远程登录失败,需要配置ssh允许root登录，并重启ssh服务。</code></pre><h4 id="在101服务器生成密钥上传到server1服务器，实现反向ssh互信"><a href="#在101服务器生成密钥上传到server1服务器，实现反向ssh互信" class="headerlink" title="在101服务器生成密钥上传到server1服务器，实现反向ssh互信"></a>在101服务器生成密钥上传到server1服务器，实现反向ssh互信</h4><pre><code>在101服务器，生成dsa密钥，并上传到server1服务器，实现互信。</code></pre><h4 id="脚本编写"><a href="#脚本编写" class="headerlink" title="脚本编写"></a>脚本编写</h4><pre><code>接下来就可以愉快的在server1编写所需的shell脚本了，范例如下：[root@web01 ~]# cat /opt/check_service.sh</code></pre><pre><code>#!/bin/bashDNS_IP=10.0.0.101FILE1=/var/log/dns.logFILE2=/tmp/pri_dns.logNOW_UNIX=`date +%s`UNIX=`expr ${NOW_UNIX} - 60` #本地文件清理rm -f $FILE2#SSH DNS并发信息获取ssh root@${DNS_IP} &gt; /dev/null 2&gt;&amp;1 &lt;&lt; EOF    egrep &quot;${UNIX}&quot; $FILE1|wc -l &gt;$FILE2    scp -r $FILE2 root@server1:/tmp/     exitEOF</code></pre><pre><code>脚本逻辑：(1)定义所需环境变量(2)通过如下方式在shell中嵌入SSH远程登录并在远程服务器执行命令   ssh root@10.10.10.101 &gt; /dev/null 2&gt;&amp;1 &lt;&lt; EOF      comm1...      comm2...      comm3...      exit   EOF在上面的例子中，远端执行完毕后，通过scp方式，将结果传输到server1服务器的/tmp目录下，最后再编写zabbix自定义key来实现监控。</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;适用场景&quot;&gt;&lt;a href=&quot;#适用场景&quot; class=&quot;headerlink&quot; title=&quot;适用场景&quot;&gt;&lt;/a&gt;适用场景&lt;/h4&gt;&lt;pre&gt;&lt;code&gt;有这样一个生产场景: zabbix-agent只在server1服务器有安装并提供监控服务，想使用这一台server1服务器通过编写shell脚本去监控其他服务器运行的服务，比如：服务运行状态、log日志统计并发等等。如何做？
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="shell" scheme="https://wuyanteng.github.io/tags/shell/"/>
+    
+      <category term="ssh" scheme="https://wuyanteng.github.io/tags/ssh/"/>
+    
+      <category term="shell脚本" scheme="https://wuyanteng.github.io/tags/shell%E8%84%9A%E6%9C%AC/"/>
+    
+  </entry>
+  
+  <entry>
     <title>rsync限速实例</title>
     <link href="https://wuyanteng.github.io/2018/08/31/rsync%E9%99%90%E9%80%9F%E5%AE%9E%E4%BE%8B/"/>
     <id>https://wuyanteng.github.io/2018/08/31/rsync限速实例/</id>
     <published>2018-08-31T03:54:35.000Z</published>
-    <updated>2018-08-31T03:54:35.617Z</updated>
+    <updated>2018-08-31T04:02:31.533Z</updated>
     
     <content type="html"><![CDATA[<h4 id="场景介绍"><a href="#场景介绍" class="headerlink" title="场景介绍"></a>场景介绍</h4><pre><code>生产环境有这样的需求，需要跨机房传输TB级文件，但又不想其带宽占用的太厉害而影响了其他业务，这时候就需要使用rsync的限速功能了，简单扯下</code></pre><a id="more"></a><h4 id="rsync限速参数-–bwlimit"><a href="#rsync限速参数-–bwlimit" class="headerlink" title="rsync限速参数: –bwlimit"></a>rsync限速参数: –bwlimit</h4><pre><code>--bwlimit=100   单位：KBPS, 100意思是 传输速度限制100KB/s，也就是限速大概1MB的速度。再比如：想要限速50MB的速度，那么应该设置为 --bwlimit=5000</code></pre><h4 id="rsync限速传输命令"><a href="#rsync限速传输命令" class="headerlink" title="rsync限速传输命令"></a>rsync限速传输命令</h4><pre><code>参考：time rsync --port 873 -ravPz ./2018* rsync@X.X.X.X::logfile/2018/H5/</code></pre>]]></content>
     
@@ -608,36 +635,6 @@ wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.2.0.tgz
       <category term="mongod" scheme="https://wuyanteng.github.io/tags/mongod/"/>
     
       <category term="二进制版" scheme="https://wuyanteng.github.io/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%89%88/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>单独运行shell脚本与crontab运行shell脚本的区别</title>
-    <link href="https://wuyanteng.github.io/2018/06/02/%E5%8D%95%E7%8B%AC%E8%BF%90%E8%A1%8Cshell%E8%84%9A%E6%9C%AC%E4%B8%8Ecrontab%E8%BF%90%E8%A1%8Cshell%E8%84%9A%E6%9C%AC%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
-    <id>https://wuyanteng.github.io/2018/06/02/单独运行shell脚本与crontab运行shell脚本的区别/</id>
-    <published>2018-06-02T00:10:57.000Z</published>
-    <updated>2018-06-02T00:19:50.923Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>crontab运行脚本存在两大问题：环境变量和路径.现象：单独运行脚本没问题，但用crontab定时运行脚本就报错，cron日志只显示执行过了命令，但运行结果不是我们想要的，因为中间过程中出现了错误。</code></pre><a id="more"></a><h5 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h5><pre><code>常常写脚本，要能够基本判断某个命令是否是shell内部命令（所支持的命令），外部命令在脚本中需要使用命令绝对路径，否则crontab去执行这个脚本时会出现错误。外部命令如：python、jq等等解决方法：命令使用绝对路径即可（可使用which命令查看）</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;crontab运行脚本存在两大问题：环境变量和路径.
-现象：单独运行脚本没问题，但用crontab定时运行脚本就报错，cron日志只显示执行过了命令，但运行结果不是我们想要的，因为中间过程中出现了错误。
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="shell" scheme="https://wuyanteng.github.io/tags/shell/"/>
-    
-      <category term="crontab" scheme="https://wuyanteng.github.io/tags/crontab/"/>
-    
-      <category term="外部命令" scheme="https://wuyanteng.github.io/tags/%E5%A4%96%E9%83%A8%E5%91%BD%E4%BB%A4/"/>
-    
-      <category term="内部命令" scheme="https://wuyanteng.github.io/tags/%E5%86%85%E9%83%A8%E5%91%BD%E4%BB%A4/"/>
     
   </entry>
   
