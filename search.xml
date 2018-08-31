@@ -3,6 +3,28 @@
   
     
     <entry>
+      <title>rsync限速实例</title>
+      <link href="/2018/08/31/rsync%E9%99%90%E9%80%9F%E5%AE%9E%E4%BE%8B/"/>
+      <url>/2018/08/31/rsync%E9%99%90%E9%80%9F%E5%AE%9E%E4%BE%8B/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> rsync </tag>
+            
+            <tag> rsync限速 </tag>
+            
+            <tag> bwlimit </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>shell数组</title>
       <link href="/2018/08/28/shell%E6%95%B0%E7%BB%84/"/>
       <url>/2018/08/28/shell%E6%95%B0%E7%BB%84/</url>
@@ -1172,9 +1194,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> emerge </tag>
-            
             <tag> gentoo </tag>
+            
+            <tag> emerge </tag>
             
             <tag> 编译nginx </tag>
             
@@ -1216,9 +1238,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> libvert </tag>
-            
             <tag> nova </tag>
+            
+            <tag> libvert </tag>
             
             <tag> 热迁移 live migration </tag>
             
@@ -1770,9 +1792,9 @@
             
             <tag> Gentoo </tag>
             
-            <tag> Funtoo </tag>
-            
             <tag> emerge </tag>
+            
+            <tag> Funtoo </tag>
             
             <tag> USE标记 </tag>
             
@@ -2180,9 +2202,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> nova </tag>
-            
             <tag> 高级优化 </tag>
+            
+            <tag> nova </tag>
             
             <tag> CPU超配 </tag>
             
@@ -2418,9 +2440,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 数据库管理 </tag>
-            
             <tag> 用户管理 </tag>
+            
+            <tag> 数据库管理 </tag>
             
         </tags>
       
@@ -4196,11 +4218,11 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -4498,11 +4520,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> 高可用 </tag>
-            
             <tag> lvs </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> 高可用 </tag>
             
             <tag> dns </tag>
             
@@ -5684,9 +5706,9 @@
       
         <tags>
             
-            <tag> Ansible </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> Ansible </tag>
             
         </tags>
       
