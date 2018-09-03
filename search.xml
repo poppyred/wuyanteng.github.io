@@ -3,6 +3,16 @@
   
     
     <entry>
+      <title>You should know Trojan</title>
+      <link href="/2018/09/03/You-should-know-Trojan/"/>
+      <url>/2018/09/03/You-should-know-Trojan/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+    </entry>
+    
+    <entry>
       <title>基于OpenSSL自建CA和颁发SSL证书</title>
       <link href="/2018/09/03/%E5%9F%BA%E4%BA%8EOpenSSL%E8%87%AA%E5%BB%BACA%E5%92%8C%E9%A2%81%E5%8F%91SSL%E8%AF%81%E4%B9%A6/"/>
       <url>/2018/09/03/%E5%9F%BA%E4%BA%8EOpenSSL%E8%87%AA%E5%BB%BACA%E5%92%8C%E9%A2%81%E5%8F%91SSL%E8%AF%81%E4%B9%A6/</url>
@@ -2488,9 +2498,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
             
         </tags>
       
@@ -2926,8 +2936,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -2937,6 +2945,8 @@
             <tag> consumer </tag>
             
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -3300,9 +3310,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -3326,9 +3336,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -3456,11 +3466,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -3486,8 +3496,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3503,6 +3511,8 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -3636,9 +3646,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> Producer </tag>
             
@@ -4266,11 +4276,11 @@
       
         <tags>
             
+            <tag> Nginx </tag>
+            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
@@ -4412,9 +4422,9 @@
             
             <tag> PHP </tag>
             
-            <tag> tmpfs </tag>
-            
             <tag> 内存 </tag>
+            
+            <tag> tmpfs </tag>
             
             <tag> VM </tag>
             
@@ -4540,9 +4550,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -5150,9 +5160,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -5234,11 +5244,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -5254,11 +5264,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -6310,11 +6320,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> 大数据 </tag>
             
@@ -6484,9 +6494,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> BIOS </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
             
         </tags>
       
