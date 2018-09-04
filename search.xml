@@ -3,6 +3,38 @@
   
     
     <entry>
+      <title>certbot免费证书申请</title>
+      <link href="/2018/09/04/certbot%E5%85%8D%E8%B4%B9%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/"/>
+      <url>/2018/09/04/certbot%E5%85%8D%E8%B4%B9%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> HTTPS </tag>
+            
+            <tag> SSL </tag>
+            
+            <tag> 免费SSL证书 </tag>
+            
+            <tag> crt </tag>
+            
+            <tag> pem </tag>
+            
+            <tag> certbot </tag>
+            
+            <tag> Let&#39;s Encrypt </tag>
+            
+            <tag> SSL证书自动续签 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>基于OpenSSL自建CA和颁发SSL证书</title>
       <link href="/2018/09/03/%E5%9F%BA%E4%BA%8EOpenSSL%E8%87%AA%E5%BB%BACA%E5%92%8C%E9%A2%81%E5%8F%91SSL%E8%AF%81%E4%B9%A6/"/>
       <url>/2018/09/03/%E5%9F%BA%E4%BA%8EOpenSSL%E8%87%AA%E5%BB%BACA%E5%92%8C%E9%A2%81%E5%8F%91SSL%E8%AF%81%E4%B9%A6/</url>
@@ -14,13 +46,13 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> pem </tag>
+            
             <tag> OpenSSL </tag>
             
             <tag> CA </tag>
             
             <tag> SSL证书 </tag>
-            
-            <tag> pem </tag>
             
             <tag> csr </tag>
             
