@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-09-04T07:09:15.064Z</updated>
+  <updated>2018-09-07T12:51:11.708Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>编译安装openssl</title>
+    <link href="https://wuyanteng.github.io/2018/09/07/%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85openssl/"/>
+    <id>https://wuyanteng.github.io/2018/09/07/编译安装openssl/</id>
+    <published>2018-09-07T12:40:12.000Z</published>
+    <updated>2018-09-07T12:51:11.708Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>本文主要记录openssl编译安装以及lib库的正确加载问题注：如果之前有yum或apt安装过openssl，建议卸载干净再继续。不建议手动删除老版本文件，否则后果可能很严重。</code></pre><a id="more"></a><p>编译安装openssl</p><p>官网：<a href="https://www.openssl.org/source/" target="_blank" rel="noopener">下载</a></p><pre><code>wget https://www.openssl.org/source/openssl-1.0.2p.tar.gztar -xzf openssl-1.0.2p.tar.gzcd openssl-1.0.2p./config --prefix=/usr/local/opensslmake &amp;&amp; make install</code></pre><pre><code>命令软链【或添加环境变量均可】ln -sv /usr/local/openssl/bin/openssl /usr/bin/opensslopenssl version</code></pre><pre><code>打印openssl库文件所依赖的共享库列表ldd /usr/local/openssl/bin/openssl</code></pre><pre><code>加载openssl新版lib库cat /etc/ld.so.conf新增如下行：/usr/local/openssl/lib生效ldconfig /etc/ld.so.conf</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;本文主要记录openssl编译安装以及lib库的正确加载问题
+
+注：如果之前有yum或apt安装过openssl，建议卸载干净再继续。不建议手动删除老版本文件，否则后果可能很严重。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="openssl" scheme="https://wuyanteng.github.io/tags/openssl/"/>
+    
+      <category term="libssl" scheme="https://wuyanteng.github.io/tags/libssl/"/>
+    
+      <category term="libcrypto" scheme="https://wuyanteng.github.io/tags/libcrypto/"/>
+    
+  </entry>
   
   <entry>
     <title>certbot免费证书申请</title>
@@ -607,49 +636,6 @@ UserParameter=mysql.slave[*],/var/lib/mysql/check_mysql_slave.sh $1
       <category term="Cluster" scheme="https://wuyanteng.github.io/tags/Cluster/"/>
     
       <category term="MySQL" scheme="https://wuyanteng.github.io/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx日志配合iptables封IP防CC攻击</title>
-    <link href="https://wuyanteng.github.io/2018/06/12/nginx%E6%97%A5%E5%BF%97%E9%85%8D%E5%90%88iptables%E5%B0%81IP%E9%98%B2CC%E6%94%BB%E5%87%BB/"/>
-    <id>https://wuyanteng.github.io/2018/06/12/nginx日志配合iptables封IP防CC攻击/</id>
-    <published>2018-06-12T07:30:44.000Z</published>
-    <updated>2018-06-12T08:30:07.776Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>通过分析nginx日志找出请求数较大的IP，并用iptables封掉。</code></pre><p>编写脚本</p><pre><code>#!/bin/bash#定义访问次数上限100num=100LOG_DIR=/var/log/nginxcd $LOG_DIR#定义筛选访问量＞100的IP地址IP=`tail access.log -n 1000|awk &#39;{print $1}&#39;|sort|uniq -c|sort -rn|awk &#39;{if ($1&gt;&#39;$num&#39;){print $2}}&#39;`for i in $IP#读取最新1000条记录，如果单IP超过100条就封掉。do      iptables -I INPUT -p tcp -s $i --dport 80 -j DROPdone</code></pre><a id="more"></a><p>配置crontab</p><pre><code>#5分钟执行一次*/5 * * * * sh /path/deny.sh   </code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;通过分析nginx日志找出请求数较大的IP，并用iptables封掉。
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;编写脚本&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#!/bin/bash
-
-#定义访问次数上限100
-num=100
-LOG_DIR=/var/log/nginx
-cd $LOG_DIR
-
-#定义筛选访问量＞100的IP地址
-IP=`tail access.log -n 1000|awk &amp;#39;{print $1}&amp;#39;|sort|uniq -c|sort -rn|awk &amp;#39;{if ($1&amp;gt;&amp;#39;$num&amp;#39;){print $2}}&amp;#39;`
-
-for i in $IP
-#读取最新1000条记录，如果单IP超过100条就封掉。
-do
-      iptables -I INPUT -p tcp -s $i --dport 80 -j DROP
-done
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="CC" scheme="https://wuyanteng.github.io/tags/CC/"/>
-    
-      <category term="Ddos" scheme="https://wuyanteng.github.io/tags/Ddos/"/>
-    
-      <category term="nginx日志" scheme="https://wuyanteng.github.io/tags/nginx%E6%97%A5%E5%BF%97/"/>
-    
-      <category term="高积运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%A7%AF%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
