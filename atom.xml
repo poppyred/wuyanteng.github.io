@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-09-12T08:47:16.343Z</updated>
+  <updated>2018-09-13T06:18:27.767Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>date时间戳转换</title>
+    <link href="https://wuyanteng.github.io/2018/09/13/date%E6%97%B6%E9%97%B4%E6%88%B3%E8%BD%AC%E6%8D%A2/"/>
+    <id>https://wuyanteng.github.io/2018/09/13/date时间戳转换/</id>
+    <published>2018-09-13T06:12:01.000Z</published>
+    <updated>2018-09-13T06:18:27.767Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>linux时间戳转换</code></pre><p>查看当前unix时间戳</p><pre><code>date +%s变量赋值Now_UNIX=`date +%s`</code></pre><a id="more"></a><p>标准时间转unix</p><pre><code>date -d &quot;2017-08-01 00:00:00&quot; +%s变量赋值UNIX=`date -d &quot;2017-08-01 00:00:00&quot; +%s`</code></pre><p>unix转标准时间</p><pre><code>date -d &quot;@1536819453&quot; </code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;linux时间戳转换
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;查看当前unix时间戳&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;date +%s
+
+变量赋值
+Now_UNIX=`date +%s`
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="unix" scheme="https://wuyanteng.github.io/tags/unix/"/>
+    
+      <category term="date" scheme="https://wuyanteng.github.io/tags/date/"/>
+    
+      <category term="时间戳" scheme="https://wuyanteng.github.io/tags/%E6%97%B6%E9%97%B4%E6%88%B3/"/>
+    
+      <category term="time" scheme="https://wuyanteng.github.io/tags/time/"/>
+    
+  </entry>
   
   <entry>
     <title>基于easyrsa3自动化实现openvpn用户证书的创建与吊销</title>
@@ -608,41 +642,6 @@ replicate_wild_do_table
       <category term="innobackup" scheme="https://wuyanteng.github.io/tags/innobackup/"/>
     
       <category term="锁表" scheme="https://wuyanteng.github.io/tags/%E9%94%81%E8%A1%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>shell变量传参</title>
-    <link href="https://wuyanteng.github.io/2018/06/22/shell%E5%8F%98%E9%87%8F%E4%BC%A0%E5%8F%82/"/>
-    <id>https://wuyanteng.github.io/2018/06/22/shell变量传参/</id>
-    <published>2018-06-22T07:54:54.000Z</published>
-    <updated>2018-06-22T08:53:43.784Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>有时候经常会写传参脚本，下面是一个zabbix自定义key传参案例</code></pre><h5 id="zabbix配置文件"><a href="#zabbix配置文件" class="headerlink" title="zabbix配置文件"></a>zabbix配置文件</h5><pre><code>UnsafeUserParameters=1#mysql slave监控UserParameter=mysql.slave[*],/var/lib/mysql/check_mysql_slave.sh $1注：留意下这个key值，后面是*表示所有</code></pre><a id="more"></a><h5 id="自定义key传参脚本"><a href="#自定义key传参脚本" class="headerlink" title="自定义key传参脚本"></a>自定义key传参脚本</h5><pre><code>vim  check_mysql.sh</code></pre><pre><code>#!/bin/bashUSER=xxxPASS=xxxxxxio_status(){    IoStatus=`mysql -u${USER} -p${PASS} -e &quot;show slave status\G;&quot; |grep -i running|sed -n 1p|awk &#39;{print $NF}&#39;`    if [ $IoStatus == &quot;Yes&quot; ];then        IoStatus=1    else        IoStatus=0    fi    echo  $IoStatus}sql_status(){    SqlStatus=`mysql -u${USER} -p${PASS} -e &quot;show slave status\G;&quot; |grep -i running|sed -n 2p|awk &#39;{print $NF}&#39;`    if [ $SqlStatus == &quot;Yes&quot; ];then        SqlStatus=1    else        SqlStatus=0    fi    echo $SqlStatus}lag_status(){    DelayStatus=`mysql -u${USER} -p${PASS} -e &quot;show slave status\G;&quot; |grep &quot;Seconds_Behind_Master&quot;|awk &#39;{print $NF}&#39;`    echo $DelayStatus}$1</code></pre><pre><code>如何快速理解脚本传参逻辑？(1)可以看到整个脚本使用了3个函数,要知道，写了函数需要在脚本调用才会生效，而本脚本中是使用$1来进行调用的。(2)从脚本中可以看到，对应的传参值分别为io_status、sql_status和lag_status, 其他传参值将不会被调用。(3)zabbix mysql模板中自定义key名称与脚本函数名称相同，所以可以被正确赋值给$1并正确取值。</code></pre><h5 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h5><pre><code>如果zabbix mysql模板中自定义key名称不是 io_status、sql_status和lag_status，依然能被正确调用？</code></pre><pre><code>需要在脚本中, 加入判断。如果$1等于zabbix mysql模板中的某个值，则执行脚本中其中一个函数。</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;有时候经常会写传参脚本，下面是一个zabbix自定义key传参案例
-&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&quot;zabbix配置文件&quot;&gt;&lt;a href=&quot;#zabbix配置文件&quot; class=&quot;headerlink&quot; title=&quot;zabbix配置文件&quot;&gt;&lt;/a&gt;zabbix配置文件&lt;/h5&gt;&lt;pre&gt;&lt;code&gt;UnsafeUserParameters=1
-
-#mysql slave监控
-UserParameter=mysql.slave[*],/var/lib/mysql/check_mysql_slave.sh $1
-
-注：留意下这个key值，后面是*表示所有
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="zabbix" scheme="https://wuyanteng.github.io/tags/zabbix/"/>
-    
-      <category term="shell" scheme="https://wuyanteng.github.io/tags/shell/"/>
-    
-      <category term="变量传参" scheme="https://wuyanteng.github.io/tags/%E5%8F%98%E9%87%8F%E4%BC%A0%E5%8F%82/"/>
-    
-      <category term="shell传参" scheme="https://wuyanteng.github.io/tags/shell%E4%BC%A0%E5%8F%82/"/>
     
   </entry>
   
