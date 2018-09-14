@@ -3,6 +3,28 @@
   
     
     <entry>
+      <title>重温ps命令</title>
+      <link href="/2018/09/14/%E9%87%8D%E6%B8%A9ps-aux%E5%91%BD%E4%BB%A4/"/>
+      <url>/2018/09/14/%E9%87%8D%E6%B8%A9ps-aux%E5%91%BD%E4%BB%A4/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> ps </tag>
+            
+            <tag> aux </tag>
+            
+            <tag> 查看进程内存 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>date时间戳转换</title>
       <link href="/2018/09/13/date%E6%97%B6%E9%97%B4%E6%88%B3%E8%BD%AC%E6%8D%A2/"/>
       <url>/2018/09/13/date%E6%97%B6%E9%97%B4%E6%88%B3%E8%BD%AC%E6%8D%A2/</url>
@@ -414,11 +436,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> SECONDARY </tag>
+            <tag> MongoDB </tag>
             
             <tag> PRIMARY </tag>
             
-            <tag> MongoDB </tag>
+            <tag> SECONDARY </tag>
             
             <tag> slave </tag>
             
@@ -654,13 +676,13 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> SECONDARY </tag>
-            
-            <tag> PRIMARY </tag>
-            
             <tag> MongoDB </tag>
             
             <tag> STARTUP </tag>
+            
+            <tag> PRIMARY </tag>
+            
+            <tag> SECONDARY </tag>
             
             <tag> 副本集成员 </tag>
             
@@ -1622,9 +1644,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MongoDB </tag>
-            
             <tag> Mongo </tag>
+            
+            <tag> MongoDB </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -1646,9 +1668,9 @@
             
             <tag> 高可用 </tag>
             
-            <tag> MongoDB </tag>
-            
             <tag> Mongo </tag>
+            
+            <tag> MongoDB </tag>
             
             <tag> 路由 </tag>
             
@@ -2258,9 +2280,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> ELK </tag>
-            
             <tag> docker </tag>
+            
+            <tag> ELK </tag>
             
         </tags>
       
@@ -3358,13 +3380,13 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> CentOS7 </tag>
-            
             <tag> Gitlab </tag>
             
             <tag> Git服务器 </tag>
             
             <tag> Docker </tag>
+            
+            <tag> CentOS7 </tag>
             
         </tags>
       
@@ -3382,9 +3404,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> docker </tag>
-            
             <tag> Gitlab </tag>
+            
+            <tag> docker </tag>
             
             <tag> Jenkins </tag>
             
@@ -3472,9 +3494,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> docker </tag>
-            
             <tag> CentOS7 </tag>
+            
+            <tag> docker </tag>
             
             <tag> docker-ce </tag>
             
@@ -4390,11 +4412,11 @@
       
         <tags>
             
-            <tag> Nginx </tag>
-            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
+            
+            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             

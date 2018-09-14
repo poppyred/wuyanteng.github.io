@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-09-13T06:18:27.767Z</updated>
+  <updated>2018-09-14T02:58:52.786Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>重温ps命令</title>
+    <link href="https://wuyanteng.github.io/2018/09/14/%E9%87%8D%E6%B8%A9ps-aux%E5%91%BD%E4%BB%A4/"/>
+    <id>https://wuyanteng.github.io/2018/09/14/重温ps-aux命令/</id>
+    <published>2018-09-14T02:48:20.000Z</published>
+    <updated>2018-09-14T02:58:52.786Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>Linux下最常用的2个命令：ps -efps aux来重新温习下他们两个命令的区别</code></pre><a id="more"></a><h4 id="ps-ef能输出什么内容："><a href="#ps-ef能输出什么内容：" class="headerlink" title="ps -ef能输出什么内容："></a>ps -ef能输出什么内容：</h4><pre><code>[root@gfw_proxy_15 ~]# ps -ef|headUID        PID  PPID  C STIME TTY          TIME CMDroot         8     2  0 Jul13 ?        00:00:00 [rcu_bh]root         9     2  0 Jul13 ?        00:00:00 [rcuob/0]root        10     2  0 Jul13 ?        00:00:00 [rcuob/1]root        11     2  0 Jul13 ?        00:00:00 [rcuob/2]</code></pre><pre><code>UID     //用户ID、但输出的是用户名PID     //进程的IDPPID    //父进程IDC       //进程占用CPU的百分比STIME   //进程启动到现在的时间TTY     //该进程在那个终端上运行，若与终端无关，则显示? 若为pts/0等，则表示由网络连接主机进程。CMD     //命令的名称和参数</code></pre><h4 id="ps-aux能输出什么内容？"><a href="#ps-aux能输出什么内容？" class="headerlink" title="ps aux能输出什么内容？"></a>ps aux能输出什么内容？</h4><pre><code>[root@gfw_proxy_15 ~]# ps aux|headUSER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMANDroot         1  0.0  0.0 123308  3820 ?        Ss   Jul13  45:58 /usr/lib/systemd/systemd...root         2  0.0  0.0      0     0 ?        S    Jul13   0:04 [kthreadd]root         3  0.0  0.0      0     0 ?        S    Jul13   0:14 [ksoftirqd/0]</code></pre><pre><code>USER      //用户名PID       //PID%CPU      //进程占用的CPU百分比%MEM      //占用内存的百分比VSZ       //该进程使用的虚拟內存量（KB）RSS       //该进程占用的固定內存量（KB）（驻留中页的数量）STAT      //进程的状态START     //该进程被触发启动时间TIME      //该进程实际使用CPU运行的时间</code></pre><h4 id="查看进程占用的CPU和内存大小"><a href="#查看进程占用的CPU和内存大小" class="headerlink" title="查看进程占用的CPU和内存大小"></a>查看进程占用的CPU和内存大小</h4><pre><code># ps aux |grep openvpnroot     18493  0.7  0.1  12336  3888 ?        Sl   Sep13   7:54 /usr/sbin/openvpn.....上面第3列是CPU占用百分比；上面第6列，是进程所占用的固定内存,单位k(除以1000单位是M)</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;Linux下最常用的2个命令：
+ps -ef
+ps aux
+
+来重新温习下他们两个命令的区别
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="ps" scheme="https://wuyanteng.github.io/tags/ps/"/>
+    
+      <category term="aux" scheme="https://wuyanteng.github.io/tags/aux/"/>
+    
+      <category term="查看进程内存" scheme="https://wuyanteng.github.io/tags/%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98/"/>
+    
+  </entry>
   
   <entry>
     <title>date时间戳转换</title>
@@ -569,11 +600,11 @@ QUERY  Error: listDatabases failed:{ &amp;quot;note&amp;quot; : &amp;quot;from e
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
-      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
+      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
     
       <category term="PRIMARY" scheme="https://wuyanteng.github.io/tags/PRIMARY/"/>
     
-      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
+      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
     
       <category term="slave" scheme="https://wuyanteng.github.io/tags/slave/"/>
     
@@ -611,37 +642,6 @@ replicate_wild_do_table
       <category term="mysql从库" scheme="https://wuyanteng.github.io/tags/mysql%E4%BB%8E%E5%BA%93/"/>
     
       <category term="同步个别库" scheme="https://wuyanteng.github.io/tags/%E5%90%8C%E6%AD%A5%E4%B8%AA%E5%88%AB%E5%BA%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>mysqldump备份避免锁表</title>
-    <link href="https://wuyanteng.github.io/2018/07/02/mysqldump%E5%A4%87%E4%BB%BD%E9%81%BF%E5%85%8D%E9%94%81%E8%A1%A8/"/>
-    <id>https://wuyanteng.github.io/2018/07/02/mysqldump备份避免锁表/</id>
-    <published>2018-07-02T04:09:26.000Z</published>
-    <updated>2018-07-02T04:26:27.768Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>生产环境中,场景难免会遇到对正在运行的数据库进行备份，而mysqldump备份会有锁表风险，导致数据在备份期间无法写入数据，所以对正在运行的数据库备份需要慎重。下面就聊聊如何解决锁表？</code></pre><a id="more"></a><h5 id="mysqldump命令备份Mysql数据库的参数说明"><a href="#mysqldump命令备份Mysql数据库的参数说明" class="headerlink" title="mysqldump命令备份Mysql数据库的参数说明"></a>mysqldump命令备份Mysql数据库的参数说明</h5><pre><code>-q       采用快速的dump方式(提高导出性能)-e       采用多重insert语句形式(提高还原性能)-R       导出存储过程，函数，和触发器--events        如果是5.1以上的版本使用，包含事件--skip-opt      避免锁表--create-option            添加create相关的选项--single-transaction       一致性备份--no-autocommit      采用批量提交方式(提高还原性能)--master-data   如果有写log-bin且版本为5.0以上的版本，则再加上 --master-data=2</code></pre><h5 id="改良mysqldump备份命令"><a href="#改良mysqldump备份命令" class="headerlink" title="改良mysqldump备份命令"></a>改良mysqldump备份命令</h5><pre><code>我的版本是MySQL-5.7.11,启用了binlog，所以应使用如下命令备份数据库mysqldump -uroot -p --events --single-transaction --master-data=2 --skip-opt --databases db1 db2 &gt;/root/mysql.sql</code></pre><h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><pre><code>mysqldump命令适用于对数据库相对较小的MySQL进行备份，一般数据量约50GB以内，大于50GB强烈建议使用xtrabackup工具。</code></pre><p>参考：<a href="https://wuyanteng.github.io/2018/01/23/MySql-xtrabackup%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%87%E4%BB%BD%E4%B8%8E%E8%BF%98%E5%8E%9F/">MySql xtrabackup大数据量备份与还原</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;生产环境中,场景难免会遇到对正在运行的数据库进行备份，而mysqldump备份会有锁表风险，导致数据在备份期间无法写入数据，所以对正在运行的数据库备份需要慎重。下面就聊聊如何解决锁表？
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="MySQL" scheme="https://wuyanteng.github.io/tags/MySQL/"/>
-    
-      <category term="xtrabackup" scheme="https://wuyanteng.github.io/tags/xtrabackup/"/>
-    
-      <category term="mysqldump" scheme="https://wuyanteng.github.io/tags/mysqldump/"/>
-    
-      <category term="innobackup" scheme="https://wuyanteng.github.io/tags/innobackup/"/>
-    
-      <category term="锁表" scheme="https://wuyanteng.github.io/tags/%E9%94%81%E8%A1%A8/"/>
     
   </entry>
   
