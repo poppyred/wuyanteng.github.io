@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-09-14T02:58:52.786Z</updated>
+  <updated>2018-09-18T07:58:14.244Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -17,11 +17,40 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>mysql主从库同步出现主键错误-分析</title>
+    <link href="https://wuyanteng.github.io/2018/09/18/mysql%E4%B8%BB%E4%BB%8E%E5%BA%93%E5%90%8C%E6%AD%A5%E5%87%BA%E7%8E%B0%E4%B8%BB%E9%94%AE%E9%94%99%E8%AF%AF-%E5%88%86%E6%9E%90/"/>
+    <id>https://wuyanteng.github.io/2018/09/18/mysql主从库同步出现主键错误-分析/</id>
+    <published>2018-09-18T07:45:38.000Z</published>
+    <updated>2018-09-18T07:58:14.244Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>mysql主库数据量TB级别，废了九牛二虎之力做了从库，一切正常。过了没几天，出现了主键等错误。</code></pre><p>原因分析</p><pre><code>造成此问题的原因 与主库数据量几乎没有关系，很大可能是因为从库被写入了数据，导致主从主键不一致。</code></pre><a id="more"></a><p>建议</p><pre><code>1. 从库启用read_only, 配置文件添加如下配置【也可动态配置，无需重启服务】：   read_only = ON   super_read_only = ON2. 主从均开启GTID3. 主从均使用ROW格式</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;mysql主库数据量TB级别，废了九牛二虎之力做了从库，一切正常。过了没几天，出现了主键等错误。
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;原因分析&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;造成此问题的原因 与主库数据量几乎没有关系，很大可能是因为从库被写入了数据，导致主从主键不一致。
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="主从同步" scheme="https://wuyanteng.github.io/tags/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/"/>
+    
+      <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
+    
+      <category term="主键错误" scheme="https://wuyanteng.github.io/tags/%E4%B8%BB%E9%94%AE%E9%94%99%E8%AF%AF/"/>
+    
+  </entry>
+  
+  <entry>
     <title>重温ps命令</title>
     <link href="https://wuyanteng.github.io/2018/09/14/%E9%87%8D%E6%B8%A9ps-aux%E5%91%BD%E4%BB%A4/"/>
     <id>https://wuyanteng.github.io/2018/09/14/重温ps-aux命令/</id>
     <published>2018-09-14T02:48:20.000Z</published>
-    <updated>2018-09-14T02:58:52.786Z</updated>
+    <updated>2018-09-14T03:04:24.028Z</updated>
     
     <content type="html"><![CDATA[<pre><code>Linux下最常用的2个命令：ps -efps aux来重新温习下他们两个命令的区别</code></pre><a id="more"></a><h4 id="ps-ef能输出什么内容："><a href="#ps-ef能输出什么内容：" class="headerlink" title="ps -ef能输出什么内容："></a>ps -ef能输出什么内容：</h4><pre><code>[root@gfw_proxy_15 ~]# ps -ef|headUID        PID  PPID  C STIME TTY          TIME CMDroot         8     2  0 Jul13 ?        00:00:00 [rcu_bh]root         9     2  0 Jul13 ?        00:00:00 [rcuob/0]root        10     2  0 Jul13 ?        00:00:00 [rcuob/1]root        11     2  0 Jul13 ?        00:00:00 [rcuob/2]</code></pre><pre><code>UID     //用户ID、但输出的是用户名PID     //进程的IDPPID    //父进程IDC       //进程占用CPU的百分比STIME   //进程启动到现在的时间TTY     //该进程在那个终端上运行，若与终端无关，则显示? 若为pts/0等，则表示由网络连接主机进程。CMD     //命令的名称和参数</code></pre><h4 id="ps-aux能输出什么内容？"><a href="#ps-aux能输出什么内容？" class="headerlink" title="ps aux能输出什么内容？"></a>ps aux能输出什么内容？</h4><pre><code>[root@gfw_proxy_15 ~]# ps aux|headUSER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMANDroot         1  0.0  0.0 123308  3820 ?        Ss   Jul13  45:58 /usr/lib/systemd/systemd...root         2  0.0  0.0      0     0 ?        S    Jul13   0:04 [kthreadd]root         3  0.0  0.0      0     0 ?        S    Jul13   0:14 [ksoftirqd/0]</code></pre><pre><code>USER      //用户名PID       //PID%CPU      //进程占用的CPU百分比%MEM      //占用内存的百分比VSZ       //该进程使用的虚拟內存量（KB）RSS       //该进程占用的固定內存量（KB）（驻留中页的数量）STAT      //进程的状态START     //该进程被触发启动时间TIME      //该进程实际使用CPU运行的时间</code></pre><h4 id="查看进程占用的CPU和内存大小"><a href="#查看进程占用的CPU和内存大小" class="headerlink" title="查看进程占用的CPU和内存大小"></a>查看进程占用的CPU和内存大小</h4><pre><code># ps aux |grep openvpnroot     18493  0.7  0.1  12336  3888 ?        Sl   Sep13   7:54 /usr/sbin/openvpn.....上面第3列是CPU占用百分比；上面第6列，是进程所占用的固定内存,单位k(除以1000单位是M)</code></pre>]]></content>
     
@@ -600,48 +629,15 @@ QUERY  Error: listDatabases failed:{ &amp;quot;note&amp;quot; : &amp;quot;from e
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
-      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
+      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
     
       <category term="PRIMARY" scheme="https://wuyanteng.github.io/tags/PRIMARY/"/>
     
-      <category term="SECONDARY" scheme="https://wuyanteng.github.io/tags/SECONDARY/"/>
+      <category term="MongoDB" scheme="https://wuyanteng.github.io/tags/MongoDB/"/>
     
       <category term="slave" scheme="https://wuyanteng.github.io/tags/slave/"/>
     
       <category term="show dbs" scheme="https://wuyanteng.github.io/tags/show-dbs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>mysql从库-只同步某些库</title>
-    <link href="https://wuyanteng.github.io/2018/07/06/mysql%E4%BB%8E%E5%BA%93-%E5%8F%AA%E5%90%8C%E6%AD%A5%E6%9F%90%E4%BA%9B%E5%BA%93/"/>
-    <id>https://wuyanteng.github.io/2018/07/06/mysql从库-只同步某些库/</id>
-    <published>2018-07-06T09:54:12.000Z</published>
-    <updated>2018-07-06T10:09:38.923Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>生产环境需求：从库同步时，限定只同步某些数据库，而非全部同步，如何优雅逆袭？</code></pre><p>配置</p><pre><code>vim /etc/my.cnf[mysqld]......replicate_wild_do_table=db1.%replicate_wild_do_table=db2.%replicate_wild_do_table=db3.%db1到db3是需要同步的数据库名，如果复制多个数据库，重复设置这个选项即可。</code></pre><pre><code>重启mysql</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;pre&gt;&lt;code&gt;生产环境需求：从库同步时，限定只同步某些数据库，而非全部同步，如何优雅逆袭？
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;配置&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;vim /etc/my.cnf
-
-[mysqld]
-......
-replicate_wild_do_table
-      
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="mysql从库" scheme="https://wuyanteng.github.io/tags/mysql%E4%BB%8E%E5%BA%93/"/>
-    
-      <category term="同步个别库" scheme="https://wuyanteng.github.io/tags/%E5%90%8C%E6%AD%A5%E4%B8%AA%E5%88%AB%E5%BA%93/"/>
     
   </entry>
   

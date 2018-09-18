@@ -3,6 +3,28 @@
   
     
     <entry>
+      <title>mysql主从库同步出现主键错误-分析</title>
+      <link href="/2018/09/18/mysql%E4%B8%BB%E4%BB%8E%E5%BA%93%E5%90%8C%E6%AD%A5%E5%87%BA%E7%8E%B0%E4%B8%BB%E9%94%AE%E9%94%99%E8%AF%AF-%E5%88%86%E6%9E%90/"/>
+      <url>/2018/09/18/mysql%E4%B8%BB%E4%BB%8E%E5%BA%93%E5%90%8C%E6%AD%A5%E5%87%BA%E7%8E%B0%E4%B8%BB%E9%94%AE%E9%94%99%E8%AF%AF-%E5%88%86%E6%9E%90/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> 主从同步 </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> 主键错误 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>重温ps命令</title>
       <link href="/2018/09/14/%E9%87%8D%E6%B8%A9ps-aux%E5%91%BD%E4%BB%A4/"/>
       <url>/2018/09/14/%E9%87%8D%E6%B8%A9ps-aux%E5%91%BD%E4%BB%A4/</url>
@@ -436,11 +458,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MongoDB </tag>
+            <tag> SECONDARY </tag>
             
             <tag> PRIMARY </tag>
             
-            <tag> SECONDARY </tag>
+            <tag> MongoDB </tag>
             
             <tag> slave </tag>
             
@@ -676,13 +698,13 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> MongoDB </tag>
-            
-            <tag> STARTUP </tag>
+            <tag> SECONDARY </tag>
             
             <tag> PRIMARY </tag>
             
-            <tag> SECONDARY </tag>
+            <tag> MongoDB </tag>
+            
+            <tag> STARTUP </tag>
             
             <tag> 副本集成员 </tag>
             
@@ -1574,9 +1596,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> mysql </tag>
-            
             <tag> 1236 </tag>
+            
+            <tag> mysql </tag>
             
             <tag> 主从复制错误 </tag>
             
@@ -1644,9 +1666,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 数据库管理 </tag>
             
@@ -1668,9 +1690,9 @@
             
             <tag> 高可用 </tag>
             
-            <tag> Mongo </tag>
-            
             <tag> MongoDB </tag>
+            
+            <tag> Mongo </tag>
             
             <tag> 路由 </tag>
             
@@ -2634,9 +2656,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
             
         </tags>
       
@@ -3380,13 +3402,13 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> CentOS7 </tag>
+            
             <tag> Gitlab </tag>
             
             <tag> Git服务器 </tag>
             
             <tag> Docker </tag>
-            
-            <tag> CentOS7 </tag>
             
         </tags>
       
@@ -3404,9 +3426,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Gitlab </tag>
-            
             <tag> docker </tag>
+            
+            <tag> Gitlab </tag>
             
             <tag> Jenkins </tag>
             
@@ -3494,9 +3516,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> CentOS7 </tag>
-            
             <tag> docker </tag>
+            
+            <tag> CentOS7 </tag>
             
             <tag> docker-ce </tag>
             
@@ -4412,11 +4434,11 @@
       
         <tags>
             
+            <tag> Nginx </tag>
+            
             <tag> 负载均衡 </tag>
             
             <tag> keepalived </tag>
-            
-            <tag> Nginx </tag>
             
             <tag> upstream </tag>
             
