@@ -3,6 +3,32 @@
   
     
     <entry>
+      <title>hadoop之认识大数据-1</title>
+      <link href="/2018/09/18/hadoop%E4%B9%8B%E8%AE%A4%E8%AF%86%E5%A4%A7%E6%95%B0%E6%8D%AE-1/"/>
+      <url>/2018/09/18/hadoop%E4%B9%8B%E8%AE%A4%E8%AF%86%E5%A4%A7%E6%95%B0%E6%8D%AE-1/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 大数据 </tag>
+            
+            <tag> YARN </tag>
+            
+            <tag> hadoop </tag>
+            
+            <tag> HDFS </tag>
+            
+            <tag> 本地模式 </tag>
+            
+            <tag> 伪分布模式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>mysql主从库同步出现主键错误-分析</title>
       <link href="/2018/09/18/mysql%E4%B8%BB%E4%BB%8E%E5%BA%93%E5%90%8C%E6%AD%A5%E5%87%BA%E7%8E%B0%E4%B8%BB%E9%94%AE%E9%94%99%E8%AF%AF-%E5%88%86%E6%9E%90/"/>
       <url>/2018/09/18/mysql%E4%B8%BB%E4%BB%8E%E5%BA%93%E5%90%8C%E6%AD%A5%E5%87%BA%E7%8E%B0%E4%B8%BB%E9%94%AE%E9%94%99%E8%AF%AF-%E5%88%86%E6%9E%90/</url>
