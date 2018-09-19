@@ -3,9 +3,9 @@
   
     
     <entry>
-      <title>hadoop之认识大数据-1</title>
-      <link href="/2018/09/18/hadoop%E4%B9%8B%E8%AE%A4%E8%AF%86%E5%A4%A7%E6%95%B0%E6%8D%AE-1/"/>
-      <url>/2018/09/18/hadoop%E4%B9%8B%E8%AE%A4%E8%AF%86%E5%A4%A7%E6%95%B0%E6%8D%AE-1/</url>
+      <title>Hadoop2.7.3完全分布式部署-大数据1</title>
+      <link href="/2018/09/18/Hadoop2.7.3%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2-%E5%A4%A7%E6%95%B0%E6%8D%AE1/"/>
+      <url>/2018/09/18/Hadoop2.7.3%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2-%E5%A4%A7%E6%95%B0%E6%8D%AE1/</url>
 	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
       <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
       
@@ -14,11 +14,11 @@
             
             <tag> 大数据 </tag>
             
-            <tag> YARN </tag>
-            
             <tag> hadoop </tag>
             
             <tag> HDFS </tag>
+            
+            <tag> YARN </tag>
             
             <tag> 本地模式 </tag>
             
@@ -3120,8 +3120,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3131,6 +3129,8 @@
             <tag> consumer </tag>
             
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -3494,9 +3494,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -3520,9 +3520,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -3650,11 +3650,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -3680,8 +3680,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3697,6 +3695,8 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -3830,9 +3830,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> Producer </tag>
             
@@ -4734,9 +4734,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -5344,9 +5344,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -5428,11 +5428,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -5448,11 +5448,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -6504,11 +6504,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> 大数据 </tag>
             
