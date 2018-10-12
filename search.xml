@@ -3,6 +3,32 @@
   
     
     <entry>
+      <title>查看和释放swap内存</title>
+      <link href="/2018/10/12/%E6%9F%A5%E7%9C%8B%E5%92%8C%E9%87%8A%E6%94%BEswap%E5%86%85%E5%AD%98/"/>
+      <url>/2018/10/12/%E6%9F%A5%E7%9C%8B%E5%92%8C%E9%87%8A%E6%94%BEswap%E5%86%85%E5%AD%98/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> cache </tag>
+            
+            <tag> swap </tag>
+            
+            <tag> swapon </tag>
+            
+            <tag> swapoff </tag>
+            
+            <tag> 交换分区 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>ESXI安装openstack注意事项</title>
       <link href="/2018/09/26/ESXI%E5%AE%89%E8%A3%85openstack%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
       <url>/2018/09/26/ESXI%E5%AE%89%E8%A3%85openstack%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</url>
@@ -62,9 +88,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> mysql </tag>
-            
             <tag> 主从同步 </tag>
+            
+            <tag> mysql </tag>
             
             <tag> 主键错误 </tag>
             
@@ -2350,9 +2376,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> docker </tag>
-            
             <tag> ELK </tag>
+            
+            <tag> docker </tag>
             
         </tags>
       
@@ -2704,9 +2730,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
             
         </tags>
       
@@ -3142,8 +3168,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3153,6 +3177,8 @@
             <tag> consumer </tag>
             
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> logstash </tag>
             
@@ -3516,9 +3542,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -3542,9 +3568,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> codis </tag>
             
@@ -3672,11 +3698,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> HA </tag>
             
@@ -3702,8 +3728,6 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
@@ -3719,6 +3743,8 @@
             <tag> MQ </tag>
             
             <tag> kafka broker </tag>
+            
+            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -3852,9 +3878,9 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> MQ </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> Producer </tag>
             
@@ -4628,6 +4654,8 @@
             
             <tag> PHP </tag>
             
+            <tag> swap </tag>
+            
             <tag> 内存 </tag>
             
             <tag> tmpfs </tag>
@@ -4637,8 +4665,6 @@
             <tag> RM </tag>
             
             <tag> Mysql </tag>
-            
-            <tag> swap </tag>
             
             <tag> 内存文件系统 </tag>
             
@@ -4756,9 +4782,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -5366,9 +5392,9 @@
       
         <tags>
             
-            <tag> apache </tag>
-            
             <tag> 高级运维 </tag>
+            
+            <tag> apache </tag>
             
             <tag> nginx </tag>
             
@@ -5450,11 +5476,11 @@
       
         <tags>
             
+            <tag> 高级运维 </tag>
+            
             <tag> apache </tag>
             
             <tag> 目录浏览 </tag>
-            
-            <tag> 高级运维 </tag>
             
         </tags>
       
@@ -5470,11 +5496,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> NAT </tag>
             
@@ -5828,11 +5854,11 @@
             
             <tag> 高级运维 </tag>
             
+            <tag> Hadoop </tag>
+            
             <tag> CDH </tag>
             
             <tag> 大数据 </tag>
-            
-            <tag> Hadoop </tag>
             
         </tags>
       
@@ -5950,11 +5976,11 @@
             
             <tag> CDH </tag>
             
+            <tag> 大数据 </tag>
+            
             <tag> Vcores </tag>
             
             <tag> DRF </tag>
-            
-            <tag> 大数据 </tag>
             
         </tags>
       
@@ -6526,11 +6552,11 @@
       
         <tags>
             
-            <tag> 高级运维 </tag>
-            
             <tag> kafka </tag>
             
             <tag> zookeeper </tag>
+            
+            <tag> 高级运维 </tag>
             
             <tag> 大数据 </tag>
             

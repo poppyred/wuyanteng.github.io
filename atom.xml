@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-09-26T09:24:34.458Z</updated>
+  <updated>2018-10-12T02:28:30.938Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -17,11 +17,54 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>查看和释放swap内存</title>
+    <link href="https://wuyanteng.github.io/2018/10/12/%E6%9F%A5%E7%9C%8B%E5%92%8C%E9%87%8A%E6%94%BEswap%E5%86%85%E5%AD%98/"/>
+    <id>https://wuyanteng.github.io/2018/10/12/查看和释放swap内存/</id>
+    <published>2018-10-12T02:09:07.000Z</published>
+    <updated>2018-10-12T02:28:30.938Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="关于内存耗尽总结"><a href="#关于内存耗尽总结" class="headerlink" title="关于内存耗尽总结"></a>关于内存耗尽总结</h4><pre><code>要达到释放缓存的目的，我们首先需要了解下关键的配置文件/proc/sys/vm/drop_caches。这个文件中记录了缓存释放的参数，默认值为0，也就是不释放缓存。他的值可以为0~3之间的任意数字，代表着不同的含义：0 – 不释放1 – 释放页缓存2 – 释放dentries和inodes3 – 释放所有缓存知道了参数后，我们就可以根据我们的需要，使用下面的指令来进行操作。</code></pre><h4 id="swap磁盘占用过高原因分析"><a href="#swap磁盘占用过高原因分析" class="headerlink" title="swap磁盘占用过高原因分析"></a>swap磁盘占用过高原因分析</h4><pre><code>通过此命令查看内存被哪些进程占用（单位是MByte）for i in `cd /proc;ls |grep &quot;^[0-9]&quot;|awk &#39; $0 &gt;100&#39;` ;do awk &#39;/Swap:/{a=a+$2}END{print &#39;&quot;$i&quot;&#39;,a/1024&quot;M&quot;}&#39; /proc/$i/smaps ;done 2&gt;&amp;1 |sort -k2nr |head注：以上结果输出PID与内存占用大小，通过PID可以找到对应进程</code></pre><a id="more"></a><h4 id="释放内存方案"><a href="#释放内存方案" class="headerlink" title="释放内存方案"></a>释放内存方案</h4><pre><code>方案1： 重启占用swap最高的进程方法2： 关闭swap分区       有时候并不能查看到哪些进程占用swap，则需要先关闭swap分区再开启</code></pre><h4 id="关闭swap分区注意事项和步骤"><a href="#关闭swap分区注意事项和步骤" class="headerlink" title="关闭swap分区注意事项和步骤"></a>关闭swap分区注意事项和步骤</h4><pre><code>1，确保系统空闲物理内存大于swap已用内存，否则会导致服务器宕机！2，先清理内存cache，空出足够内存   sync   echo &quot;3&quot; &gt; /proc/sys/vm/drop_caches3，关闭swap分区，这个过程需要等待   swapon -s  查看swap挂载分区   swapoff -a 或 swapoff /dev/sda54，swap分区释放后，恢复swap分区   swapon -a  或 swapon /dev/sda55，恢复内存cache的设置   echo &quot;0&quot; &gt; /proc/sys/vm/drop_caches</code></pre><pre><code>free -m   再次查看即可</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;关于内存耗尽总结&quot;&gt;&lt;a href=&quot;#关于内存耗尽总结&quot; class=&quot;headerlink&quot; title=&quot;关于内存耗尽总结&quot;&gt;&lt;/a&gt;关于内存耗尽总结&lt;/h4&gt;&lt;pre&gt;&lt;code&gt;要达到释放缓存的目的，我们首先需要了解下关键的配置文件/proc/sys/vm/drop_caches。这个文件中记录了缓存释放的参数，默认值为0，也就是不释放缓存。他的值可以为0~3之间的任意数字，代表着不同的含义：
+
+0 – 不释放
+1 – 释放页缓存
+2 – 释放dentries和inodes
+3 – 释放所有缓存
+
+知道了参数后，我们就可以根据我们的需要，使用下面的指令来进行操作。
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&quot;swap磁盘占用过高原因分析&quot;&gt;&lt;a href=&quot;#swap磁盘占用过高原因分析&quot; class=&quot;headerlink&quot; title=&quot;swap磁盘占用过高原因分析&quot;&gt;&lt;/a&gt;swap磁盘占用过高原因分析&lt;/h4&gt;&lt;pre&gt;&lt;code&gt;通过此命令查看内存被哪些进程占用（单位是MByte）
+
+for i in `cd /proc;ls |grep &amp;quot;^[0-9]&amp;quot;|awk &amp;#39; $0 &amp;gt;100&amp;#39;` ;do awk &amp;#39;/Swap:/{a=a+$2}END{print &amp;#39;&amp;quot;$i&amp;quot;&amp;#39;,a/1024&amp;quot;M&amp;quot;}&amp;#39; /proc/$i/smaps ;done 2&amp;gt;&amp;amp;1 |sort -k2nr |head
+
+注：以上结果输出PID与内存占用大小，通过PID可以找到对应进程
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="cache" scheme="https://wuyanteng.github.io/tags/cache/"/>
+    
+      <category term="swap" scheme="https://wuyanteng.github.io/tags/swap/"/>
+    
+      <category term="swapon" scheme="https://wuyanteng.github.io/tags/swapon/"/>
+    
+      <category term="swapoff" scheme="https://wuyanteng.github.io/tags/swapoff/"/>
+    
+      <category term="交换分区" scheme="https://wuyanteng.github.io/tags/%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BA/"/>
+    
+  </entry>
+  
+  <entry>
     <title>ESXI安装openstack注意事项</title>
     <link href="https://wuyanteng.github.io/2018/09/26/ESXI%E5%AE%89%E8%A3%85openstack%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
     <id>https://wuyanteng.github.io/2018/09/26/ESXI安装openstack注意事项/</id>
     <published>2018-09-26T09:19:22.000Z</published>
-    <updated>2018-09-26T09:24:34.458Z</updated>
+    <updated>2018-09-26T09:50:59.993Z</updated>
     
     <content type="html"><![CDATA[<h4 id="如在esxi中安装openstack，则esxi需要配置混杂模式，否则vm无法上网。"><a href="#如在esxi中安装openstack，则esxi需要配置混杂模式，否则vm无法上网。" class="headerlink" title="如在esxi中安装openstack，则esxi需要配置混杂模式，否则vm无法上网。"></a>如在esxi中安装openstack，则esxi需要配置混杂模式，否则vm无法上网。</h4><h4 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h4><pre><code>(1)使用 vSphere Client 登录到 ESXi/ESX 主机或 vCenter Server。(2)在清单中选择 ESXi/ESX 主机。(3)单击配置选项卡。(4)在“硬件”部分，单击网络。(5)单击要启用混杂模式的虚拟交换机的属性。(6)选择要修改的虚拟交换机或端口组，然后单击编辑。(7)单击安全选项卡。(8)从“混杂模式”下拉菜单中，单击接受。</code></pre><p>参考：<a href="https://kb.vmware.com/articleview?docid=1004099&amp;lang=zh_CN" target="_blank" rel="noopener">官网-中文</a></p>]]></content>
     
@@ -104,9 +147,9 @@
     
       <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
     
-      <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
-    
       <category term="主从同步" scheme="https://wuyanteng.github.io/tags/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/"/>
+    
+      <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
     
       <category term="主键错误" scheme="https://wuyanteng.github.io/tags/%E4%B8%BB%E9%94%AE%E9%94%99%E8%AF%AF/"/>
     
@@ -611,39 +654,6 @@ Host &amp;#39;X.X.X.X&amp;#39; is not allowed to connect to this MySQL server.
       <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
     
       <category term="root远程登录" scheme="https://wuyanteng.github.io/tags/root%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>vim打开文件中文乱码问题</title>
-    <link href="https://wuyanteng.github.io/2018/07/12/vim%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/"/>
-    <id>https://wuyanteng.github.io/2018/07/12/vim打开文件中文乱码问题/</id>
-    <published>2018-07-12T04:16:26.000Z</published>
-    <updated>2018-07-12T06:24:36.119Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>vim ~/.vimrc</code></pre><pre><code>set encoding=utf-8set fenc=utf-8set fencs=utf-8,usc-bom,euc-jp,gb18030,gbk,gbk2312,cp936</code></pre><pre><code>现在试试中文乱码就消失了</code></pre><p>GitHub参考：<a href="https://gist.github.com/jhezjkp/3405319" target="_blank" rel="noopener">.vimrc配置</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;pre&gt;&lt;code&gt;vim ~/.vimrc
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;set encoding=utf-8
-set fenc=utf-8
-set fencs=utf-8,usc-bom,euc-jp,gb18030,gbk,gbk2312,cp936
-&lt;
-      
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="shell" scheme="https://wuyanteng.github.io/tags/shell/"/>
-    
-      <category term="vim" scheme="https://wuyanteng.github.io/tags/vim/"/>
-    
-      <category term="中文乱码" scheme="https://wuyanteng.github.io/tags/%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/"/>
     
   </entry>
   
