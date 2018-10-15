@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-10-12T02:28:30.938Z</updated>
+  <updated>2018-10-15T08:14:34.771Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>gentoo emerge postfix</title>
+    <link href="https://wuyanteng.github.io/2018/10/15/gentoo-emerge-postfix/"/>
+    <id>https://wuyanteng.github.io/2018/10/15/gentoo-emerge-postfix/</id>
+    <published>2018-10-15T08:06:44.000Z</published>
+    <updated>2018-10-15T08:14:34.771Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>gentoo系统中，安装某些包的过程中，出现blocking的情况，也就是出现了冲突。下面以安装postfix为例，简单记录下</code></pre><a id="more"></a><h4 id="错误提示"><a href="#错误提示" class="headerlink" title="错误提示"></a>错误提示</h4><pre><code>Gentoo 安装postfix，但如果系统中默认安装了ssmtp，就会出现blocking无法安装的情况。冲突的软件会列出来。错误提示：[blocks B] mail-mta/postfix (&quot;mail-mta/postfix&quot; is blocking mail-mta/ssmtp-2.64-r2)[blocks B] &gt;=mail-mta/ssmtp-2.64-r2[mta] (&quot;&gt;=mail-mta/ssmtp-2.64-r2[mta]&quot; is blocking mail-mta/postfix-2.9.4)* Error: The above package list contains packages which cannot be* installed at the same time on the same system.</code></pre><h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><pre><code>解决方法如下：emerge --ask -C ssmtp    检查系统中是否安装有ssmtp,如果有按照提示卸载emerge --ask postfix     再安装就正常了</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;gentoo系统中，安装某些包的过程中，出现blocking的情况，也就是出现了冲突。
+下面以安装postfix为例，简单记录下
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="emerge" scheme="https://wuyanteng.github.io/tags/emerge/"/>
+    
+      <category term="gentoo" scheme="https://wuyanteng.github.io/tags/gentoo/"/>
+    
+      <category term="postfix" scheme="https://wuyanteng.github.io/tags/postfix/"/>
+    
+      <category term="install" scheme="https://wuyanteng.github.io/tags/install/"/>
+    
+  </entry>
   
   <entry>
     <title>查看和释放swap内存</title>
@@ -628,32 +658,6 @@ make install
       <category term="mysqldump详解" scheme="https://wuyanteng.github.io/tags/mysqldump%E8%AF%A6%E8%A7%A3/"/>
     
       <category term="mysql导入导出" scheme="https://wuyanteng.github.io/tags/mysql%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>mysql用户远程登录失败--Host is not allowed to connect to this MySQL server</title>
-    <link href="https://wuyanteng.github.io/2018/07/25/mysql%E7%94%A8%E6%88%B7%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%E5%A4%B1%E8%B4%A5/"/>
-    <id>https://wuyanteng.github.io/2018/07/25/mysql用户远程登录失败/</id>
-    <published>2018-07-25T02:13:55.000Z</published>
-    <updated>2018-07-25T02:31:00.541Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="故障描述"><a href="#故障描述" class="headerlink" title="故障描述"></a>故障描述</h4><pre><code>mysql远程登录失败，错误如下：Host &#39;X.X.X.X&#39; is not allowed to connect to this MySQL server.</code></pre><a id="more"></a><h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><pre><code>当前使用的用户不允许从远程登录</code></pre><h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>方案1：更改用户表</p><pre><code>mysql &gt; use mysql;mysql &gt; update user set host = &#39;%&#39; where user = &#39;usr_name&#39;;;其中， usr_name 用户名； 而 &#39;%&#39; 为通配符，表示匹配所有主机。</code></pre><p>方案2：命令行授权</p><pre><code>mysql &gt; grant all privileges on db_name.* to usr_name@&#39;%&#39; identified by &#39;user_password&#39;;mysql &gt; flush privileges ;其中，db_name 是数据库名， usr_name 用户名， pwd 密码。&#39;%&#39; 为通配符。</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h4 id=&quot;故障描述&quot;&gt;&lt;a href=&quot;#故障描述&quot; class=&quot;headerlink&quot; title=&quot;故障描述&quot;&gt;&lt;/a&gt;故障描述&lt;/h4&gt;&lt;pre&gt;&lt;code&gt;mysql远程登录失败，错误如下：
-Host &amp;#39;X.X.X.X&amp;#39; is not allowed to connect to this MySQL server.
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="mysql" scheme="https://wuyanteng.github.io/tags/mysql/"/>
-    
-      <category term="root远程登录" scheme="https://wuyanteng.github.io/tags/root%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95/"/>
     
   </entry>
   

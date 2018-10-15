@@ -3,6 +3,30 @@
   
     
     <entry>
+      <title>gentoo emerge postfix</title>
+      <link href="/2018/10/15/gentoo-emerge-postfix/"/>
+      <url>/2018/10/15/gentoo-emerge-postfix/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> emerge </tag>
+            
+            <tag> gentoo </tag>
+            
+            <tag> postfix </tag>
+            
+            <tag> install </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>查看和释放swap内存</title>
       <link href="/2018/10/12/%E6%9F%A5%E7%9C%8B%E5%92%8C%E9%87%8A%E6%94%BEswap%E5%86%85%E5%AD%98/"/>
       <url>/2018/10/12/%E6%9F%A5%E7%9C%8B%E5%92%8C%E9%87%8A%E6%94%BEswap%E5%86%85%E5%AD%98/</url>
@@ -2376,9 +2400,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> ELK </tag>
-            
             <tag> docker </tag>
+            
+            <tag> ELK </tag>
             
         </tags>
       
@@ -4654,9 +4678,9 @@
             
             <tag> PHP </tag>
             
-            <tag> swap </tag>
-            
             <tag> 内存 </tag>
+            
+            <tag> swap </tag>
             
             <tag> tmpfs </tag>
             
@@ -5854,11 +5878,11 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> Hadoop </tag>
-            
             <tag> CDH </tag>
             
             <tag> 大数据 </tag>
+            
+            <tag> Hadoop </tag>
             
         </tags>
       
@@ -5976,11 +6000,11 @@
             
             <tag> CDH </tag>
             
-            <tag> 大数据 </tag>
-            
             <tag> Vcores </tag>
             
             <tag> DRF </tag>
+            
+            <tag> 大数据 </tag>
             
         </tags>
       
