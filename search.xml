@@ -3,6 +3,28 @@
   
     
     <entry>
+      <title>查询mongo数据</title>
+      <link href="/2018/10/18/%E6%9F%A5%E8%AF%A2mongo%E6%95%B0%E6%8D%AE/"/>
+      <url>/2018/10/18/%E6%9F%A5%E8%AF%A2mongo%E6%95%B0%E6%8D%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> mongo </tag>
+            
+            <tag> 查询mongo </tag>
+            
+            <tag> limit </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>sendmail发送邮件</title>
       <link href="/2018/10/18/sendmail%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/"/>
       <url>/2018/10/18/sendmail%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</url>
@@ -2776,9 +2798,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 用户管理 </tag>
-            
             <tag> 数据库管理 </tag>
+            
+            <tag> 用户管理 </tag>
             
         </tags>
       

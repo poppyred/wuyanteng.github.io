@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-10-18T03:12:03.249Z</updated>
+  <updated>2018-10-18T06:26:20.912Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -17,11 +17,41 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>查询mongo数据</title>
+    <link href="https://wuyanteng.github.io/2018/10/18/%E6%9F%A5%E8%AF%A2mongo%E6%95%B0%E6%8D%AE/"/>
+    <id>https://wuyanteng.github.io/2018/10/18/查询mongo数据/</id>
+    <published>2018-10-18T06:17:12.000Z</published>
+    <updated>2018-10-18T06:26:20.912Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>简单整理下查询mongo数据方法</code></pre><h4 id="进入mongo数据库"><a href="#进入mongo数据库" class="headerlink" title="进入mongo数据库"></a>进入mongo数据库</h4><pre><code>mongo 10.0.0.200:27017rs.slaveOk();   让从库支持读操作show dbs; 查询数据库use video;  进入数据库</code></pre><h4 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h4><pre><code>SECONDARY&gt; db.表名.find()这个命令类似于mysql数据库的：select from 表名;</code></pre><p>如果表过大，需要使用limit限制行数，否则可能对库造成很大压力。</p><pre><code>SECONDARY&gt; db.表名.find().limit(10)    查看前10行数据</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;pre&gt;&lt;code&gt;简单整理下查询mongo数据方法
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&quot;进入mongo数据库&quot;&gt;&lt;a href=&quot;#进入mongo数据库&quot; class=&quot;headerlink&quot; title=&quot;进入mongo数据库&quot;&gt;&lt;/a&gt;进入mongo数据库&lt;/h4&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="mongo" scheme="https://wuyanteng.github.io/tags/mongo/"/>
+    
+      <category term="查询mongo" scheme="https://wuyanteng.github.io/tags/%E6%9F%A5%E8%AF%A2mongo/"/>
+    
+      <category term="limit" scheme="https://wuyanteng.github.io/tags/limit/"/>
+    
+  </entry>
+  
+  <entry>
     <title>sendmail发送邮件</title>
     <link href="https://wuyanteng.github.io/2018/10/18/sendmail%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/"/>
     <id>https://wuyanteng.github.io/2018/10/18/sendmail发送邮件/</id>
     <published>2018-10-18T03:01:03.000Z</published>
-    <updated>2018-10-18T03:12:03.249Z</updated>
+    <updated>2018-10-18T03:33:41.128Z</updated>
     
     <content type="html"><![CDATA[<pre><code>Gentoo系统模板内置了ssmtp软件，可直接使用sendmail命令发送</code></pre><h2 id="安装mailx"><a href="#安装mailx" class="headerlink" title="安装mailx"></a>安装mailx</h2><pre><code>eix mailxemerge mail-client/mailx</code></pre><h2 id="邮件发送命令"><a href="#邮件发送命令" class="headerlink" title="邮件发送命令"></a>邮件发送命令</h2><pre><code>echo -e  &quot;this is test\n Is true.&quot; |mail -s &quot;test&quot; mail@qq.com</code></pre>]]></content>
     
@@ -631,36 +661,6 @@ make install
       <category term="非交互" scheme="https://wuyanteng.github.io/tags/%E9%9D%9E%E4%BA%A4%E4%BA%92/"/>
     
       <category term="使用ssh和expect监控RouterOS" scheme="https://wuyanteng.github.io/tags/%E4%BD%BF%E7%94%A8ssh%E5%92%8Cexpect%E7%9B%91%E6%8E%A7RouterOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DNS TLS Public</title>
-    <link href="https://wuyanteng.github.io/2018/08/06/DNS-TLS-Public/"/>
-    <id>https://wuyanteng.github.io/2018/08/06/DNS-TLS-Public/</id>
-    <published>2018-08-06T07:57:13.000Z</published>
-    <updated>2018-08-06T08:08:45.668Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>Public DNS(TLS) </code></pre><h4 id="Cloudflare"><a href="#Cloudflare" class="headerlink" title="Cloudflare"></a>Cloudflare</h4><pre><code>1.1.1.1@8531.0.0.1@8532606:4700:4700::1111@8532606:4700:4700::1001@853</code></pre><a id="more"></a><h4 id="Quad9"><a href="#Quad9" class="headerlink" title="Quad9"></a>Quad9</h4><pre><code>9.9.9.9@853149.112.112.112@8532620:fe::fe@8532620:fe::9@853</code></pre><h4 id="CleanBrowsing"><a href="#CleanBrowsing" class="headerlink" title="CleanBrowsing"></a>CleanBrowsing</h4><pre><code>185.228.168.168@853185.228.168.169@8532a0d:2a00:1::@8532a0d:2a00:2::@853</code></pre><h4 id="Taipei"><a href="#Taipei" class="headerlink" title="Taipei"></a>Taipei</h4><pre><code>101.101.101.101@853101.102.103.104@853</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;pre&gt;&lt;code&gt;Public DNS(TLS) 
-&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&quot;Cloudflare&quot;&gt;&lt;a href=&quot;#Cloudflare&quot; class=&quot;headerlink&quot; title=&quot;Cloudflare&quot;&gt;&lt;/a&gt;Cloudflare&lt;/h4&gt;&lt;pre&gt;&lt;code&gt;1.1.1.1@853
-1.0.0.1@853
-
-2606:4700:4700::1111@853
-2606:4700:4700::1001@853
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="高级运维" scheme="https://wuyanteng.github.io/tags/%E9%AB%98%E7%BA%A7%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="DNS TLS" scheme="https://wuyanteng.github.io/tags/DNS-TLS/"/>
-    
-      <category term="Public DNS" scheme="https://wuyanteng.github.io/tags/Public-DNS/"/>
     
   </entry>
   
