@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wuyanteng.github.io/"/>
-  <updated>2018-10-18T06:26:20.912Z</updated>
+  <updated>2018-10-18T07:19:43.591Z</updated>
   <id>https://wuyanteng.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://wuyanteng.github.io/2018/10/18/%E6%9F%A5%E8%AF%A2mongo%E6%95%B0%E6%8D%AE/"/>
     <id>https://wuyanteng.github.io/2018/10/18/查询mongo数据/</id>
     <published>2018-10-18T06:17:12.000Z</published>
-    <updated>2018-10-18T06:26:20.912Z</updated>
+    <updated>2018-10-18T07:19:43.591Z</updated>
     
-    <content type="html"><![CDATA[<pre><code>简单整理下查询mongo数据方法</code></pre><h4 id="进入mongo数据库"><a href="#进入mongo数据库" class="headerlink" title="进入mongo数据库"></a>进入mongo数据库</h4><pre><code>mongo 10.0.0.200:27017rs.slaveOk();   让从库支持读操作show dbs; 查询数据库use video;  进入数据库</code></pre><h4 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h4><pre><code>SECONDARY&gt; db.表名.find()这个命令类似于mysql数据库的：select from 表名;</code></pre><p>如果表过大，需要使用limit限制行数，否则可能对库造成很大压力。</p><pre><code>SECONDARY&gt; db.表名.find().limit(10)    查看前10行数据</code></pre>]]></content>
+    <content type="html"><![CDATA[<pre><code>简单整理下查询mongo数据方法</code></pre><h4 id="进入mongo数据库"><a href="#进入mongo数据库" class="headerlink" title="进入mongo数据库"></a>进入mongo数据库</h4><pre><code>mongo 10.0.0.200:27017rs.slaveOk();   让从库支持读操作show dbs; 查询数据库use video;  进入数据库show tables; 查询关系型表show collections； 查询所有表（集合）</code></pre><h4 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h4><pre><code>SECONDARY&gt; db.表名.find()这个命令类似于mysql数据库的：select from 表名;</code></pre><p>如果表过大，需要使用limit限制行数，否则可能对库造成很大压力。</p><pre><code>SECONDARY&gt; db.表名.find().limit(10)    查看前10行数据</code></pre>]]></content>
     
     <summary type="html">
     

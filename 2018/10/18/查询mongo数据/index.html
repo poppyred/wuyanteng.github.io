@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="https://wuyanteng.github.io">
   <title>查询mongo数据 | Gary Wu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="简单整理下查询mongo数据方法 进入mongo数据库mongo 10.0.0.200:27017 rs.slaveOk();   让从库支持读操作 show dbs; 查询数据库 use video;  进入数据库 查询数据SECONDARY&amp;gt; db.表名.find()  这个命令类似于mysql数据库的：select from 表名; 如果表过大，需要使用limit限制行数，否则可能对库">
+  <meta name="description" content="简单整理下查询mongo数据方法 进入mongo数据库mongo 10.0.0.200:27017 rs.slaveOk();   让从库支持读操作 show dbs; 查询数据库 use video;  进入数据库 show tables; 查询关系型表 show collections； 查询所有表（集合） 查询数据SECONDARY&amp;gt; db.表名.find()  这个命令类似于mysq">
 <meta name="keywords" content="高级运维,mongo,查询mongo,limit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="查询mongo数据">
 <meta property="og:url" content="https://wuyanteng.github.io/2018/10/18/查询mongo数据/index.html">
 <meta property="og:site_name" content="Gary Wu">
-<meta property="og:description" content="简单整理下查询mongo数据方法 进入mongo数据库mongo 10.0.0.200:27017 rs.slaveOk();   让从库支持读操作 show dbs; 查询数据库 use video;  进入数据库 查询数据SECONDARY&amp;gt; db.表名.find()  这个命令类似于mysql数据库的：select from 表名; 如果表过大，需要使用limit限制行数，否则可能对库">
+<meta property="og:description" content="简单整理下查询mongo数据方法 进入mongo数据库mongo 10.0.0.200:27017 rs.slaveOk();   让从库支持读操作 show dbs; 查询数据库 use video;  进入数据库 show tables; 查询关系型表 show collections； 查询所有表（集合） 查询数据SECONDARY&amp;gt; db.表名.find()  这个命令类似于mysq">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-18T06:26:20.912Z">
+<meta property="og:updated_time" content="2018-10-18T07:19:43.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="查询mongo数据">
-<meta name="twitter:description" content="简单整理下查询mongo数据方法 进入mongo数据库mongo 10.0.0.200:27017 rs.slaveOk();   让从库支持读操作 show dbs; 查询数据库 use video;  进入数据库 查询数据SECONDARY&amp;gt; db.表名.find()  这个命令类似于mysql数据库的：select from 表名; 如果表过大，需要使用limit限制行数，否则可能对库">
+<meta name="twitter:description" content="简单整理下查询mongo数据方法 进入mongo数据库mongo 10.0.0.200:27017 rs.slaveOk();   让从库支持读操作 show dbs; 查询数据库 use video;  进入数据库 show tables; 查询关系型表 show collections； 查询所有表（集合） 查询数据SECONDARY&amp;gt; db.表名.find()  这个命令类似于mysq">
   
     <link rel="alternative" href="/atom.xml" title="Gary Wu" type="application/atom+xml">
   
@@ -211,6 +211,8 @@
 rs.slaveOk();   让从库支持读操作
 show dbs; 查询数据库
 use video;  进入数据库
+show tables; 查询关系型表
+show collections； 查询所有表（集合）
 </code></pre><h4 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h4><pre><code>SECONDARY&gt; db.表名.find()
 
 这个命令类似于mysql数据库的：select from 表名;
@@ -877,18 +879,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">HA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">高可用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">双机热备</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">GlusterFS</a>
               </li>
              
@@ -902,6 +892,18 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式存储</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">HA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">高可用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">双机热备</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2825,18 +2827,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">IaaS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">PaaS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SaaS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">virsh</a>
               </li>
              
@@ -2846,6 +2836,18 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">KVM虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">IaaS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">PaaS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SaaS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -3217,6 +3219,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">flock</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">LVS连接数监控</a>
               </li>
              
@@ -3230,10 +3236,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">InActConn</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">flock</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -3373,19 +3375,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">autostart</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">aux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">查看进程内存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">autostart</a>
               </li>
              
               <li class="article-tag-list-item">
