@@ -20,6 +20,8 @@
             
             <tag> 磁盘io </tag>
             
+            <tag> iotop </tag>
+            
         </tags>
       
     </entry>
@@ -178,9 +180,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> mysql </tag>
-            
             <tag> 主从同步 </tag>
+            
+            <tag> mysql </tag>
             
             <tag> 主键错误 </tag>
             
@@ -6816,9 +6818,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> BIOS </tag>
-            
             <tag> DTK </tag>
+            
+            <tag> BIOS </tag>
             
         </tags>
       
