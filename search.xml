@@ -3,6 +3,28 @@
   
     
     <entry>
+      <title>linux查看进程所占用的磁盘io</title>
+      <link href="/2018/10/19/linux%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E6%89%80%E5%8D%A0%E7%94%A8%E7%9A%84%E7%A3%81%E7%9B%98io/"/>
+      <url>/2018/10/19/linux%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E6%89%80%E5%8D%A0%E7%94%A8%E7%9A%84%E7%A3%81%E7%9B%98io/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> linux </tag>
+            
+            <tag> io </tag>
+            
+            <tag> 磁盘io </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>查询mongo数据</title>
       <link href="/2018/10/18/%E6%9F%A5%E8%AF%A2mongo%E6%95%B0%E6%8D%AE/"/>
       <url>/2018/10/18/%E6%9F%A5%E8%AF%A2mongo%E6%95%B0%E6%8D%AE/</url>
@@ -156,9 +178,9 @@
             
             <tag> 高级运维 </tag>
             
-            <tag> 主从同步 </tag>
-            
             <tag> mysql </tag>
+            
+            <tag> 主从同步 </tag>
             
             <tag> 主键错误 </tag>
             
@@ -6794,9 +6816,9 @@
             
             <tag> cobbler </tag>
             
-            <tag> DTK </tag>
-            
             <tag> BIOS </tag>
+            
+            <tag> DTK </tag>
             
         </tags>
       
