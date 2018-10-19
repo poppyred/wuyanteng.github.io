@@ -3,6 +3,28 @@
   
     
     <entry>
+      <title>Cacti流量叠加图形设置</title>
+      <link href="/2018/10/19/Cacti%E6%B5%81%E9%87%8F%E5%8F%A0%E5%8A%A0%E5%9B%BE%E5%BD%A2%E8%AE%BE%E7%BD%AE/"/>
+      <url>/2018/10/19/Cacti%E6%B5%81%E9%87%8F%E5%8F%A0%E5%8A%A0%E5%9B%BE%E5%BD%A2%E8%AE%BE%E7%BD%AE/</url>
+	  <content type="html"><%-: minify(stripe(stripe_code(post.content))) | cdata %></content>
+      <content type="html"><%-: minify(stripe(stripe_code(page.content))) | cdata %></content>
+      
+      
+        <tags>
+            
+            <tag> 高级运维 </tag>
+            
+            <tag> Cacti流量叠加图形 </tag>
+            
+            <tag> Cacti整合图形 </tag>
+            
+            <tag> Graph </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>linux查看进程所占用的磁盘io</title>
       <link href="/2018/10/19/linux%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E6%89%80%E5%8D%A0%E7%94%A8%E7%9A%84%E7%A3%81%E7%9B%98io/"/>
       <url>/2018/10/19/linux%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E6%89%80%E5%8D%A0%E7%94%A8%E7%9A%84%E7%A3%81%E7%9B%98io/</url>
